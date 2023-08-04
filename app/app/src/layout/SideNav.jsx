@@ -88,7 +88,7 @@ const SideNav = () => {
 export default SideNav;
 
 const TodoPanel = () => {
-  return <div className="w-full h-44 border bg-tertiary"></div>;
+  return <div className="w-full h-44  bg-tertiary"></div>;
 };
 
 const SideMenuContainer = ({ topNav }) => {
@@ -142,7 +142,7 @@ const SingleItem = ({ data, open }) => {
     <Link
       href={data?.path}
       className={`mt-3 flex gap-1 items-center ${
-        open ? "" : "-mt-28"
+        open ? "" : "-mt-20"
       } transition-all duration-300  ease-linear`}
     >
       <div className="relative h-14 w-14">
