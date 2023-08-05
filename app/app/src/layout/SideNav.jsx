@@ -108,7 +108,6 @@ const SideMenuContainer = ({ topNav }) => {
 
 const SideMenu = ({ data }) => {
   const [isOpen, setIsOpen] = useState(true);
-  console.log(isOpen);
   const { sideNav } = useSelector((state) => state.layout);
   return (
     <div className="mt-5 ">
