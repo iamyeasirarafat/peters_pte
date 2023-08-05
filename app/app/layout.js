@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }) => {
           </button>
         )}
         <SideNav />
-        {children}
+        <div className="max-w-7xl w-full mx-auto">{children}</div>
       </div>
     </>
   );

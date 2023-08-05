@@ -40,3 +40,22 @@
   background: #e0e0e0;
   border-radius: 1rem;
 }
+
+/* swiper slider custom button CSS start */
+.swiper-pagination-bullet {
+  background-color: transparent !important;
+  border: 2px solid black !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: black !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+.swiper-pagination {
+  display: flex;
+  top: 40% !important;
+  justify-content: start !important;
+}
+/* swiper slider custom button CSS END */
