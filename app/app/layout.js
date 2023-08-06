@@ -1,6 +1,7 @@
 "use client";
 import { toggleTopNav as toggleNav } from "@/src/redux/slice/layoutSlice";
 import { useDispatch, useSelector } from "react-redux";
+import GlobalModal from "./src/component/GlobalModal";
 import SideNav from "./src/layout/SideNav";
 import TopNav from "./src/layout/TopNav";
 
@@ -24,6 +25,7 @@ const DashboardLayout = ({ children }) => {
         )}
         <SideNav />
         <div className="max-w-7xl w-full mx-auto">{children}</div>
+        <GlobalModal />
       </div>
     </>
   );
