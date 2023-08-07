@@ -141,7 +141,7 @@ const SingleItem = ({ data, open }) => {
     <Link
       href={data?.path}
       className={`mt-3 flex gap-1 items-center ${
-        open ? "" : "-mt-20"
+        open ? "" : "-mt-28"
       } transition-all duration-300  ease-linear`}
     >
       <div className="relative h-14 w-14">

@@ -1,13 +1,45 @@
 "use client";
-import React, { useState } from "react";
+import axios from "axios";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
   // react hook form
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
+  const router = useRouter();
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post("/auth/token", data);
+
+      if (res?.data?.access) {
+        setCookie("access_token", res?.data?.access, { maxAge: 60 * 60 });
+      }
+      if (res?.data?.refresh) {
+        setCookie("refresh_token", res?.data?.refresh, {
+          maxAge: 60 * 60 * 24,
+        });
+      }
+      router.push("/app");
+    } catch (e) {
+      console.log(e.response.data.detail);
+      if (e.response.data.detail) {
+        setError("email", {
+          type: "manual",
+          message: e.response.data.detail,
+        });
+      }
+      toast.error("");
+    }
     console.log(data);
   };
   return (
@@ -15,7 +47,9 @@ const Login = () => {
       <div className="p-4 space-y-2 bg-[#FFF4EB] rounded-[32px] w-full">
         <div className="w-full">
           <input
-            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border border-[#B9B9B9] rounded-[16px] outline-none`}
+            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${
+              errors.email ? "border-red" : "border-[#B9B9B9] "
+            } rounded-[16px] outline-none`}
             {...register("email", {
               required: "Password is required",
             })}
@@ -25,7 +59,9 @@ const Login = () => {
         </div>
         <div className="relative w-full">
           <input
-            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border border-[#B9B9B9] rounded-[16px] outline-none`}
+            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${
+              errors.password ? "border-red" : "border-[#B9B9B9] "
+            } rounded-[16px] outline-none`}
             {...register("password", {
               required: "Password is required",
             })}
@@ -46,6 +82,11 @@ const Login = () => {
             )}
           </div>
         </div>
+        {errors.email && errors?.email?.message && (
+          <li className={`list-disc ml-5 text-sm text-red`}>
+            {errors?.email?.message}
+          </li>
+        )}
       </div>
       {/* login button */}
       <button

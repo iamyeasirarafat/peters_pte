@@ -68,7 +68,7 @@ const Modal = () => {
                       </div>
                       <div className="max-w-lg w-full relative bg-white overflow-hidden rounded-3xl">
                         <input
-                          className="w-full   placeholder:text-xl rounded-3xl border-none pl-8 placeholder:text-gray placeholder:font-light "
+                          className="w-full focus:ring-0 placeholder:text-xl rounded-3xl border-none pl-8 placeholder:text-gray placeholder:font-light "
                           placeholder="Search By Question Title / Number"
                         />
                         <img

@@ -3,7 +3,7 @@ module.exports = {
   darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
@@ -18,6 +18,7 @@ module.exports = {
       gold: "#B57700",
       gray: "#616161",
       accent: "#949494",
+      red: "#FF0000",
     },
     fontFamily: {
       cabin: ["Cabin", "sans-serif"],
