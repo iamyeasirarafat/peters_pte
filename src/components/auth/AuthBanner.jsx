@@ -1,10 +1,9 @@
 import Image from "next/image";
-import React from "react";
 import { BsStarFill } from "react-icons/bs";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const AuthBanner = () => {
   // swiper pagination
@@ -15,9 +14,9 @@ const AuthBanner = () => {
     },
   };
   return (
-    <div className="hidden lg:block w-1/2 h-full">
+    <div className="hidden lg:block w-1/2 h-full relative">
       <div className="px-16 pt-16 h-full bg-[#FFF4EB]">
-        <div className="h-full relative">
+        <div className="h-full">
           <Swiper
             pagination={pagination}
             modules={[Pagination]}
@@ -45,12 +44,12 @@ const AuthBanner = () => {
               </p>
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 w-[500px] h-[650px]">
                 <div className="w-full h-full relative">
-                  <Image
+                  {/* <Image
                     className="object-cover"
                     src="/auth-image.png"
                     fill
                     alt="auth image"
-                  />
+                  /> */}
                 </div>
               </div>
             </SwiperSlide>
@@ -117,17 +116,17 @@ const AuthBanner = () => {
               </div>
             </SwiperSlide>
           </Swiper>
-          {/* login page bg shape */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-0 w-full h-[391px]">
-            <div className="w-full h-full relative">
-              <Image
-                className="object-cover"
-                src="/bg-shape.png"
-                fill
-                alt="auth image"
-              />
-            </div>
-          </div>
+        </div>
+      </div>
+      {/* login page bg shape */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-0 w-full h-[391px]">
+        <div className="w-full h-full relative">
+          <Image
+            className="object-cover"
+            src="/bg-shape.png"
+            fill
+            alt="auth image"
+          />
         </div>
       </div>
     </div>

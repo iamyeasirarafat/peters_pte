@@ -6,7 +6,6 @@ import TeaxtBlock from "@/src/components/read-aloud/TeaxtBlock";
 import RecordBlock from "@/src/components/read-aloud/RecordBlock";
 import Pagination from "@/src/components/read-aloud/Pagination";
 import Score from "@/src/components/read-aloud/Score";
-import ScoreModal from "@/src/components/global/ScoreModal";
 import ReusableModal from "@/src/components/global/ReusableModal";
 
 const Page = () => {

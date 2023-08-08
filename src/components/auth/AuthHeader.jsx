@@ -1,8 +1,12 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AuthHeader({ page, setPage }) {
-  const [screenWidth, setScreenWidth] = useState(window?.innerWidth);
+  const [screenWidth, setScreenWidth] = useState();
+
+  useEffect(() => {
+    setScreenWidth(window?.innerWidth);
+  }, []);
 
   const handleResize = () => {
     const width = window?.innerWidth;

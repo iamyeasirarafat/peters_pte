@@ -1218,7 +1218,6 @@ const countryCodes = [
 
 const JoinForm = ({ setPage }) => {
   const [country, setCountry] = useState("+880");
-  console.log(country);
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const {
@@ -1242,13 +1241,11 @@ const JoinForm = ({ setPage }) => {
     }
     try {
       const res = await axios.post("/auth/user/join", data);
-      console.log(res.statusText);
       if (res.statusText === "OK") {
         toast.success("Account successfully created. Please log in");
         setPage("login");
       }
     } catch (e) {
-      console.log(e.response.data, "ss");
       Object.keys(e.response.data).length > 0 &&
         Object.keys(e.response.data).map((item) => {
           if (item === "email") {
@@ -1294,7 +1291,6 @@ const JoinForm = ({ setPage }) => {
     }
     return true;
   };
-  console.log(errors);
   return (
     <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
       <div className="p-4 space-y-2 bg-[#FFF4EB] rounded-[32px] w-full">
@@ -1322,9 +1318,6 @@ const JoinForm = ({ setPage }) => {
         </div>
         <div className="flex items-center gap-x-3">
           <select
-            onChange={(e) => {
-              console.log(e, "Ss");
-            }}
             className={`bg-white w-2/5 text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 ${
               errors?.country ? "border-red" : "border-[#B9B9B9]"
             }  rounded-[16px] outline-none`}

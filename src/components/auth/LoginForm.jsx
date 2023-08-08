@@ -4,7 +4,6 @@ import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Login = () => {
@@ -32,13 +31,18 @@ const Login = () => {
       router.push("/app");
     } catch (e) {
       console.log(e.response.data.detail);
-      if (e.response.data.detail) {
+      if (e.response.data.error) {
         setError("email", {
           type: "manual",
-          message: e.response.data.detail,
+          message: e.response.data.error,
         });
       }
-      toast.error("");
+      if (e.response.data.error) {
+        setError("password", {
+          type: "manual",
+          message: e.response.data.error,
+        });
+      }
     }
     console.log(data);
   };
