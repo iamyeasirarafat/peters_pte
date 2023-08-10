@@ -11,7 +11,7 @@ const GlobalModal = () => {
         onClick={toggleModal}
         className="top-2/4 absolute h-20 w-7 bg-primary right-0 rounded-tl-3xl rounded-bl-3xl "
       >
-        <img src="/icons/chevrons-right-double.svg" />
+        <img src="/icons/chevrons-right-double.svg" alt="" />
       </button>
       <Modal />
     </>
@@ -23,6 +23,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import QuestionBlock from "./QuestionBlock";
 import QuestionNavigation from "./QuestionNavigation";
+import { IoIosArrowBack } from "react-icons/io";
 
 const Modal = () => {
   const { state } = useSelector((state) => state.globalModal);
@@ -109,7 +110,7 @@ const Modal = () => {
                           ))}
                       </div>
                       {/* pagination */}
-                      <div className="flex items-center justify-end py-4">
+                      <div className="flex items-center justify-end pt-4">
                         <div className="bg-secondary rounded-[30px] px-4 py-[5px] flex items-center gap-x-2">
                           <IoIosArrowBack className="text-lg text-gray cursor-pointer" />
                           <select

@@ -6,14 +6,14 @@ import {
 
 const QuestionNavigation = ({ questionType, setQuestionType }) => {
   return (
-    <div className="flex items-center gap-x-4 mt-4">
+    <div className="flex items-center gap-x-4 mt-4 pl-6">
       {/* All Question */}
       <div
         onClick={() => setQuestionType("All")}
         className="flex items-center gap-x-2 cursor-pointer"
       >
         {questionType === "All" ? (
-          <RiCheckboxBlankCircleFill className="text-sm text-cream" />
+          <RiCheckboxBlankCircleFill className="text-sm text-blue" />
         ) : (
           <RiCheckboxBlankCircleLine className="text-sm text-black" />
         )}
@@ -25,7 +25,7 @@ const QuestionNavigation = ({ questionType, setQuestionType }) => {
         className="flex items-center gap-x-2 cursor-pointer"
       >
         {questionType === "Practiced" ? (
-          <RiCheckboxBlankCircleFill className="text-sm text-cream" />
+          <RiCheckboxBlankCircleFill className="text-sm text-blue" />
         ) : (
           <RiCheckboxBlankCircleLine className="text-sm text-black" />
         )}
@@ -37,7 +37,7 @@ const QuestionNavigation = ({ questionType, setQuestionType }) => {
         className="flex items-center gap-x-2 cursor-pointer"
       >
         {questionType === "Not_Practiced" ? (
-          <RiCheckboxBlankCircleFill className="text-sm text-cream" />
+          <RiCheckboxBlankCircleFill className="text-sm text-blue" />
         ) : (
           <RiCheckboxBlankCircleLine className="text-sm text-black" />
         )}

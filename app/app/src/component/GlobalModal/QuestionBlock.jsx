@@ -1,5 +1,6 @@
 import ButtonFill from "@/src/components/global/ButtonFill";
 import ButtonOutline from "@/src/components/global/ButtonOutline";
+import Image from "next/image";
 import React from "react";
 
 const QuestionBlock = () => {

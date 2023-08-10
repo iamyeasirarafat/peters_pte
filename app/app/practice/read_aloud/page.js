@@ -89,8 +89,6 @@ const Index = () => {
         <TextBlock data={data} />
         {/* recording Block */}
         <RecordBlock />
-        {/* pagination */}
-        <Pagination />
       </div>
       <div className="relative border border-primary rounded-[15px] mt-12 py-4 px-8">
         {/* tab button */}
@@ -117,7 +115,7 @@ const Index = () => {
             src={"/icons/score.svg"}
             iconWidth={24}
             iconHeight={24}
-            bgColor={"[#F4D1B1]"}
+            bgColor={"primary"}
             textColor={"gray"}
           >
             Community Score
@@ -225,7 +223,7 @@ const Modal = ({ open, setOpen }) => {
             {/* Enabling Skill  */}
             <div className="col-span-6 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Reading Score</p>
+                <p className="text-gray text-xl">Enabling Skill</p>
               </div>
               {/* progress bar */}
               <div className="space-y-4 p-5">
