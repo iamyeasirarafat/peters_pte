@@ -1,9 +1,5 @@
 import { toggleModal as modalSlice } from "@/src/redux/slice/globalModalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  RiCheckboxBlankCircleLine,
-  RiCheckboxBlankCircleFill,
-} from "react-icons/ri";
 
 const GlobalModal = () => {
   const dispatch = useDispatch();
@@ -94,16 +90,10 @@ const Modal = () => {
                     <div className="relative border border-primary rounded-[13px] bg-white p-5 mt-11">
                       {/* tab button */}
                       <div className="flex items-center gap-x-2 absolute bottom-[100.2%] right-5">
-                        <button
-                          onClick={() => setQuestionType("All")}
-                          className="text-gray py-1 px-3 rounded-t-md text-base bg-cream"
-                        >
+                        <button className="text-gray py-1 px-3 rounded-t-md text-base bg-cream">
                           All
                         </button>
-                        <button
-                          onClick={() => setQuestionType("Prediction")}
-                          className="text-gray py-1 px-3 rounded-t-md text-base bg-secondary"
-                        >
+                        <button className="text-gray py-1 px-3 rounded-t-md text-base bg-primary">
                           Prediction
                         </button>
                         <button className="text-white py-1 px-3 rounded-t-md text-base bg-blue">
@@ -117,6 +107,24 @@ const Modal = () => {
                           .map((q, i) => (
                             <QuestionBlock key={i} />
                           ))}
+                      </div>
+                      {/* pagination */}
+                      <div className="flex items-center justify-end py-4">
+                        <div className="bg-secondary rounded-[30px] px-4 py-[5px] flex items-center gap-x-2">
+                          <IoIosArrowBack className="text-lg text-gray cursor-pointer" />
+                          <select
+                            className="py-2 bg-white rounded-[22px] outline-none border-0 focus:outline-none focus:ring-0"
+                            name=""
+                            id=""
+                          >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                          </select>
+                          <p className="text-sm text-gray font-medium">of</p>
+                          <p className="text-sm text-gray font-medium">1127</p>
+                          <IoIosArrowBack className="text-lg text-gray cursor-pointer rotate-180" />
+                        </div>
                       </div>
                     </div>
                   </div>

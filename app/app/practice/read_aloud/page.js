@@ -2,6 +2,7 @@
 import AiPageHeader from "@/src/components/global/AiPageHeader";
 import ReusableModal from "@/src/components/global/ReusableModal";
 import TabButton from "@/src/components/global/TabButton";
+import Pagination from "@/src/components/read-aloud/Pagination";
 import RecordBlock from "@/src/components/read-aloud/RecordBlock";
 import Score from "@/src/components/read-aloud/Score";
 import TextBlock from "@/src/components/read-aloud/TextBlock";
@@ -88,6 +89,8 @@ const Index = () => {
         <TextBlock data={data} />
         {/* recording Block */}
         <RecordBlock />
+        {/* pagination */}
+        <Pagination />
       </div>
       <div className="relative border border-primary rounded-[15px] mt-12 py-4 px-8">
         {/* tab button */}

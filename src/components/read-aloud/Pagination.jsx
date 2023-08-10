@@ -29,8 +29,8 @@ const Pagination = ({ HandleSubmit }) => {
             </div>
           </div>
         </button>
-        <div className="bg-secondary rounded-[30px] px-4 py-2 flex items-center gap-x-2">
-          <IoIosArrowBack className="text-base text-gray" />
+        <div className="bg-secondary rounded-[30px] px-4 py-[5px] flex items-center gap-x-2">
+          <IoIosArrowBack className="text-lg text-gray cursor-pointer" />
           <select
             className="py-2 bg-white rounded-[22px] outline-none border-0 focus:outline-none focus:ring-0"
             name=""
@@ -42,7 +42,7 @@ const Pagination = ({ HandleSubmit }) => {
           </select>
           <p className="text-sm text-gray font-medium">of</p>
           <p className="text-sm text-gray font-medium">1127</p>
-          <IoIosArrowBack className="text-base text-gray rotate-180" />
+          <IoIosArrowBack className="text-lg text-gray cursor-pointer rotate-180" />
         </div>
       </div>
     </div>
