@@ -1,5 +1,9 @@
 import { toggleModal as modalSlice } from "@/src/redux/slice/globalModalSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  RiCheckboxBlankCircleLine,
+  RiCheckboxBlankCircleFill,
+} from "react-icons/ri";
 
 const GlobalModal = () => {
   const dispatch = useDispatch();
@@ -20,12 +24,15 @@ const GlobalModal = () => {
 export default GlobalModal;
 
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
+import QuestionBlock from "./QuestionBlock";
+import QuestionNavigation from "./QuestionNavigation";
 
 const Modal = () => {
   const { state } = useSelector((state) => state.globalModal);
   const dispatch = useDispatch();
   const toggleModal = () => dispatch(modalSlice({}));
+  const [questionType, setQuestionType] = useState("All");
 
   return (
     <Transition.Root show={state.visible} as={Fragment}>
@@ -76,6 +83,40 @@ const Modal = () => {
                           alt=""
                           className="absolute right-4 top-0"
                         />
+                      </div>
+                    </div>
+                    {/* Question type */}
+                    <QuestionNavigation
+                      questionType={questionType}
+                      setQuestionType={setQuestionType}
+                    />
+                    {/* Questions block  */}
+                    <div className="relative border border-primary rounded-[13px] bg-white p-5 mt-11">
+                      {/* tab button */}
+                      <div className="flex items-center gap-x-2 absolute bottom-[100.2%] right-5">
+                        <button
+                          onClick={() => setQuestionType("All")}
+                          className="text-gray py-1 px-3 rounded-t-md text-base bg-cream"
+                        >
+                          All
+                        </button>
+                        <button
+                          onClick={() => setQuestionType("Prediction")}
+                          className="text-gray py-1 px-3 rounded-t-md text-base bg-secondary"
+                        >
+                          Prediction
+                        </button>
+                        <button className="text-white py-1 px-3 rounded-t-md text-base bg-blue">
+                          BookMarked
+                        </button>
+                      </div>
+                      <div className="space-y-2">
+                        {/* Question */}
+                        {Array(7)
+                          .fill()
+                          .map((q, i) => (
+                            <QuestionBlock key={i} />
+                          ))}
                       </div>
                     </div>
                   </div>

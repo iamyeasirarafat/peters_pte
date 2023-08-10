@@ -9,7 +9,7 @@ const navItems = {
   "Speaking Test": [
     {
       name: "Read Aloud",
-      path: "#",
+      path: "/app/practice/read_aloud?que_no=2",
       ai: true,
       icon: "",
     },
@@ -141,7 +141,7 @@ const SingleItem = ({ data, open }) => {
     <Link
       href={data?.path}
       className={`mt-3 flex gap-1 items-center ${
-        open ? "" : "-mt-28"
+        open ? "" : "-mt-24"
       } transition-all duration-300  ease-linear`}
     >
       <div className="relative h-14 w-14">

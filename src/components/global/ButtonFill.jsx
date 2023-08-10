@@ -1,4 +1,4 @@
-const GlobalButton = ({ text, bgColor, textColor }) => {
+const ButtonFill = ({ text, bgColor, textColor }) => {
   return (
     <button
       className={`text-${textColor} py-1 px-3 text-base rounded bg-${bgColor}`}
@@ -8,4 +8,4 @@ const GlobalButton = ({ text, bgColor, textColor }) => {
   );
 };
 
-export default GlobalButton;
+export default ButtonFill;

@@ -1,7 +1,7 @@
 const withSession = async ({ token, refreshToken }) => {
   if (token) {
     try {
-      const res = await fetch(`http://3.108.252.181:7000/auth/token/verify`, {
+      const res = await fetch(`http://3.110.151.3:7000/auth/token/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -15,14 +15,14 @@ const withSession = async ({ token, refreshToken }) => {
       if (data?.code === "token_not_valid") return [false, true];
       return [true, false];
     } catch (error) {
-      consrole.log("error", error);
+      console.log("error", error);
       return [false, error];
     }
   }
 
   if (refreshToken) {
     try {
-      const res = await fetch(`http://3.108.252.181:7000/auth/token/refresh`, {
+      const res = await fetch(`http://3.110.151.3:7000/auth/token/refresh`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

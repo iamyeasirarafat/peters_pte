@@ -2,11 +2,14 @@ import Image from "next/image";
 import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 
-const Pagination = () => {
+const Pagination = ({ HandleSubmit }) => {
   return (
     <div className="flex items-center justify-between ml-8 mr-5 mt-3">
       <div className="flex items-center gap-x-2">
-        <button className="py-2 px-6 rounded-[22px] bg-blue text-white font-semibold text-lg">
+        <button
+          onClick={HandleSubmit}
+          className="py-2 px-6 rounded-[22px] bg-blue text-white font-semibold text-lg"
+        >
           Submit
         </button>
         <button className="py-2 px-6 rounded-[22px] bg-primary text-white font-semibold text-lg">

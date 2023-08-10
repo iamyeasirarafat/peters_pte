@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const NavigateButton = ({
+const TabButton = ({
   children,
   src,
   bgColor,
@@ -26,4 +26,4 @@ const NavigateButton = ({
   );
 };
 
-export default NavigateButton;
+export default TabButton;
