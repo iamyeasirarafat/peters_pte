@@ -21,7 +21,7 @@ module.exports = {
         lightGray: "#ABABAB",
         accent: "#949494",
         red: "#FF0000",
-        yellow_green: "#849C3E",
+        yellowGreen: "#849C3E",
       },
       fontFamily: {
         cabin: ["Cabin", "sans-serif"],

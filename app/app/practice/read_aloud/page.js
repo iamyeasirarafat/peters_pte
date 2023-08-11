@@ -10,19 +10,18 @@ import axios from "axios";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 import { Toaster } from "react-hot-toast";
 import { AiOutlineSound } from "react-icons/ai";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { VscDebugStart } from "react-icons/vsc";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 const Index = () => {
   const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-  console.log(data);
   const params = useSearchParams();
   const id = params.get("que_no");
   useEffect(() => {
@@ -113,7 +112,7 @@ const Modal = ({ open, setOpen, result }) => {
         {/* modal header */}
         <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
           <p className="text-white text-2xl">#7250589</p>
-          <p className="text-white text-2xl ml-40">AI DEATILED SCORE</p>
+          <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
           <div className="flex items-center gap-x-4">
             <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
               <p className="text-white text-lg px-2 py-1 rounded-[30px] bg-blue">
@@ -139,7 +138,7 @@ const Modal = ({ open, setOpen, result }) => {
               <VscDebugStart className="text-white text-2xl" />
             </button>
           </div>
-          {/* voliuam */}
+          {/* sound */}
           <div className="flex items-center justify-end gap-x-2 mt-3">
             <AiOutlineSound className="text-lg" />
             <div className="w-[114px] h-1 rounded-[13px] bg-[#BED3CC] relative">
@@ -204,14 +203,19 @@ const Modal = ({ open, setOpen, result }) => {
                 {/* Content */}
                 <div className="w-full flex items-center justify-between gap-x-5">
                   <p className="text-gray text-xl w-3/6 text-start">Content</p>
-                  <LineProgressBar lineColor={"cream"} strokeWidth={content} />
+                  <LineProgressBar
+                    height={45}
+                    lineColor={"cream"}
+                    strokeWidth={content}
+                  />
                   <p className="text-gray text-xl">53/90</p>
                 </div>
                 {/* Fluency */}
                 <div className="w-full flex items-center justify-between gap-x-5">
                   <p className="text-gray text-xl w-3/6 text-start">Fluency</p>
                   <LineProgressBar
-                    lineColor={"yellow_green"}
+                    height={45}
+                    lineColor={"primary"}
                     strokeWidth={fluency}
                   />
                   <p className="text-gray text-xl">73/90</p>
@@ -222,6 +226,7 @@ const Modal = ({ open, setOpen, result }) => {
                     Pronunciation
                   </p>
                   <LineProgressBar
+                    height={45}
                     lineColor={"blue"}
                     strokeWidth={pronunciation}
                   />

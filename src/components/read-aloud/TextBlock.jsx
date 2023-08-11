@@ -1,9 +1,12 @@
 import Image from "next/image";
+import { useEffect } from "react";
 
 const TextBlock = ({ data }) => {
   //text to speech function
-  const synth = window.speechSynthesis;
-
+  let synth;
+  useEffect(() => {
+    synth = window?.speechSynthesis;
+  }, []);
   const handleSpeak = () => {
     if (synth && data?.content) {
       const utterance = new SpeechSynthesisUtterance(data?.content);
