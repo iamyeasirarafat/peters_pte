@@ -1,9 +1,8 @@
-import React from "react";
 import { BiSolidTrashAlt } from "react-icons/bi";
 import { BsPlusCircle } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 
-const Score = () => {
+const Score = ({ result, setOpenModal }) => {
   return (
     <div className="flex items-center justify-between border border-primary rounded-[15px] p-2">
       {/*  */}
@@ -20,15 +19,18 @@ const Score = () => {
           <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
             S
           </p>
-          <p className="text-xl text-gray">86/90</p>
+          <p className="text-xl text-gray">{result?.speaking_score}/90</p>
         </button>
         <button className="border border-primary rounded-[30px] flex items-center gap-x-4 py-1 pl-2 pr-7">
           <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-cream">
             R
           </p>
-          <p className="text-xl text-gray">73/90</p>
+          <p className="text-xl text-gray">{result?.reading_score}/90</p>
         </button>
-        <button className="border border-primary rounded-[30px] flex items-center gap-x-4 py-1 pl-2 pr-7">
+        <button
+          onClick={() => setOpenModal(true)}
+          className="border border-primary rounded-[30px] flex items-center gap-x-4 py-1 pl-2 pr-7"
+        >
           <p className="text-2xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-blue">
             AI
           </p>

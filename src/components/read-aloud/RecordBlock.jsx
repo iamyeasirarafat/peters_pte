@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { ReactMic } from "react-mic";
 import Pagination from "../global/Pagination";
 
-const RecordBlock = () => {
+const RecordBlock = ({ setResult }) => {
   // countdown function
   const targetDate = new Date().getTime() + 35000;
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -32,9 +32,19 @@ const RecordBlock = () => {
   //recording function...
   const [isRecording, setIsRecording] = useState(false);
   const [audioData, setAudioData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const beepAudio = new Audio("/beep.mp3");
+  const [recordingTime, setRecordingTime] = useState(0); // Track recording time
+  console.log(recordingTime);
+  let timerId;
 
   const handleStartRecording = () => {
+    setRecordingTime(0);
+    beepAudio.play();
     setIsRecording(true);
+    timerId = setTimeout(handleStopRecording, 35000);
+    setAudioData(null);
+    setResult(null);
   };
 
   const handleStopRecording = () => {
@@ -45,36 +55,64 @@ const RecordBlock = () => {
     setAudioData(recordedBlob.blob);
   };
 
+  // automatically start record after 35 second
+  useEffect(() => {
+    if (timeLeft?.seconds === 0 && !isRecording && !audioData) {
+      handleStartRecording();
+    }
+  }, [timeLeft?.seconds, audioData, isLoading]);
+
+  // automatically stop recording after 35 seconds
+  useEffect(() => {
+    if (isRecording) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      timerId = setInterval(() => {
+        setRecordingTime((prevTime) => prevTime + 1000); // Increment recording time every second
+      }, 1000);
+    } else {
+      clearInterval(timerId); // Clear the timer if recording stops
+    }
+
+    return () => clearInterval(timerId); // Cleanup the timer on component unmount
+  }, [isRecording]);
+
+  //progressbar width
+  const progressBarWidth = (recordingTime / 35000) * 1000;
+
   // handle submit function
   const params = useSearchParams();
   const id = params.get("que_no");
   const HandleSubmit = async () => {
-    console.log("submitting...!!");
+    setIsLoading(true);
     if (audioData) {
       try {
         const formData = new FormData();
         formData.append("audio", audioData, "recorded.wav"); // Append the audioData as is
-        formData.append("id", id);
+        formData.append("read_aloud", id);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
 
-        const response = await axios.post(
+        const { data } = await axios.post(
           "/practice/read_alouds/answer",
           formData,
           config
         );
-
-        console.log("Audio sent successfully:", response);
+        setResult(data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error sending audio:", error);
+        toast.error("Something went wrong, try again later.");
+        setIsLoading(false);
       }
     } else {
       toast.error("You need to record yourself!");
+      setIsLoading(false);
     }
   };
+  console.log(progressBarWidth);
   return (
     <>
       <div className="border border-primary rounded-[15px] mt-3 ml-8 mr-5 p-4 flex flex-col items-center justify-center">
@@ -86,7 +124,7 @@ const RecordBlock = () => {
               handleStartRecording();
             }
           }}
-          className="w-[70px] h-[70px] bg-primary rounded-full flex items-center justify-center"
+          className="w-[70px]  h-[70px] bg-primary rounded-full flex items-center justify-center"
         >
           <div className="w-[28px] h-[44px]">
             <div className="w-full h-full relative">
@@ -105,18 +143,29 @@ const RecordBlock = () => {
           onStop={handleAudioStop}
           mimeType="audio/wav"
         />
-        <p className="text-base text-gray">Click To Start</p>
-        <p className="text-sm text-accent">
-          <i>Beginning in {timeLeft.seconds} Sec...</i>
+        <p className="text-base text-gray">
+          Click To {isRecording ? "Stop" : "Start"}
         </p>
+        {!isRecording && !audioData && (
+          <p className="text-sm text-accent">
+            <i>Beginning in {timeLeft.seconds} Sec...</i>
+          </p>
+        )}
         {isRecording && (
           <div className="w-full">
             <div className="flex w-full items-center justify-between">
-              <p className="text-base text-gray">0:00</p>
+              <p className="text-base text-gray">
+                0:{Math.floor(recordingTime / 1000)}
+              </p>
               <p className="text-base text-gray">0:35</p>
             </div>
             <div className="relative bg-secondary w-full h-2 rounded-[13px]">
-              <div className="w-[30%] h-full absolute left-0 top-0 bg-primary rounded-[13px]"></div>
+              <div
+                style={{
+                  width: progressBarWidth,
+                }}
+                className={` h-full absolute left-0 top-0 bg-primary rounded-[13px]`}
+              ></div>
             </div>
           </div>
         )}
@@ -130,7 +179,12 @@ const RecordBlock = () => {
         </div>
       )}
       {/* Pagination */}
-      <Pagination HandleSubmit={HandleSubmit} />
+      <Pagination
+        isLoading={isLoading}
+        handleStartRecording={handleStartRecording}
+        audioData={audioData}
+        HandleSubmit={HandleSubmit}
+      />
     </>
   );
 };

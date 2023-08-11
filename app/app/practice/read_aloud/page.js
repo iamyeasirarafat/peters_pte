@@ -19,8 +19,9 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { VscDebugStart } from "react-icons/vsc";
 
 const Index = () => {
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState({});
+  const [result, setResult] = useState(null);
   console.log(data);
   const params = useSearchParams();
   const id = params.get("que_no");
@@ -37,7 +38,7 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <AiPageHeader title="Read Aloud" setOpen={setOpen} />
+      <AiPageHeader title="Read Aloud" setOpen={setOpenModal} />
       <p className="text-gray text-base mt-2 text-center">
         Look at the text below. In 35 seconds, you must read this text aloud as
         naturally and clearly as possible. You have 35 seconds to read aloud.
@@ -88,54 +89,24 @@ const Index = () => {
         {/* text block */}
         <TextBlock data={data} />
         {/* recording Block */}
-        <RecordBlock />
+        <RecordBlock setResult={setResult} />
       </div>
-      <div className="relative border border-primary rounded-[15px] mt-12 py-4 px-8">
-        {/* tab button */}
-        <div className="flex items-center gap-x-2 absolute bottom-[101%] right-5">
-          <TabButton
-            src={"/icons/aplus.svg"}
-            iconWidth={21}
-            iconHeight={23}
-            bgColor={"blue"}
-            textColor={"white"}
-          >
-            My Score
-          </TabButton>
-          <TabButton
-            src={"/icons/massage.svg"}
-            iconWidth={22}
-            iconHeight={22}
-            bgColor={"cream"}
-            textColor={"gray"}
-          >
-            Forum
-          </TabButton>
-          <TabButton
-            src={"/icons/score.svg"}
-            iconWidth={24}
-            iconHeight={24}
-            bgColor={"primary"}
-            textColor={"gray"}
-          >
-            Community Score
-          </TabButton>
-        </div>
-        {/* score */}
-        <Score />
-      </div>
-      <Modal open={open} setOpen={setOpen} />
+      {/* // result tab */}
+      {result && <ResultSection setOpenModal={setOpenModal} result={result} />}
+      {result && (
+        <Modal result={result} open={openModal} setOpen={setOpenModal} />
+      )}
     </div>
   );
 };
 export default Index;
 
-const Modal = ({ open, setOpen }) => {
-  const ReadingScore = 86;
-  const SpeakingScore = 50;
-  const content = 53;
-  const fluency = 73;
-  const pronunciation = 63;
+const Modal = ({ open, setOpen, result }) => {
+  const ReadingScore = result?.reading_score || 0;
+  const SpeakingScore = result?.speaking_score || 0;
+  const content = result?.reading_score || 0;
+  const fluency = result?.fluency_score || 0;
+  const pronunciation = result?.pronunciation_score || 0;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -286,5 +257,44 @@ const Modal = ({ open, setOpen }) => {
         </div>
       </div>
     </ReusableModal>
+  );
+};
+
+const ResultSection = ({ result, setOpenModal }) => {
+  return (
+    <div className="relative border border-primary rounded-[15px] mt-12 py-4 px-8">
+      {/* tab button */}
+      <div className="flex items-center gap-x-2 absolute bottom-[101%] right-5">
+        <TabButton
+          src={"/icons/aplus.svg"}
+          iconWidth={21}
+          iconHeight={23}
+          bgColor={"blue"}
+          textColor={"white"}
+        >
+          My Score
+        </TabButton>
+        <TabButton
+          src={"/icons/massage.svg"}
+          iconWidth={22}
+          iconHeight={22}
+          bgColor={"cream"}
+          textColor={"gray"}
+        >
+          Forum
+        </TabButton>
+        <TabButton
+          src={"/icons/score.svg"}
+          iconWidth={24}
+          iconHeight={24}
+          bgColor={"primary"}
+          textColor={"gray"}
+        >
+          Community Score
+        </TabButton>
+      </div>
+      {/* score */}
+      <Score setOpenModal={setOpenModal} result={result} />
+    </div>
   );
 };
