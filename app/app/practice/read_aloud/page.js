@@ -1,5 +1,6 @@
 "use client";
 import AiPageHeader from "@/src/components/global/AiPageHeader";
+import LineProgressBar from "@/src/components/global/LineProgressBar";
 import ReusableModal from "@/src/components/global/ReusableModal";
 import TabButton from "@/src/components/global/TabButton";
 import Pagination from "@/src/components/read-aloud/Pagination";
@@ -230,10 +231,11 @@ const Modal = ({ open, setOpen }) => {
                 {/* Content */}
                 <div className="w-full flex items-center justify-between gap-x-5">
                   <p className="text-gray text-xl w-3/6 text-start">Content</p>
-                  <div className="h-[45px] w-full rounded-3xl bg-secondary relative">
-                    {/* % */}
-                    <div className="w-[50%] h-full bg-cream rounded-3xl absolute top-0 left-0"></div>
-                  </div>
+                  <LineProgressBar
+                    bgColor={"secondary"}
+                    lineColor={"cream"}
+                    parentage={55}
+                  />
                   <p className="text-gray text-xl">53/90</p>
                 </div>
                 {/* Fluency */}
