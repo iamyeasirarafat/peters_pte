@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
     <Provider store={store}>
       <SetValues />
       {/* for dark mood toggle this normal to dark */}
-      <html className="normal" lang="en">
+      <html className="normal font-cabin" lang="en">
         <body>{children}</body>
       </html>
     </Provider>

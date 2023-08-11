@@ -134,6 +134,9 @@ export default Index;
 const Modal = ({ open, setOpen }) => {
   const ReadingScore = 86;
   const SpeakingScore = 50;
+  const content = 53;
+  const fluency = 73;
+  const pronunciation = 63;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -231,20 +234,16 @@ const Modal = ({ open, setOpen }) => {
                 {/* Content */}
                 <div className="w-full flex items-center justify-between gap-x-5">
                   <p className="text-gray text-xl w-3/6 text-start">Content</p>
-                  <LineProgressBar
-                    bgColor={"secondary"}
-                    lineColor={"cream"}
-                    parentage={55}
-                  />
+                  <LineProgressBar lineColor={"cream"} strokeWidth={content} />
                   <p className="text-gray text-xl">53/90</p>
                 </div>
                 {/* Fluency */}
                 <div className="w-full flex items-center justify-between gap-x-5">
                   <p className="text-gray text-xl w-3/6 text-start">Fluency</p>
-                  <div className="h-[45px] w-full rounded-3xl bg-secondary relative">
-                    {/* % */}
-                    <div className="w-[60%] h-full bg-[#849C3E] rounded-3xl absolute top-0 left-0"></div>
-                  </div>
+                  <LineProgressBar
+                    lineColor={"yellow_green"}
+                    strokeWidth={fluency}
+                  />
                   <p className="text-gray text-xl">73/90</p>
                 </div>
                 {/* Pronunciation */}
@@ -252,10 +251,10 @@ const Modal = ({ open, setOpen }) => {
                   <p className="text-gray text-xl w-3/6 text-start">
                     Pronunciation
                   </p>
-                  <div className="h-[45px] w-full rounded-3xl bg-secondary relative">
-                    {/* % */}
-                    <div className="w-[30%] h-full bg-blue rounded-3xl absolute top-0 left-0"></div>
-                  </div>
+                  <LineProgressBar
+                    lineColor={"blue"}
+                    strokeWidth={pronunciation}
+                  />
                   <p className="text-gray text-xl">63/90</p>
                 </div>
               </div>
