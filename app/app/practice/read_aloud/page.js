@@ -3,7 +3,6 @@ import AiPageHeader from "@/src/components/global/AiPageHeader";
 import LineProgressBar from "@/src/components/global/LineProgressBar";
 import ReusableModal from "@/src/components/global/ReusableModal";
 import TabButton from "@/src/components/global/TabButton";
-import Pagination from "@/src/components/read-aloud/Pagination";
 import RecordBlock from "@/src/components/read-aloud/RecordBlock";
 import Score from "@/src/components/read-aloud/Score";
 import TextBlock from "@/src/components/read-aloud/TextBlock";
