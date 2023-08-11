@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { ReactMic } from "react-mic";
-import Pagination from "./Pagination";
+import Pagination from "../global/Pagination";
 
 const RecordBlock = () => {
   // countdown function
@@ -129,7 +129,7 @@ const RecordBlock = () => {
           </audio>
         </div>
       )}
-      {/* paginaion */}
+      {/* Pagination */}
       <Pagination HandleSubmit={HandleSubmit} />
     </>
   );
