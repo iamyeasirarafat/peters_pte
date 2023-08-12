@@ -4,24 +4,28 @@ import LineProgressBar from "@/src/components/global/LineProgressBar";
 import ReusableModal from "@/src/components/global/ReusableModal";
 import Score from "@/src/components/global/Score";
 import TabButton from "@/src/components/global/TabButton";
+import WordHighlight from "@/src/components/global/WordHighlight";
 import RecordBlock from "@/src/components/read-aloud/RecordBlock";
 import TextBlock from "@/src/components/read-aloud/TextBlock";
+import wordCount from "@/src/utils/wordCount";
 import axios from "axios";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import { Toaster } from "react-hot-toast";
 import { AiOutlineSound } from "react-icons/ai";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { VscDebugStart } from "react-icons/vsc";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
+import GlobalModal from "../../src/component/GlobalModal";
 
 const Index = () => {
   const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
+  console.log(result);
   const params = useSearchParams();
   const id = params.get("que_no");
   useEffect(() => {
@@ -34,6 +38,8 @@ const Index = () => {
 
   return (
     <div>
+      {/* Side Modal */}
+      <GlobalModal />
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
@@ -101,6 +107,8 @@ const Index = () => {
 export default Index;
 
 const Modal = ({ open, setOpen, result }) => {
+  const params = useSearchParams();
+  const id = params.get("que_no");
   const ReadingScore = result?.reading_score || 0;
   const SpeakingScore = result?.speaking_score || 0;
   const content = result?.reading_score || 0;
@@ -111,7 +119,7 @@ const Modal = ({ open, setOpen, result }) => {
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
         {/* modal header */}
         <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
-          <p className="text-white text-2xl">#7250589</p>
+          <p className="text-white text-2xl">#{id}</p>
           <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
           <div className="flex items-center gap-x-4">
             <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
@@ -208,7 +216,7 @@ const Modal = ({ open, setOpen, result }) => {
                     lineColor={"cream"}
                     strokeWidth={content}
                   />
-                  <p className="text-gray text-xl">53/90</p>
+                  <p className="text-gray text-xl">{content}/90</p>
                 </div>
                 {/* Fluency */}
                 <div className="w-full flex items-center justify-between gap-x-5">
@@ -218,7 +226,7 @@ const Modal = ({ open, setOpen, result }) => {
                     lineColor={"primary"}
                     strokeWidth={fluency}
                   />
-                  <p className="text-gray text-xl">73/90</p>
+                  <p className="text-gray text-xl">{fluency}/90</p>
                 </div>
                 {/* Pronunciation */}
                 <div className="w-full flex items-center justify-between gap-x-5">
@@ -230,7 +238,7 @@ const Modal = ({ open, setOpen, result }) => {
                     lineColor={"blue"}
                     strokeWidth={pronunciation}
                   />
-                  <p className="text-gray text-xl">63/90</p>
+                  <p className="text-gray text-xl">{pronunciation}/90</p>
                 </div>
               </div>
             </div>
@@ -241,20 +249,19 @@ const Modal = ({ open, setOpen, result }) => {
               <p className="text-gray text-xl">AI Speech to Text</p>
             </div>
             <div className="px-7 py-5">
-              <p className="text-left text-xl leading-normal">
-                The bill calls for the establishment of the National Landslide
-                Hazards Reduction Program within one year of becoming law. The
-                program serves numerous functions, including to identify and
-                understand landslide hazards and risks, reduce losses from
-                landslides, protect communities at risk of landslides hazards,
-                and improve communication and emergency preparedness.
-              </p>
+              <WordHighlight words={result?.word_highlight} />
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <p className="text-gray text-lg font-medium">Total: 50 words</p>
-            <p className="text-[#858736] text-lg font-medium">Good: 36 words</p>
-            <p className="text-red text-lg font-medium">Bad/Missed: 14 words</p>
+            <p className="text-gray text-lg font-medium">
+              Total: {result?.word_highlight.length} words
+            </p>
+            <p className="text-[#858736] text-lg font-medium">
+              Good: {wordCount(result?.word_highlight, "correct")} words
+            </p>
+            <p className="text-red text-lg font-medium">
+              Bad/Missed: {wordCount(result?.word_highlight, "missing")} words
+            </p>
           </div>
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023

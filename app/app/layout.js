@@ -25,7 +25,7 @@ const DashboardLayout = ({ children }) => {
         )}
         <SideNav />
         <div className="max-w-7xl w-full mx-auto">{children}</div>
-        <GlobalModal />
+        {/* <GlobalModal /> */}
       </div>
     </>
   );
