@@ -1,24 +1,40 @@
 import Image from "next/image";
-import { useEffect } from "react";
+import { useState } from "react";
 
 const TextBlock = ({ data }) => {
+  const [talking, setTalking] = useState(false);
   //text to speech function
-  let synth;
-  useEffect(() => {
-    synth = window?.speechSynthesis;
-  }, []);
+  let synth = typeof window !== "undefined" && window?.speechSynthesis;
+  //handle speak function
   const handleSpeak = () => {
     if (synth && data?.content) {
       const utterance = new SpeechSynthesisUtterance(data?.content);
       synth.speak(utterance);
+      setTalking(true);
     }
   };
+
+  //handle stop function
+  const handleStop = () => {
+    synth.pause();
+    setTalking(false);
+  };
+
   return (
     <div className="border border-primary rounded-[15px] mt-6 ml-8 mr-5 pt-3 pb-4 px-5">
       <p className="text-xl">{data?.content}</p>
       {/*  */}
       <div className="mt-[40px] flex justify-end">
-        <button onClick={handleSpeak} className="w-[34px] h-[27px]">
+        <button
+          onClick={() => {
+            if (talking) {
+              handleStop();
+            } else {
+              handleSpeak();
+            }
+          }}
+          className="w-[34px] h-[27px]"
+        >
           <div className="w-full h-full relative">
             <Image
               className="object-cover"

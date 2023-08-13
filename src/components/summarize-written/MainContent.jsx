@@ -1,25 +1,29 @@
 import Image from "next/image";
-import React from "react";
 import TextBlock from "../global/TextBlock";
 import TypingBlock from "./TypingBlock";
 
-const MainContent = () => {
+const MainContent = ({ data, setResult }) => {
   return (
     <div className="relative border border-primary rounded-[15px] mt-12 pb-4">
       {/* tab button */}
       <div className="flex items-center gap-x-2 absolute bottom-[100.2%] right-5">
-        <button className="text-gray py-1 px-3 rounded-t-md text-base bg-cream">
-          Prediction
-        </button>
+        {data?.prediction && (
+          <button className="text-gray py-1 px-3 rounded-t-md text-base bg-cream">
+            Prediction
+          </button>
+        )}
         <button className="text-gray py-1 px-3 rounded-t-md text-base bg-primary">
-          Practiced (1)
+          Practiced ({data?.practiced})
         </button>
         <button className="text-white py-1 px-3 rounded-t-md text-base bg-blue">
-          Appeared (12)
+          Appeared ({data?.appeared})
         </button>
       </div>
       <div className="bg-secondary rounded-t-[15px] py-2 pl-8 pr-5 flex items-center justify-between">
-        <p className="text-[#ACACAC] text-xl">Bill | Q No. #7250589</p>
+        <p className="text-[#ACACAC] text-xl">
+          {" "}
+          {data?.title} | Q No. #{data?.id}
+        </p>
         <div className="flex items-center gap-x-5">
           <div className="w-[28px] h-[29px]">
             <div className="w-full h-full relative">
@@ -44,9 +48,9 @@ const MainContent = () => {
         </div>
       </div>
       {/* text block */}
-      <TextBlock />
+      <TextBlock data={data} />
       {/* type Block */}
-      <TypingBlock />
+      <TypingBlock setResult={setResult} />
     </div>
   );
 };

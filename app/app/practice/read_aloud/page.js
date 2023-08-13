@@ -23,7 +23,6 @@ const Index = () => {
     };
     getData();
   }, [id]);
-
   return (
     <div>
       {/* Side Modal */}

@@ -9,7 +9,7 @@ const navItems = {
   "Speaking Test": [
     {
       name: "Read Aloud",
-      path: "/app/practice/read_aloud?que_no=2",
+      path: "/app/practice/read_aloud?que_no=3",
       ai: true,
       icon: "",
     },
@@ -40,7 +40,7 @@ const navItems = {
   "Writing Test": [
     {
       name: "Summarize Written Text",
-      path: "#",
+      path: "/app/practice/summarize_written?que_no=1",
       ai: true,
       icon: "",
     },

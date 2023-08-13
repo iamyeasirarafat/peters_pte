@@ -2,7 +2,7 @@ import React from "react";
 import TabButton from "./TabButton";
 import Score from "./Score";
 
-const ResultSection = ({ result, setOpenModal }) => {
+const ResultSection = ({ result, setOpenModal, summary }) => {
   return (
     <div className="relative border border-primary rounded-[15px] mt-12 py-4 px-8">
       {/* tab button */}
@@ -36,7 +36,7 @@ const ResultSection = ({ result, setOpenModal }) => {
         </TabButton>
       </div>
       {/* score */}
-      <Score setOpenModal={setOpenModal} result={result} />
+      <Score summary={summary} setOpenModal={setOpenModal} result={result} />
     </div>
   );
 };
