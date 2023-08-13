@@ -112,6 +112,11 @@ const RecordBlock = ({ setResult }) => {
       setIsLoading(false);
     }
   };
+
+  // if change question automatically removing old record function
+  useEffect(() => {
+    setAudioData(null);
+  }, [id]);
   return (
     <>
       <div className="border border-primary rounded-[15px] mt-3 ml-8 mr-5 p-4 flex flex-col items-center justify-center">

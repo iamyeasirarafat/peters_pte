@@ -6,7 +6,7 @@ import Pagination from "../global/Pagination";
 
 const TypingBlock = ({ setResult }) => {
   // remaining time function
-  const initialMinutes = 1;
+  const initialMinutes = 10;
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
@@ -57,6 +57,12 @@ const TypingBlock = ({ setResult }) => {
       setIsLoading(false);
     }
   };
+
+  // after change question automatically clearing textfild
+  useEffect(() => {
+    setSummary("");
+  }, [id]);
+
   return (
     <>
       <div className="border border-primary rounded-[15px] mt-3 ml-8 mr-5">
@@ -76,6 +82,7 @@ const TypingBlock = ({ setResult }) => {
         <div className="p-3">
           <textarea
             onChange={(e) => setSummary(e.target.value)}
+            value={summary}
             disabled={timerExpired}
             className="w-full disabled:opacity-40 border-0 text-gray focus:ring-0"
             placeholder="Type your summary here..."

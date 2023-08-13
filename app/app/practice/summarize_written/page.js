@@ -1,6 +1,7 @@
 "use client";
 import AiPageHeader from "@/src/components/global/AiPageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
+import SideModal from "@/src/components/global/SideModal";
 import MainContent from "@/src/components/summarize-written/MainContent";
 import SummarizeModal from "@/src/components/summarize-written/SummarizeModal";
 import axios from "axios";
@@ -12,7 +13,6 @@ const Index = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-  console.log(result);
   const params = useSearchParams();
   const id = params.get("que_no");
   useEffect(() => {
@@ -22,9 +22,19 @@ const Index = () => {
     };
     getData();
   }, [id]);
+
+  // sideModal Data
+  const SideModalData = {
+    title: "Summarize Text",
+    api: "/summarizes",
+  };
   return (
     <div>
+      {/* Toast component  */}
       <Toaster />
+
+      {/* sideModal Component  */}
+      <SideModal data={SideModalData} />
       <AiPageHeader title="Summarize Written Text" setOpen={setOpen} />
       <p className="text-gray text-base mt-2 text-center">
         Read the passage below and summarize it using one sentence. Type your

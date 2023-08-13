@@ -1,36 +1,46 @@
 import { toggleModal as modalSlice } from "@/src/redux/slice/globalModalSlice";
-import { useDispatch, useSelector } from "react-redux";
-
-const GlobalModal = () => {
-  const dispatch = useDispatch();
-  const toggleModal = () => dispatch(modalSlice({ data: "sss" }));
-
-  return (
-    <>
-      <button
-        onClick={toggleModal}
-        className="top-2/4 absolute h-20 w-7 bg-primary right-0 rounded-tl-3xl rounded-bl-3xl "
-      >
-        <img src="/icons/chevrons-right-double.svg" alt="" />
-      </button>
-      <Modal />
-    </>
-  );
-};
-export default GlobalModal;
-
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import axios from "axios";
+import { Fragment, useEffect, useState } from "react";
+import { IoIosArrowBack } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import QuestionBlock from "./QuestionBlock";
 import QuestionNavigation from "./QuestionNavigation";
-import { IoIosArrowBack } from "react-icons/io";
 
-const Modal = () => {
-  const { state } = useSelector((state) => state.globalModal);
+const GlobalModal = () => {
+  //redux state management functions
+  const state = useSelector((state) => state.globalModal);
   const dispatch = useDispatch();
   const toggleModal = () => dispatch(modalSlice({}));
   const [questionType, setQuestionType] = useState("All");
 
+  //getting Data from api functions
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios(state?.data?.api);
+      setData(data);
+    };
+    if (state.visible) {
+      getData();
+    }
+  }, [state]);
+
+  // data filtration
+  const [filteredData, setFilteredData] = useState([]);
+  useEffect(() => {
+    if (questionType === "All") {
+      setFilteredData(data);
+    }
+    if (questionType === "Practiced") {
+      const filter = data.filter((item) => item.practiced > 0);
+      setFilteredData(filter);
+    }
+    if (questionType === "Not_Practiced") {
+      const filter = data.filter((item) => item.practiced === 0);
+      setFilteredData(filter);
+    }
+  }, [data, questionType]);
   return (
     <Transition.Root show={state.visible} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={toggleModal}>
@@ -43,7 +53,7 @@ const Modal = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-white bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
@@ -63,11 +73,11 @@ const Modal = () => {
                     <div className="border flex justify-between border-primary rounded-xl px-7 py-3">
                       <div className="flex gap-2 items-center">
                         <h2 className="font-cabin text-4xl text-gray">
-                          Read Aloud
+                          {state?.data?.title}
                         </h2>
 
                         <h2 className="font-cabin text-xl text-gray">
-                          | 1121 Question
+                          | {data?.length} Question
                         </h2>
                       </div>
                       <div className="max-w-lg w-full relative bg-white overflow-hidden rounded-3xl">
@@ -103,11 +113,13 @@ const Modal = () => {
                       </div>
                       <div className="space-y-2">
                         {/* Question */}
-                        {Array(7)
-                          .fill()
-                          .map((q, i) => (
-                            <QuestionBlock key={i} />
-                          ))}
+                        {filteredData?.map((item, i) => (
+                          <QuestionBlock
+                            toggleModal={toggleModal}
+                            key={i}
+                            data={item}
+                          />
+                        ))}
                       </div>
                       {/* pagination */}
                       <div className="flex items-center justify-end pt-4">
@@ -138,3 +150,4 @@ const Modal = () => {
     </Transition.Root>
   );
 };
+export default GlobalModal;

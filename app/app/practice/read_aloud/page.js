@@ -1,13 +1,13 @@
 "use client";
 import AiPageHeader from "@/src/components/global/AiPageHeader";
+import ResultSection from "@/src/components/global/ResultSection";
+import SideModal from "@/src/components/global/SideModal";
+import MainContent from "@/src/components/read-aloud/MainContent";
+import ReadAloudModal from "@/src/components/read-aloud/ReadAloudModal";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import GlobalModal from "../../src/component/GlobalModal";
-import ResultSection from "@/src/components/global/ResultSection";
-import ReadAloudModal from "@/src/components/read-aloud/ReadAloudModal";
-import MainContent from "@/src/components/read-aloud/MainContent";
 
 const Index = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -23,10 +23,16 @@ const Index = () => {
     };
     getData();
   }, [id]);
+
+  //sideModal Data
+  const SideModalData = {
+    title: "Read Aloud",
+    api: "/practice/read_alouds",
+  };
   return (
     <div>
       {/* Side Modal */}
-      <GlobalModal />
+      <SideModal data={SideModalData} />
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}

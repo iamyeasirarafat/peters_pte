@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  state: {
-    visible: false,
-    data: {},
-  },
+  visible: false,
+  data: {},
 };
 
 const globalModalSlice = createSlice({
@@ -12,8 +10,8 @@ const globalModalSlice = createSlice({
   initialState,
   reducers: {
     toggleModal: (state, action) => {
-      state.state.visible = !state.state.visible;
-      state.state.data = action.payload;
+      state.visible = !state.visible;
+      state.data = action.payload;
       return state;
     },
   },

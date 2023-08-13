@@ -140,9 +140,10 @@ const SingleItem = ({ data, open }) => {
   return (
     <Link
       href={data?.path}
-      className={`mt-3 flex gap-1 items-center ${
-        open ? "" : "-mt-24"
-      } transition-all duration-300  ease-linear`}
+      style={{
+        marginTop: open ? "12px" : "-80px",
+      }}
+      className={` flex gap-1 items-center  transition-all duration-300  ease-linear`}
     >
       <div className="relative h-14 w-14">
         <div className="bg-white rounded-xl w-full h-full"></div>
