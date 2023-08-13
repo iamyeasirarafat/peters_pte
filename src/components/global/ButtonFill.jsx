@@ -1,9 +1,9 @@
-const ButtonFill = ({ text, bgColor, textColor }) => {
+const ButtonFill = ({ text, bgColor, textColor, count }) => {
   return (
     <button
       className={`text-${textColor} py-1 px-3 text-base rounded bg-${bgColor}`}
     >
-      {text}
+      {text} <span>{count}</span>
     </button>
   );
 };

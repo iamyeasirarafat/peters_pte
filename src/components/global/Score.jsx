@@ -2,7 +2,7 @@ import { BiSolidTrashAlt } from "react-icons/bi";
 import { BsPlusCircle } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 
-const Score = ({ result, setOpenModal }) => {
+const Score = ({ result, setOpenModal, summary }) => {
   return (
     <div className="flex items-center justify-between border border-primary rounded-[15px] p-2">
       {/*  */}
@@ -19,14 +19,18 @@ const Score = ({ result, setOpenModal }) => {
           <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
             S
           </p>
-          <p className="text-xl text-gray">{result?.speaking_score}/90</p>
-        </button>
-        <button className="border border-primary rounded-[30px] flex items-center gap-x-4 py-1 pl-2 pr-7">
-          <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-cream">
-            R
+          <p className="text-xl text-gray">
+            {result?.speaking_score || result?.Overall}/{summary ? "7" : "90"}
           </p>
-          <p className="text-xl text-gray">{result?.reading_score}/90</p>
         </button>
+        {!summary && (
+          <button className="border border-primary rounded-[30px] flex items-center gap-x-4 py-1 pl-2 pr-7">
+            <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-cream">
+              R
+            </p>
+            <p className="text-xl text-gray">{result?.reading_score}/90</p>
+          </button>
+        )}
         <button
           onClick={() => setOpenModal(true)}
           className="border border-primary rounded-[30px] flex items-center gap-x-4 py-1 pl-2 pr-7"

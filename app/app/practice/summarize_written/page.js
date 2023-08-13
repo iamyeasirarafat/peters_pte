@@ -1,14 +1,47 @@
 "use client";
 import AiPageHeader from "@/src/components/global/AiPageHeader";
-import { useState } from "react";
 import ResultSection from "@/src/components/global/ResultSection";
+import SideModal from "@/src/components/global/SideModal";
 import SummarizeModal from "@/src/components/summarize-written/SummarizeModal";
-import MainContent from "@/src/components/summarize-written/MainContent";
+import axios from "axios";
+import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
+
+const MainContent = dynamic(
+  () => import("@/src/components/summarize-written/MainContent"),
+  {
+    ssr: false,
+  }
+);
 
 const Index = () => {
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState({});
+  const [result, setResult] = useState(null);
+  const params = useSearchParams();
+  const id = params.get("que_no");
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios("/summarize/" + id);
+      setData(data);
+    };
+    getData();
+  }, [id]);
+
+  // sideModal Data
+  const SideModalData = {
+    title: "Summarize Text",
+    api: "/summarizes",
+  };
   return (
     <div>
+      {/* Toast component  */}
+      <Toaster />
+
+      {/* sideModal Component  */}
+      <SideModal data={SideModalData} />
       <AiPageHeader title="Summarize Written Text" setOpen={setOpen} />
       <p className="text-gray text-base mt-2 text-center">
         Read the passage below and summarize it using one sentence. Type your
@@ -18,10 +51,14 @@ const Index = () => {
         passage.
       </p>
       {/* read aloud box  */}
-      <MainContent />
+      <MainContent data={data} setResult={setResult} />
       {/* result section */}
-      <ResultSection result={result} setOpenModal={setOpenModal} />
-      <SummarizeModal open={open} setOpen={setOpen} />
+      {result && (
+        <ResultSection summary result={result} setOpenModal={setOpen} />
+      )}
+      {result && (
+        <SummarizeModal result={result} open={open} setOpen={setOpen} />
+      )}
     </div>
   );
 };

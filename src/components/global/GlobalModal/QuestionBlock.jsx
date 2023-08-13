@@ -1,24 +1,58 @@
 import ButtonFill from "@/src/components/global/ButtonFill";
 import ButtonOutline from "@/src/components/global/ButtonOutline";
 import Image from "next/image";
-import React from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+const QuestionBlock = ({ data, toggleModal }) => {
+  // pushing id to search params
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-const QuestionBlock = () => {
+  const addParam = (event = ChangeEvent) => {
+    // now you got a read/write object
+    const current = new URLSearchParams(Array.from(searchParams.entries())); // -> has to use this form
+
+    //setting new question id
+    current.delete("que_no");
+
+    current.set("que_no", data.id);
+
+    // cast to string
+    const search = current.toString();
+    // or const query = `${'?'.repeat(search.length && 1)}${search}`;
+    const query = search ? `?${search}` : "";
+
+    router.push(`${pathname}${query}`);
+
+    //closing Side Modal
+    toggleModal();
+  };
   return (
-    <div className="flex items-center justify-between border border-primary rounded-[13px] p-3">
-      <h2 className="text-xl font-medium">Bill | #7250589</h2>
+    <div
+      onClick={addParam}
+      className="flex items-center cursor-pointer justify-between border border-primary rounded-[13px] p-3"
+    >
+      <h2 className="text-xl font-medium">
+        {data?.title} | #{data?.id}
+      </h2>
       <div className="flex items-center gap-x-10">
         <div className="space-x-2">
-          <ButtonFill text="Prediction" bgColor={"cream"} textColor={"gray"} />
+          {data?.prediction && (
+            <ButtonFill
+              text="Prediction"
+              bgColor={"cream"}
+              textColor={"gray"}
+            />
+          )}
           <ButtonFill
             text="Practiced"
-            count={"(4)"}
+            count={`(${data?.practiced})`}
             bgColor={"primary"}
             textColor={"gray"}
           />
           <ButtonOutline
             text="Appeared"
-            count={"(12)"}
+            count={`(${data?.appeared})`}
             borderColor={"primary"}
             textColor={"gray"}
           />

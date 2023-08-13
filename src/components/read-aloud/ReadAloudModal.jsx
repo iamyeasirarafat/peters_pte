@@ -1,13 +1,14 @@
-import React from "react";
-import ReusableModal from "../global/ReusableModal";
-import { MdOutlineFileDownload } from "react-icons/md";
-import { GrClose } from "react-icons/gr";
-import { VscDebugStart } from "react-icons/vsc";
-import { AiOutlineSound } from "react-icons/ai";
-import LineProgressBar from "../global/LineProgressBar";
-import WordHighlight from "../global/WordHighlight";
+import wordCount from "@/src/utils/wordCount";
+import { useSearchParams } from "next/navigation";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { AiOutlineSound } from "react-icons/ai";
+import { GrClose } from "react-icons/gr";
+import { MdOutlineFileDownload } from "react-icons/md";
+import { VscDebugStart } from "react-icons/vsc";
+import LineProgressBar from "../global/LineProgressBar";
+import ReusableModal from "../global/ReusableModal";
+import WordHighlight from "../global/WordHighlight";
 
 const ReadAloudModal = ({ open, setOpen, result }) => {
   const params = useSearchParams();
