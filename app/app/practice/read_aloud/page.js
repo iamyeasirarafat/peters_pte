@@ -2,12 +2,18 @@
 import AiPageHeader from "@/src/components/global/AiPageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
-import MainContent from "@/src/components/read-aloud/MainContent";
 import ReadAloudModal from "@/src/components/read-aloud/ReadAloudModal";
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+const MainContent = dynamic(
+  () => import("@/src/components/read-aloud/MainContent"),
+  {
+    ssr: false,
+  }
+);
 
 const Index = () => {
   const [openModal, setOpenModal] = useState(false);

@@ -2,12 +2,19 @@
 import AiPageHeader from "@/src/components/global/AiPageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
-import MainContent from "@/src/components/summarize-written/MainContent";
 import SummarizeModal from "@/src/components/summarize-written/SummarizeModal";
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+
+const MainContent = dynamic(
+  () => import("@/src/components/summarize-written/MainContent"),
+  {
+    ssr: false,
+  }
+);
 
 const Index = () => {
   const [open, setOpen] = useState(false);
