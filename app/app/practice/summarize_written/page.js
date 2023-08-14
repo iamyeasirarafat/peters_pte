@@ -60,7 +60,7 @@ const Index = () => {
       {result && (
         <SummarizeModal result={result} open={open} setOpen={setOpen} />
       )}
-      <DiscursionSection />
+      {/*<DiscursionSection /> */}
     </div>
   );
 };
