@@ -44,12 +44,12 @@ const AuthBanner = () => {
               </p>
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 w-[500px] h-[650px]">
                 <div className="w-full h-full relative">
-                  {/* <Image
+                  <Image
                     className="object-cover"
                     src="/auth-image.png"
                     fill
                     alt="auth image"
-                  /> */}
+                  />
                 </div>
               </div>
             </SwiperSlide>

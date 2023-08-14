@@ -1,5 +1,6 @@
 "use client";
 import AiPageHeader from "@/src/components/global/AiPageHeader";
+import DiscursionSection from "@/src/components/global/DiscursionSection";
 import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
 import SummarizeModal from "@/src/components/summarize-written/SummarizeModal";
@@ -59,6 +60,7 @@ const Index = () => {
       {result && (
         <SummarizeModal result={result} open={open} setOpen={setOpen} />
       )}
+      <DiscursionSection />
     </div>
   );
 };
