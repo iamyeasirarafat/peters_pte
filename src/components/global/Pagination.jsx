@@ -8,7 +8,7 @@ const Pagination = ({
   isLoading,
 }) => {
   return (
-    <div className="flex items-center justify-between ml-8 mr-5 mt-3">
+    <div className="flex items-center justify-between mt-3">
       <div className="flex items-center gap-x-2">
         <button
           disabled={isLoading}
