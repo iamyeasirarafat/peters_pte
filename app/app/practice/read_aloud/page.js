@@ -1,19 +1,22 @@
 "use client";
-import AiPageHeader from "@/src/components/global/AiPageHeader";
+import GlobalMainContent from "@/src/components/global/GlobalMainContent";
+import PageHeader from "@/src/components/global/PageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
+import TextBlock from "@/src/components/global/TextBlock";
 import ReadAloudModal from "@/src/components/read-aloud/ReadAloudModal";
+import RecordBlock from "@/src/components/read-aloud/RecordBlock";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-const MainContent = dynamic(
-  () => import("@/src/components/read-aloud/MainContent"),
-  {
-    ssr: false,
-  }
-);
+// const MainContent = dynamic(
+//   () => import("@/src/components/read-aloud/MainContent"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 const Index = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -42,13 +45,17 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <AiPageHeader title="Read Aloud" setOpen={setOpenModal} />
+      <PageHeader title="Read Aloud" setOpen={setOpenModal} />
       <p className="text-gray text-base mt-2 text-center">
         Look at the text below. In 35 seconds, you must read this text aloud as
         naturally and clearly as possible. You have 35 seconds to read aloud.
       </p>
-      {/* read aloud box  */}
-      <MainContent data={data} setResult={setResult} />
+      <GlobalMainContent data={data}>
+        {/* text block */}
+        <TextBlock data={data} />
+        {/* recording Block */}
+        <RecordBlock setResult={setResult} />
+      </GlobalMainContent>
       {/* // result tab */}
       {result && <ResultSection setOpenModal={setOpenModal} result={result} />}
       {result && (

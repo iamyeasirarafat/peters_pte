@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 
-const AiPageHeader = ({ title, setOpen }) => {
+const PageHeader = ({ title, setOpen }) => {
   return (
     <div className="py-2 px-5 border border-primary rounded-[15px] mt-5">
       <div className="flex items-center justify-between">
@@ -52,4 +52,4 @@ const AiPageHeader = ({ title, setOpen }) => {
   );
 };
 
-export default AiPageHeader;
+export default PageHeader;

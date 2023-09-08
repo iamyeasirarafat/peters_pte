@@ -1,5 +1,5 @@
 "use client";
-import AiPageHeader from "@/src/components/global/AiPageHeader";
+import PageHeader from "@/src/components/global/PageHeader";
 import DiscursionSection from "@/src/components/global/DiscursionSection";
 import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
@@ -9,6 +9,9 @@ import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import TextBlock from "@/src/components/global/TextBlock";
+import TypingBlock from "@/src/components/summarize-written/TypingBlock";
+import GlobalMainContent from "@/src/components/global/GlobalMainContent";
 
 const MainContent = dynamic(
   () => import("@/src/components/summarize-written/MainContent"),
@@ -43,7 +46,7 @@ const Index = () => {
 
       {/* sideModal Component  */}
       <SideModal data={SideModalData} />
-      <AiPageHeader title="Summarize Written Text" setOpen={setOpen} />
+      <PageHeader title="Summarize Written Text" setOpen={setOpen} />
       <p className="text-gray text-base mt-2 text-center">
         Read the passage below and summarize it using one sentence. Type your
         response in the box at the bottom of the screen. You have 10 minutes to
@@ -51,8 +54,12 @@ const Index = () => {
         writing and on how well your response presents the key points in the
         passage.
       </p>
-      {/* read aloud box  */}
-      <MainContent data={data} setResult={setResult} />
+      <GlobalMainContent data={data}>
+        {/* text block */}
+        <TextBlock data={data} />
+        {/* type Block */}
+        <TypingBlock setResult={setResult} />
+      </GlobalMainContent>
       {/* result section */}
       {result && (
         <ResultSection summary result={result} setOpenModal={setOpen} />

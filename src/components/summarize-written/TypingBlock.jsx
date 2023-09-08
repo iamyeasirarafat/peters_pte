@@ -65,7 +65,7 @@ const TypingBlock = ({ setResult }) => {
 
   return (
     <>
-      <div className="border border-primary rounded-[15px] mt-3 ml-8 mr-5">
+      <div className="border border-primary rounded-[15px]">
         <div className="flex items-center justify-end bg-primary rounded-t-[15px] p-1 px-5">
           <div className="w-1/2 flex items-center justify-between">
             <p className="text-gray text-xs text-center mr-auto">
