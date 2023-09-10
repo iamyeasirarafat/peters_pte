@@ -13,7 +13,7 @@ const GlobalMainContent = ({ children, data }) => {
         )}
 
         <button className="text-gray py-1 px-3 rounded-t-md text-base bg-primary">
-          Practiced ({data?.practiced})
+          Practiced {data?.practiced ? `(${data?.practiced})` : ""}
         </button>
         <button className="text-white py-1 px-3 rounded-t-md text-base bg-blue">
           Appeared (12)

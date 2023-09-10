@@ -2,12 +2,12 @@ import React from "react";
 import { AiOutlineSound } from "react-icons/ai";
 import { ImPlay3 } from "react-icons/im";
 
-const ListenBlock = () => {
+const ListenBlock = ({ setOpen }) => {
   return (
-    <div className="p-5 border border-primary rounded-[15px]">
+    <div className="p-5 border border-primary rounded-[15px] relative">
       <div className="flex items-center justify-center">
         <div className="flex flex-col items-center gap-y-2">
-          <button className="bg-primary rounded-full w-16 h-16 flex items-center justify-center">
+          <button className="bg-primary rounded-full w-14 h-14 flex items-center justify-center">
             <ImPlay3 className="text-white text-4xl" />
           </button>
           <p className="text-gray text-lg">CLICK TO LISTEN</p>
@@ -40,6 +40,16 @@ const ListenBlock = () => {
           type="range"
         />
       </div>
+      {/* Transcript */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(true);
+        }}
+        className="text-gray text-base absolute top-2 right-2 py-2 px-3 rounded-3xl bg-secondary cursor-pointer"
+      >
+        Transcript
+      </button>
     </div>
   );
 };

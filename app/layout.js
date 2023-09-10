@@ -4,6 +4,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import { Provider } from "react-redux";
 import "./globals.css";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function RootLayout({ children }) {
   return (
