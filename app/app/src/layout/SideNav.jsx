@@ -1,7 +1,9 @@
 "use client";
 import { toggleSideNav } from "@/src/redux/slice/layoutSlice";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 
 // side navigation items
@@ -11,30 +13,36 @@ const navItems = {
       name: "Read Aloud",
       path: "/app/practice/read_aloud?que_no=3",
       ai: true,
-      icon: "",
+      icon: "RA",
+      bg: "gold",
     },
     {
       name: "Repeat Sentence",
       path: "#",
       ai: true,
-      icon: "",
+      icon: "RS",
+      bg: "gold",
     },
     {
       name: "Describe Image",
       path: "#",
       ai: true,
-      icon: "",
+      icon: "DI",
+      bg: "gold",
     },
     {
       name: "Re-Tell Lecture",
       path: "#",
       ai: true,
-      icon: "",
+      icon: "RL",
+      bg: "gold",
     },
     {
       name: "Answer Short Question",
       path: "#",
       ai: true,
+      icon: "ASQ",
+      bg: "gold",
     },
   ],
   "Writing Test": [
@@ -42,17 +50,112 @@ const navItems = {
       name: "Summarize Written Text",
       path: "/app/practice/summarize_written?que_no=1",
       ai: true,
-      icon: "",
+      icon: "SWT",
+      bg: "primary",
     },
     {
       name: "Write Essay",
       path: "#",
       ai: true,
-      icon: "",
+      icon: "WE",
+      bg: "primary",
     },
   ],
-  "Reading Test": [],
-  "Listing Test": [],
+  "Reading Test": [
+    {
+      name: "Reading & Writing Fill in the blanks",
+      path: "#",
+      ai: false,
+      icon: "FIB",
+      bg: "cream",
+    },
+    {
+      name: "Multiple Choice (Multiple)",
+      path: "#",
+      ai: false,
+      icon: "MCM",
+      bg: "cream",
+    },
+    {
+      name: "Re-order Paragraphs",
+      path: "#",
+      ai: false,
+      icon: "RP",
+      bg: "cream",
+    },
+    {
+      name: "Reading Fill in the Blanks",
+      path: "#",
+      ai: false,
+      icon: "FIB",
+      bg: "cream",
+    },
+    {
+      name: "Multiple Choice (Single)",
+      path: "#",
+      ai: false,
+      icon: "MCS",
+      bg: "cream",
+    },
+  ],
+  "Listing Test": [
+    {
+      name: "Summarize Spoken Text",
+      path: "#",
+      ai: true,
+      icon: "SST",
+      bg: "gray",
+    },
+    {
+      name: "Multiple Choice (Multiple)",
+      path: "#",
+      ai: false,
+      icon: "MCM",
+      bg: "gray",
+    },
+    {
+      name: "Fill in the Blanks",
+      path: "#",
+      ai: false,
+      icon: "FIB",
+      bg: "gray",
+    },
+    {
+      name: "Highlight Correct Summary",
+      path: "#",
+      ai: false,
+      icon: "HCS",
+      bg: "gray",
+    },
+    {
+      name: "Multiple Choice (Single)",
+      path: "#",
+      ai: false,
+      icon: "MCS",
+      bg: "gray",
+    },
+    {
+      name: "Select Missing Word",
+      path: "#",
+      ai: false,
+      icon: "SMW",
+      bg: "gray",
+    },
+    {
+      name: "Highlight Incorrect Words",
+      path: "#",
+      ai: false,
+      icon: "HIW",
+      bg: "gray",
+    },
+    {
+      name: "Write From Dictation",
+      path: "#",
+      ai: true,
+      icon: "WFD",
+      bg: "gray",
+    },
+  ],
 };
 
 const SideNav = () => {
@@ -76,9 +179,12 @@ const SideNav = () => {
         onClick={toggleNav}
         className="top-2/4 absolute h-14 w-5 bg-secondary -right-[20px] rounded-tr-3xl rounded-br-3xl "
       >
-        <img
-          className={`${sideNav ? "" : "rotate-180"}`}
+        <Image
+          className={`object-cover ${sideNav ? "" : "rotate-180"}`}
           src="/icons/chevrons-left-double.svg"
+          width={16}
+          height={16}
+          alt="icon"
         />
       </button>
     </div>
@@ -121,7 +227,11 @@ const SideMenu = ({ data }) => {
             {sideNav ? data : data.split(" ")[0]}
           </h1>
           <button onClick={() => setIsOpen(!isOpen)}>
-            <img src="/icons/chevron-up.svg" />
+            <IoIosArrowDown
+              className={`text-gray text-base duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+            />
           </button>
         </div>
       </div>
@@ -143,10 +253,14 @@ const SingleItem = ({ data, open }) => {
       style={{
         marginTop: open ? "12px" : "-80px",
       }}
-      className={` flex gap-1 items-center  transition-all duration-300  ease-linear`}
+      className={` flex gap-x-2 items-center  transition-all duration-300  ease-linear`}
     >
-      <div className="relative h-14 w-14">
-        <div className="bg-white rounded-xl w-full h-full"></div>
+      <div className="relative h-14 w-14 flex-shrink-0">
+        <div
+          className={`bg-${data?.bg} rounded-xl w-full h-full flex items-center justify-center text-xl text-white font-semibold`}
+        >
+          {data?.icon}
+        </div>
         {data?.ai && (
           <div className="absolute h-5 w-5 flex items-center justify-center text-white -top-1 -right-1 bg-blue rounded-full text-xs font-cabin ">
             AI
