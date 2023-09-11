@@ -3,6 +3,7 @@ import { toggleTopNav as toggleNav } from "@/src/redux/slice/layoutSlice";
 import { useDispatch, useSelector } from "react-redux";
 import SideNav from "./src/layout/SideNav";
 import TopNav from "./src/layout/TopNav";
+import Image from "next/image";
 
 const DashboardLayout = ({ children }) => {
   const { topNav } = useSelector((state) => state.layout);
@@ -19,7 +20,13 @@ const DashboardLayout = ({ children }) => {
             onClick={toggleTopNav}
             className="absolute h-6 w-7 flex items-center justify-center rotate-180 bg-gold rounded top-2 right-3"
           >
-            <img src="/icons/chevron-up.svg" alt="" />
+            <Image
+              className="object-cover"
+              src="/icons/chevron-up.svg"
+              width={16}
+              height={16}
+              alt="icon"
+            />
           </button>
         )}
         <SideNav />

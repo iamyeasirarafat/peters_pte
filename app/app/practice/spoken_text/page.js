@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import ResultSection from "@/src/components/global/ResultSection";
 import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
 import SpokenTextModal from "@/src/components/spoken_text/SpokenTextModal";
+import DiscursionSection from "@/src/components/global/DiscursionSection";
 
 const Page = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +21,8 @@ const Page = () => {
         <ListenBlock setOpen={setOpen} />
         <TypingBlock />
       </GlobalMainContent>
-      <ResultSection setOpenModal={setOpenScoreModal} />
+      {/* <ResultSection setOpenModal={setOpenScoreModal} /> */}
+      <DiscursionSection />
       <TranscriptModal open={open} setOpen={setOpen} />
       <SpokenTextModal open={openScoreModal} setOpen={setOpenScoreModal} />
     </>
