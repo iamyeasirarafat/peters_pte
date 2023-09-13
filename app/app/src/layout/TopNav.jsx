@@ -75,7 +75,7 @@ const MenuItem = () => {
         Practice Test <IoIosArrowDown className="text-sm text-white" />
         {/* mega menu */}
         <div
-          className={`absolute z-50 top-11 left-0 w-full overflow-hidden group-hover:shadow-md transition-all duration-300 group-hover:h-[630px] h-0`}
+          className={`absolute z-50 top-11 left-0 w-full overflow-hidden group-hover:shadow-md transition-all duration-300 group-hover:h-[630px] h-0 cursor-default`}
         >
           <div className="pt-5 bg-white h-full w-full mt-5">
             <div className="max-w-6xl mx-auto flex justify-between gap-x-3">
