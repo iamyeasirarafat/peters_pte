@@ -6,6 +6,7 @@ import { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { RiCloseCircleLine, RiMenu2Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
+import { navItems } from "./SideNav";
 
 const TopNav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -64,13 +65,60 @@ const Logo = () => {
 };
 
 const MenuItem = () => {
+  const menuData = navItems;
   return (
     <ul className="text-white xs:hidden md:flex items-center gap-4 text-xl font-semibold font-avantt">
       <li>
         <Link href="/">Home</Link>
       </li>
-      <li className="flex items-center gap-x-2">
+      <li className="group flex items-center gap-x-2 cursor-pointer">
         Practice Test <IoIosArrowDown className="text-sm text-white" />
+        {/* mega menu */}
+        <div
+          className={`absolute z-50 top-11 left-0 w-full overflow-hidden group-hover:shadow-md transition-all duration-300 group-hover:h-[630px] h-0`}
+        >
+          <div className="pt-5 bg-white h-full w-full mt-5">
+            <div className="max-w-6xl mx-auto flex justify-between gap-x-3">
+              {/* Speaking Test */}
+              {Object.keys(menuData).map((item, index) => {
+                return (
+                  <div key={index} className="w-full">
+                    <h3 className="text-gray text-xl font-semibold border-b border-gray leading-10 w-full">
+                      {item}
+                    </h3>
+                    <div className="space-y-2 mt-3">
+                      {menuData?.[item]?.map((test, index) => {
+                        return (
+                          <Link
+                            key={index}
+                            href={test?.path}
+                            className="flex gap-x-2 items-center"
+                          >
+                            <div className="relative h-14 w-14 flex-shrink-0">
+                              <div
+                                className={`bg-${test?.bg} rounded-xl w-full h-full flex items-center justify-center text-xl text-white font-semibold`}
+                              >
+                                {test?.icon}
+                              </div>
+                              {test?.ai && (
+                                <div className="absolute h-5 w-5 flex items-center justify-center text-white -top-1 -right-1 bg-blue rounded-full text-xs font-cabin ">
+                                  AI
+                                </div>
+                              )}
+                            </div>
+                            <h2 className="font-cabin text-lg leading-tight text-gray">
+                              {test?.name}
+                            </h2>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </li>
       <li>
         <Link href="/about">Mock Test</Link>
@@ -119,9 +167,6 @@ const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
       <ul className="text-white flex flex-col gap-4 text-xl font-semibold font-avantt px-6">
         <li>
           <Link href="/">Home</Link>
-        </li>
-        <li className="flex items-center gap-x-2">
-          Practice Test <IoIosArrowDown className="text-sm text-white" />
         </li>
         <li>
           <Link href="/about">Mock Test</Link>

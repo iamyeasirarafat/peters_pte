@@ -7,7 +7,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 
 // side navigation items
-const navItems = {
+export const navItems = {
   "Speaking Test": [
     {
       name: "Read Aloud",
@@ -245,7 +245,7 @@ const SideMenu = ({ data }) => {
   );
 };
 
-const SingleItem = ({ data, open }) => {
+export const SingleItem = ({ data, open }) => {
   const { sideNav } = useSelector((state) => state.layout);
   return (
     <Link
