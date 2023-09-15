@@ -156,26 +156,38 @@ const UserDropdown = () => {
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   return (
     <div
-      className={`w-[250px] h-full bg-primary absolute top-0  ${
+      className={`w-[250px] h-full bg-secondary absolute top-0  ${
         mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-      } z-50 pt-10 transition-transform duration-500 ease-in-out`}
+      } z-50 pt-14 transition-transform duration-500 ease-in-out`}
     >
       <RiCloseCircleLine
         onClick={() => setMobileMenuOpen(false)}
-        className="text-white text-3xl absolute top-2 right-2"
+        className="text-primary text-3xl absolute top-2 right-2"
       />
       <ul className="text-white flex flex-col gap-4 text-xl font-semibold font-avantt px-6">
-        <li>
+        <li className="text-gray py-2 px-3 bg-primary rounded-md">
           <Link href="/">Home</Link>
         </li>
-        <li>
+        <li className="text-gray py-2 px-3 bg-primary rounded-md">
           <Link href="/about">Mock Test</Link>
         </li>
-        <li>
-          <Link href="/contact">Prediction</Link>
+        <li className="text-gray py-2 px-3 bg-primary rounded-md">
+          <Link href="/prediction">Prediction</Link>
+        </li>
+        <li className="text-gray py-2 px-3 bg-primary rounded-md">
+          <Link href="/contact">Mobile App</Link>
         </li>
         <li>
-          <Link href="/contact">Mobile App</Link>
+          <button className="w-full bg-gold flex text-lg text-white font-avantt font-semibold items-center py-2 px-3 rounded-md gap-x-1">
+            <span>Become Premium</span>
+            <Image
+              className="object-cover"
+              src="/icons/diamond.svg"
+              width={16}
+              height={16}
+              alt="icon"
+            />
+          </button>
         </li>
       </ul>
     </div>
