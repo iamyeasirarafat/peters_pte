@@ -1,7 +1,6 @@
 import wordCount from "@/src/utils/wordCount";
 import { useSearchParams } from "next/navigation";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 import { AiOutlineSound } from "react-icons/ai";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
