@@ -4,7 +4,7 @@ import Score from "./Score";
 
 const ResultSection = ({ result, setOpenModal, summary }) => {
   return (
-    <div className="relative border border-primary rounded-[15px] mt-12 py-4 px-8">
+    <div className="relative border border-primary rounded-[15px] mt-12 p-5">
       {/* tab button */}
       <div className="flex items-center gap-x-2 absolute bottom-[101%] right-5">
         <TabButton

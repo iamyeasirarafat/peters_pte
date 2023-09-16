@@ -21,7 +21,7 @@ const TextBlock = ({ data }) => {
   };
 
   return (
-    <div className="border border-primary rounded-[15px] mt-6 ml-8 mr-5 pt-3 pb-4 px-5">
+    <div className="border border-primary rounded-[15px] p-5">
       <p className="text-xl">{data?.content}</p>
       {/*  */}
       <div className="mt-[40px] flex justify-end">
