@@ -71,7 +71,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "#",
+      path: "/app/practice/multiple_choice/multiple_answers",
       ai: false,
       icon: "MCM",
       bg: "cream",
@@ -92,7 +92,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Single)",
-      path: "#",
+      path: "/app/practice/multiple_choice/single_answer",
       ai: false,
       icon: "MCS",
       bg: "cream",
@@ -101,7 +101,7 @@ export const navItems = {
   "Listing Test": [
     {
       name: "Summarize Spoken Text",
-      path: "#",
+      path: "/app/practice/spoken_text",
       ai: true,
       icon: "SST",
       bg: "gray",

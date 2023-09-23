@@ -7,7 +7,6 @@ import TextBlock from "@/src/components/global/TextBlock";
 import ReadAloudModal from "@/src/components/read-aloud/ReadAloudModal";
 import RecordBlock from "@/src/components/read-aloud/RecordBlock";
 import axios from "axios";
-import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -22,7 +21,6 @@ const Index = () => {
   const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-  console.log(result);
   const params = useSearchParams();
   const id = params.get("que_no");
   useEffect(() => {

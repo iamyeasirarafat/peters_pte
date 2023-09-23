@@ -1,11 +1,13 @@
 "use client";
 import GlobalMainContent from "@/src/components/global/GlobalMainContent";
+import ListenBlock from "@/src/components/global/ListenBlock";
+import MultipleChoiceAiModal from "@/src/components/global/MultipleChoiceAiModal";
 import MultipleChoiceAnswer from "@/src/components/global/MultipleChoiceAnswer";
 import PageHeader from "@/src/components/global/PageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
-import TextBlock from "@/src/components/global/TextBlock";
+import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
 const answers = [
@@ -38,6 +40,8 @@ const answers = [
 function Page() {
   const [openModal, setOpenModal] = useState(false);
   const { register, handleSubmit } = useForm();
+  const [openScoreModal, setOpenScoreModal] = useState(false);
+  const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
   const onSubmit = (data) => {
     console.log(data);
   };
@@ -49,7 +53,7 @@ function Page() {
       />
       <GlobalMainContent>
         {/* text block */}
-        <TextBlock />
+        <ListenBlock setOpen={setOpenTranscriptModal} />
         {/* Multiple Choice Answer */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <MultipleChoiceAnswer register={register} answers={answers} />
@@ -64,7 +68,19 @@ function Page() {
           </div>
         </form>
       </GlobalMainContent>
-      <ResultSection setOpenModal={setOpenModal} />
+      <ResultSection
+        summary
+        setOpenModal={setOpenScoreModal}
+        setOpenScoreModal={setOpenScoreModal}
+      />
+      <MultipleChoiceAiModal
+        open={openScoreModal}
+        setOpen={setOpenScoreModal}
+      />
+      <TranscriptModal
+        open={openTranscriptModal}
+        setOpen={setOpenTranscriptModal}
+      />
     </div>
   );
 }
