@@ -136,7 +136,7 @@ export const navItems = {
     },
     {
       name: "Select Missing Word",
-      path: "#",
+      path: "/app/practice/multiple_choice/missing_word",
       ai: false,
       icon: "SMW",
       bg: "gray",
