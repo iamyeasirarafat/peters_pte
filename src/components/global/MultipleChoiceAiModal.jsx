@@ -6,11 +6,6 @@ import LineProgressBar from "./LineProgressBar";
 
 const MultipleChoiceAiModal = ({ open, setOpen }) => {
   const totalScore = 100;
-  const content = 20;
-  const grammar = 30;
-  const form = 40;
-  const spelling = 50;
-  const vocabulary = 60;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -119,7 +114,7 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
                 <p className="text-gray text-xl w-3/6 text-start">Listening</p>
                 <LineProgressBar
                   height={30}
-                  lineColor={"primary"}
+                  lineColor={"cream"}
                   strokeWidth={50}
                 />
                 <p className="text-gray text-xl">0/2</p>
