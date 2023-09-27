@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 function MultipleChoiceAnswer({ register, answers }) {
   return (
@@ -19,13 +19,18 @@ function MultipleChoiceAnswer({ register, answers }) {
 export default MultipleChoiceAnswer;
 
 export const Answer = ({ answer, register }) => {
+  const [isCheck, setIsCheck] = useState(false);
   return (
-    <label className="bg-secondary rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer">
+    <label
+      className={`${
+        isCheck ? "bg-secondary" : "bg-white"
+      } rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
+    >
       <input
         {...register(`${answer?.serial}`)}
         className="border-2 border-primary focus:ring-transparent cursor-pointer w-7 h-7 rounded-md text-primary"
         type="checkbox"
-        name=""
+        onClick={() => setIsCheck(!isCheck)}
       />
       <p className="text-gray flex items-center gap-x-5 text-xl">
         <span className="capitalize">{answer?.serial}.</span>

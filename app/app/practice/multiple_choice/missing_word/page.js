@@ -1,12 +1,12 @@
 "use client";
 import GlobalMainContent from "@/src/components/global/GlobalMainContent";
 import PageHeader from "@/src/components/global/PageHeader";
-import ResultSection from "@/src/components/global/ResultSection";
 import SingleChoiceAnswer from "@/src/components/global/SingleChoiceAnswer";
 import TextBlock from "@/src/components/global/TextBlock";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { GlobalPagination } from "../multiple_answers/page";
+import ResultSection from "@/src/components/global/ResultSection";
 const answers = [
   {
     serial: "A",
@@ -42,13 +42,11 @@ function Page() {
   };
   return (
     <div>
-      <PageHeader
-        title="Multiple Choice, Single Answers"
-        setOpen={setOpenModal}
-      />
+      <PageHeader title="Select Missing Word" setOpen={setOpenModal} />
       <p className="text-gray text-base mt-2 text-center">
-        Listen to the recording and answer the multiple-choice question by
-        selecting the correct response. Only one response is correct.
+        You will hear a recording. At the end of the recording the last word or
+        group of words has been replaced by a beep. Select the correct option to
+        complete the recording.
       </p>
       <GlobalMainContent>
         {/* text block */}

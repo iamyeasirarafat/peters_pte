@@ -51,6 +51,10 @@ function Page() {
         title="Multiple Choice, Multiple Answers"
         setOpen={setOpenModal}
       />
+      <p className="text-gray text-base mt-2 text-center">
+        Listen to the recording and answer the question by selecting all the
+        correct responses. You will need to select more than one response.
+      </p>
       <GlobalMainContent>
         {/* text block */}
         <ListenBlock setOpen={setOpenTranscriptModal} />
