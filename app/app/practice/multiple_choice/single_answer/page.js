@@ -3,10 +3,12 @@ import GlobalMainContent from "@/src/components/global/GlobalMainContent";
 import PageHeader from "@/src/components/global/PageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
 import SingleChoiceAnswer from "@/src/components/global/SingleChoiceAnswer";
-import TextBlock from "@/src/components/global/TextBlock";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { GlobalPagination } from "../multiple_answers/page";
+import MultipleChoiceAiModal from "@/src/components/global/MultipleChoiceAiModal";
+import ListenBlock from "@/src/components/global/ListenBlock";
+import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
 const answers = [
   {
     serial: "A",
@@ -36,6 +38,8 @@ const answers = [
 ];
 function Page() {
   const [openModal, setOpenModal] = useState(false);
+  const [openScoreModal, setOpenScoreModal] = useState(false);
+  const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     console.log(data);
@@ -52,7 +56,7 @@ function Page() {
       </p>
       <GlobalMainContent>
         {/* text block */}
-        <TextBlock />
+        <ListenBlock setOpen={setOpenTranscriptModal} />
         {/* Multiple Choice Answer */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <SingleChoiceAnswer register={register} answers={answers} />
@@ -67,7 +71,18 @@ function Page() {
           </div>
         </form>
       </GlobalMainContent>
-      <ResultSection setOpenModal={setOpenModal} />
+      <ResultSection
+        setOpenModal={setOpenScoreModal}
+        setOpenScoreModal={setOpenScoreModal}
+      />
+      <TranscriptModal
+        open={openTranscriptModal}
+        setOpen={setOpenTranscriptModal}
+      />
+      <MultipleChoiceAiModal
+        open={openScoreModal}
+        setOpen={setOpenScoreModal}
+      />
     </div>
   );
 }
