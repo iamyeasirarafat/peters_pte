@@ -1,8 +1,8 @@
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
-import LineProgressBar from "./LineProgressBar";
 import ReusableModal from "./ReusableModal";
+import LineProgressBar from "./LineProgressBar";
 
 const MultipleChoiceAiModal = ({ open, setOpen }) => {
   const totalScore = 100;
@@ -63,72 +63,49 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
               </div>
             </div>
             {/* Time Taken */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Time Taken</p>
               </div>
               {/* score point*/}
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-32 h-w-32">
-                  <CircularProgressbar
-                    value={totalScore}
-                    text={totalScore / 100}
-                    strokeWidth={15}
-                    styles={buildStyles({
-                      textColor: "gray",
-                      textSize: "20px",
-                      pathColor: "#ff8412",
-                      trailColor: "#f1f1f1",
-                    })}
-                  />
-                </div>
-                <p className="text-gray text-xl mt-1">Out of 1.00</p>
+              <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
+                <p className="text-[60px] text-gray">02:23</p>
               </div>
             </div>
             {/* Correct answer */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Correct answer</p>
               </div>
               {/* score point*/}
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-32 h-w-32">
-                  <CircularProgressbar
-                    value={totalScore}
-                    text={totalScore / 100}
-                    strokeWidth={15}
-                    styles={buildStyles({
-                      textColor: "gray",
-                      textSize: "20px",
-                      pathColor: "#ff8412",
-                      trailColor: "#f1f1f1",
-                    })}
-                  />
-                </div>
-                <p className="text-gray text-xl mt-1">Out of 1.00</p>
+              <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
+                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
+                  A
+                </p>
+                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
+                  B
+                </p>
+                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
+                  E
+                </p>
               </div>
             </div>
             {/* Your Answer */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Your Answer</p>
               </div>
               {/* score point*/}
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-32 h-w-32">
-                  <CircularProgressbar
-                    value={totalScore}
-                    text={totalScore / 100}
-                    strokeWidth={15}
-                    styles={buildStyles({
-                      textColor: "gray",
-                      textSize: "20px",
-                      pathColor: "#ff8412",
-                      trailColor: "#f1f1f1",
-                    })}
-                  />
-                </div>
-                <p className="text-gray text-xl mt-1">Out of 1.00</p>
+              <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
+                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
+                  A
+                </p>
+                <p className="text-[60px] text-gray bg-[#ffe0e0] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
+                  C
+                </p>
+                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
+                  E
+                </p>
               </div>
             </div>
           </div>
@@ -149,7 +126,6 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
               </div>
             </div>
           </div>
-
           <p className="text-center mt-2 text-lightGray">
             This score will disappear on 02/08/2023
           </p>
