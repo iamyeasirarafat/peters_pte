@@ -108,7 +108,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "/app/practice/multiple_choice/multiple_answers?que_no=3",
+      path: "/app/practice/multiple_choice/multiple_answers?que_no=1",
       ai: false,
       icon: "MCM",
       bg: "gray",
@@ -129,7 +129,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/multiple_choice/single_answers",
+      path: "/app/practice/multiple_choice/single_answer",
       ai: false,
       icon: "MCS",
       bg: "gray",

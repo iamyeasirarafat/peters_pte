@@ -89,7 +89,7 @@ function Page() {
         <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
         {/* Multiple Choice Answer */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <SingleChoiceAnswer register={register} answers={apiData?.options} />
+          <SingleChoiceAnswer register={register} answers={answers} />
           <div className="flex items-center justify-between mt-4">
             <button
               className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
