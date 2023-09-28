@@ -22,7 +22,7 @@ const SetValues = () => {
   // Axios Interceptor
   axios.interceptors.request.use(
     async (config) => {
-      config.baseURL = "http://3.110.151.3:7000";
+      config.baseURL = "http://127.0.0.1:8000";
       if (getCookie("access_token")) {
         config.headers["Authorization"] = `Bearer ${getCookie("access_token")}`;
       }

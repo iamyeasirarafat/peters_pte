@@ -71,7 +71,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "/app/practice/multiple_choice/multiple_answers",
+      path: "#",
       ai: false,
       icon: "MCM",
       bg: "cream",
@@ -92,7 +92,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/multiple_choice/single_answer",
+      path: "#",
       ai: false,
       icon: "MCS",
       bg: "cream",
@@ -108,7 +108,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "#",
+      path: "/app/practice/multiple_choice/multiple_answers?que_no=3",
       ai: false,
       icon: "MCM",
       bg: "gray",
@@ -122,14 +122,14 @@ export const navItems = {
     },
     {
       name: "Highlight Correct Summary",
-      path: "#",
+      path: "/app/practice/multiple_choice/highlight_summary?que_no=1",
       ai: false,
       icon: "HCS",
       bg: "gray",
     },
     {
       name: "Multiple Choice (Single)",
-      path: "#",
+      path: "/app/practice/multiple_choice/single_answers",
       ai: false,
       icon: "MCS",
       bg: "gray",

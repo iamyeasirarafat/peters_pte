@@ -20,7 +20,8 @@ const Score = ({ result, setOpenModal, summary }) => {
             S
           </p>
           <p className="text-xl text-gray">
-            {result?.speaking_score || result?.Overall}/{summary ? "7" : "90"}
+            {result?.speaking_score || result?.Overall || result?.score}/
+            {summary ? "10" : "90"}
           </p>
         </button>
         {!summary && (
