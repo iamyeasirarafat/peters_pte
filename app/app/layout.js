@@ -1,9 +1,9 @@
 "use client";
 import { toggleTopNav as toggleNav } from "@/src/redux/slice/layoutSlice";
+import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import SideNav from "./src/layout/SideNav";
 import TopNav from "./src/layout/TopNav";
-import Image from "next/image";
 
 const DashboardLayout = ({ children }) => {
   const { topNav } = useSelector((state) => state.layout);
@@ -30,7 +30,13 @@ const DashboardLayout = ({ children }) => {
           </button>
         )}
         <SideNav />
-        <div className="max-w-7xl w-full mx-auto">{children}</div>
+        <div
+          className={`max-w-7xl w-full 
+        ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"}
+        overflow-y-auto mx-auto`}
+        >
+          {children}
+        </div>
         {/* <GlobalModal /> */}
       </div>
     </>

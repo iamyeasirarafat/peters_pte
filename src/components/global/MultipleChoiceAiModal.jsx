@@ -1,11 +1,35 @@
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
-import ReusableModal from "./ReusableModal";
 import LineProgressBar from "./LineProgressBar";
+import ReusableModal from "./ReusableModal";
 
-const MultipleChoiceAiModal = ({ open, setOpen }) => {
+const MultipleChoiceAiModal = ({
+  open,
+  setOpen,
+  apiData,
+  myAnswer,
+  result,
+}) => {
   const totalScore = 100;
+  const obj = {
+    0: "A",
+    1: "B",
+    2: "C",
+    3: "D",
+    4: "E",
+    5: "F",
+    6: "G",
+  };
+
+  // getting the right answers index
+  const rightIndex = [];
+  result?.right_options.forEach((element) => {
+    const index = apiData?.options.indexOf(element);
+    if (index !== -1) {
+      rightIndex.push(index);
+    }
+  });
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -43,8 +67,8 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={totalScore}
-                    text={totalScore / 100}
+                    value={result?.score}
+                    text={result?.score}
                     strokeWidth={15}
                     styles={buildStyles({
                       textColor: "gray",
@@ -54,7 +78,7 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 1.00</p>
+                <p className="text-gray text-xl mt-1">Out of 10.00</p>
               </div>
             </div>
             {/* Time Taken */}
@@ -74,15 +98,9 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
-                  A
-                </p>
-                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
-                  B
-                </p>
-                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
-                  E
-                </p>
+                {rightIndex?.map((item) => {
+                  return <WordValue key={item} word={obj[item]} />;
+                })}
               </div>
             </div>
             {/* Your Answer */}
@@ -92,15 +110,15 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
-                  A
-                </p>
-                <p className="text-[60px] text-gray bg-[#ffe0e0] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
-                  C
-                </p>
-                <p className="text-[60px] text-gray bg-[#d3ffd5] capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary">
-                  E
-                </p>
+                {myAnswer?.map((item, i) => {
+                  let wrong = true;
+                  rightIndex.forEach((i) => {
+                    if (i === parseInt(item)) {
+                      wrong = false;
+                    }
+                  });
+                  return <WordValue key={i} word={obj[item]} wrong={wrong} />;
+                })}
               </div>
             </div>
           </div>
@@ -131,3 +149,15 @@ const MultipleChoiceAiModal = ({ open, setOpen }) => {
 };
 
 export default MultipleChoiceAiModal;
+
+const WordValue = ({ word, wrong }) => {
+  return (
+    <p
+      className={`text-[60px] text-gray ${
+        wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
+      } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
+    >
+      {word}
+    </p>
+  );
+};

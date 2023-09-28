@@ -5,79 +5,100 @@ import MultipleChoiceAiModal from "@/src/components/global/MultipleChoiceAiModal
 import MultipleChoiceAnswer from "@/src/components/global/MultipleChoiceAnswer";
 import PageHeader from "@/src/components/global/PageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
+import SideModal from "@/src/components/global/SideModal";
 import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
+import axios from "axios";
 import Image from "next/image";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
-const answers = [
-  {
-    serial: "A",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "B",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "C",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-  {
-    serial: "D",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "E",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-];
+
 function Page() {
-  const [openModal, setOpenModal] = useState(false);
+  const [givenAnswer, setGivenAnswer] = useState([]);
   const { register, handleSubmit } = useForm();
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
-  const onSubmit = (data) => {
-    console.log(data);
+  const [apiData, setData] = useState({});
+  const [result, setResult] = useState(null);
+
+  // get data
+  const params = useSearchParams();
+  const id = params.get("que_no");
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios("/multi_choice/" + id);
+      setData(data);
+    };
+    getData();
+  }, [id]);
+
+  //sideModal Data
+  const SideModalData = {
+    title: "Multiple Choices",
+    api: "/multi_choices",
+  };
+
+  //submit data
+  const onSubmit = async (data) => {
+    // filtering answer data
+    let ans = [];
+    let given = [];
+    Object.keys(data).forEach((i) => {
+      if (data[i] === true) {
+        given.push(i);
+        ans.push(apiData?.options[i]);
+      }
+    });
+    setGivenAnswer(given);
+    //submitting data
+    const result = await axios.post("/multi_choice/answer", {
+      multi_choice: id,
+      answers: ans,
+    });
+    setResult(result.data);
   };
   return (
     <div>
-      <PageHeader
-        title="Multiple Choice, Multiple Answers"
-        setOpen={setOpenModal}
-      />
+      {/* Side Modal */}
+      <SideModal data={SideModalData} />
+      <PageHeader title="Multiple Choice, Multiple Answers" />
       <p className="text-gray text-base mt-2 text-center">
         Listen to the recording and answer the question by selecting all the
         correct responses. You will need to select more than one response.
       </p>
-      <GlobalMainContent>
+      <GlobalMainContent data={apiData}>
         {/* text block */}
-        <ListenBlock setOpen={setOpenTranscriptModal} />
+        <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
         {/* Multiple Choice Answer */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <MultipleChoiceAnswer register={register} answers={answers} />
+          <MultipleChoiceAnswer
+            register={register}
+            answers={apiData?.options}
+          />
           <div className="flex items-center justify-between mt-4">
             <button
               className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
               type="submit"
             >
-              Submit
+              {result ? "Re-Submit" : "Submit"}
             </button>
             <GlobalPagination />
           </div>
         </form>
       </GlobalMainContent>
-      <ResultSection
-        summary
-        setOpenModal={setOpenScoreModal}
-        setOpenScoreModal={setOpenScoreModal}
-      />
+      {result && (
+        <ResultSection
+          summary
+          setOpenModal={setOpenScoreModal}
+          setOpenScoreModal={setOpenScoreModal}
+          result={result}
+        />
+      )}
       <MultipleChoiceAiModal
+        result={result}
+        myAnswer={givenAnswer}
+        apiData={apiData}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
       />
