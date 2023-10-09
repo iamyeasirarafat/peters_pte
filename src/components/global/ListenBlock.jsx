@@ -1,28 +1,27 @@
-import { Howl } from "howler";
-import { useState } from "react";
-import { ImPlay3 } from "react-icons/im";
-import { MdOutlinePause } from "react-icons/md";
-const ListenBlock = ({ setOpen, data }) => {
-  console.log(data);
-  const [isPlaying, setIsPlaying] = useState(false);
-  // Create an instance of Howl with your audio file URL
-  const sound = new Howl({
-    src: [data?.audio], // Replace with the correct audio file URL
-  });
+import AudioPlayer from "./audio_player/AudioPlayer";
 
-  const toggleAudio = () => {
-    if (isPlaying) {
-      sound.stop();
-    } else {
-      sound.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
+const ListenBlock = ({ setOpen, data }) => {
+  // console.log(data);
+  // const [isPlaying, setIsPlaying] = useState(false);
+  // // Create an instance of Howl with your audio file URL
+  // const sound = new Howl({
+  //   src: [data?.audio], // Replace with the correct audio file URL
+  // });
+
+  // const toggleAudio = () => {
+  //   if (isPlaying) {
+  //     sound.stop();
+  //   } else {
+  //     sound.play();
+  //   }
+  //   setIsPlaying(!isPlaying);
+  // };
   return (
     <div className="p-5 border border-primary rounded-[15px] relative">
       <div className="flex items-center justify-center">
-        <div className="flex flex-col items-center gap-y-2">
-          <button
+        <div className="flex flex-col items-center w-full gap-y-2">
+          <AudioPlayer data={data} />
+          {/* <button
             onClick={toggleAudio}
             className="bg-primary rounded-full w-14 h-14 flex items-center justify-center"
           >
@@ -32,7 +31,7 @@ const ListenBlock = ({ setOpen, data }) => {
               <ImPlay3 className="text-white text-4xl" />
             )}
           </button>
-          <p className="text-gray text-lg">CLICK TO LISTEN</p>
+          <p className="text-gray text-lg">CLICK TO LISTEN</p> */}
 
           {/* <div className="flex items-center gap-x-5">
             <select className="bg-secondary rounded-[22px] py-1 pl-4 pr-10 focus:border-none focus:ring-0 border-none text-gray text-base">
