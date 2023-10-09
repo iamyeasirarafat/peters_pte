@@ -8,11 +8,11 @@ import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
 import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
 import axios from "axios";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
+import { RxShuffle } from "react-icons/rx";
 
 function Page() {
   const [givenAnswer, setGivenAnswer] = useState([]);
@@ -115,22 +115,13 @@ export default Page;
 export const GlobalPagination = () => {
   return (
     <div className="flex items-center gap-x-2">
-      <button className="w-[56px] h-[45px] bg-secondary rounded-[22px] flex items-center justify-center">
-        <div className="w-[32px] h-[25px]">
-          <div className="w-full h-full relative">
-            <Image
-              className="object-cover"
-              src="/icons/suppel.svg"
-              alt="grow icon"
-              fill
-            />
-          </div>
-        </div>
+      <button className="w-10 h-7 md:w-[56px] md:h-[45px] bg-secondary rounded-[22px] flex items-center justify-center">
+        <RxShuffle className="text-gray text-xl md:text-3xl" />
       </button>
-      <div className="bg-secondary rounded-[30px] px-4 py-[5px] flex items-center gap-x-2">
-        <IoIosArrowBack className="text-lg text-gray cursor-pointer" />
+      <div className="bg-secondary rounded-[30px] px-2 md:px-4 py-[5px] flex items-center gap-x-1 md:gap-x-2">
+        <IoIosArrowBack className="text-sm md:text-lg text-gray cursor-pointer" />
         <select
-          className="py-2 bg-white rounded-[22px] outline-none border-0 focus:outline-none focus:ring-0"
+          className="py-0 md:py-2  bg-white rounded-[22px] outline-none border-0 focus:outline-none focus:ring-0"
           name=""
           id=""
         >
@@ -140,7 +131,7 @@ export const GlobalPagination = () => {
         </select>
         <p className="text-sm text-gray font-medium">of</p>
         <p className="text-sm text-gray font-medium">1127</p>
-        <IoIosArrowBack className="text-lg text-gray cursor-pointer rotate-180" />
+        <IoIosArrowBack className="text-sm md:text-lg text-gray cursor-pointer rotate-180" />
       </div>
     </div>
   );

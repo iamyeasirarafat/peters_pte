@@ -76,7 +76,7 @@ const RecordBlock = ({ setResult }) => {
   }, [isRecording]);
 
   //progressbar width
-  const progressBarWidth = (recordingTime / 35000) * 1000;
+  const progressBarWidth = (recordingTime / 35000) * 100;
 
   // handle submit function
   const params = useSearchParams();
@@ -156,9 +156,9 @@ const RecordBlock = ({ setResult }) => {
             <div className="relative bg-secondary w-full h-2 rounded-[13px]">
               <div
                 style={{
-                  width: progressBarWidth,
+                  width: `${progressBarWidth}%`,
                 }}
-                className={` h-full absolute left-0 top-0 bg-primary rounded-[13px]`}
+                className={`h-full absolute left-0 top-0 bg-primary rounded-[13px]`}
               ></div>
             </div>
           </div>
