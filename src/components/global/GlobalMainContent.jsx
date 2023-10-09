@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { CiBookmark, CiFileOn } from "react-icons/ci";
 
 const GlobalMainContent = ({ children, data }) => {
   return (
@@ -19,34 +20,16 @@ const GlobalMainContent = ({ children, data }) => {
           Appeared (12)
         </button>
       </div>
-      <div className="bg-secondary rounded-t-[15px] py-2 pl-8 pr-5 flex items-center justify-between">
-        <p className="text-[#ACACAC] text-xl">
+      <div className="bg-secondary rounded-t-[15px] py-3 px-4 md:px-6 flex items-center justify-between">
+        <p className="text-[#ACACAC] text-base md:text-xl">
           {data?.title} | Q No. #{data?.id}
         </p>
-        <div className="flex items-center gap-x-5">
-          <div className="w-[28px] h-[29px]">
-            <div className="w-full h-full relative">
-              <Image
-                className="object-cover"
-                src="/icons/page.svg"
-                alt="grow icon"
-                fill
-              />
-            </div>
-          </div>
-          <div className="w-[17px] h-[28px]">
-            <div className="w-full h-full relative">
-              <Image
-                className="object-cover"
-                src="/icons/bookmark.svg"
-                alt="grow icon"
-                fill
-              />
-            </div>
-          </div>
+        <div className="flex items-center gap-x-2">
+          <CiFileOn className="text-primary text-3xl" />
+          <CiBookmark className="text-3xl text-primary" />
         </div>
       </div>
-      <div className="p-6 space-y-5">{children}</div>
+      <div className="p-4 md:p-6 space-y-5">{children}</div>
     </div>
   );
 };

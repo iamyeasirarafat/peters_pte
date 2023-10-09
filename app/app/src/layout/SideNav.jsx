@@ -168,7 +168,7 @@ const SideNav = () => {
     <div
       className={`${sideNav ? "w-72" : "w-[134px]"} flex-shrink-0 ${
         !topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
-      } transition-all relative duration-300 ease-linear  bg-secondary`}
+      } transition-all relative duration-300 ease-linear bg-secondary hidden md:block`}
     >
       {/* side Nav container */}
       <SideMenuContainer topNav={topNav} />

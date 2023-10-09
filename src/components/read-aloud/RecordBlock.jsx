@@ -1,11 +1,11 @@
 "use client";
 import axios from "axios";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { ReactMic } from "react-mic";
 import Pagination from "../global/Pagination";
+import { BsFillMicFill } from "react-icons/bs";
 
 const RecordBlock = ({ setResult }) => {
   // countdown function
@@ -26,7 +26,6 @@ const RecordBlock = ({ setResult }) => {
     const interval = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -119,7 +118,7 @@ const RecordBlock = ({ setResult }) => {
   }, [id]);
   return (
     <>
-      <div className="border border-primary rounded-[15px] mt-3 ml-8 mr-5 p-4 flex flex-col items-center justify-center">
+      <div className="border border-primary rounded-[15px] mt-3 p-4 flex flex-col items-center justify-center">
         <button
           onClick={() => {
             if (isRecording) {
@@ -128,18 +127,9 @@ const RecordBlock = ({ setResult }) => {
               handleStartRecording();
             }
           }}
-          className="w-[70px]  h-[70px] bg-primary rounded-full flex items-center justify-center"
+          className="w-10 h-10 md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center"
         >
-          <div className="w-[28px] h-[44px]">
-            <div className="w-full h-full relative">
-              <Image
-                className="object-cover"
-                src="/icons/mic.svg"
-                alt="grow icon"
-                fill
-              />
-            </div>
-          </div>
+          <BsFillMicFill className="text-white text-2xl md:text-5xl" />
         </button>
         <ReactMic
           className="hidden"
@@ -175,7 +165,7 @@ const RecordBlock = ({ setResult }) => {
         )}
       </div>
       {audioData && (
-        <div className="mt-6 px-8">
+        <div>
           <audio controls>
             <source src={URL.createObjectURL(audioData)} type="audio/wav" />
             Your browser does not support the audio element.

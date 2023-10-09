@@ -31,9 +31,9 @@ const DashboardLayout = ({ children }) => {
         )}
         <SideNav />
         <div
-          className={`max-w-7xl w-full 
+          className={`max-w-7xl w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"}
-        overflow-y-auto mx-auto`}
+        overflow-y-auto mx-auto px-5 md:px-10 2xl:px-0`}
         >
           {children}
         </div>

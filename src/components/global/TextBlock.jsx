@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
+import { RxSpeakerLoud } from "react-icons/rx";
 
 const TextBlock = ({ data }) => {
   const [talking, setTalking] = useState(false);
@@ -21,7 +22,7 @@ const TextBlock = ({ data }) => {
   };
 
   return (
-    <div className="border border-primary rounded-[15px] p-5">
+    <div className="border border-primary rounded-[15px] p-2 md:p-4">
       <p className="text-xl">{data?.content}</p>
       {/*  */}
       <div className="mt-[40px] flex justify-end">
@@ -33,16 +34,8 @@ const TextBlock = ({ data }) => {
               handleSpeak();
             }
           }}
-          className="w-[34px] h-[27px]"
         >
-          <div className="w-full h-full relative">
-            <Image
-              className="object-cover"
-              src="/icons/speker.svg"
-              alt="grow icon"
-              fill
-            />
-          </div>
+          <RxSpeakerLoud className="text-base md:text-xl" />
         </button>
       </div>
     </div>
