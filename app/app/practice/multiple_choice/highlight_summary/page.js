@@ -80,7 +80,7 @@ function Page() {
       {/* Side Modal */}
       <SideModal data={SideModalData} />
       <PageHeader title="Highlight Correct Summary" />
-      <p className="text-gray text-base mt-2 text-center">
+      <p className="text-gray text-xs md:text-base mt-2 text-center">
         Listen to the recording and answer the multiple-choice question by
         selecting the correct response. Only one response is correct.
       </p>
