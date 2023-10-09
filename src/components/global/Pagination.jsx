@@ -8,12 +8,12 @@ const Pagination = ({
   isLoading,
 }) => {
   return (
-    <div className="flex items-center justify-between mt-3">
+    <div className="flex flex-col md:flex-row gap-4 items-center justify-between mt-3">
       <div className="flex items-center gap-x-2">
         <button
           disabled={isLoading}
           onClick={HandleSubmit}
-          className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
+          className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
         >
           {isLoading ? (
             <>
@@ -33,7 +33,7 @@ const Pagination = ({
         {audioData && (
           <button
             onClick={handleStartRecording}
-            className="py-2 px-6 rounded-[22px] bg-primary text-white font-semibold text-lg"
+            className="py-2 px-6 rounded-[22px] bg-primary text-white font-semibold text-sm md:text-lg"
           >
             Re-Test
           </button>

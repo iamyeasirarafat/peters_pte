@@ -39,12 +39,14 @@ const Index = () => {
   return (
     <div>
       {/* Side Modal */}
-      <SideModal data={SideModalData} />
+      <div className="hidden lg:block">
+        <SideModal data={SideModalData} />
+      </div>
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <PageHeader title="Read Aloud" setOpen={setOpenModal} />
-      <p className="text-gray text-base mt-2 text-center">
+      <PageHeader title="Read Aloud" />
+      <p className="text-gray text-xs md:text-base mt-2 text-center">
         Look at the text below. In 35 seconds, you must read this text aloud as
         naturally and clearly as possible. You have 35 seconds to read aloud.
       </p>
