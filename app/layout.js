@@ -1,11 +1,11 @@
 "use client";
 import { store } from "@/src/redux/store";
+import "@/src/style/customize-progress-bar.css";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import "react-circular-progressbar/dist/styles.css";
 import { Provider } from "react-redux";
 import "./globals.css";
-import "react-circular-progressbar/dist/styles.css";
-
 export default function RootLayout({ children }) {
   return (
     <Provider store={store}>
