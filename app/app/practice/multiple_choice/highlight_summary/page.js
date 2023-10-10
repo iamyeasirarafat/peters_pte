@@ -12,40 +12,15 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { GlobalPagination } from "../multiple_answers/page";
-const answers = [
-  {
-    serial: "A",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "B",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "C",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-  {
-    serial: "D",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "E",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-];
+
 function Page() {
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
   const { register, handleSubmit } = useForm();
   const [apiData, setData] = useState({});
   const [result, setResult] = useState(null);
-  console.log(result);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [givenAnswer, setGivenAnswer] = useState([]);
   // get data
   const params = useSearchParams();
   const id = params.get("que_no");
@@ -64,15 +39,12 @@ function Page() {
   };
 
   //submit data
-  const onSubmit = async (data) => {
-    // filtering answer data
-    const ans = Object.keys(data).find((i) => data[i] === true);
+  const onSubmit = async () => {
     //submitting data
-    const result = await axios.post("highlight_summary/answer", {
+    const result = await axios.post("/highlight_summary/answer", {
       highlight_summary: id,
-      answer: ans,
+      answer: selectedAnswer,
     });
-    console.log(result);
     setResult(result.data);
   };
   return (
@@ -89,7 +61,13 @@ function Page() {
         <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
         {/* Multiple Choice Answer */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <SingleChoiceAnswer register={register} answers={answers} />
+          <SingleChoiceAnswer
+            setGivenAnswer={setGivenAnswer}
+            selectedAnswer={selectedAnswer}
+            setSelectedAnswer={setSelectedAnswer}
+            register={register}
+            answers={apiData?.options}
+          />
           <div className="flex items-center justify-between mt-4">
             <button
               className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
@@ -103,8 +81,10 @@ function Page() {
       </GlobalMainContent>
       {result && (
         <ResultSection
+          summary
           setOpenModal={setOpenScoreModal}
           setOpenScoreModal={setOpenScoreModal}
+          result={result}
         />
       )}
       <TranscriptModal
@@ -112,6 +92,10 @@ function Page() {
         setOpen={setOpenTranscriptModal}
       />
       <MultipleChoiceAiModal
+        single={true}
+        result={result}
+        myAnswer={givenAnswer}
+        apiData={apiData}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
       />

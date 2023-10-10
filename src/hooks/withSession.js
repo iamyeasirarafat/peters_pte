@@ -1,7 +1,7 @@
 const withSession = async ({ token, refreshToken }) => {
   if (token) {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/auth/token/verify`, {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +22,7 @@ const withSession = async ({ token, refreshToken }) => {
 
   if (refreshToken) {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/auth/token/refresh`, {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

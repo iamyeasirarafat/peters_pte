@@ -11,7 +11,7 @@ export const navItems = {
   "Speaking Test": [
     {
       name: "Read Aloud",
-      path: "/app/practice/read_aloud?que_no=3",
+      path: "/app/practice/read_aloud?que_no=1",
       ai: true,
       icon: "RA",
       bg: "gold",
@@ -101,7 +101,7 @@ export const navItems = {
   "Listing Test": [
     {
       name: "Summarize Spoken Text",
-      path: "/app/practice/spoken_text",
+      path: "/app/practice/spoken_text?que_no=1",
       ai: true,
       icon: "SST",
       bg: "gray",
@@ -129,14 +129,14 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/multiple_choice/single_answer",
+      path: "/app/practice/multiple_choice/single_answer?que_no=1",
       ai: false,
       icon: "MCS",
       bg: "gray",
     },
     {
       name: "Select Missing Word",
-      path: "/app/practice/multiple_choice/missing_word",
+      path: "/app/practice/multiple_choice/missing_word?que_no=1",
       ai: false,
       icon: "SMW",
       bg: "gray",

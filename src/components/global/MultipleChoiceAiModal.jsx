@@ -10,6 +10,7 @@ const MultipleChoiceAiModal = ({
   apiData,
   myAnswer,
   result,
+  single,
 }) => {
   const totalScore = 100;
   const obj = {
@@ -24,12 +25,19 @@ const MultipleChoiceAiModal = ({
 
   // getting the right answers index
   const rightIndex = [];
-  result?.right_options.forEach((element) => {
-    const index = apiData?.options.indexOf(element);
+  if (!single) {
+    result?.right_options?.forEach((element) => {
+      const index = apiData?.options.indexOf(element);
+      if (index !== -1) {
+        rightIndex.push(index);
+      }
+    });
+  } else {
+    const index = apiData?.options?.indexOf(result?.right_option);
     if (index !== -1) {
       rightIndex.push(index);
     }
-  });
+  }
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -113,11 +121,13 @@ const MultipleChoiceAiModal = ({
                 {myAnswer?.map((item, i) => {
                   let wrong = true;
                   rightIndex.forEach((i) => {
-                    if (i === parseInt(item)) {
+                    if (i === parseInt(item - 1)) {
                       wrong = false;
                     }
                   });
-                  return <WordValue key={i} word={obj[item]} wrong={wrong} />;
+                  return (
+                    <WordValue key={i} word={obj[item - 1]} wrong={wrong} />
+                  );
                 })}
               </div>
             </div>
