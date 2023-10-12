@@ -9,7 +9,7 @@ const ResultSection = ({
   setOpenScoreModal,
 }) => {
   return (
-    <div className="relative border border-primary rounded-[15px] mt-12 p-5">
+    <div className="relative border border-primary rounded-[15px] mt-12 p-2 lg:p-5">
       {/* tab button */}
       <div className="flex items-center gap-x-2 absolute bottom-[101%] right-5">
         <TabButton

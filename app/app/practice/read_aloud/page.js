@@ -1,4 +1,5 @@
 "use client";
+import DiscursionSection from "@/src/components/global/DiscursionSection";
 import GlobalMainContent from "@/src/components/global/GlobalMainContent";
 import PageHeader from "@/src/components/global/PageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
@@ -6,6 +7,7 @@ import SideModal from "@/src/components/global/SideModal";
 import TextBlock from "@/src/components/global/TextBlock";
 import ReadAloudModal from "@/src/components/read-aloud/ReadAloudModal";
 import RecordBlock from "@/src/components/read-aloud/RecordBlock";
+import RecordBlockMobile from "@/src/components/read-aloud/RecordBlockMobile";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -54,10 +56,16 @@ const Index = () => {
         {/* text block */}
         <TextBlock data={data} />
         {/* recording Block */}
-        <RecordBlock setResult={setResult} />
+        <div className="hidden md:block">
+          <RecordBlock setResult={setResult} />
+        </div>
       </GlobalMainContent>
       {/* // result tab */}
       {result && <ResultSection setOpenModal={setOpenModal} result={result} />}
+      <ResultSection setOpenModal={setOpenModal} result={result} />
+      <div className="block md:hidden">
+        <RecordBlockMobile setResult={setResult} />
+      </div>
       {result && (
         <ReadAloudModal
           result={result}

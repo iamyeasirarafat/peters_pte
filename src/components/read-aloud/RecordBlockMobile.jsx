@@ -7,7 +7,7 @@ import { ReactMic } from "react-mic";
 import Pagination from "../global/Pagination";
 import { BsFillMicFill } from "react-icons/bs";
 
-const RecordBlock = ({ setResult }) => {
+const RecordBlockMobile = ({ setResult }) => {
   // countdown function
   const targetDate = new Date().getTime() + 35000;
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -118,7 +118,8 @@ const RecordBlock = ({ setResult }) => {
   }, [id]);
   return (
     <>
-      <div className="border border-primary rounded-[15px] mt-3 p-4 flex flex-col items-center justify-center">
+      {/* <div className="border-t-2 border-primary absolute w-full left-0 -top-6" /> */}
+      <div className="border border-primary rounded-[15px] mt-10 p-4 pt-7 flex flex-col items-center justify-center relative">
         <button
           onClick={() => {
             if (isRecording) {
@@ -127,7 +128,7 @@ const RecordBlock = ({ setResult }) => {
               handleStartRecording();
             }
           }}
-          className="w-10 h-10 md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center"
+          className="w-[60px] h-[60px] bg-primary rounded-full flex items-center justify-center absolute -top-8 left-1/2 -translate-x-1/2"
         >
           <BsFillMicFill className="text-white text-2xl md:text-5xl" />
         </button>
@@ -182,5 +183,4 @@ const RecordBlock = ({ setResult }) => {
     </>
   );
 };
-
-export default RecordBlock;
+export default RecordBlockMobile;
