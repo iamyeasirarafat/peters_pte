@@ -12,7 +12,7 @@ const TabButton = ({
   return (
     <button
       {...buttonProps}
-      className={`flex items-center gap-x-2 py-1 px-3 rounded-t-md text-base bg-${bgColor} text-${textColor}`}
+      className={`flex items-center gap-x-2 py-1 px-3 rounded-t-md text-sm md:text-base bg-${bgColor} text-${textColor}`}
     >
       {...children}
       {src && (
