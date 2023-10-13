@@ -1,4 +1,5 @@
 "use client";
+import AddComment from "@/src/components/global/AddComment";
 import DiscursionSection from "@/src/components/global/DiscursionSection";
 import GlobalMainContent from "@/src/components/global/GlobalMainContent";
 import ListenBlock from "@/src/components/global/ListenBlock";
@@ -22,10 +23,10 @@ const Page = () => {
       </GlobalMainContent>
       <ResultSection setOpenModal={setOpenScoreModal} />
       <DiscursionSection />
+      <AddComment />
       <TranscriptModal open={open} setOpen={setOpen} />
       <SpokenTextModal open={openScoreModal} setOpen={setOpenScoreModal} />
     </>
   );
 };
-
 export default Page;
