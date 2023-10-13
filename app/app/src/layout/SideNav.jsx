@@ -150,7 +150,7 @@ export const navItems = {
     },
     {
       name: "Write From Dictation",
-      path: "#",
+      path: "/app/practice/write_dictation",
       ai: true,
       icon: "WFD",
       bg: "gray",
