@@ -134,6 +134,7 @@ const MenuItem = () => {
 };
 
 const UserDropdown = () => {
+  const { user } = useSelector((state) => state?.user);
   return (
     <div className="flex gap-2">
       <button className="bg-gold xs:hidden md:flex text-lg text-white font-avantt font-semibold items-center py-3 px-5 rounded-[32px] gap-1">
@@ -146,9 +147,9 @@ const UserDropdown = () => {
           alt="icon"
         />
       </button>
-      <button className="rounded-full text-4xl text-gray w-12 h-12 bg-white">
-        T
-      </button>
+      <p className="rounded-full text-4xl text-gray w-12 h-12 bg-white capitalize flex items-center justify-center">
+        {user?.full_name?.charAt(0)}
+      </p>
     </div>
   );
 };

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import SideNav from "./src/layout/SideNav";
 import TopNav from "./src/layout/TopNav";
+import { useEffect } from "react";
+import { getUser } from "@/src/redux/slice/userSlice";
 
 const DashboardLayout = ({ children }) => {
   const { topNav } = useSelector((state) => state.layout);
@@ -11,6 +13,9 @@ const DashboardLayout = ({ children }) => {
   const toggleTopNav = () => {
     dispatch(toggleNav());
   };
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
   return (
     <>
       <TopNav />
