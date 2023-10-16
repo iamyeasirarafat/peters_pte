@@ -26,11 +26,20 @@ const Index = () => {
   const params = useSearchParams();
   const id = params.get("que_no");
   useEffect(() => {
+    // get read aloud
     const getData = async () => {
       const { data } = await axios("/practice/read_aloud/" + id);
       setData(data);
     };
     getData();
+
+    // get Discussion data
+    const getDiscussion = async () => {
+      const { data } = await axios(
+        `https://api.codebyamirus.link/read_aloud /${id}/discussions`
+      );
+      console.log("discussions", data);
+    };
   }, [id]);
 
   //sideModal Data

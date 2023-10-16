@@ -1,52 +1,69 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import TabButton from "./TabButton";
 import Score from "./Score";
-
+import DiscursionSection from "./DiscursionSection";
+import CommentSection from "./CommentSection";
+const sectionTabButton = [
+  {
+    name: "My Score",
+    icon: "/icons/aplus.svg",
+    bgColor: "blue",
+    textColor: "white",
+  },
+  {
+    name: "Forum",
+    icon: "/icons/massage.svg",
+    bgColor: "cream",
+    textColor: "gray",
+  },
+  {
+    name: "Community Score",
+    icon: "/icons/score.svg",
+    bgColor: "primary",
+    textColor: "gray",
+  },
+];
 const ResultSection = ({
   result,
   setOpenModal,
   summary,
   setOpenScoreModal,
 }) => {
+  const [pageTab, setPageTab] = useState("My Score");
   return (
     <div className="relative border border-primary rounded-[15px] mt-12 p-2 lg:p-5">
       {/* tab button */}
-      <div className="flex items-center gap-x-2 absolute bottom-[101%] right-5">
-        <TabButton
-          src={"/icons/aplus.svg"}
-          iconWidth={21}
-          iconHeight={23}
-          bgColor={"blue"}
-          textColor={"white"}
-        >
-          My Score
-        </TabButton>
-        <TabButton
-          src={"/icons/massage.svg"}
-          iconWidth={22}
-          iconHeight={22}
-          bgColor={"cream"}
-          textColor={"gray"}
-        >
-          Forum
-        </TabButton>
-        <TabButton
-          src={"/icons/score.svg"}
-          iconWidth={24}
-          iconHeight={24}
-          bgColor={"primary"}
-          textColor={"gray"}
-        >
-          Community Score
-        </TabButton>
+      <div className="flex items-center gap-x-2 absolute bottom-full right-5">
+        {sectionTabButton?.map((button, i) => {
+          return (
+            <TabButton
+              key={i}
+              src={button?.icon}
+              bgColor={button?.bgColor}
+              textColor={button?.textColor}
+              onClick={() => {
+                setPageTab(button?.name);
+              }}
+            >
+              {button?.name}
+            </TabButton>
+          );
+        })}
       </div>
       {/* score */}
-      <Score
-        summary={summary}
-        setOpenModal={setOpenModal}
-        result={result}
-        setOpenScoreModal={setOpenScoreModal}
-      />
+      {pageTab === "My Score" ? (
+        <Score
+          summary={summary}
+          setOpenModal={setOpenModal}
+          result={result}
+          setOpenScoreModal={setOpenScoreModal}
+        />
+      ) : pageTab === "Community Score" ? (
+        <CommentSection />
+      ) : pageTab === "Forum" ? (
+        <DiscursionSection />
+      ) : null}
     </div>
   );
 };
