@@ -10,16 +10,18 @@ import toast from "react-hot-toast";
 import { formatDateTime } from "@/src/utils/formatDateTime";
 import { useSearchParams } from "next/navigation";
 import { getPageName } from "@/src/utils/getPageName";
+import { useSelector } from "react-redux";
 
 function CommentSection() {
   const [open, setOpen] = useState({ state: false, id: null });
+  const [isAddReply, setIsAddReply] = useState({ state: false, id: null });
   const [parentComment, setParentComment] = useState([]);
   const [fetch, setFetch] = useState(false);
+  const { user } = useSelector((state) => state?.user);
   const params = useSearchParams();
   const id = params.get("que_no");
 
-  // page name check
-  console.log(getPageName(), "page name", id, "id");
+  console.log("parentComment", parentComment);
 
   useEffect(() => {
     const getComment = async () => {
@@ -41,13 +43,44 @@ function CommentSection() {
       </button>
       {/* comment show*/}
       <div className="space-y-2">
-        {parentComment?.map((item, i) => {
+        {parentComment?.map((item) => {
           return (
-            <div key={i} className="border border-primary rounded-[15px] p-3">
-              <CommentBlock parent comment={item} />
+            <div
+              key={item?.id}
+              className="border border-primary rounded-[15px] p-3 space-y-2"
+            >
+              {/* parent comment show */}
+              <CommentBlock
+                isParent
+                data={item}
+                setIsAddReply={setIsAddReply}
+                fetch={fetch}
+                setFetch={setFetch}
+              />
               {/* child comment */}
-              <div className="pl-24">
-                <p>here is child comment</p>
+              <div className="pl-24 space-y-3">
+                {/* child comment show */}
+                {item?.replies?.map((reply) => (
+                  <CommentBlock
+                    key={reply?.id}
+                    isChild
+                    data={reply}
+                    fetch={fetch}
+                    setFetch={setFetch}
+                  />
+                ))}
+                {/* child comment add */}
+                {isAddReply?.id === item?.id && (
+                  <CommentBlock
+                    user={user}
+                    questionId={id}
+                    parentId={item?.id}
+                    addChild
+                    setIsAddReply={setIsAddReply}
+                    fetch={fetch}
+                    setFetch={setFetch}
+                  />
+                )}
               </div>
             </div>
           );
@@ -64,44 +97,123 @@ function CommentSection() {
 }
 export default CommentSection;
 
-const CommentBlock = ({ parent, comment }) => {
+const CommentBlock = ({
+  isParent,
+  isChild,
+  data,
+  addChild,
+  user,
+  setIsAddReply,
+  questionId,
+  parentId,
+  fetch,
+  setFetch,
+}) => {
+  // comment reply post start =====================================
+  const { register, handleSubmit, reset } = useForm();
+  const pageName = getPageName();
+  const onSubmit = async (data) => {
+    const replyData = {
+      [pageName]: questionId,
+      parent: parentId,
+      body: data?.body,
+    };
+    const res = await axios.post(
+      `https://api.codebyamirus.link/${getPageName()}/discussion`,
+      replyData
+    );
+    reset();
+    setIsAddReply({ state: false, id: null });
+    setFetch(!fetch);
+    toast.success("successfully added reply");
+  };
+  // comment reply post End =====================================
+
+  // delete reply start ===============================================
+  const handelDelete = async (id) => {
+    const res = await axios.delete(
+      `https://api.codebyamirus.link/discussion/${id}`
+    );
+    setFetch(!fetch);
+    toast.success(res?.data?.message);
+  };
+  // delete reply end ===============================================
+
+  // comment like start ===============================================
+  const handelLike = async (id) => {
+    console.log("like and dislike ID", id);
+    const res = await axios.get(
+      `https://api.codebyamirus.link/discussion/${id}/like`
+    );
+    setFetch(!fetch);
+    toast.success(res?.data?.message);
+  };
+  // comment like end ===============================================
+
   return (
     <div className="flex items-center justify-between gap-x-3">
       <div className="flex-grow flex items-center gap-x-2">
         <p className="text-3xl w-10 h-10 flex items-center justify-center text-gray rounded-full border border-primary capitalize">
-          {comment?.user?.full_name?.charAt(0)}
+          {data?.user?.full_name?.charAt(0) || user?.full_name?.charAt(0)}
         </p>
         <div className="w-full">
           <p className="text-sm text-gray flex items-center gap-x-8">
-            {comment?.user?.full_name}
+            {data?.user?.full_name || user?.full_name}
             <p className="flex items-center gap-x-3">
-              <span>{formatDateTime(comment?.created_at, "time")}</span>
-              <span>{formatDateTime(comment?.created_at, "date")}</span>
+              <span>
+                {data?.created_at
+                  ? formatDateTime(data?.created_at, "time")
+                  : formatDateTime(new Date(), "time")}
+              </span>
+              <span>
+                {data?.created_at
+                  ? formatDateTime(data?.created_at, "date")
+                  : formatDateTime(new Date(), "date")}
+              </span>
             </p>
           </p>
-          {parent ? (
-            <p className="text-sm text-[#949494]">{comment?.body}</p>
+          {isParent || isChild ? (
+            <p className="text-sm text-[#949494]">{data?.body}</p>
           ) : (
-            <input
-              type="text"
-              className="w-full placeholder:text-[#ACACAC] placeholder:italic text-gray text-sm border border-x-0 border-t-0 border-b-primary outline-none focus:ring-transparent focus:border-primary p-0 m-0"
-              placeholder="Write Text Here......."
-            />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input
+                {...register("body", { required: true })}
+                type="text"
+                className="w-full placeholder:text-[#ACACAC] placeholder:italic text-gray text-sm border border-x-0 border-t-0 border-b-primary outline-none focus:ring-transparent focus:border-primary p-0 m-0"
+                placeholder="Write Comment Here......."
+              />
+            </form>
           )}
         </div>
       </div>
       {/* like delete */}
       <div className="flex items-center gap-x-4">
-        <p className="flex items-end gap-x-2">
-          <BiComment className="text-cream text-xl cursor-pointer" />
-          <span className="text-gray text-xs">{comment?.replies?.length}</span>
-        </p>
-        <p className="flex items-end gap-x-2">
-          <BiLike className="text-cream text-xl cursor-pointer" />
-          <span className="text-gray text-xs">{comment?.like?.length}</span>
-        </p>
-        {parent && (
-          <BiSolidTrashAlt className="text-primary text-xl cursor-pointer" />
+        {(isParent || (!isChild && !addChild)) && (
+          <p className="flex items-end gap-x-2">
+            <BiComment
+              onClick={() => setIsAddReply({ state: true, id: data?.id })}
+              className="text-cream text-xl cursor-pointer"
+            />
+            <span className="text-gray text-xs">{data?.replies?.length}</span>
+          </p>
+        )}
+        {(isParent || isChild) && (
+          <p className="flex items-end gap-x-2">
+            <BiLike
+              onClick={() => handelLike(data?.id)}
+              className="text-cream text-xl cursor-pointer"
+            />
+            <span className="text-gray text-xs">{data?.like?.length}</span>
+          </p>
+        )}
+        {(isParent || isChild || addChild) && (
+          <BiSolidTrashAlt
+            onClick={() => {
+              addChild && setIsAddReply({ state: false, id: null });
+              (isParent || isChild) && handelDelete(data?.id);
+            }}
+            className="text-primary text-xl cursor-pointer"
+          />
         )}
       </div>
     </div>
@@ -117,9 +229,10 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch }) => {
   ];
   // post comment
   const { register, handleSubmit, reset } = useForm();
+  const pageName = getPageName();
   const onSubmit = async (data) => {
     const FormData = {
-      read_aloud: open?.id,
+      [pageName]: open?.id,
       body: data?.body,
       images: data?.images[0],
       type: commentType,

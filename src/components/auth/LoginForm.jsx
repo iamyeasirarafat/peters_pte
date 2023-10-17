@@ -44,7 +44,6 @@ const Login = () => {
         });
       }
     }
-    console.log(data);
   };
   return (
     <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
