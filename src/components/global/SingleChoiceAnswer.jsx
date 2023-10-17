@@ -60,7 +60,7 @@ export const Answer = ({
         checked={selectedAnswer === answer}
         onClick={() => {
           setSelectedAnswer(answer);
-          setGivenAnswer([serial + 1]);
+          setGivenAnswer([serial]);
         }}
       />
       <p className="text-gray flex items-center gap-x-5 text-xl">

@@ -1,9 +1,14 @@
 "use client";
 import { toggleTopNav as toggleNav } from "@/src/redux/slice/layoutSlice";
 import Image from "next/image";
+import { Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideNav from "./src/layout/SideNav";
 import TopNav from "./src/layout/TopNav";
+
+function SearchBarFallback() {
+  return <>placeholder</>;
+}
 
 const DashboardLayout = ({ children }) => {
   const { topNav } = useSelector((state) => state.layout);
@@ -35,7 +40,7 @@ const DashboardLayout = ({ children }) => {
         ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"}
         overflow-y-auto mx-auto px-5 md:px-10 2xl:px-0`}
         >
-          {children}
+          <Suspense fallback={<SearchBarFallback />}>{children}</Suspense>
         </div>
         {/* <GlobalModal /> */}
       </div>

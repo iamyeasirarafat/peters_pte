@@ -44,18 +44,22 @@ const QuestionBlock = ({ data, toggleModal }) => {
               textColor={"gray"}
             />
           )}
-          <ButtonFill
-            text="Practiced"
-            count={`(${data?.practiced})`}
-            bgColor={"primary"}
-            textColor={"gray"}
-          />
-          <ButtonOutline
-            text="Appeared"
-            count={`(${data?.appeared})`}
-            borderColor={"primary"}
-            textColor={"gray"}
-          />
+          {data?.practiced && (
+            <ButtonFill
+              text="Practiced"
+              count={`(${data?.practiced})`}
+              bgColor={"primary"}
+              textColor={"gray"}
+            />
+          )}
+          {data?.appeared && (
+            <ButtonOutline
+              text="Appeared"
+              count={`(${data?.appeared})`}
+              borderColor={"primary"}
+              textColor={"gray"}
+            />
+          )}
         </div>
         <div className="space-x-5">
           <button>
