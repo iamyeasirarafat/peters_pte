@@ -51,6 +51,7 @@ function Page() {
       }
     });
     setGivenAnswer(given);
+    console.log(given);
     //submitting data
     const result = await axios.post("/multi_choice/answer", {
       multi_choice: id,

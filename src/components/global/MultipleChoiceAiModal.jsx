@@ -12,7 +12,6 @@ const MultipleChoiceAiModal = ({
   result,
   single,
 }) => {
-  const totalScore = 100;
   const obj = {
     0: "A",
     1: "B",
@@ -38,6 +37,8 @@ const MultipleChoiceAiModal = ({
       rightIndex.push(index);
     }
   }
+  const value = (result?.score / result?.max_score) * 100;
+  console.log(value);
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -75,7 +76,7 @@ const MultipleChoiceAiModal = ({
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={result?.score}
+                    value={value}
                     text={result?.score}
                     strokeWidth={15}
                     styles={buildStyles({
@@ -86,7 +87,9 @@ const MultipleChoiceAiModal = ({
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 10.00</p>
+                <p className="text-gray text-xl mt-1">
+                  Out of {result?.max_score}
+                </p>
               </div>
             </div>
             {/* Time Taken */}
@@ -96,7 +99,8 @@ const MultipleChoiceAiModal = ({
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
-                <p className="text-[60px] text-gray">02:23</p>
+                {/* <p className="text-[60px] text-gray">02:23</p> */}
+                <p className="text-[60px] text-gray">N/A</p>
               </div>
             </div>
             {/* Correct answer */}
@@ -121,13 +125,11 @@ const MultipleChoiceAiModal = ({
                 {myAnswer?.map((item, i) => {
                   let wrong = true;
                   rightIndex.forEach((i) => {
-                    if (i === parseInt(item - 1)) {
+                    if (i === parseInt(item)) {
                       wrong = false;
                     }
                   });
-                  return (
-                    <WordValue key={i} word={obj[item - 1]} wrong={wrong} />
-                  );
+                  return <WordValue key={i} word={obj[item]} wrong={wrong} />;
                 })}
               </div>
             </div>
