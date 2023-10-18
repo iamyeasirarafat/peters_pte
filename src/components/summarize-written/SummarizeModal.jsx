@@ -8,7 +8,7 @@ import ReusableModal from "../global/ReusableModal";
 const SummarizeModal = ({ open, setOpen, result }) => {
   const params = useSearchParams();
   const id = params.get("que_no");
-  const totalScore = result.Overall || 0;
+  const totalScore = result?.Overall || 0;
   const content = result?.Content || 0;
   const grammar = result?.Grammar || 0;
   const pronunciation = result?.Form || 0;
