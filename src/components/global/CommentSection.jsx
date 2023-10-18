@@ -10,6 +10,7 @@ import { formatDateTime } from "@/src/utils/formatDateTime";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { getPageName } from "@/src/utils/getPageName";
+import Image from "next/image";
 
 function CommentSection() {
   const [open, setOpen] = useState({ state: false, id: null });
@@ -22,12 +23,15 @@ function CommentSection() {
   const pathname = usePathname();
 
   useEffect(() => {
+    let pageName = getPageName(pathname);
+    pageName =
+      pageName === "multiple_answers" || pageName === "single_answer"
+        ? "multi_choice"
+        : pageName;
     try {
       const getComment = async () => {
         const res = await axios.get(
-          `https://api.codebyamirus.link/${getPageName(
-            pathname
-          )}/${id}/discussions`
+          `https://api.codebyamirus.link/${pageName}/${id}/discussions`
         );
         setParentComment(res?.data);
       };
@@ -120,7 +124,11 @@ const CommentBlock = ({
 }) => {
   // comment reply post start =====================================
   const { register, handleSubmit, reset } = useForm();
-  const pageName = getPageName(pathname);
+  let pageName = getPageName(pathname);
+  pageName =
+    pageName === "multiple_answers" || pageName === "single_answer"
+      ? "multi_choice"
+      : pageName;
   const onSubmit = async (data) => {
     const replyData = {
       [pageName]: questionId,
@@ -237,7 +245,11 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
   ];
   // post comment
   const { register, handleSubmit, reset } = useForm();
-  const pageName = getPageName(pathname);
+  let pageName = getPageName(pathname);
+  pageName =
+    pageName === "multiple_answers" || pageName === "single_answer"
+      ? "multi_choice"
+      : pageName;
   const onSubmit = async (data) => {
     const FormData = {
       [pageName]: open?.id,
