@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import TabButton from "./TabButton";
 import { BiComment, BiLike, BiSolidTrashAlt } from "react-icons/bi";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import ReusableModal from "./ReusableModal";
@@ -8,9 +7,9 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { formatDateTime } from "@/src/utils/formatDateTime";
-import { useSearchParams } from "next/navigation";
-import { getPageName } from "@/src/utils/getPageName";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
+import { getPageName } from "@/src/utils/getPageName";
 
 function CommentSection() {
   const [open, setOpen] = useState({ state: false, id: null });
@@ -20,18 +19,23 @@ function CommentSection() {
   const { user } = useSelector((state) => state?.user);
   const params = useSearchParams();
   const id = params.get("que_no");
-
-  console.log("parentComment", parentComment);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const getComment = async () => {
-      const res = await axios.get(
-        `https://api.codebyamirus.link/${getPageName()}/${id}/discussions`
-      );
-      setParentComment(res?.data);
-    };
-    getComment();
-  }, [id, fetch]);
+    try {
+      const getComment = async () => {
+        const res = await axios.get(
+          `https://api.codebyamirus.link/${getPageName(
+            pathname
+          )}/${id}/discussions`
+        );
+        setParentComment(res?.data);
+      };
+      getComment();
+    } catch (error) {
+      toast.error(error?.message);
+    }
+  }, [id, fetch, pathname]);
   return (
     <>
       {/*add comment modal open */}
@@ -56,9 +60,10 @@ function CommentSection() {
                 setIsAddReply={setIsAddReply}
                 fetch={fetch}
                 setFetch={setFetch}
+                pathname={pathname}
               />
               {/* child comment */}
-              <div className="pl-24 space-y-3">
+              <div className="pl-16 space-y-3">
                 {/* child comment show */}
                 {item?.replies?.map((reply) => (
                   <CommentBlock
@@ -67,6 +72,7 @@ function CommentSection() {
                     data={reply}
                     fetch={fetch}
                     setFetch={setFetch}
+                    pathname={pathname}
                   />
                 ))}
                 {/* child comment add */}
@@ -79,6 +85,7 @@ function CommentSection() {
                     setIsAddReply={setIsAddReply}
                     fetch={fetch}
                     setFetch={setFetch}
+                    pathname={pathname}
                   />
                 )}
               </div>
@@ -91,6 +98,7 @@ function CommentSection() {
         setOpen={setOpen}
         fetch={fetch}
         setFetch={setFetch}
+        pathname={pathname}
       />
     </>
   );
@@ -108,10 +116,11 @@ const CommentBlock = ({
   parentId,
   fetch,
   setFetch,
+  pathname,
 }) => {
   // comment reply post start =====================================
   const { register, handleSubmit, reset } = useForm();
-  const pageName = getPageName();
+  const pageName = getPageName(pathname);
   const onSubmit = async (data) => {
     const replyData = {
       [pageName]: questionId,
@@ -119,7 +128,7 @@ const CommentBlock = ({
       body: data?.body,
     };
     const res = await axios.post(
-      `https://api.codebyamirus.link/${getPageName()}/discussion`,
+      `https://api.codebyamirus.link/${pageName}/discussion`,
       replyData
     );
     reset();
@@ -141,7 +150,6 @@ const CommentBlock = ({
 
   // comment like start ===============================================
   const handelLike = async (id) => {
-    console.log("like and dislike ID", id);
     const res = await axios.get(
       `https://api.codebyamirus.link/discussion/${id}/like`
     );
@@ -157,7 +165,7 @@ const CommentBlock = ({
           {data?.user?.full_name?.charAt(0) || user?.full_name?.charAt(0)}
         </p>
         <div className="w-full">
-          <p className="text-sm text-gray flex items-center gap-x-8">
+          <h2 className="text-sm text-gray flex items-center gap-x-8">
             {data?.user?.full_name || user?.full_name}
             <p className="flex items-center gap-x-3">
               <span>
@@ -171,7 +179,7 @@ const CommentBlock = ({
                   : formatDateTime(new Date(), "date")}
               </span>
             </p>
-          </p>
+          </h2>
           {isParent || isChild ? (
             <p className="text-sm text-[#949494]">{data?.body}</p>
           ) : (
@@ -188,7 +196,7 @@ const CommentBlock = ({
       </div>
       {/* like delete */}
       <div className="flex items-center gap-x-4">
-        {(isParent || (!isChild && !addChild)) && (
+        {isParent && (
           <p className="flex items-end gap-x-2">
             <BiComment
               onClick={() => setIsAddReply({ state: true, id: data?.id })}
@@ -220,7 +228,7 @@ const CommentBlock = ({
   );
 };
 
-const AddCommentModal = ({ open, setOpen, fetch, setFetch }) => {
+const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
   const [commentType, setCommentType] = useState("Discuss");
   const allCommentType = [
     { name: "Discuss" },
@@ -229,7 +237,7 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch }) => {
   ];
   // post comment
   const { register, handleSubmit, reset } = useForm();
-  const pageName = getPageName();
+  const pageName = getPageName(pathname);
   const onSubmit = async (data) => {
     const FormData = {
       [pageName]: open?.id,
@@ -238,7 +246,7 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch }) => {
       type: commentType,
     };
     const res = await axios.post(
-      `https://api.codebyamirus.link/${getPageName()}/discussion`,
+      `https://api.codebyamirus.link/${pageName}/discussion`,
       FormData,
       {
         headers: {

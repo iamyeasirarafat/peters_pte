@@ -1,11 +1,10 @@
-import Image from "next/image";
 import { useState } from "react";
 import { RxSpeakerLoud } from "react-icons/rx";
 
 const TextBlock = ({ data }) => {
   const [talking, setTalking] = useState(false);
   //text to speech function
-  let synth = typeof window !== "undefined" && window?.speechSynthesis;
+  let synth = typeof window !== "undefined" ? window?.speechSynthesis : null;
   //handle speak function
   const handleSpeak = () => {
     if (synth && data?.content) {

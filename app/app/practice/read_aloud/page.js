@@ -70,7 +70,7 @@ const Index = () => {
         </div>
       </GlobalMainContent>
       {/* // result tab */}
-      {result && <ResultSection setOpenModal={setOpenModal} result={result} />}
+      {!result && <ResultSection setOpenModal={setOpenModal} result={result} />}
       <div className="block md:hidden">
         <RecordBlockMobile setResult={setResult} />
       </div>

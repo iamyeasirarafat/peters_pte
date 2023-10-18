@@ -3,7 +3,6 @@ import { BsPlusCircle } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 
 const Score = ({ result, setOpenModal, summary }) => {
-  console.log(result?.max_score, "ss");
   return (
     <div className="flex flex-col lg:flex-row gap-y-2 items-center justify-between border border-primary rounded-[15px] p-2">
       <div className=" flex lg:hidden items-center justify-between w-full">
