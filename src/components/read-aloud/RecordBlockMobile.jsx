@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { ReactMic } from "react-mic";
 import Pagination from "../global/Pagination";
 import { BsFillMicFill } from "react-icons/bs";
+import AudioPlayer from "../global/audio_player/AudioPlayer";
 
 const RecordBlockMobile = ({ setResult }) => {
   // countdown function
@@ -146,6 +147,7 @@ const RecordBlockMobile = ({ setResult }) => {
             <i>Beginning in {timeLeft.seconds} Sec...</i>
           </p>
         )}
+        {audioData && <AudioPlayer data={audioData} />}
         {isRecording && (
           <div className="w-full">
             <div className="flex w-full items-center justify-between">
@@ -165,14 +167,6 @@ const RecordBlockMobile = ({ setResult }) => {
           </div>
         )}
       </div>
-      {audioData && (
-        <div className="mt-3">
-          <audio controls>
-            <source src={URL.createObjectURL(audioData)} type="audio/wav" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      )}
       {/* Pagination */}
       <Pagination
         isLoading={isLoading}
