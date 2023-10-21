@@ -1,24 +1,15 @@
 "use client";
 import PageHeader from "@/src/components/global/PageHeader";
-import DiscursionSection from "@/src/components/global/DiscursionSection";
 import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
 import SummarizeModal from "@/src/components/summarize-written/SummarizeModal";
 import axios from "axios";
-import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import TextBlock from "@/src/components/global/TextBlock";
-import TypingBlock from "@/src/components/summarize-written/TypingBlock";
+import TypingBlock from "@/src/components/global/TypingBlock";
 import GlobalMainContent from "@/src/components/global/GlobalMainContent";
-
-const MainContent = dynamic(
-  () => import("@/src/components/summarize-written/MainContent"),
-  {
-    ssr: false,
-  }
-);
 
 const Index = () => {
   const [open, setOpen] = useState(false);
@@ -67,7 +58,6 @@ const Index = () => {
       {result && (
         <SummarizeModal result={result} open={open} setOpen={setOpen} />
       )}
-      {/*<DiscursionSection /> */}
     </div>
   );
 };

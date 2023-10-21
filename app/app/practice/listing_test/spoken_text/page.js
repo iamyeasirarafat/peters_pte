@@ -6,7 +6,7 @@ import PageHeader from "@/src/components/global/PageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
 import SpokenTextModal from "@/src/components/spoken_text/SpokenTextModal";
 import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
-import TypingBlock from "@/src/components/summarize-written/TypingBlock";
+import TypingBlock from "@/src/components/global/TypingBlock";
 import { useState } from "react";
 
 const Page = () => {
