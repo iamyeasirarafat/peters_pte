@@ -11,7 +11,7 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { GlobalPagination } from "../../reading_test/multiple_answers/page";
+import { GlobalPagination } from "../multiple_answers/page";
 
 function Page() {
   const [openScoreModal, setOpenScoreModal] = useState(false);

@@ -1,4 +1,4 @@
-import { GlobalPagination } from "@/app/app/practice/reading_test/multiple_answers/page";
+import { GlobalPagination } from "@/app/app/practice/listing_test/multiple_answers/page";
 import Image from "next/image";
 import { IoIosArrowBack } from "react-icons/io";
 
