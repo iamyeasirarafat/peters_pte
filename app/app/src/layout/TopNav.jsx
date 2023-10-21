@@ -7,6 +7,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import { RiCloseCircleLine, RiMenu2Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { navItems } from "./SideNav";
+import { FiUser } from "react-icons/fi";
+import { MdLogout } from "react-icons/md";
+import { Logout } from "@/src/utils/Logout";
 
 const TopNav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -134,9 +137,10 @@ const MenuItem = () => {
 };
 
 const UserDropdown = () => {
+  const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state?.user);
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 relative">
       <button className="bg-gold xs:hidden md:flex text-lg text-white font-avantt font-semibold items-center py-3 px-5 rounded-[32px] gap-1">
         <span>Become Premium</span>
         <Image
@@ -147,9 +151,51 @@ const UserDropdown = () => {
           alt="icon"
         />
       </button>
-      <p className="rounded-full text-4xl text-gray w-12 h-12 bg-white capitalize flex items-center justify-center">
+      <button
+        onClick={() => setShowProfile(!showProfile)}
+        className="rounded-full text-4xl text-gray w-12 h-12 bg-white capitalize flex items-center justify-center"
+      >
         {user?.full_name?.charAt(0)}
-      </p>
+      </button>
+
+      {/* user info */}
+      {showProfile && (
+        <div className="absolute top-[110%] right-0 bg-white rounded-sm shadow z-50">
+          <div className="px-4 py-3 flex items-center gap-x-4">
+            <p className="rounded-full text-5xl text-gray w-14 h-14 bg-white capitalize flex items-center justify-center border border-primary">
+              {user?.full_name?.charAt(0)}
+            </p>
+            <div className="space-y-1">
+              <p className="text-gray text-base capitalize">
+                {user?.full_name}
+              </p>
+              <p className="text-gray text-base">{user?.email}</p>
+            </div>
+          </div>
+          <hr className="border-t border-gray" />
+          <div className="py-2 px-7">
+            <button className="text-gray text-lg font-medium flex items-center px-3 py-1 gap-x-2">
+              Become Premium
+              <Image
+                className="object-cover"
+                src="/icons/diamond_black.svg"
+                width={24}
+                height={24}
+                alt="icon"
+              />
+            </button>
+            <button className="text-gray text-lg font-medium flex items-center px-3 py-1 gap-x-2">
+              Profile Center <FiUser className="text-xl" />
+            </button>
+            <button
+              onClick={() => Logout()}
+              className="text-gray text-lg font-medium flex items-center px-3 py-1 gap-x-2"
+            >
+              Log Out <MdLogout className="text-xl" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
