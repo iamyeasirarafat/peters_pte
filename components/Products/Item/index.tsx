@@ -1,43 +1,56 @@
 import Link from "next/link";
 import Image from "@/components/Image";
+import Icon from "@/components/Icon";
 
 type ItemProps = {
-    item: any;
+  item: any;
 };
 
 const Item = ({ item }: ItemProps) => (
-    <Link
-        className="flex justify-between items-center px-4 py-3 border-b border-n-1 text-sm last:border-none dark:border-white"
-        href="/crm/product-details"
-    >
-        <div className="">
-            <div className="mb-3 text-xs">{item.date}</div>
-            <div className="inline-flex items-center">
-                <div className="w-15 mr-3 border border-n-1">
-                    <Image
-                        className="w-full"
-                        src={item.image}
-                        width={60}
-                        height={42}
-                        alt=""
-                    />
-                </div>
-                <div className="">
-                    <div className="font-bold">{item.title}</div>
-                    <div>{item.color}</div>
-                </div>
-            </div>
+  <div className="space-y-2 px-4 py-3 text-sm">
+    <div className="w-full flex items-center justify-between">
+      <div className="label-stroke min-w-[7.25rem] text-xs">
+        {item.accountPlan}
+      </div>
+      <div className="flex items-center gap-x-2">
+        <div
+          className={`min-w-[4rem] ${
+            item.averageScore >= "80"
+              ? "label-stroke-green"
+              : item.averageScore >= "70"
+              ? "label-stroke-yellow"
+              : item.averageScore >= "60"
+              ? "label-stroke-pink"
+              : "label-stroke"
+          }`}
+        >
+          {item.averageScore}/90
         </div>
-        <div className="text-right">
-            <div className="label-green min-w-[3.75rem] h-4.5 mb-3">
-                {item.avl}
-            </div>
-            <div className="">
-                <div className="font-bold">{item.price}</div>
-                <div>{item.sales}</div>
-            </div>
+        <button className="btn-transparent-dark btn-small btn-square">
+          <Icon name="dots" />
+        </button>
+      </div>
+    </div>
+    <div className="w-full flex items-center justify-between">
+      <div className="flex items-center gap-x-3">
+        <Image
+          className="w-10 h-10 rounded-full"
+          src={item.image}
+          width={42}
+          height={42}
+          alt=""
+        />
+        <div className="flex flex-col gap-y-1">
+          <p className="text-sm font-semibold">{item?.name}</p>
+          <p className="text-sm font-semibold">{item?.userId}</p>
         </div>
-    </Link>
+      </div>
+      <div className="space-y-1">
+        <p className="text-sm font-semibold">Dhaka Branch</p>
+        <p className="text-xs font-medium">05/10/23</p>
+      </div>
+    </div>
+  </div>
 );
 
 export default Item;
