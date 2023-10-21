@@ -10,7 +10,6 @@ import { formatDateTime } from "@/src/utils/formatDateTime";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { getPageName } from "@/src/utils/getPageName";
-import Image from "next/image";
 
 function CommentSection() {
   const [open, setOpen] = useState({ state: false, id: null });
@@ -214,13 +213,16 @@ const CommentBlock = ({
           </p>
         )}
         {(isParent || isChild) && (
-          <p className="flex items-end gap-x-2">
+          <button
+            disabled={data?.self_like === false}
+            className="flex items-end gap-x-2"
+          >
             <BiLike
               onClick={() => handelLike(data?.id)}
               className="text-cream text-xl cursor-pointer"
             />
             <span className="text-gray text-xs">{data?.like?.length}</span>
-          </p>
+          </button>
         )}
         {(isParent || isChild || addChild) && (
           <BiSolidTrashAlt

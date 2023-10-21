@@ -71,7 +71,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "/app/practice/reading_test/multiple_answers?que_no=1",
+      path: "#",
       ai: false,
       icon: "MCM",
       bg: "cream",
@@ -92,7 +92,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/reading_test/single_answer?que_no=2",
+      path: "#",
       ai: false,
       icon: "MCS",
       bg: "cream",
@@ -108,14 +108,14 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "#",
+      path: "/app/practice/listing_test/multiple_answers?que_no=1",
       ai: false,
       icon: "MCM",
       bg: "primary",
     },
     {
       name: "Fill in the Blanks",
-      path: "#",
+      path: "/app/practice/listing_test/fill_blanks?que_no=1",
       ai: false,
       icon: "FIB",
       bg: "primary",
@@ -129,7 +129,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Single)",
-      path: "#",
+      path: "/app/practice/listing_test/single_answer?que_no=2",
       ai: false,
       icon: "MCS",
       bg: "primary",
