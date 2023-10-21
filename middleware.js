@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import withSession from "./src/hooks/withSession";
-
+import withSession from "./hooks/withSession";
 export async function middleware(NextRequest) {
   const token = NextRequest.cookies.get("access_token")?.value;
   const refreshToken = NextRequest.cookies.get("refresh_token")?.value;
