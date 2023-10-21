@@ -43,7 +43,7 @@ const DashboardLayout = ({ children }) => {
         <div
           className={`max-w-7xl w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"}
-        overflow-y-auto mx-auto px-5 md:px-10 2xl:px-0`}
+        overflow-y-auto custom_scroll_bar mx-auto px-5 md:px-10 2xl:px-3`}
         >
           <Suspense fallback={<SearchBarFallback />}>{children}</Suspense>
         </div>

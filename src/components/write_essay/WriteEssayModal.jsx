@@ -5,14 +5,17 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 
-const SummarizeModal = ({ open, setOpen, result }) => {
+const WriteEssayModal = ({ open, setOpen, result }) => {
   const params = useSearchParams();
   const id = params.get("que_no");
-  const totalScore = result?.Overall || 0;
-  const content = result?.Content || 0;
-  const grammar = result?.Grammar || 0;
-  const pronunciation = result?.Form || 0;
-  const vocabulary = result?.Vocabulary || 0;
+  const totalScore = 0;
+  const content = 0;
+  const grammar = 0;
+  const spellings = 0;
+  const dsc = 0;
+  const glr = 0;
+  const form = 0;
+  const vocabulary = 0;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -40,19 +43,19 @@ const SummarizeModal = ({ open, setOpen, result }) => {
         {/* Modal content */}
         <div className="px-8 pt-4 pb-2">
           {/* score */}
-          <div className="grid grid-cols-11 gap-x-6 mt-12">
+          <div className="grid grid-cols-12 gap-x-6 mt-12">
             {/* Total Score */}
-            <div className="col-span-4 w-full border border-primary rounded-[13px]">
+            <div className="col-span-3 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Total Score</p>
               </div>
               {/* score point*/}
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-36 h-36">
+              <div className="flex flex-col items-center justify-center p-4 pt-7">
+                <div className="w-[150px] h-[150px]">
                   <CircularProgressbar
-                    value={totalScore}
-                    text={totalScore}
-                    maxValue={7}
+                    value={4}
+                    text={4}
+                    maxValue={10}
                     strokeWidth={15}
                     styles={buildStyles({
                       textColor: "gray",
@@ -62,57 +65,93 @@ const SummarizeModal = ({ open, setOpen, result }) => {
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 7</p>
+                <p className="text-gray text-xl mt-1">Out of 10.00</p>
               </div>
             </div>
             {/* Enabling Skill  */}
-            <div className="col-span-7 w-full border border-primary rounded-[13px]">
+            <div className="col-span-9 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
               </div>
               {/* progress bar */}
-              <div className="space-y-3 p-5">
+              <div className="space-y-0 p-5">
                 {/* Content */}
                 <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Content</p>
+                  <p className="text-gray text-lg w-full text-start">Content</p>
                   <LineProgressBar
-                    height={35}
+                    height={25}
                     lineColor={"cream"}
-                    strokeWidth={content * 50}
+                    strokeWidth={60}
                   />
-                  <p className="text-gray text-xl">{content}/2</p>
+                  <p className="text-gray text-lg">0/2</p>
                 </div>
                 {/* Grammar */}
                 <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Grammar</p>
+                  <p className="text-gray text-lg w-full text-start">Grammar</p>
                   <LineProgressBar
-                    height={35}
+                    height={25}
                     lineColor={"primary"}
-                    strokeWidth={grammar * 50}
+                    strokeWidth={50}
                   />
-                  <p className="text-gray text-xl">{grammar}/2</p>
+                  <p className="text-gray text-lg">0/2</p>
+                </div>
+                {/* Spellings */}
+                <div className="w-full flex items-center justify-between gap-x-5">
+                  <p className="text-gray text-lg w-full text-start">
+                    Spellings
+                  </p>
+                  <LineProgressBar
+                    height={25}
+                    lineColor={"primary"}
+                    strokeWidth={50}
+                  />
+                  <p className="text-gray text-lg">0/2</p>
+                </div>
+                {/* Development, Structure and Coherence */}
+                <div className="w-full flex items-center justify-between gap-x-5">
+                  <p className="text-gray text-lg w-full text-start">
+                    Development, Structure and Coherence
+                  </p>
+                  <LineProgressBar
+                    height={25}
+                    lineColor={"primary"}
+                    strokeWidth={50}
+                  />
+                  <p className="text-gray text-lg">0/2</p>
+                </div>
+                {/* General Linguistic Range */}
+                <div className="w-full flex items-center justify-between gap-x-5">
+                  <p className="text-gray text-lg w-full text-start">
+                    General Linguistic Range
+                  </p>
+                  <LineProgressBar
+                    height={25}
+                    lineColor={"blue"}
+                    strokeWidth={50}
+                  />
+                  <p className="text-gray text-lg">0/2</p>
                 </div>
                 {/* Form */}
                 <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Form</p>
+                  <p className="text-gray text-lg w-full text-start">Form</p>
                   <LineProgressBar
-                    height={35}
+                    height={25}
                     lineColor={"blue"}
-                    strokeWidth={pronunciation * 50}
+                    strokeWidth={50}
                   />
-                  <p className="text-gray text-xl">{pronunciation}/2</p>
+                  <p className="text-gray text-lg">0/2</p>
                 </div>
-                {/* Vocabulary Range */}
+                {/* Vocabulary */}
                 <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">
-                    Vocabulary Range
+                  <p className="text-gray text-lg w-full text-start">
+                    Vocabulary
                   </p>
                   <LineProgressBar
-                    height={35}
+                    height={25}
                     lineColor={"primary"}
-                    strokeWidth={vocabulary * 50}
+                    strokeWidth={50}
                   />
-                  <p className="text-gray text-xl">{vocabulary}/2</p>
+                  <p className="text-gray text-lg">0/2</p>
                 </div>
               </div>
             </div>
@@ -135,8 +174,7 @@ const SummarizeModal = ({ open, setOpen, result }) => {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-gray text-lg font-medium">Total: 50 words</p>
-            <p className="text-gray text-lg font-medium">Time : 5:00</p>
-            <p className="text-gray text-lg font-medium">English: British</p>
+            <p className="text-gray text-lg font-medium">Time Taken : 5:00</p>
           </div>
           {/* Suggestion */}
           <div className="w-full border border-primary rounded-[13px] mt-4">
@@ -160,4 +198,4 @@ const SummarizeModal = ({ open, setOpen, result }) => {
   );
 };
 
-export default SummarizeModal;
+export default WriteEssayModal;
