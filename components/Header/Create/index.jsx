@@ -3,9 +3,9 @@ import { Menu, Transition } from "@headlessui/react";
 import { AddStudentModal } from "pages/organization/students";
 import { useState } from "react";
 
-type CreateProps = {};
 
-const Create = ({}: CreateProps) => {
+
+const Create = ({ }) => {
   const [visible, setVisible] = useState(false);
   const buttons = [
     {

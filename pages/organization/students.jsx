@@ -1,18 +1,17 @@
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
-import Filters from "@/components/Filters";
+import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import Products from "@/components/Products";
 import Select from "@/components/Select";
 import TablePagination from "@/components/TablePagination";
 import axios from "axios";
-import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { default as Toaster, default as toast } from "react-hot-toast";
+import { default as toast } from "react-hot-toast";
 
-const StudentList: NextPage = () => {
+const StudentList = () => {
   const [data, setData] = useState([
     // {
     //   userId: "Tushar123",
@@ -39,9 +38,8 @@ const StudentList: NextPage = () => {
     <Layout title="Students" background>
       {data?.length > 0 ? (
         <>
-          <Toaster />
-          <Filters />
-          <Products items={data} />
+          <StudentFilter />
+          <Products student={true} items={data} />
           <TablePagination />
         </>
       ) : (
@@ -54,7 +52,7 @@ const StudentList: NextPage = () => {
 export default StudentList;
 
 const EmptyPage = ({ setStatus }) => {
-  const [visible, setVisible] = useState<boolean>(false);
+  const [visible, setVisible] = useState(false);
   return (
     <>
       <Empty
@@ -82,7 +80,7 @@ const EmptyPage = ({ setStatus }) => {
   );
 };
 
-export const AddStudentModal = ({ visible, setVisible, setStatus }: any) => {
+export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
   const plans = [
     {
       id: "2",
@@ -103,8 +101,8 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }: any) => {
       title: "Khulna Branch",
     },
   ];
-  const [plan, setPlan] = useState<any>(plans[0]);
-  const [group, setGroup] = useState<any>(groups[0]);
+  const [plan, setPlan] = useState(plans[0]);
+  const [group, setGroup] = useState(groups[0]);
   const {
     register,
     handleSubmit,
@@ -113,7 +111,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }: any) => {
     formState: { errors },
   } = useForm({});
 
-  const onSubmit = async (data: { string: string }) => {
+  const onSubmit = async (data) => {
     const submitData = {
       ...data,
       group: group.title,

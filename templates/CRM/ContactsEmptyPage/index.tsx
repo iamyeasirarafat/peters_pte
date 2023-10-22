@@ -1,9 +1,6 @@
-import { useState } from "react";
-import Layout from "@/components/Layout";
 import Empty from "@/components/Empty";
-import Modal from "@/components/Modal";
-import Icon from "@/components/Icon";
-import Field from "@/components/Field";
+import Layout from "@/components/Layout";
+import { useState } from "react";
 
 const ContactsEmptyPage = () => {
     const [visible, setVisible] = useState<boolean>(false);
@@ -33,7 +30,7 @@ const ContactsEmptyPage = () => {
                     onClick={() => setVisible(true)}
                 />
             </Layout>
-            <Modal
+            {/* <Modal
                 title="Create new contact"
                 visible={visible}
                 onClose={() => setVisible(false)}
@@ -84,7 +81,7 @@ const ContactsEmptyPage = () => {
                         Add contact
                     </button>
                 </form>
-            </Modal>
+            </Modal> */}
         </>
     );
 };

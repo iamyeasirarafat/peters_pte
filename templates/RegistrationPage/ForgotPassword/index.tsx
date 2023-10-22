@@ -1,9 +1,8 @@
 import { useState } from "react";
-import Field from "@/components/Field";
 
 type ForgotPasswordProps = {};
 
-const ForgotPassword = ({}: ForgotPasswordProps) => {
+const ForgotPassword = ({ }: ForgotPasswordProps) => {
     const [email, setEmail] = useState<string>("");
 
     return (
@@ -16,7 +15,7 @@ const ForgotPassword = ({}: ForgotPasswordProps) => {
                     You can also set a new password if you’ve never set one
                     before.
                 </div>
-                <Field
+                {/* <Field
                     className="mb-4.5"
                     label="Email"
                     type="email"
@@ -25,7 +24,7 @@ const ForgotPassword = ({}: ForgotPasswordProps) => {
                     value={email}
                     onChange={(e: any) => setEmail(e.target.value)}
                     required
-                />
+                /> */}
                 <button
                     className="btn-purple btn-shadow w-full h-14"
                     type="submit"

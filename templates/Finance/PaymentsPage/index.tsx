@@ -1,7 +1,6 @@
-import { useState } from "react";
 import Layout from "@/components/Layout";
 import Select from "@/components/Select";
-import Field from "@/components/Field";
+import { useState } from "react";
 
 const utilities = [
     {
@@ -49,7 +48,7 @@ const PaymentsPage = () => {
                     value={utility}
                     onChange={setUtility}
                 />
-                <Field
+                {/* <Field
                     className="mb-5"
                     label="Service provider"
                     placeholder="Enter provider"
@@ -66,7 +65,7 @@ const PaymentsPage = () => {
                     value={currency}
                     onChange={(e: any) => setCurrency(e.target.value)}
                     required
-                />
+                /> */}
                 <div className="mb-5 border-l border-n-1 py-3.5 dark:border-white">
                     {list.map((item, index) => (
                         <div
@@ -82,7 +81,7 @@ const PaymentsPage = () => {
                         </div>
                     ))}
                 </div>
-                <Field
+                {/* <Field
                     className="mb-5"
                     classInput="bg-transparent"
                     label="Delivery time"
@@ -90,7 +89,7 @@ const PaymentsPage = () => {
                     value={time}
                     onChange={(e: any) => setTime(e.target.value)}
                     required
-                />
+                /> */}
                 <div className="mb-15 text-xs md:mb-8">
                     Transfers made on weekends or holidays take longer. All
                     transfers are subject to review and could be delayed or

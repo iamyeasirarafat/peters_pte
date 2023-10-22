@@ -6,7 +6,6 @@ import Chart from "@/components/LineChart/Chart";
 import Statistics from "@/components/LineChart/Statistics";
 import Students from "@/components/Products";
 import TablePagination from "@/components/TablePagination";
-import type { NextPage } from "next";
 const studentsList = [
   {
     name: "Eshak khan",
@@ -128,14 +127,14 @@ const barsDoubleData = [
   },
 ];
 
-const Courses: NextPage = () => {
+const Courses = () => {
   return (
     <Layout title="Reports">
       {/* Students Report */}
       <>
         <p className="text-lg font-extrabold mb-2">Students Report</p>
         <Filters />
-        <Students items={studentsList} />
+        <Students student={false} items={studentsList} />
         <TablePagination />
       </>
       {/* At a Glance */}
