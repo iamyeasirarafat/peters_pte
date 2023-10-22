@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import {
   BiComment,
@@ -43,7 +43,6 @@ function CommentSection() {
       toast.error(error?.message);
     }
   }, [id, fetch, pathname]);
-  console.log(parentComment);
   return (
     <>
       {/*add comment modal open */}
@@ -64,6 +63,7 @@ function CommentSection() {
               {/* parent comment show */}
               <CommentBlock
                 isParent
+                user={user}
                 data={item}
                 setIsAddReply={setIsAddReply}
                 fetch={fetch}
@@ -75,8 +75,9 @@ function CommentSection() {
                 {/* child comment show */}
                 {item?.replies?.map((reply) => (
                   <CommentBlock
-                    key={reply?.id}
                     isChild
+                    key={reply?.id}
+                    user={user}
                     data={reply}
                     fetch={fetch}
                     setFetch={setFetch}
@@ -86,10 +87,10 @@ function CommentSection() {
                 {/* child comment add */}
                 {isAddReply?.id === item?.id && (
                   <CommentBlock
+                    addChild
                     user={user}
                     questionId={id}
                     parentId={item?.id}
-                    addChild
                     setIsAddReply={setIsAddReply}
                     fetch={fetch}
                     setFetch={setFetch}
@@ -108,6 +109,7 @@ function CommentSection() {
         setFetch={setFetch}
         pathname={pathname}
       />
+      <Toaster />
     </>
   );
 }
@@ -192,14 +194,14 @@ const CommentBlock = ({
               <input
                 {...register("body", { required: true })}
                 type="text"
-                className="w-full placeholder:text-[#ACACAC] placeholder:italic text-gray text-sm border border-x-0 border-t-0 border-b-primary outline-none focus:ring-transparent focus:border-primary p-0 m-0"
+                className="w-full bg-transparent placeholder:text-[#ACACAC] placeholder:italic text-gray text-sm border border-x-0 border-t-0 border-b-primary outline-none focus:ring-transparent focus:border-primary p-0 m-0"
                 placeholder="Write Comment Here......."
               />
             </form>
           )}
         </div>
       </div>
-      {/* like delete */}
+      {/* like delete comment */}
       <div className="flex items-center gap-x-4">
         {isParent && (
           <p className="flex items-end gap-x-2">
@@ -211,22 +213,20 @@ const CommentBlock = ({
           </p>
         )}
         {(isParent || isChild) && (
-          <p className="flex items-end gap-x-2">
+          <button
+            onClick={() => handelLike(data?.id)}
+            disabled={user?.email === data?.user?.email}
+            className="flex items-end gap-x-2"
+          >
             {data?.self_like ? (
-              <BiSolidLike
-                onClick={() => handelLike(data?.id)}
-                className={`text-cream text-xl cursor-pointer  `}
-              />
+              <BiSolidLike className={`text-cream text-xl cursor-pointer  `} />
             ) : (
-              <BiLike
-                onClick={() => handelLike(data?.id)}
-                className={`text-cream text-xl cursor-pointer  `}
-              />
+              <BiLike className={`text-cream text-xl cursor-pointer  `} />
             )}
             <span className="text-gray text-xs">{data?.like?.length}</span>
-          </p>
+          </button>
         )}
-        {(isParent || isChild || addChild) && (
+        {(user?.email === data?.user?.email || addChild) && (
           <BiSolidTrashAlt
             onClick={() => {
               addChild && setIsAddReply({ state: false, id: null });

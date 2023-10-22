@@ -89,7 +89,7 @@ function Page() {
           </div>
         </form>
       </GlobalMainContent>
-      {result && (
+      {!result && (
         <ResultSection
           summary
           setOpenModal={setOpenScoreModal}
