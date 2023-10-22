@@ -1,18 +1,19 @@
 "use client";
-import GlobalMainContent from "@/src/components/global/GlobalMainContent";
-import ListenBlock from "@/src/components/global/ListenBlock";
-import MultipleChoiceAiModal from "@/src/components/global/MultipleChoiceAiModal";
-import MultipleChoiceAnswer from "@/src/components/global/MultipleChoiceAnswer";
-import PageHeader from "@/src/components/global/PageHeader";
-import ResultSection from "@/src/components/global/ResultSection";
-import SideModal from "@/src/components/global/SideModal";
-import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
+import GlobalMainContent from "@/components/global/GlobalMainContent";
+import ListenBlock from "@/components/global/ListenBlock";
+import MultipleChoiceAiModal from "@/components/global/MultipleChoiceAiModal";
+import MultipleChoiceAnswer from "@/components/global/MultipleChoiceAnswer";
+import PageHeader from "@/components/global/PageHeader";
+import ResultSection from "@/components/global/ResultSection";
+import SideModal from "@/components/global/SideModal";
+import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
 import { RxShuffle } from "react-icons/rx";
+import DashboardLayout from "../../../layout";
 
 function Page() {
   const [givenAnswer, setGivenAnswer] = useState([]);
@@ -60,7 +61,7 @@ function Page() {
     setResult(result.data);
   };
   return (
-    <div>
+    <DashboardLayout>
       {/* Side Modal */}
       <SideModal data={SideModalData} />
       <PageHeader title="Multiple Choice, Multiple Answers" />
@@ -107,7 +108,7 @@ function Page() {
         open={openTranscriptModal}
         setOpen={setOpenTranscriptModal}
       />
-    </div>
+    </DashboardLayout>
   );
 }
 

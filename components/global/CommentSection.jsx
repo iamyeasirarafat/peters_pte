@@ -7,7 +7,12 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { BiComment, BiLike, BiSolidTrashAlt } from "react-icons/bi";
+import {
+  BiComment,
+  BiLike,
+  BiSolidLike,
+  BiSolidTrashAlt,
+} from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
 import { useSelector } from "react-redux";
 import ReusableModal from "./ReusableModal";
@@ -30,9 +35,7 @@ function CommentSection() {
         : pageName;
     try {
       const getComment = async () => {
-        const res = await axios.get(
-          `https://api.codebyamirus.link/${pageName}/${id}/discussions`
-        );
+        const res = await axios.get(`/${pageName}/${id}/discussions`);
         setParentComment(res?.data);
       };
       getComment();
@@ -40,6 +43,7 @@ function CommentSection() {
       toast.error(error?.message);
     }
   }, [id, fetch, pathname]);
+  console.log(parentComment);
   return (
     <>
       {/*add comment modal open */}
@@ -135,10 +139,7 @@ const CommentBlock = ({
       parent: parentId,
       body: data?.body,
     };
-    const res = await axios.post(
-      `https://api.codebyamirus.link/${pageName}/discussion`,
-      replyData
-    );
+    const res = await axios.post(`/${pageName}/discussion`, replyData);
     reset();
     setIsAddReply({ state: false, id: null });
     setFetch(!fetch);
@@ -148,9 +149,7 @@ const CommentBlock = ({
 
   // delete reply start ===============================================
   const handelDelete = async (id) => {
-    const res = await axios.delete(
-      `https://api.codebyamirus.link/discussion/${id}`
-    );
+    const res = await axios.delete(`/discussion/${id}`);
     setFetch(!fetch);
     toast.success(res?.data?.message);
   };
@@ -158,9 +157,7 @@ const CommentBlock = ({
 
   // comment like start ===============================================
   const handelLike = async (id) => {
-    const res = await axios.get(
-      `https://api.codebyamirus.link/discussion/${id}/like`
-    );
+    const res = await axios.get(`/discussion/${id}/like`);
     setFetch(!fetch);
     toast.success(res?.data?.message);
   };
@@ -215,10 +212,17 @@ const CommentBlock = ({
         )}
         {(isParent || isChild) && (
           <p className="flex items-end gap-x-2">
-            <BiLike
-              onClick={() => handelLike(data?.id)}
-              className="text-cream text-xl cursor-pointer"
-            />
+            {data?.self_like ? (
+              <BiSolidLike
+                onClick={() => handelLike(data?.id)}
+                className={`text-cream text-xl cursor-pointer  `}
+              />
+            ) : (
+              <BiLike
+                onClick={() => handelLike(data?.id)}
+                className={`text-cream text-xl cursor-pointer  `}
+              />
+            )}
             <span className="text-gray text-xs">{data?.like?.length}</span>
           </p>
         )}
@@ -257,15 +261,11 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
       images: data?.images[0],
       type: commentType,
     };
-    const res = await axios.post(
-      `https://api.codebyamirus.link/${pageName}/discussion`,
-      FormData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const res = await axios.post(`/${pageName}/discussion`, FormData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     reset();
     setOpen({ state: false, id: null });
     setFetch(!fetch);

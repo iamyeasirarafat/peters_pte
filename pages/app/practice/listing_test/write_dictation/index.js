@@ -3,7 +3,7 @@ import GlobalMainContent from "@/components/global/GlobalMainContent";
 import ListenBlock from "@/components/global/ListenBlock";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
-import TypingBlock from "@/components/summarize-written/TypingBlock";
+import TypingBlock from "@/components/global/TypingBlock";
 import WriteDictationModal from "@/components/write_dictation/WriteDictationModal";
 import { useState } from "react";
 import DashboardLayout from "../../../layout";
