@@ -6,12 +6,13 @@ import ListenBlock from "@/components/global/ListenBlock";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
 import { useState } from "react";
+import DashboardLayout from "../../../layout";
 
 const Page = () => {
   const [open, setOpen] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
   return (
-    <>
+    <DashboardLayout>
       <PageHeader title="Reading Fill in the Blanks" />
       {/* main content */}
       <GlobalMainContent>
@@ -20,7 +21,7 @@ const Page = () => {
       </GlobalMainContent>
       <ResultSection setOpenModal={setOpenScoreModal} />
       <FillBlanksModal open={openScoreModal} setOpen={setOpenScoreModal} />
-    </>
+    </DashboardLayout>
   );
 };
 

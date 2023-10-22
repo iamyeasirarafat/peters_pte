@@ -1,12 +1,11 @@
+import Checkbox from "@/components/Checkbox";
+import Sorting from "@/components/Sorting";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import Sorting from "@/components/Sorting";
-import Checkbox from "@/components/Checkbox";
-import Row from "./Row";
 import Item from "./Item";
+import Row from "./Row";
 
 import { useHydrated } from "@/hooks/useHydrated";
-
 type StudentsProps = {
   items: any;
 };
@@ -58,6 +57,7 @@ const Students = ({ items }: StudentsProps) => {
       <tbody>
         {items.map((product: any, i: number) => (
           <Row item={product} key={i} />
+
         ))}
       </tbody>
     </table>

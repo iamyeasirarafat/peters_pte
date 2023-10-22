@@ -8,6 +8,7 @@ import WriteEssayModal from "@/components/write_essay/WriteEssayModal";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
+import DashboardLayout from "../../../layout";
 
 const Index = () => {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ const Index = () => {
     api: "/summarizes",
   };
   return (
-    <div>
+    <DashboardLayout>
       {/* Toast component  */}
       <Toaster />
 
@@ -49,7 +50,7 @@ const Index = () => {
       {!result && (
         <WriteEssayModal result={result} open={open} setOpen={setOpen} />
       )}
-    </div>
+    </DashboardLayout>
   );
 };
 

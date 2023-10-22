@@ -186,7 +186,7 @@ module.exports = {
       });
       addComponents({
         ".btn": {
-          "@apply inline-flex items-center justify-center h-13 px-5 border border-n-1 rounded-sm text-base text-n-1 fill-n-1 font-bold transition-colors":
+          "@apply inline-flex items-center justify-center h-13 px-5  rounded-sm text-base text-n-1 fill-n-1 font-bold transition-colors":
             {},
         },
         ".btn svg": {
@@ -201,7 +201,7 @@ module.exports = {
             {},
         },
         ".btn-purple": {
-          "@apply btn bg-purple-1 text-n-1 fill-n-1 hover:bg-purple-1/90": {},
+          "@apply btn bg-primary text-n-1 fill-n-1 hover:bg-secondary": {},
         },
         ".btn-dark": {
           "@apply btn bg-n-1 text-white fill-white hover:bg-n-1/80 dark:bg-white/10 dark:hover:bg-white/20":
@@ -236,39 +236,38 @@ module.exports = {
           "@apply w-9": {},
         },
         ".label": {
-          "@apply inline-flex justify-center items-center h-6 px-3 border rounded-sm text-center text-xs font-bold text-n-1":
+          "@apply inline-flex justify-center items-center h-6 px-3  rounded-sm text-center text-xs font-bold text-n-1":
             {},
         },
         ".label-stroke": {
-          "@apply label border-n-1 dark:border-white dark:text-white": {},
+          "@apply label  dark:text-white": {},
         },
         ".label-stroke-yellow": {
           "@apply label border-yellow-1 text-yellow-1": {},
         },
         ".label-stroke-pink": {
-          "@apply label border-pink-1 text-pink-1": {},
+          "@apply label  text-pink-1": {},
         },
         ".label-stroke-purple": {
-          "@apply label border-purple-1 text-purple-1": {},
+          "@apply label  text-purple-1": {},
         },
         ".label-stroke-green": {
-          "@apply label border-green-1 text-green-1": {},
+          "@apply label  text-green-1": {},
         },
         ".label-purple": {
-          "@apply label border-purple-1 bg-purple-1": {},
+          "@apply label  bg-purple-1": {},
         },
         ".label-green": {
-          "@apply label border-green-1 bg-green-1": {},
+          "@apply label  bg-green-1": {},
         },
         ".label-yellow": {
-          "@apply label border-yellow-1 bg-yellow-1": {},
+          "@apply label  bg-yellow-1": {},
         },
         ".label-black": {
           "@apply label border-n-1 bg-n-1 text-white dark:bg-white/10": {},
         },
         ".table-custom": {
-          "@apply table w-full border border-n-1 bg-white dark:bg-n-1 dark:border-white":
-            {},
+          "@apply table w-full  bg-white dark:bg-n-1 dark:border-none": {},
         },
         ".table-select": {
           "@apply table-custom [&>thead>tr>*:nth-child(2)]:pl-0 [&>thead>tr>*:nth-child(1)]:w-13 [&>thead>tr>*:nth-child(1)]:px-0 [&>thead>tr>*:nth-child(1)]:text-0 [&>thead>tr>*:nth-child(1)]:text-center [&>tbody>tr>*:nth-child(2)]:pl-0 [&>tbody>tr>*:nth-child(1)]:w-13 [&>tbody>tr>*:nth-child(1)]:px-0 [&>tbody>tr>*:nth-child(1)]:text-center [&>tbody>tr>*:nth-child(1)]:text-0":
@@ -279,7 +278,7 @@ module.exports = {
             {},
         },
         ".td-custom": {
-          "@apply table-cell h-[3.875rem] px-3 py-2.5 align-middle border-t border-n-1 text-sm first:pl-5 last:pr-5 dark:border-white":
+          "@apply table-cell h-[3.875rem] px-3 py-2.5 align-middle  border-n-1 text-sm first:pl-5 last:pr-5 dark:border-none":
             {},
         },
         ".card": {
