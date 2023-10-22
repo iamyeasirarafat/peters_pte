@@ -14,6 +14,7 @@ export async function middleware(NextRequest) {
   const [valid, error] = await withSession({
     token,
   });
+  console.log(valid, error, "middleware");
   if (!valid || error) {
     const [token, error] = await withSession({
       refreshToken,

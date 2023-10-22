@@ -1,17 +1,20 @@
 const withSession = async ({ token, refreshToken }) => {
   if (token) {
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: token,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/token/verify`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+          }),
+        }
+      );
       const data = await res.json();
-      console.log(data, "data");
+      console.log(data, "data yeasir");
       if (data?.code === "token_not_valid") return [false, true];
       return [true, false];
     } catch (error) {
@@ -22,15 +25,18 @@ const withSession = async ({ token, refreshToken }) => {
 
   if (refreshToken) {
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          refresh: refreshToken,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/token/refresh`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            refresh: refreshToken,
+          }),
+        }
+      );
       const data = await res.json();
       return [data.access, false];
     } catch (error) {
