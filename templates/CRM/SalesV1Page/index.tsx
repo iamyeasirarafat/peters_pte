@@ -9,7 +9,7 @@ const SalesV1Page = () => {
     return (
         <Layout title="Sales">
             <Filters />
-            <Products items={sales1} />
+            {/* <Products items={sales1} /> */}
             <TablePagination />
         </Layout>
     );

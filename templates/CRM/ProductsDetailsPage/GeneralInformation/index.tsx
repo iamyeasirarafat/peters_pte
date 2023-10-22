@@ -1,7 +1,6 @@
-import { useState } from "react";
-import Field from "@/components/Field";
-import Select from "@/components/Select";
 import Counter from "@/components/Counter";
+import Select from "@/components/Select";
+import { useState } from "react";
 import Images from "./Images";
 import Specifications from "./Specifications";
 
@@ -32,7 +31,7 @@ const specifications = ["Digital", "UI / UX", "Web", "Theme"];
 
 type GeneralInformationProps = {};
 
-const GeneralInformation = ({}: GeneralInformationProps) => {
+const GeneralInformation = ({ }: GeneralInformationProps) => {
     const [title, setTitle] = useState<string>("");
     const [category, setCategory] = useState<any>(categories[0]);
     const [sku, setSku] = useState<string>("");
@@ -44,14 +43,14 @@ const GeneralInformation = ({}: GeneralInformationProps) => {
             <div className="p-5">
                 <Images items={images} />
                 <div className="flex mb-4 space-x-5 md:block md:space-x-0 md:space-y-4">
-                    <Field
+                    {/* <Field
                         className="flex-1"
                         label="Product title"
                         placeholder="Enter title"
                         value={title}
                         onChange={(e: any) => setTitle(e.target.value)}
                         required
-                    />
+                    /> */}
                     <Select
                         className="flex-1"
                         label="Category"
@@ -61,14 +60,14 @@ const GeneralInformation = ({}: GeneralInformationProps) => {
                     />
                 </div>
                 <div className="flex mb-4 space-x-5 md:block md:space-x-0 md:space-y-4">
-                    <Field
+                    {/* <Field
                         className="flex-1"
                         label="SKU"
                         placeholder="Enter SKU"
                         value={sku}
                         onChange={(e: any) => setSku(e.target.value)}
                         required
-                    />
+                    /> */}
                     <Counter
                         className="flex-1"
                         label="Available"

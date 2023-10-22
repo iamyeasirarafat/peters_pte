@@ -13,13 +13,13 @@ export const navigation = [
   {
     title: "Exam Calendar",
     icon: "calendar",
-    url: "#",
+    url: "/organization/calender",
   },
   {
     title: "Reports",
     icon: "report2",
     // counter: 28,
-    url: "#",
+    url: "/organization/reports",
   },
   {
     title: "Billing & Bluk Account",

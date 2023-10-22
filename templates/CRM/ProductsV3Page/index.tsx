@@ -10,7 +10,7 @@ const ProductsV3Page = () => {
     return (
         <Layout title="Products">
             <Actions />
-            <Products items={products3} />
+            {/* <Products items={products3} /> */}
             <TablePagination />
         </Layout>
     );

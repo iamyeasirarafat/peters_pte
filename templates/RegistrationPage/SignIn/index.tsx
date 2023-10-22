@@ -1,7 +1,6 @@
-import { useState } from "react";
-import Field from "@/components/Field";
 import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
+import { useState } from "react";
 
 type SignInProps = {
     onRecover: () => void;
@@ -20,7 +19,7 @@ const SignIn = ({ onRecover, onLoginQr }: SignInProps) => {
                 <div className="mb-12 text-sm text-n-2 dark:text-white/50">
                     Enter your account details or use QR code
                 </div>
-                <Field
+                {/* <Field
                     className="mb-4.5"
                     label="Email"
                     type="email"
@@ -38,7 +37,7 @@ const SignIn = ({ onRecover, onLoginQr }: SignInProps) => {
                     value={password}
                     onChange={(e: any) => setPassword(e.target.value)}
                     required
-                />
+                /> */}
                 <div className="flex justify-between items-center mb-6.5">
                     <Checkbox
                         label="Remember me"

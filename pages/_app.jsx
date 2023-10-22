@@ -4,7 +4,6 @@ import "@/styles/globals.css";
 import { ColorModeProvider, ColorModeScript } from "@chakra-ui/color-mode";
 import axios from "axios";
 import { getCookie } from "cookies-next";
-import type { AppProps } from "next/app";
 import { Roboto_Flex } from "next/font/google";
 import "react-circular-progressbar/dist/styles.css";
 import { Provider } from "react-redux";
@@ -16,7 +15,7 @@ const roboto = Roboto_Flex({
   variable: "--font-roboto",
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }) {
   return (
     <main className={`${roboto.variable} font-sans`}>
       <SetValues />

@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,17 +20,47 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/templates/*": ["templates/*"],
-      "@/styles/*": ["styles/*"],
-      "@/utils/*": ["utils/*"],
-      "@/redux/*": ["redux/*"],
-      "@/hooks/*": ["hooks/*"],
-      "@/types/*": ["types/*"],
-      "@/constants/*": ["constants/*"],
-      "@/mocks/*": ["mocks/*"]
-    }
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/templates/*": [
+        "templates/*"
+      ],
+      "@/styles/*": [
+        "styles/*"
+      ],
+      "@/utils/*": [
+        "utils/*"
+      ],
+      "@/redux/*": [
+        "redux/*"
+      ],
+      "@/hooks/*": [
+        "hooks/*"
+      ],
+      "@/types/*": [
+        "types/*"
+      ],
+      "@/constants/*": [
+        "constants/*"
+      ],
+      "@/mocks/*": [
+        "mocks/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+, "components/Field/index.jsx", "pages/_app.jsx", "pages/organization/students.jsx", "pages/organization/student-details.jsx", "pages/organization/reports.jsx", "pages/organization/index.jsx", "pages/organization/calender.jsx", "components/Products/Row/index.jsx", "components/Products/index.jsx", "components/Header/Create/index.jsx"  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

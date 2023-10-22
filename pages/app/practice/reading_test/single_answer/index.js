@@ -11,7 +11,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { GlobalPagination } from "../multiple_answers/page";
+import { GlobalPagination } from "../../reading_test/multiple_answers";
 const answers = [
   {
     serial: "A",

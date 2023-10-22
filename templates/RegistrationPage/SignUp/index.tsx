@@ -1,7 +1,6 @@
-import { useState } from "react";
-import Field from "@/components/Field";
 import Checkbox from "@/components/Checkbox";
 import Select from "@/components/Select";
+import { useState } from "react";
 
 const countries = [
     {
@@ -20,7 +19,7 @@ const countries = [
 
 type SignUpProps = {};
 
-const SignUp = ({}: SignUpProps) => {
+const SignUp = ({ }: SignUpProps) => {
     const [country, setCountry] = useState<any>(countries[0]);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -41,7 +40,7 @@ const SignUp = ({}: SignUpProps) => {
                     value={country}
                     onChange={setCountry}
                 />
-                <Field
+                {/* <Field
                     className="mb-4.5"
                     label="Email"
                     type="email"
@@ -59,7 +58,7 @@ const SignUp = ({}: SignUpProps) => {
                     value={password}
                     onChange={(e: any) => setPassword(e.target.value)}
                     required
-                />
+                /> */}
                 <Checkbox
                     className="mb-3.5"
                     label="I agree to receive email updates"

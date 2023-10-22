@@ -3,15 +3,13 @@ import Sorting from "@/components/Sorting";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Item from "./Item";
-import Row from "./Row";
+import Row, { StudentRow } from "./Row";
 
 import { useHydrated } from "@/hooks/useHydrated";
-type StudentsProps = {
-  items: any;
-};
 
-const Students = ({ items }: StudentsProps) => {
-  const [valueAll, setValueAll] = useState<boolean>(false);
+
+const Students = ({ items, student }) => {
+  const [valueAll, setValueAll] = useState(false);
   const { mounted } = useHydrated();
 
   const isTablet = useMediaQuery({
@@ -20,7 +18,7 @@ const Students = ({ items }: StudentsProps) => {
 
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black">
-      {items.map((product: any, i: number) => (
+      {items.map((product, i) => (
         <Item item={product} key={i} />
       ))}
     </div>
@@ -55,10 +53,15 @@ const Students = ({ items }: StudentsProps) => {
         </tr>
       </thead>
       <tbody>
-        {items.map((product: any, i: number) => (
-          <Row item={product} key={i} />
+        {items.map((product, i) => {
+          if (student) {
+            return <StudentRow item={product} key={i} />
+          } else {
+            return <Row item={product} key={i} />
+          }
+        }
 
-        ))}
+        )}
       </tbody>
     </table>
   );

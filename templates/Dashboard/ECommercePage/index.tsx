@@ -1,9 +1,7 @@
 import Layout from "@/components/Layout";
-import SalesOverview from "./SalesOverview";
 import FinancialOverview from "./FinancialOverview";
-import Products from "@/components/Products";
+import SalesOverview from "./SalesOverview";
 
-import { products } from "@/mocks/dashboard";
 
 const ECommercePage = () => {
     return (
@@ -17,7 +15,7 @@ const ECommercePage = () => {
                 </div>
             </div>
             <div className="hidden mb-3.5 text-h6 lg:block">Latest Sales</div>
-            <Products items={products} />
+            {/* <Products items={products} /> */}
         </Layout>
     );
 };
