@@ -11,7 +11,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import DashboardLayout from "../../../layout";
-import { GlobalPagination } from "../../reading_test/multiple_answers/page";
+import { GlobalPagination } from "../../reading_test/multiple_answers";
 const answers = [
   {
     serial: "A",

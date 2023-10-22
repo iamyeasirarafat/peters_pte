@@ -2,29 +2,54 @@
 import GlobalMainContent from "@/src/components/global/GlobalMainContent";
 import ListenBlock from "@/src/components/global/ListenBlock";
 import MultipleChoiceAiModal from "@/src/components/global/MultipleChoiceAiModal";
-import MultipleChoiceAnswer from "@/src/components/global/MultipleChoiceAnswer";
 import PageHeader from "@/src/components/global/PageHeader";
 import ResultSection from "@/src/components/global/ResultSection";
 import SideModal from "@/src/components/global/SideModal";
+import SingleChoiceAnswer from "@/src/components/global/SingleChoiceAnswer";
 import TranscriptModal from "@/src/components/spoken_text/TranscriptModal";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { IoIosArrowBack } from "react-icons/io";
-import { RxShuffle } from "react-icons/rx";
-
+import { GlobalPagination } from "../multiple_answers/page";
+const answers = [
+  {
+    serial: "A",
+    answer:
+      "Listen to the recording and answer the question by selecting all the tortoise",
+  },
+  {
+    serial: "B",
+    answer:
+      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
+  },
+  {
+    serial: "C",
+    answer:
+      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
+  },
+  {
+    serial: "D",
+    answer:
+      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
+  },
+  {
+    serial: "E",
+    answer:
+      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
+  },
+];
 function Page() {
-  const [givenAnswer, setGivenAnswer] = useState([]);
-  const { register, handleSubmit } = useForm();
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
+  const { register, handleSubmit } = useForm();
   const [apiData, setData] = useState({});
   const [result, setResult] = useState(null);
-
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [givenAnswer, setGivenAnswer] = useState([]);
   // get data
-  const params = useSearchParams();
-  const id = params.get("que_no");
+  const router = useRouter();
+  const id = router.query.que_no;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/multi_choice/" + id);
@@ -35,27 +60,16 @@ function Page() {
 
   //sideModal Data
   const SideModalData = {
-    title: "Multiple Choices",
-    api: "/multi_choices",
+    title: "Single Answer",
+    api: "/multi_choices/single-answer",
   };
 
   //submit data
-  const onSubmit = async (data) => {
-    // filtering answer data
-    let ans = [];
-    let given = [];
-    Object.keys(data).forEach((i) => {
-      if (data[i] === true) {
-        given.push(i);
-        ans.push(apiData?.options[i]);
-      }
-    });
-    setGivenAnswer(given);
-    console.log(given);
+  const onSubmit = async () => {
     //submitting data
     const result = await axios.post("/multi_choice/answer", {
       multi_choice: id,
-      answers: ans,
+      answers: [selectedAnswer],
     });
     setResult(result.data);
   };
@@ -63,17 +77,20 @@ function Page() {
     <div>
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Multiple Choice, Multiple Answers" />
+      <PageHeader title="Multiple Choice, Single Answers" />
       <p className="text-gray text-base mt-2 text-center">
-        Listen to the recording and answer the question by selecting all the
-        correct responses. You will need to select more than one response.
+        Listen to the recording and answer the multiple-choice question by
+        selecting the correct response. Only one response is correct.
       </p>
       <GlobalMainContent data={apiData}>
         {/* text block */}
         <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
         {/* Multiple Choice Answer */}
         <form onSubmit={handleSubmit(onSubmit)}>
-          <MultipleChoiceAnswer
+          <SingleChoiceAnswer
+            setGivenAnswer={setGivenAnswer}
+            selectedAnswer={selectedAnswer}
+            setSelectedAnswer={setSelectedAnswer}
             register={register}
             answers={apiData?.options}
           />
@@ -96,6 +113,10 @@ function Page() {
           result={result}
         />
       )}
+      <TranscriptModal
+        open={openTranscriptModal}
+        setOpen={setOpenTranscriptModal}
+      />
       <MultipleChoiceAiModal
         result={result}
         myAnswer={givenAnswer}
@@ -103,37 +124,8 @@ function Page() {
         open={openScoreModal}
         setOpen={setOpenScoreModal}
       />
-      <TranscriptModal
-        open={openTranscriptModal}
-        setOpen={setOpenTranscriptModal}
-      />
     </div>
   );
 }
 
 export default Page;
-
-export const GlobalPagination = () => {
-  return (
-    <div className="flex items-center gap-x-2">
-      <button className="w-10 h-7 md:w-[56px] md:h-[45px] bg-secondary rounded-[22px] flex items-center justify-center">
-        <RxShuffle className="text-gray text-xl md:text-3xl" />
-      </button>
-      <div className="bg-secondary rounded-[30px] px-2 md:px-4 py-[5px] flex items-center gap-x-1 md:gap-x-2">
-        <IoIosArrowBack className="text-sm md:text-lg text-gray cursor-pointer" />
-        <select
-          className="py-0 md:py-2  bg-white rounded-[22px] outline-none border-0 focus:outline-none focus:ring-0"
-          name=""
-          id=""
-        >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-        <p className="text-sm text-gray font-medium">of</p>
-        <p className="text-sm text-gray font-medium">1127</p>
-        <IoIosArrowBack className="text-sm md:text-lg text-gray cursor-pointer rotate-180" />
-      </div>
-    </div>
-  );
-};
