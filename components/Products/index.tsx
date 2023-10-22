@@ -6,12 +6,11 @@ import Item from "./Item";
 import Row from "./Row";
 
 import { useHydrated } from "@/hooks/useHydrated";
-
-type ProductsProps = {
+type StudentsProps = {
   items: any;
 };
 
-const Products = ({ items }: ProductsProps) => {
+const Students = ({ items }: StudentsProps) => {
   const [valueAll, setValueAll] = useState<boolean>(false);
   const { mounted } = useHydrated();
 
@@ -20,13 +19,13 @@ const Products = ({ items }: ProductsProps) => {
   });
 
   return mounted && isTablet ? (
-    <div className="card">
-      {items.map((product: any) => (
-        <Item item={product} key={product.id} />
+    <div className="bg-white dark:bg-black">
+      {items.map((product: any, i: number) => (
+        <Item item={product} key={i} />
       ))}
     </div>
   ) : (
-    <table className="table-custom table-select">
+    <table className="bg-white dark:bg-black">
       <thead>
         <tr>
           <th className="th-custom">
@@ -39,13 +38,13 @@ const Products = ({ items }: ProductsProps) => {
             <Sorting title="Student Name" />
           </th>
           <th className="th-custom">
-            <Sorting title="Account plan" />
+            <Sorting title="Account Plan" />
           </th>
           <th className="th-custom">
             <Sorting title="User Id" />
           </th>
           <th className="th-custom">
-            <Sorting title="Last Logged in" />
+            <Sorting title="Last Logged In" />
           </th>
           <th className="th-custom">
             <Sorting title="Average Score" />
@@ -53,17 +52,16 @@ const Products = ({ items }: ProductsProps) => {
           <th className="th-custom text-right">
             <Sorting title="Group" />
           </th>
-
-          <th className="th-custom text-right"></th>
         </tr>
       </thead>
       <tbody>
-        {items.map((product: any) => (
-          <Row item={product} key={product.id} />
+        {items.map((product: any, i: number) => (
+          <Row item={product} key={i} />
+
         ))}
       </tbody>
     </table>
   );
 };
 
-export default Products;
+export default Students;
