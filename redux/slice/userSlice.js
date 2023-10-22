@@ -8,7 +8,7 @@ const initialState = {
   error: "",
 };
 export const getUser = createAsyncThunk("getUser", async () => {
-  const res = await axios.get("https://api.codebyamirus.link/user/profile");
+  const res = await axios.get("/user/profile");
   return res.data;
 });
 const userSlice = createSlice({

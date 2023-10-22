@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import PageListPage from "@/templates/PageListPage";
 
 const Home: NextPage = () => {
-    return <PageListPage />;
+  // return <PageListPage />;
+  return <div>Home Page</div>;
 };
 
 export default Home;

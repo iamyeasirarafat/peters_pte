@@ -8,6 +8,7 @@ import SideModal from "@/components/global/SideModal";
 import SingleChoiceAnswer from "@/components/global/SingleChoiceAnswer";
 import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import DashboardLayout from "../../../layout";
