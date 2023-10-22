@@ -31,17 +31,17 @@ export const navigation = [
   {
     title: "Prediction",
     icon: "prediction",
-    url: "#",
+    url: "/organization/prediction",
   },
   {
     title: "Template",
     icon: "template",
-    url: "#",
+    url: "/organization/template",
   },
   {
     title: "Study Material",
     icon: "book",
-    url: "#",
+    url: "/organization/study-material",
   },
 ];
 
