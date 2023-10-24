@@ -6,7 +6,7 @@ import Chart from "@/components/LineChart/Chart";
 import Statistics from "@/components/LineChart/Statistics";
 import Students from "@/components/Products";
 import TablePagination from "@/components/TablePagination";
-const studentsList = [
+export const studentsList = [
   {
     name: "Eshak khan",
     image: "/images/product-pic-1.jpg",
