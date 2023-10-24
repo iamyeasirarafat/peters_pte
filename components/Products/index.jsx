@@ -7,7 +7,6 @@ import Row, { StudentRow } from "./Row";
 
 import { useHydrated } from "@/hooks/useHydrated";
 
-
 const Students = ({ items, student }) => {
   const [valueAll, setValueAll] = useState(false);
   const { mounted } = useHydrated();
@@ -17,13 +16,13 @@ const Students = ({ items, student }) => {
   });
 
   return mounted && isTablet ? (
-    <div className="bg-white dark:bg-black">
+    <div className="bg-white dark:bg-black w-full">
       {items.map((product, i) => (
         <Item item={product} key={i} />
       ))}
     </div>
   ) : (
-    <table className="bg-white dark:bg-black">
+    <table className="bg-white dark:bg-black w-full">
       <thead>
         <tr>
           <th className="th-custom">
@@ -55,13 +54,11 @@ const Students = ({ items, student }) => {
       <tbody>
         {items.map((product, i) => {
           if (student) {
-            return <StudentRow item={product} key={i} />
+            return <StudentRow item={product} key={i} />;
           } else {
-            return <Row item={product} key={i} />
+            return <Row item={product} key={i} />;
           }
-        }
-
-        )}
+        })}
       </tbody>
     </table>
   );
