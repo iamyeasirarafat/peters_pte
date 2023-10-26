@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout";
+import AdminLayout from "@/components/AdminLayout";
 
 const Index = () => {
-  return <Layout title="Dashboard">Admin Dashboard</Layout>;
+  return <AdminLayout title="Dashboard">Admin Dashboard</AdminLayout>;
 };
 
 export default Index;

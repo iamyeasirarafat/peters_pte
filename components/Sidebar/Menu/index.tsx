@@ -2,11 +2,7 @@ import Icon from "@/components/Icon";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import {
-  navigation,
-  adminNavigation,
-  superAdminNavigation,
-} from "@/constants/navigation";
+import { navigation, adminNavigation } from "@/constants/navigation";
 import { twMerge } from "tailwind-merge";
 
 type MenuProps = {
@@ -28,13 +24,7 @@ const Menu = ({ visible }: MenuProps) => {
       <SingleMenu
         router={router}
         visible
-        menu={
-          router?.asPath?.includes("admin")
-            ? adminNavigation
-            : router?.asPath?.includes("superAdmin")
-            ? superAdminNavigation
-            : navigation
-        }
+        menu={router?.asPath?.includes("admin") ? adminNavigation : navigation}
       />
     </>
   );
