@@ -61,7 +61,7 @@ export const adminNavigation = [
   },
   {
     title: "Organization",
-    icon: "school",
+    icon: "organization",
     // counter: 5,
     url: "/admin/organization",
   },
