@@ -125,6 +125,85 @@ export const adminNavigation = [
     url: "/admin/settings",
   },
 ];
+export const superAdminNavigation = [
+  {
+    title: "Dashboard",
+    icon: "dashboard",
+    // counter: 16,
+    url: "/superAdmin",
+  },
+  {
+    title: "Students",
+    icon: "students",
+    counter: 10,
+    url: "/superAdmin/students",
+  },
+  {
+    title: "Organization",
+    icon: "school",
+    // counter: 5,
+    url: "/superAdmin/organization",
+  },
+  {
+    title: "Exam Calendar",
+    icon: "calendar",
+    // counter: 28,
+    url: "/superAdmin/exam-calendar",
+  },
+  {
+    title: "Reports",
+    icon: "report2",
+    // counter: 20,
+    url: "/superAdmin/reports",
+  },
+  {
+    title: "Billing & Plan",
+    icon: "bill",
+    counter: 12,
+    url: "/superAdmin/billing-plan",
+  },
+  {
+    title: "Promotion",
+    icon: "campaign",
+    // counter: 6,
+    url: "/superAdmin/promotion",
+  },
+  {
+    title: "Practice Question",
+    icon: "question",
+    counter: 5,
+    url: "/superAdmin/practice-question",
+  },
+  {
+    title: "Mocktest",
+    icon: "help",
+    // counter: 7,
+    url: "/superAdmin/mocktest",
+  },
+  {
+    title: "Discussion",
+    icon: "discussion",
+    // counter: 36,
+    url: "/superAdmin/discussion",
+  },
+  {
+    title: "Study Material",
+    icon: "book",
+    // counter: 85,
+    url: "/superAdmin/study-material",
+  },
+  {
+    title: "Admin User",
+    icon: "person",
+    // counter: 85,
+    url: "/superAdmin/admin-user",
+  },
+  {
+    title: "Settings",
+    icon: "settings",
+    url: "/superAdmin/settings",
+  },
+];
 
 export const navigationMobile = [
   {

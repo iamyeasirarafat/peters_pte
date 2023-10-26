@@ -1,9 +1,6 @@
-const index = () => {
-  return (
-    <div>
-      <h3>super admin</h3>
-    </div>
-  );
+import AdminLayout from "@/components/AdminLayout";
+const Index = () => {
+  return <AdminLayout title="Dashboard">Super Admin Dashboard</AdminLayout>;
 };
 
-export default index;
+export default Index;
