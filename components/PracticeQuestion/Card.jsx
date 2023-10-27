@@ -13,7 +13,7 @@ const Card = ({ title, items, bg, link, text }) => {
   const bgClass = bgClasses[bg] || "bg-yellow-600"; // Default to "bg-yellow-600" if not found
   return (
     <Link
-      href={link ? `/${link}` : "#"}
+      href={title ? `/admin/practice-question/${title}` : "/#"}
       className="h-24 w-[19rem] bg-white dark:bg-black rounded-sm flex justify-start items-center gap-5  pl-5"
     >
       <div
