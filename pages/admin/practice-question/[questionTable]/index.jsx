@@ -52,7 +52,7 @@ const Index = () => {
   const router = useRouter();
   const { questionTable } = router.query;
   return (
-    <AdminLayout title={questionTable}>
+    <AdminLayout title={questionTable} back={true}>
       <div className="flex justify-between mb-6">
         <div>
           <Link href={`/admin/practice-question/${questionTable}/create`}>

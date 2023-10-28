@@ -1,4 +1,5 @@
 import Counter from "@/components/Counter";
+import Icon from "@/components/Icon";
 import { useState } from "react";
 const RepeatSentence = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,24 @@ const RepeatSentence = () => {
     console.log(formData);
   };
 
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [audioName, setAudioName] = useState(null);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAudioSrc(URL.createObjectURL(file));
+      setAudioName(file?.name);
+    } else {
+      setAudioSrc(null);
+      setAudioName(null);
+    }
+  };
+
+  const handleDeleteAudio = () => {
+    setAudioSrc(null);
+    setAudioName(null);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -39,6 +58,55 @@ const RepeatSentence = () => {
             onChange={handleInputChange}
           />
         </div>
+
+        <div>
+          <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
+          {!audioName && !audioSrc ? (
+            <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
+              <Icon
+                className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                name="upload"
+              />
+              <span class="mt-2 text-base leading-normal">Upload</span>
+              <input
+                type="file"
+                class="hidden"
+                accept="audio/*"
+                onChange={handleFileChange}
+              />
+            </label>
+          ) : (
+            <div className="flex gap-5">
+              <div class="border relative w-28 flex flex-col items-center  cursor-pointer">
+                <div onClick={handleDeleteAudio} class="absolute top-0 right-0">
+                  <Icon
+                    class="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                    name="cross"
+                  />
+                </div>
+                <Icon
+                  className="icon-20 mt-5 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                  name="pause"
+                />
+                <span class="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
+                  {audioName}
+                </span>
+              </div>
+              <div className="w-full">
+                <audio
+                  controls
+                  src={audioSrc}
+                  className="w-full   border  p-2"
+                ></audio>
+                <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
+                  <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+                  Generate Reference Text
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="flex flex-col gap-2 my-5">
           <label for="paragraph" className="font-bold text-sm">
             Reference Text

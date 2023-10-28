@@ -16,7 +16,7 @@ const AllForms = () => {
     content = <h2>this is new question from</h2>;
   }
   return (
-    <AdminLayout title={`${questionTable} / New Question`}>
+    <AdminLayout back={true} title={`${questionTable} / New Question`}>
       {content}
     </AdminLayout>
   );
