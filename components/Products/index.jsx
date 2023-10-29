@@ -1,14 +1,10 @@
-import Checkbox from "@/components/Checkbox";
 import Sorting from "@/components/Sorting";
-import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
 import Item from "./Item";
 import Row, { StudentRow } from "./Row";
-
+import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 
 const Students = ({ items, student }) => {
-  const [valueAll, setValueAll] = useState(false);
   const { mounted } = useHydrated();
 
   const isTablet = useMediaQuery({
@@ -25,12 +21,6 @@ const Students = ({ items, student }) => {
     <table className="bg-white dark:bg-black w-full">
       <thead>
         <tr>
-          <th className="th-custom">
-            <Checkbox
-              value={valueAll}
-              onChange={() => setValueAll(!valueAll)}
-            />
-          </th>
           <th className="th-custom">
             <Sorting title="Student Name" />
           </th>

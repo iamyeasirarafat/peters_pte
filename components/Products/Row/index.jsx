@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { useState } from "react";
 
-
 const Row = ({ item }) => {
   const [value, setValue] = useState(false);
   return (
@@ -32,20 +31,21 @@ const Row = ({ item }) => {
       <td className="td-custom">{item.lastLoggedIn}</td>
       <td className="td-custom">
         <div
-          className={`min-w-[4rem] ${item.averageScore >= "80"
-            ? "label-stroke-green"
-            : item.averageScore >= "70"
+          className={`min-w-[4rem] ${
+            item.averageScore >= "80"
+              ? "label-stroke-green"
+              : item.averageScore >= "70"
               ? "label-stroke-yellow"
               : item.averageScore >= "60"
-                ? "label-stroke-pink"
-                : "label-stroke"
-            }`}
+              ? "label-stroke-pink"
+              : "label-stroke"
+          }`}
         >
           {item.averageScore}/90
         </div>
       </td>
-      <td className="td-custom text-right">{item.group}</td>
-      <td className="td-custom text-right">
+      <td className="td-custom">{item.group}</td>
+      <td className="td-custom">
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>
@@ -55,7 +55,6 @@ const Row = ({ item }) => {
 };
 
 export default Row;
-
 
 export const StudentRow = ({ item }) => {
   const [value, setValue] = useState(false);
@@ -93,28 +92,26 @@ export const StudentRow = ({ item }) => {
       </td>
       <td className="td-custom">
         <div
-          className={`min-w-[4rem] ${item.avl === "Paid"
-            ? "label-stroke-green"
-            : item.avl === "Med"
+          className={`min-w-[4rem] ${
+            item.avl === "Paid"
+              ? "label-stroke-green"
+              : item.avl === "Med"
               ? "label-stroke-yellow"
               : item.avl === "Low"
-                ? "label-stroke-pink"
-                : "label-stroke"
-            }`}
+              ? "label-stroke-pink"
+              : "label-stroke"
+          }`}
         >
           {item.avg_score || "N/A"}
         </div>
       </td>
 
-      <td className="td-custom font-bold text-right">
-        {item?.profile[0].group}
-      </td>
-      <td className="td-custom text-right">
+      <td className="td-custom font-bold">{item?.profile[0].group}</td>
+      <td className="td-custom">
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>
       </td>
     </tr>
-
-  )
-}
+  );
+};

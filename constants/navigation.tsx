@@ -26,7 +26,7 @@ export const navigation = [
     icon: "bill",
     // counter: 14,
     counterColor: "#98E9AB",
-    url: "#",
+    url: "/organization/billing-payment",
   },
   {
     title: "Prediction",
