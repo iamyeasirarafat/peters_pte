@@ -7,6 +7,11 @@ import { useState } from "react";
 
 const Row = ({ item }) => {
   const [value, setValue] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
   return (
     <tr className="">
       <td className="td-custom">
@@ -35,11 +40,57 @@ const Row = ({ item }) => {
       <td className="td-custom">
         <div className="label-stroke min-w-[7.25rem]">{item.averageScore}</div>
       </td>
-      {/* <td className="td-custom text-right">{item.group}</td> */}
       <td className="td-custom text-right">
-        <button className="btn-transparent-dark btn-small btn-square">
-          <Icon name="dots" />
-        </button>
+        <div className="flex justify-center bg-gray-100 ">
+          <div
+            className="relative inline-block text-left"
+            onClick={toggleDropdown}
+            // onBlur={closeDropdown}
+          >
+            <button className="btn-transparent-dark btn-small btn-square">
+              <Icon name="dots" />
+            </button>
+            <div
+              style={{ backgroundColor: "#FAF4F0" }}
+              className={`${
+                isOpen ? "block" : "hidden"
+              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+            >
+              <div role="none">
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                >
+                  <Icon name="settings" /> Edit Question
+                </a>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                >
+                  <Icon name="plus" /> Increase Appeared by 1
+                </a>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+                >
+                  <Icon name="prediction" /> Prediction On
+                </a>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+                >
+                  <Icon name="predictionOff" /> Prediction Off
+                </a>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+                >
+                  <Icon name="cross" /> Remove
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </td>
     </tr>
   );
