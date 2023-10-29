@@ -93,7 +93,7 @@ const CardItems = () => {
   ];
   const Speaking2 = [
     {
-      title: "Read Aloud",
+      title: "Summarize Spoken Text",
       items: "233",
       bg: "#5F646D",
       link: "#",
@@ -142,7 +142,7 @@ const CardItems = () => {
       text: "RA",
     },
     {
-      title: "Read Aloud",
+      title: "Write From Dictation",
       items: "233",
       bg: "#5F646D",
       link: "#",
