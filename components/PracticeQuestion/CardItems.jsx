@@ -1,17 +1,32 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
+import axios from "axios";
 
 const CardItems = () => {
+  const [itemNumber, setItemNumber] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/superadmin/test/counts");
+        setItemNumber(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const Speaking = [
     {
       title: "Read Aloud",
-      items: "233",
+      items: itemNumber?.read_aloud,
       bg: "#CF8800",
       link: "#",
       text: "RA",
     },
     {
       title: "Repeat Sentence",
-      items: "233",
+      items: itemNumber?.repeat_sentence,
       bg: "#CF8800",
       link: "#",
       text: "RA",
@@ -32,7 +47,7 @@ const CardItems = () => {
     },
     {
       title: "Re-Tell Lecture",
-      items: "233",
+      items: itemNumber?.retell_sentence,
       bg: "#CF8800",
       link: "#",
       text: "RA",
@@ -41,14 +56,14 @@ const CardItems = () => {
   const Writing = [
     {
       title: "Summarize Written Text",
-      items: "233",
+      items: itemNumber?.summarize_written,
       bg: "#F2B277",
       link: "#",
       text: "SWT",
     },
     {
       title: "Write Essay",
-      items: "233",
+      items: itemNumber?.write_easy,
       bg: "#F2B277",
       link: "#",
       text: "SWT",
@@ -64,7 +79,7 @@ const CardItems = () => {
     },
     {
       title: "Multiple Choice (Multiple)",
-      items: "233",
+      items: itemNumber?.multi_choice_multiple_answer,
       bg: "#4399FF",
       link: "#",
       text: "RA",
@@ -85,7 +100,7 @@ const CardItems = () => {
     },
     {
       title: "Multiple Choice (Single)",
-      items: "233",
+      items: itemNumber?.multi_choice_single_answer,
       bg: "#4399FF",
       link: "#",
       text: "RA",
@@ -100,8 +115,15 @@ const CardItems = () => {
       text: "RA",
     },
     {
-      title: "Read Aloud",
-      items: "233",
+      title: "Multiple Choice (Multiple)",
+      items: itemNumber?.multi_choice_multiple_answer,
+      bg: "#5F646D",
+      link: "#",
+      text: "RA",
+    },
+    {
+      title: "Highlight Correct Summary",
+      items: itemNumber?.highlight_summary,
       bg: "#5F646D",
       link: "#",
       text: "RA",
@@ -121,21 +143,14 @@ const CardItems = () => {
       text: "RA",
     },
     {
-      title: "Read Aloud",
-      items: "233",
+      title: "Select Missing Word",
+      items: itemNumber?.missing_word,
       bg: "#5F646D",
       link: "#",
       text: "RA",
     },
     {
-      title: "Read Aloud",
-      items: "233",
-      bg: "#5F646D",
-      link: "#",
-      text: "RA",
-    },
-    {
-      title: "Read Aloud",
+      title: "read aloud",
       items: "233",
       bg: "#5F646D",
       link: "#",
@@ -143,7 +158,7 @@ const CardItems = () => {
     },
     {
       title: "Write From Dictation",
-      items: "233",
+      items: itemNumber?.dictation,
       bg: "#5F646D",
       link: "#",
       text: "RA",
