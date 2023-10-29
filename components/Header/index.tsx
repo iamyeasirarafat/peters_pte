@@ -28,7 +28,7 @@ const Header = ({ back, title }: HeaderProps) => {
       <div className="flex items-center max-w-[90rem] m-auto w-full h-18 px-16 2xl:px-8 lg:px-6 md:px-5">
         {back && (
           <button
-            className="btn-stroke btn-square btn-medium shrink-0 mr-6 2xl:mr-4 md:!w-6 md:h-6 md:mr-3"
+            className="btn-stroke border btn-square btn-medium shrink-0 mr-6 2xl:mr-4 md:!w-6 md:h-6 md:mr-3"
             onClick={() => router.back()}
           >
             <Icon name="arrow-prev" />
