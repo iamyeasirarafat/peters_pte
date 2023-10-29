@@ -65,15 +65,15 @@ const Index = () => {
             </button>
           </Link>
           <button
-            className="h-10 px-6 text-sm font-bold last:mb-0 bg-white  transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+            className="h-10 px-6 text-sm font-bold last:mb-0 dark:text-black bg-white  transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
             as="button"
           >
-            <Icon className="-mt-0.25 mr-3 dark:fill-white" name="filters" />
+            <Icon className="-mt-0.25 mr-3 dark:fill-black" name="filters" />
             filters
           </button>
         </div>
         <button className="px-3 py-[0.4rem] border bg-white">
-          <Icon className=" dark:fill-white" name="search" />
+          <Icon className=" dark:fill-black" name="search" />
         </button>
       </div>
       <Table student={false} items={studentsList} />

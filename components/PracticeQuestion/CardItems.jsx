@@ -151,21 +151,21 @@ const CardItems = () => {
   ];
   const MiniGame = [
     {
-      title: "Summarize Written Text",
+      title: "Spelling Bee",
       items: "233",
       bg: "#AE7AFF",
       link: "#",
       text: "SWT",
     },
     {
-      title: "Summarize Written Text",
+      title: "Speaking Spell",
       items: "233",
       bg: "#AE7AFF",
       link: "#",
       text: "SWT",
     },
     {
-      title: "Summarize Written Text",
+      title: "Listening Frenzy",
       items: "233",
       bg: "#AE7AFF",
       link: "#",

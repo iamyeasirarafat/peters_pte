@@ -5,6 +5,7 @@ import ReadAloud from "@/components/QuestionForms/ReadAloud";
 import RepeatSentence from "@/components/QuestionForms/RepeatSentence";
 import ReTelLecture from "@/components/QuestionForms/ReTelLecture";
 import DescribeImage from "@/components/QuestionForms/DescribeImage";
+import EssayQuestion from "@/components/QuestionForms/EssayQuestion";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -24,6 +25,10 @@ const AllForms = () => {
     content = <ReTelLecture />;
   } else if (questionTable == "Write From Dictation") {
     content = <ReTelLecture />;
+  } else if (questionTable == "Summarize Written Text") {
+    content = <ReadAloud />;
+  } else if (questionTable == "Write Essay") {
+    content = <EssayQuestion />;
   } else {
     content = <h2>this is new question from</h2>;
   }
