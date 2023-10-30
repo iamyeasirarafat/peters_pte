@@ -9,6 +9,9 @@ import EssayQuestion from "@/components/QuestionForms/EssayQuestion";
 import SpeakingSpell from "@/components/QuestionForms/SpeakingSpell";
 import ListeningFrenzy from "@/components/QuestionForms/ListeningFrenzy";
 import SpellingBee from "@/components/QuestionForms/SpellingBee";
+import MultipleChoiceListing from "@/components/QuestionForms/MultipleChoiceListing";
+import SingleChoiceListing from "@/components/QuestionForms/SingleChoiceListing";
+import FillTheBlanks from "@/components/QuestionForms/FillTheBlanks";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -38,6 +41,16 @@ const AllForms = () => {
     content = <ListeningFrenzy />;
   } else if (questionTable == "Spelling Bee") {
     content = <SpellingBee />;
+  } else if (questionTable == "Multiple Choice (Multiples)") {
+    content = <MultipleChoiceListing />;
+  } else if (questionTable == "Multiple Choice (Singles)") {
+    content = <SingleChoiceListing />;
+  } else if (questionTable == "Highlight Correct Summary") {
+    content = <SingleChoiceListing />;
+  } else if (questionTable == "Select Missing Word") {
+    content = <SingleChoiceListing />;
+  } else if (questionTable == "Fill in the Blanks") {
+    content = <FillTheBlanks />;
   } else {
     content = <h2>this is new question from</h2>;
   }

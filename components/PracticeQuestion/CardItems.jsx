@@ -115,7 +115,7 @@ const CardItems = () => {
       text: "RA",
     },
     {
-      title: "Multiple Choice (Multiple)",
+      title: "Multiple Choice (Multiples)",
       items: itemNumber?.multi_choice_multiple_answer,
       bg: "#5F646D",
       link: "#",
@@ -129,14 +129,14 @@ const CardItems = () => {
       text: "RA",
     },
     {
-      title: "Read Aloud",
+      title: "Fill in the Blanks",
       items: "233",
       bg: "#5F646D",
       link: "#",
       text: "RA",
     },
     {
-      title: "Read Aloud",
+      title: "Multiple Choice (Singles)",
       items: "233",
       bg: "#5F646D",
       link: "#",
@@ -150,7 +150,7 @@ const CardItems = () => {
       text: "RA",
     },
     {
-      title: "read aloud",
+      title: "Highlight Incorrect Words",
       items: "233",
       bg: "#5F646D",
       link: "#",
