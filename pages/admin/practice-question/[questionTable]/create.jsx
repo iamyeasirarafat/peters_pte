@@ -6,6 +6,9 @@ import RepeatSentence from "@/components/QuestionForms/RepeatSentence";
 import ReTelLecture from "@/components/QuestionForms/ReTelLecture";
 import DescribeImage from "@/components/QuestionForms/DescribeImage";
 import EssayQuestion from "@/components/QuestionForms/EssayQuestion";
+import SpeakingSpell from "@/components/QuestionForms/SpeakingSpell";
+import ListeningFrenzy from "@/components/QuestionForms/ListeningFrenzy";
+import SpellingBee from "@/components/QuestionForms/SpellingBee";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -29,6 +32,12 @@ const AllForms = () => {
     content = <ReadAloud />;
   } else if (questionTable == "Write Essay") {
     content = <EssayQuestion />;
+  } else if (questionTable == "Speaking Spell") {
+    content = <SpeakingSpell />;
+  } else if (questionTable == "Listening Frenzy") {
+    content = <ListeningFrenzy />;
+  } else if (questionTable == "Spelling Bee") {
+    content = <SpellingBee />;
   } else {
     content = <h2>this is new question from</h2>;
   }
