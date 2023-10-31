@@ -12,6 +12,8 @@ import SpellingBee from "@/components/QuestionForms/SpellingBee";
 import MultipleChoiceListing from "@/components/QuestionForms/MultipleChoiceListing";
 import SingleChoiceListing from "@/components/QuestionForms/SingleChoiceListing";
 import FillTheBlanks from "@/components/QuestionForms/FillTheBlanks";
+import MultipleChoiceReading from "@/components/QuestionForms/MultipleChoiceReading";
+import ReOrderParagraph from "@/components/QuestionForms/ReOrderParagraph";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -51,6 +53,14 @@ const AllForms = () => {
     content = <SingleChoiceListing />;
   } else if (questionTable == "Fill in the Blanks") {
     content = <FillTheBlanks />;
+  } else if (questionTable == "Highlight Incorrect Words") {
+    content = <FillTheBlanks />;
+  } else if (questionTable == "Multiple Choice (Multiple)") {
+    content = <MultipleChoiceReading />;
+  } else if (questionTable == "Multiple Choice (Single)") {
+    content = <MultipleChoiceReading />;
+  } else if (questionTable == "Re-order Paragraphs") {
+    content = <ReOrderParagraph />;
   } else {
     content = <h2>this is new question from</h2>;
   }

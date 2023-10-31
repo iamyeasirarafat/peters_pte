@@ -98,18 +98,19 @@ const FillTheBlanks = () => {
                   src={audioSrc}
                   className="w-full   border  p-2"
                 ></audio>
-                <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
-                  <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
-                  Generate Reference Text
-                </button>
               </div>
             </div>
           )}
         </div>
-
-        <div className="flex flex-col gap-2 my-5">
+        <Counter
+          className="bg-white w-full mt-4"
+          title="Blanks Number"
+          value={formData.appeared}
+          setValue={(value) => setFormData({ ...formData, appeared: value })}
+        />
+        <div className="flex flex-col gap-2 my-5 relative">
           <label for="paragraph" className="font-bold text-sm">
-            Reference Text
+            Question Paragraph
           </label>
           <textarea
             rows={5}
@@ -120,7 +121,49 @@ const FillTheBlanks = () => {
             value={formData.paragraph}
             onChange={handleInputChange}
           />
+          <div className="flex gap-5 absolute top-10 left-38">
+            <span className="px-4 border">A</span>
+            <span className="px-4 border">B</span>
+            <span className="px-4 border">C</span>
+            <span className="px-4 border">D</span>
+          </div>
         </div>
+
+        <div className="grid grid-cols-4 gap-2 my-5">
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct A</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct B</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct C</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct D</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+        </div>
+
         <div className="flex justify-between gap-6">
           <Counter
             className="bg-white w-1/2"
