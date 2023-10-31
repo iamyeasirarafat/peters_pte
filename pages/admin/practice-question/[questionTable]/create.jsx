@@ -14,6 +14,8 @@ import SingleChoiceListing from "@/components/QuestionForms/SingleChoiceListing"
 import FillTheBlanks from "@/components/QuestionForms/FillTheBlanks";
 import MultipleChoiceReading from "@/components/QuestionForms/MultipleChoiceReading";
 import ReOrderParagraph from "@/components/QuestionForms/ReOrderParagraph";
+import ReadingFillTheBlanks from "@/components/QuestionForms/ReadingFillTheBlanks";
+import FibReading from "@/components/QuestionForms/FibReading";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -61,6 +63,10 @@ const AllForms = () => {
     content = <MultipleChoiceReading />;
   } else if (questionTable == "Re-order Paragraphs") {
     content = <ReOrderParagraph />;
+  } else if (questionTable == "Reading: Fill in the Blanks") {
+    content = <ReadingFillTheBlanks />;
+  } else if (questionTable == "Reading & Writing: FIB") {
+    content = <FibReading />;
   } else {
     content = <h2>this is new question from</h2>;
   }

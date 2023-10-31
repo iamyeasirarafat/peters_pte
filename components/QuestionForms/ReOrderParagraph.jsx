@@ -22,24 +22,6 @@ const ReOrderParagraph = () => {
     console.log(formData);
   };
 
-  const [audioSrc, setAudioSrc] = useState(null);
-  const [audioName, setAudioName] = useState(null);
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setAudioSrc(URL.createObjectURL(file));
-      setAudioName(file?.name);
-    } else {
-      setAudioSrc(null);
-      setAudioName(null);
-    }
-  };
-
-  const handleDeleteAudio = () => {
-    setAudioSrc(null);
-    setAudioName(null);
-  };
-
   const options = [
     { label: "A" },
     { label: "B" },
@@ -90,34 +72,10 @@ const ReOrderParagraph = () => {
             setValue={(value) => setOptionNumber(value)}
           />
           <div className="w-1/2  bg-white flex items-center pl-4">
-            <div className="grid grid-cols-4">
+            <div className="flex justify-start gap-4">
               {options?.map((option, i) => (
-                <label
-                  key={i}
-                  className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
-                >
-                  <input
-                    className="absolute top-0 left-0 opacity-0 invisible"
-                    type="checkbox"
-                    value={value}
-                    onChange={() => setValue(option.label)} // Update the selected value
-                    checked={value === option.label}
-                  />
-                  <span
-                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                      value == option.label
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                    }`}
-                  >
-                    <Icon
-                      className={`fill-white transition-opacity ${
-                        value == option.label ? "opacity-100" : "opacity-0"
-                      }`}
-                      name="check"
-                    />
-                  </span>
-                  <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
+                <label key={i}>
+                  <span className="text-white font-bold px-3 py-2 bg-orange-300">
                     {option?.label}
                   </span>
                 </label>
