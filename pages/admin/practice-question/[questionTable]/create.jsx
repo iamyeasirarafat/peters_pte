@@ -45,9 +45,9 @@ const AllForms = () => {
     content = <ListeningFrenzy />;
   } else if (questionTable == "Spelling Bee") {
     content = <SpellingBee />;
-  } else if (questionTable == "Multiple Choice (Multiples)") {
+  } else if (questionTable == "Listening: MCM") {
     content = <MultipleChoiceListing />;
-  } else if (questionTable == "Multiple Choice (Singles)") {
+  } else if (questionTable == "Listening: MCS") {
     content = <SingleChoiceListing />;
   } else if (questionTable == "Highlight Correct Summary") {
     content = <SingleChoiceListing />;
@@ -57,9 +57,9 @@ const AllForms = () => {
     content = <FillTheBlanks />;
   } else if (questionTable == "Highlight Incorrect Words") {
     content = <FillTheBlanks />;
-  } else if (questionTable == "Multiple Choice (Multiple)") {
+  } else if (questionTable == "Reading: MCM") {
     content = <MultipleChoiceReading />;
-  } else if (questionTable == "Multiple Choice (Single)") {
+  } else if (questionTable == "Reading: MCS") {
     content = <MultipleChoiceReading />;
   } else if (questionTable == "Re-order Paragraphs") {
     content = <ReOrderParagraph />;
