@@ -1,6 +1,8 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 const ReOrderParagraph = () => {
   const [optionNumber, setOptionNumber] = useState(0);
   const [formData, setFormData] = useState({
@@ -22,13 +24,24 @@ const ReOrderParagraph = () => {
     console.log(formData);
   };
 
-  const options = [
+  const [options, setOptions] = useState([
     { label: "A" },
     { label: "B" },
     { label: "C" },
     { label: "D" },
-  ];
-  const [value, setValue] = useState(false);
+  ]);
+
+  const onDragEnd = (result) => {
+    if (!result.destination) return; // dropped outside the list
+
+    const reorderedOptions = Array.from(options);
+    const [movedOption] = reorderedOptions.splice(result.source.index, 1);
+    reorderedOptions.splice(result.destination.index, 0, movedOption);
+
+    // Update the state with the new order
+    setOptions(reorderedOptions);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -72,14 +85,37 @@ const ReOrderParagraph = () => {
             setValue={(value) => setOptionNumber(value)}
           />
           <div className="w-1/2  bg-white flex items-center pl-4">
-            <div className="flex justify-start gap-4">
-              {options?.map((option, i) => (
-                <label key={i}>
-                  <span className="text-white font-bold px-3 py-2 bg-orange-300">
-                    {option?.label}
-                  </span>
-                </label>
-              ))}
+            <div>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="options" direction="horizontal">
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="flex justify-start gap-4"
+                    >
+                      {options?.map((option, i) => (
+                        <Draggable key={i} draggableId={i.toString()} index={i}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <label>
+                                <span className="text-white font-bold px-3 py-2 bg-orange-300">
+                                  {option?.label}
+                                </span>
+                              </label>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
           </div>
         </div>
