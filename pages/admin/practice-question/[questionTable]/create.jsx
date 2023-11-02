@@ -16,6 +16,7 @@ import MultipleChoiceReading from "@/components/QuestionForms/MultipleChoiceRead
 import ReOrderParagraph from "@/components/QuestionForms/ReOrderParagraph";
 import ReadingFillTheBlanks from "@/components/QuestionForms/ReadingFillTheBlanks";
 import FibReading from "@/components/QuestionForms/FibReading";
+import SummerizeWritten from "../../../../components/QuestionForms/SummerizeWritten";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -36,7 +37,7 @@ const AllForms = () => {
   } else if (questionTable == "Write From Dictation") {
     content = <ReTelLecture />;
   } else if (questionTable == "Summarize Written Text") {
-    content = <ReadAloud />;
+    content = <SummerizeWritten />;
   } else if (questionTable == "Write Essay") {
     content = <EssayQuestion />;
   } else if (questionTable == "Speaking Spell") {

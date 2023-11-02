@@ -7,55 +7,56 @@ import Link from "next/link";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import Image from "next/image";
 const Index = () => {
-  const studentsList = [
-    {
-      name: "Bill on the hill",
-      accountPlan: "#7250589",
-      userId: "12",
-      lastLoggedIn: true,
-      averageScore: "05/07/23",
-    },
-    {
-      name: "Bill on the hill",
-      accountPlan: "#7250589",
-      userId: "12",
-      lastLoggedIn: false,
-      averageScore: "05/07/23",
-    },
-    {
-      name: "Bill on the hill",
-      accountPlan: "#7250589",
-      userId: "12",
-      lastLoggedIn: true,
-      averageScore: "05/07/23",
-    },
-    {
-      name: "Bill on the hill",
-      accountPlan: "#7250589",
-      userId: "12",
-      lastLoggedIn: true,
-      averageScore: "05/07/23",
-    },
-    {
-      name: "Bill on the hill",
-      accountPlan: "#7250589",
-      userId: "12",
-      lastLoggedIn: true,
-      averageScore: "05/07/23",
-    },
-    {
-      name: "Bill on the hill",
-      accountPlan: "#7250589",
-      userId: "12",
-      lastLoggedIn: true,
-      averageScore: "05/07/23",
-    },
-  ];
+  // const studentsList = [
+  //   {
+  //     name: "Bill on the hill",
+  //     accountPlan: "#7250589",
+  //     userId: "12",
+  //     lastLoggedIn: true,
+  //     averageScore: "05/07/23",
+  //   },
+  //   {
+  //     name: "Bill on the hill",
+  //     accountPlan: "#7250589",
+  //     userId: "12",
+  //     lastLoggedIn: false,
+  //     averageScore: "05/07/23",
+  //   },
+  //   {
+  //     name: "Bill on the hill",
+  //     accountPlan: "#7250589",
+  //     userId: "12",
+  //     lastLoggedIn: true,
+  //     averageScore: "05/07/23",
+  //   },
+  //   {
+  //     name: "Bill on the hill",
+  //     accountPlan: "#7250589",
+  //     userId: "12",
+  //     lastLoggedIn: true,
+  //     averageScore: "05/07/23",
+  //   },
+  //   {
+  //     name: "Bill on the hill",
+  //     accountPlan: "#7250589",
+  //     userId: "12",
+  //     lastLoggedIn: true,
+  //     averageScore: "05/07/23",
+  //   },
+  //   {
+  //     name: "Bill on the hill",
+  //     accountPlan: "#7250589",
+  //     userId: "12",
+  //     lastLoggedIn: true,
+  //     averageScore: "05/07/23",
+  //   },
+  // ];
   const router = useRouter();
   const { questionTable } = router.query;
-
   const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     let url;
     if (questionTable === "Read Aloud") {
@@ -65,11 +66,14 @@ const Index = () => {
     }
 
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`/${url}`);
         setTableData(response.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -100,14 +104,23 @@ const Index = () => {
           <Icon className=" dark:fill-black" name="search" />
         </button>
       </div>
-      <Table student={false} items={studentsList} />
-
-      {tableData?.map((data, i) => (
-        <div key={i}>
-          <h2 className="text-5xl font-bold bg-green-500">{data?.title}</h2>
+      {loading ? (
+        <div className="flex justify-center items-center h-96">
+          <div
+            class="w-12 h-12 rounded-full animate-spin
+                    border-x-8 border-solid border-orange-400 border-t-transparent"
+          ></div>
         </div>
-      ))}
-      <TablePagination />
+      ) : tableData?.length ? (
+        <>
+          <Table student={false} items={tableData} />
+          <TablePagination />
+        </>
+      ) : (
+        <h3 className="text-center mt-30 font-bold text-3xl text-orange-300">
+          No Data found
+        </h3>
+      )}
     </AdminLayout>
   );
 };

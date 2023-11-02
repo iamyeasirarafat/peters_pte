@@ -6,6 +6,7 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import { Roboto_Flex } from "next/font/google";
 import "react-circular-progressbar/dist/styles.css";
+import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 
 const roboto = Roboto_Flex({
@@ -25,6 +26,7 @@ export default function App({ Component, pageProps }) {
         }
       `}</style>
       <Provider store={store}>
+        <Toaster />
         <ColorModeProvider>
           <ColorModeScript
             initialColorMode="system"

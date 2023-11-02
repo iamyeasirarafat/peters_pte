@@ -19,15 +19,15 @@ const Row = ({ item }) => {
       </td>
       <td className="td-custom">
         <div className="flex items-center ">
-          <p className="text-sm font-semibold">{item?.name}</p>
+          <p className="text-sm font-semibold">{item?.title}</p>
         </div>
       </td>
       <td className="td-custom">
-        <div className="label-stroke min-w-[7.25rem]">{item.accountPlan}</div>
+        <div className="label-stroke min-w-[7.25rem]">#0000{item?.id}</div>
       </td>
-      <td className="td-custom ">{item.userId}</td>
+      <td className="td-custom ">{item?.appeared}</td>
       <td className="td-custom">
-        {item.lastLoggedIn ? (
+        {item.prediction ? (
           <p className="text-orange-300 border-[1.5px] border-orange-300  flex justify-center py-1 rounded-1">
             prediction
           </p>
@@ -38,7 +38,9 @@ const Row = ({ item }) => {
         )}
       </td>
       <td className="td-custom">
-        <div className="label-stroke min-w-[7.25rem]">{item.averageScore}</div>
+        <div className="label-stroke min-w-[7.25rem]">
+          {item?.date ? item.date : new Date().toLocaleDateString()}
+        </div>
       </td>
       <td className="td-custom text-right">
         <div className="flex justify-center bg-gray-100 ">
