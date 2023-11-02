@@ -1,10 +1,12 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const ReOrderParagraph = () => {
   const [optionNumber, setOptionNumber] = useState(0);
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     paragraph: "",
@@ -22,6 +24,7 @@ const ReOrderParagraph = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    router.back();
   };
 
   const [options, setOptions] = useState([

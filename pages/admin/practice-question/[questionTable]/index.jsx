@@ -4,6 +4,9 @@ import Table from "@/components/QuestionTable";
 import TablePagination from "@/components/TablePagination";
 import Icon from "@/components/Icon";
 import Link from "next/link";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 const Index = () => {
   const studentsList = [
     {
@@ -51,6 +54,27 @@ const Index = () => {
   ];
   const router = useRouter();
   const { questionTable } = router.query;
+
+  const [tableData, setTableData] = useState([]);
+  useEffect(() => {
+    let url;
+    if (questionTable === "Read Aloud") {
+      url = "practice/read_alouds";
+    } else if (questionTable === "Summarize Written Text") {
+      url = "summarizes";
+    }
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/${url}`);
+        setTableData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [questionTable]);
+  console.log(56666, tableData);
   return (
     <AdminLayout title={questionTable} back={true}>
       <div className="flex justify-between mb-6">
@@ -77,6 +101,12 @@ const Index = () => {
         </button>
       </div>
       <Table student={false} items={studentsList} />
+
+      {tableData?.map((data, i) => (
+        <div key={i}>
+          <h2 className="text-5xl font-bold bg-green-500">{data?.title}</h2>
+        </div>
+      ))}
       <TablePagination />
     </AdminLayout>
   );

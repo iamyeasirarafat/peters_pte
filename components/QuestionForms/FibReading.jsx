@@ -1,5 +1,4 @@
 import Counter from "@/components/Counter";
-import Icon from "@/components/Icon";
 import { useState } from "react";
 const FibReading = () => {
   const [formData, setFormData] = useState({
