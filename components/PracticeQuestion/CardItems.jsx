@@ -1,57 +1,72 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
+import axios from "axios";
 
 const CardItems = () => {
+  const [itemNumber, setItemNumber] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/superadmin/test/counts");
+        setItemNumber(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const Speaking = [
     {
       title: "Read Aloud",
-      items: "233",
+      items: itemNumber?.read_aloud,
       bg: "#CF8800",
-      link: "#",
+      link: "Read Aloud",
       text: "RA",
     },
     {
       title: "Repeat Sentence",
-      items: "233",
+      items: itemNumber?.repeat_sentence,
       bg: "#CF8800",
-      link: "#",
-      text: "RA",
+      link: "Repeat Sentence",
+      text: "RS",
     },
     {
       title: "Describe Image",
       items: "233",
       bg: "#CF8800",
-      link: "#",
-      text: "RA",
+      link: "Describe Image",
+      text: "DI",
     },
     {
       title: "Answer Short Question",
       items: "233",
       bg: "#CF8800",
-      link: "#",
-      text: "RA",
+      link: "Answer Short Question",
+      text: "ASQ",
     },
     {
       title: "Re-Tell Lecture",
-      items: "233",
+      items: itemNumber?.retell_sentence,
       bg: "#CF8800",
-      link: "#",
-      text: "RA",
+      link: "Re-Tell Lecture",
+      text: "RL",
     },
   ];
   const Writing = [
     {
       title: "Summarize Written Text",
-      items: "233",
+      items: itemNumber?.summarize_written,
       bg: "#F2B277",
-      link: "#",
+      link: "Summarize Written Text",
       text: "SWT",
     },
     {
       title: "Write Essay",
-      items: "233",
+      items: itemNumber?.write_easy,
       bg: "#F2B277",
-      link: "#",
-      text: "SWT",
+      link: "Write Essay",
+      text: "WE",
     },
   ];
   const reading = [
@@ -59,36 +74,36 @@ const CardItems = () => {
       title: "Reading & Writing: FIB",
       items: "233",
       bg: "#4399FF",
-      link: "#",
-      text: "RA",
+      link: "Reading & Writing: FIB",
+      text: "FIB",
     },
     {
       title: "Multiple Choice (Multiple)",
-      items: "233",
+      items: itemNumber?.multi_choice_multiple_answer,
       bg: "#4399FF",
-      link: "#",
-      text: "RA",
+      link: "Reading: MCM",
+      text: "MCM",
     },
     {
       title: "Re-order Paragraphs",
       items: "233",
       bg: "#4399FF",
-      link: "#",
-      text: "RA",
+      link: "Re-order Paragraphs",
+      text: "RP",
     },
     {
       title: "Reading: Fill in the Blanks",
       items: "233",
       bg: "#4399FF",
-      link: "#",
-      text: "RA",
+      link: "Reading: Fill in the Blanks",
+      text: "FIB",
     },
     {
       title: "Multiple Choice (Single)",
-      items: "233",
+      items: itemNumber?.multi_choice_single_answer,
       bg: "#4399FF",
-      link: "#",
-      text: "RA",
+      link: "Reading: MCS",
+      text: "MCS",
     },
   ];
   const Speaking2 = [
@@ -96,80 +111,80 @@ const CardItems = () => {
       title: "Summarize Spoken Text",
       items: "233",
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Summarize Spoken Text",
+      text: "SST",
     },
     {
-      title: "Read Aloud",
-      items: "233",
+      title: "Multiple Choice (Multiples)",
+      items: itemNumber?.multi_choice_multiple_answer,
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Listening: MCM",
+      text: "MCM",
     },
     {
-      title: "Read Aloud",
-      items: "233",
+      title: "Highlight Correct Summary",
+      items: itemNumber?.highlight_summary,
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Highlight Correct Summary",
+      text: "HCR",
     },
     {
-      title: "Read Aloud",
+      title: "Fill in the Blanks",
       items: "233",
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Fill in the Blanks",
+      text: "FIB",
     },
     {
-      title: "Read Aloud",
+      title: "Multiple Choice (Singles)",
       items: "233",
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Listening: MCS",
+      text: "MCS",
     },
     {
-      title: "Read Aloud",
-      items: "233",
+      title: "Select Missing Word",
+      items: itemNumber?.missing_word,
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Select Missing Word",
+      text: "SMW",
     },
     {
-      title: "Read Aloud",
+      title: "Highlight Incorrect Words",
       items: "233",
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Highlight Incorrect Words",
+      text: "HIW",
     },
     {
       title: "Write From Dictation",
-      items: "233",
+      items: itemNumber?.dictation,
       bg: "#5F646D",
-      link: "#",
-      text: "RA",
+      link: "Write From Dictation",
+      text: "WFD",
     },
   ];
   const MiniGame = [
     {
-      title: "Summarize Written Text",
+      title: "Spelling Bee",
       items: "233",
       bg: "#AE7AFF",
-      link: "#",
-      text: "SWT",
+      link: "Spelling Bee",
+      text: "SB",
     },
     {
-      title: "Summarize Written Text",
+      title: "Speaking Spell",
       items: "233",
       bg: "#AE7AFF",
-      link: "#",
-      text: "SWT",
+      link: "Speaking Spell",
+      text: "SP",
     },
     {
-      title: "Summarize Written Text",
+      title: "Listening Frenzy",
       items: "233",
       bg: "#AE7AFF",
-      link: "#",
-      text: "SWT",
+      link: "Listening Frenzy",
+      text: "LF",
     },
   ];
   return (

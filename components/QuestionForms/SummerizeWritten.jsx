@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
-const ReadAloud = () => {
+const SummerizeWritten = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
@@ -22,8 +22,8 @@ const ReadAloud = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/practice/read_aloud", formData);
-      toast.success("Create question successfully");
+      const response = await axios.post("/summarize", formData);
+      toast.success("Create summarize question successfully");
       if (response?.data) {
         router.back();
       }
@@ -99,4 +99,4 @@ const ReadAloud = () => {
   );
 };
 
-export default ReadAloud;
+export default SummerizeWritten;

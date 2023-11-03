@@ -1,13 +1,10 @@
 import Counter from "@/components/Counter";
-import axios from "axios";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import toast from "react-hot-toast";
-const ReadAloud = () => {
-  const router = useRouter();
+const EssayQuestion = () => {
   const [formData, setFormData] = useState({
-    title: "",
-    content: "",
+    name: "",
+    essay: "",
+    paragraph: "",
     appeared: 0,
     prediction: false,
   });
@@ -19,18 +16,9 @@ const ReadAloud = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("/practice/read_aloud", formData);
-      toast.success("Create question successfully");
-      if (response?.data) {
-        router.back();
-      }
-    } catch (error) {
-      toast.error("something went wrong");
-      console.log(error);
-    }
+    console.log(formData);
   };
 
   return (
@@ -38,7 +26,7 @@ const ReadAloud = () => {
       <form onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
-            <label for="title" className="font-bold text-sm">
+            <label for="name" className="font-bold text-sm">
               Question Name
             </label>
             <h3 className="text-sm font-semibold">Question Id #785263891</h3>
@@ -46,25 +34,36 @@ const ReadAloud = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="title"
+            id="name"
             type="text"
-            value={formData.title}
+            value={formData.name}
             onChange={handleInputChange}
-            required
+          />
+        </div>
+        <div className=" flex flex-col mt-5 gap-2">
+          <label for="essay" className="font-bold text-sm">
+            Essay Question
+          </label>
+          <input
+            placeholder="Bill On The Hill"
+            className="w-full border-none py-4 px-5 text-sm "
+            id="essay"
+            type="text"
+            value={formData.essay}
+            onChange={handleInputChange}
           />
         </div>
         <div className="flex flex-col gap-2 my-5">
-          <label for="content" className="font-bold text-sm">
+          <label for="paragraph" className="font-bold text-sm">
             Question Paragraph
           </label>
           <textarea
-            required
             rows={5}
             placeholder="Start Typing..."
             className="w-full border-none py-4 px-5 text-sm "
-            id="content"
+            id="paragraph"
             type="text"
-            value={formData.content}
+            value={formData.paragraph}
             onChange={handleInputChange}
           />
         </div>
@@ -99,4 +98,4 @@ const ReadAloud = () => {
   );
 };
 
-export default ReadAloud;
+export default EssayQuestion;
