@@ -193,7 +193,7 @@ const CheckoutModal = ({ open, setOpen }) => {
       </div>
       {/* button */}
       <div className="flex justify-end px-5 pb-5">
-        <button className="flex items-center justify-between gap-x-2 py-3 px-10 text-base font-semibold border border-black rounded-md">
+        <button className="flex items-center justify-between gap-x-2 py-3 px-10 text-base font-semibold border border-black dark:border-white rounded-md">
           Print <AiFillPrinter />
         </button>
       </div>

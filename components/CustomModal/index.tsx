@@ -60,7 +60,7 @@ const Modal = ({
             {children}
             <button
               className={twMerge(
-                `absolute top-5 right-5 text-base hover:fill-red outline-none dark:fill-white dark:hover:fill-red w-6 h-6 ${classButtonClose}`
+                `absolute top-5 right-5 text-base hover:fill-primary outline-none fill-white dark:hover:fill-primary w-6 h-6 ${classButtonClose}`
               )}
               onClick={onClose}
             >
