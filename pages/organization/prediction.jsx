@@ -1,15 +1,26 @@
 import Layout from "@/components/Layout";
-import { BiSolidDownload } from "react-icons/bi";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { StudyFile } from "./study-material";
 function Prediction() {
+  const [prediction, setPrediction] = useState([]);
+
+  // get Data
+  useEffect(() => {
+    const getStudyPrediction = async () => {
+      const res = await axios.get(`/study_materials/prediction`);
+      setPrediction(res?.data);
+    };
+    getStudyPrediction();
+  }, []);
   return (
     <Layout title="Prediction">
       <p className="text-lg font-extrabold mb-2">Prediction File</p>
       {/* file */}
-      <div className="px-5 py-6 bg-white dark:bg-black flex items-center justify-between">
-        <p className="text-sm font-bold">File Prediction 05/25/23</p>
-        <button>
-          <BiSolidDownload className="text-xl" />
-        </button>
+      <div className={`${prediction.length > 0 ? "space-y-2" : ""}`}>
+        {prediction?.map((item, i) => (
+          <StudyFile key={item.id} data={item} />
+        ))}
       </div>
     </Layout>
   );
