@@ -63,6 +63,8 @@ const Index = () => {
       url = "practice/read_alouds";
     } else if (questionTable === "Summarize Written Text") {
       url = "summarizes";
+    } else if (questionTable === "Write Essay") {
+      url = "write_easies";
     }
 
     const fetchData = async () => {

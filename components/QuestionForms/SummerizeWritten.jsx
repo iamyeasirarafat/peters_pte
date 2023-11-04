@@ -28,7 +28,7 @@ const SummerizeWritten = () => {
         router.back();
       }
     } catch (error) {
-      toast.error("something went wrong");
+      toast.error(error?.message);
       console.log(error);
     }
   };
