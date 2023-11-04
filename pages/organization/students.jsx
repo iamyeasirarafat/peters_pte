@@ -133,7 +133,6 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
       title="Add new Student"
       visible={visible}
       onClose={() => setVisible(false)}
-      className="bg-[#00AA01]"
     >
       <form action="" onSubmit={handleSubmit(onSubmit)}>
         <Field
