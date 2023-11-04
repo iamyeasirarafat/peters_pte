@@ -16,7 +16,8 @@ import MultipleChoiceReading from "@/components/QuestionForms/MultipleChoiceRead
 import ReOrderParagraph from "@/components/QuestionForms/ReOrderParagraph";
 import ReadingFillTheBlanks from "@/components/QuestionForms/ReadingFillTheBlanks";
 import FibReading from "@/components/QuestionForms/FibReading";
-import SummerizeWritten from "../../../../components/QuestionForms/SummerizeWritten";
+import SummerizeWritten from "@/components/QuestionForms/SummerizeWritten";
+import HighlightSummary from "@/components/QuestionForms/HighlightSummary";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -51,7 +52,7 @@ const AllForms = () => {
   } else if (questionTable == "Listening: MCS") {
     content = <SingleChoiceListing />;
   } else if (questionTable == "Highlight Correct Summary") {
-    content = <SingleChoiceListing />;
+    content = <HighlightSummary />;
   } else if (questionTable == "Select Missing Word") {
     content = <SingleChoiceListing />;
   } else if (questionTable == "Fill in the Blanks") {
