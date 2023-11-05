@@ -33,7 +33,11 @@ export async function middleware(NextRequest) {
       const response = NextResponse.next();
       response.cookies.delete("access_token");
       response.cookies.delete("refresh_token");
-      if (NextRequest.nextUrl.pathname.startsWith("/app")) {
+      if (
+        NextRequest.nextUrl.pathname.startsWith("/app") ||
+        NextRequest.nextUrl.pathname.startsWith("/organization") ||
+        NextRequest.nextUrl.pathname.startsWith("/admin")
+      ) {
         const url = new URL(`/auth`, NextRequest.url);
         return NextResponse.redirect(url);
       }
@@ -43,5 +47,5 @@ export async function middleware(NextRequest) {
 }
 
 export const config = {
-  matcher: ["/app/:path*", "/auth"],
+  matcher: ["/app/:path*", "/auth", "/organization/:path*", "/admin/:path*"],
 };

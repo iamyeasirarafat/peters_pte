@@ -34,7 +34,7 @@ const Index = () => {
     // get Discussion data
     const getDiscussion = async () => {
       const { data } = await axios(`/read_aloud /${id}/discussions`);
-      console.log("discussions", data);
+      
     };
   }, [id]);
 
