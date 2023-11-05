@@ -1,10 +1,15 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 const RepeatSentence = () => {
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [audioName, setAudioName] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    paragraph: "",
+    title: "",
+    audio: null,
+    reference_text: "",
     appeared: 0,
     prediction: false,
   });
@@ -16,21 +21,37 @@ const RepeatSentence = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    // try {
+    //   const response = await axios.post("/repeat_sentence", formData);
+    //   toast.success("Create question successfully");
+    //   if (response?.data) {
+    //     router.back();
+    //   }
+    // } catch (error) {
+    //   toast.error("something went wrong");
+    //   console.log(error);
+    // }
     console.log(formData);
   };
 
-  const [audioSrc, setAudioSrc] = useState(null);
-  const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setAudioSrc(URL.createObjectURL(file));
       setAudioName(file?.name);
+      setFormData((prevData) => ({
+        ...prevData,
+        audio: file, // Set "audio" to the File object
+      }));
     } else {
       setAudioSrc(null);
       setAudioName(null);
+      setFormData((prevData) => ({
+        ...prevData,
+        audio: null, // Clear "audio" when no file is selected
+      }));
     }
   };
 
@@ -41,10 +62,10 @@ const RepeatSentence = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
-            <label for="name" className="font-bold text-sm">
+            <label for="title" className="font-bold text-sm">
               Question Name
             </label>
             <h3 className="text-sm font-semibold">Question Id #785263891</h3>
@@ -52,9 +73,9 @@ const RepeatSentence = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="name"
+            id="title"
             type="text"
-            value={formData.name}
+            value={formData.title}
             onChange={handleInputChange}
           />
         </div>
@@ -108,16 +129,16 @@ const RepeatSentence = () => {
         </div>
 
         <div className="flex flex-col gap-2 my-5">
-          <label for="paragraph" className="font-bold text-sm">
+          <label for="reference_text" className="font-bold text-sm">
             Reference Text
           </label>
           <textarea
             rows={5}
             placeholder="Start Typing..."
             className="w-full border-none py-4 px-5 text-sm "
-            id="paragraph"
+            id="reference_text"
             type="text"
-            value={formData.paragraph}
+            value={formData.reference_text}
             onChange={handleInputChange}
           />
         </div>

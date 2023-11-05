@@ -12,14 +12,14 @@ const HighlightSummary = () => {
   );
   const [formData, setFormData] = useState({
     name: "",
-    options: options,
+    options: options.map((option) => option.value),
     appeared: 0,
     prediction: false,
   });
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      options: options,
+      options: options.map((option) => option.value),
     }));
   }, [options]);
   console.log(formData);
@@ -73,7 +73,22 @@ const HighlightSummary = () => {
     updatedData[index] = { ...updatedData[index], value };
     setOptions(updatedData);
   };
-  const [value, setValue] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState({});
+  console.log(selectedOptions);
+
+  const handleCheckboxChange = (optionIndex) => {
+    setSelectedOptions((prevSelectedOptions) => {
+      const updatedOptions = { ...prevSelectedOptions };
+      if (optionIndex in updatedOptions) {
+        delete updatedOptions[optionIndex];
+      } else {
+        updatedOptions[optionIndex] = true;
+      }
+
+      return updatedOptions;
+    });
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -145,35 +160,38 @@ const HighlightSummary = () => {
           <div className="w-1/2  bg-white flex items-center pl-4">
             <div className="grid grid-cols-4">
               {options?.map((option, i) => (
-                <label
-                  key={i}
-                  className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
-                >
-                  <input
-                    className="absolute top-0 left-0 opacity-0 invisible"
-                    type="checkbox"
-                    value={value}
-                    onChange={() => setValue(option.title)} // Update the selected value
-                    checked={value === option.title}
-                  />
-                  <span
-                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                      value == option.title
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                    }`}
+                <div key={i}>
+                  <label
+                    className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
                   >
-                    <Icon
-                      className={`fill-white transition-opacity ${
-                        value == option.title ? "opacity-100" : "opacity-0"
-                      }`}
-                      name="check"
+                    <input
+                      className="absolute top-0 left-0 opacity-0 invisible"
+                      type="checkbox"
+                      value={option.index}
+                      onChange={() => handleCheckboxChange(option.index)}
+                      checked={option.index in selectedOptions} // Use 'in' operator to check if the key exists
                     />
-                  </span>
-                  <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
-                    {option?.index}
-                  </span>
-                </label>
+                    <span
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        option.index in selectedOptions
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
+                    >
+                      <Icon
+                        className={`fill-white transition-opacity ${
+                          option.index in selectedOptions
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
+                        name="check"
+                      />
+                    </span>
+                    <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
+                      {option?.index}
+                    </span>
+                  </label>
+                </div>
               ))}
             </div>
           </div>
