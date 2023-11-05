@@ -129,7 +129,8 @@ const StudentRow = ({ admin, item, setStatus }) => {
             </div>
           </div>
         </div>
-        {visible && <EditStudentModalAdmin {...{ visible, setVisible, editData }} />}
+        {visible && admin && <EditStudentModalAdmin {...{ visible, setVisible, editData }} />}
+        {visible && !admin && <EditStudentModal {...{ visible, setVisible, editData }} />}
       </td>
     </tr>
   );
@@ -274,6 +275,166 @@ const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
           value={org}
           onChange={setOrg}
         />
+
+        <Select
+          label="Group *"
+          className="mb-6 w-full"
+          items={groups}
+          value={group}
+          onChange={setGroup}
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Country"
+          placeholder="Enter Country"
+          register={register}
+          name="country"
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Education"
+          placeholder="Enter Education"
+          register={register}
+          name="education"
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Date of birth"
+          type='date'
+          placeholder="Enter Birth Date"
+          register={register}
+          name="birth_date"
+        />
+
+        <button className="btn-purple  w-full">Update Information</button>
+      </form>
+
+    </Modal>
+  );
+};
+
+const EditStudentModal = ({ visible, setVisible, editData }) => {
+  const genders = [
+    {
+      name: "male",
+    },
+    {
+      name: "female",
+    },
+  ];
+  const [gender, setGender] = useState(genders[0]);
+  const [groups, setGroups] = useState([])
+  const [group, setGroup] = useState({});
+  //get groups
+  useEffect(() => {
+    const fetchGroup = async () => {
+      const res = await axios("/groups")
+      setGroups(res.data)
+      setGroup(res.data[0])
+    }
+    fetchGroup()
+  }, [])
+
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    watch,
+    formState: { errors },
+  } = useForm({});
+  useEffect(() => {
+    if (editData) {
+      setValue("full_name", editData?.full_name)
+      setValue("email", editData?.email)
+      setValue("phone", editData?.phone)
+      setValue("address", editData?.profile[0]?.address || "")
+      setValue("education", editData?.profile[0]?.education || "")
+      setValue("birth_date", editData?.profile[0]?.birth_date || "")
+      setGroup(editData?.profile[0]?.group || {})
+      setGender({ name: editData?.profile[0]?.gender } || {})
+    }
+  }, [editData])
+  const onSubmit = async (data) => {
+    const submitData = {
+      "full_name": data.full_name,
+      "email": data.email,
+      "phone": data.phone,
+      group: group.id,
+      "profile": {
+        gender: gender.name,
+        "birth_date": data.birth_date,
+        "education": data.education,
+        "address": data.address,
+        "country": data.country
+      }
+    };
+    try {
+      await axios.put(`/student/${editData?.id}/update`, submitData);
+      toast.success("Successfully Updated");
+      setVisible(false);
+    } catch (err) {
+      const key = Object.keys(err?.response?.data)[0];
+      const value = err?.response?.data[key];
+      toast.error(`${key} - ${value}`);
+    }
+  };
+
+  return (
+    <Modal
+      title="Update Information"
+      visible={visible}
+      onClose={() => setVisible(false)}
+    >
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-4"
+          label="Student Name *"
+          placeholder="Enter full name"
+          register={register}
+          name="full_name"
+        />
+
+
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Email"
+          placeholder="Enter email"
+          type="email"
+          register={register}
+          name="email"
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Phone Number"
+          placeholder="Enter phone number"
+          type="tel"
+          register={register}
+          name="phone"
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Address"
+          placeholder="Enter Address"
+          register={register}
+          name="address"
+        />
+        <Select
+          label="Gender"
+          className="mb-6"
+          items={genders}
+          value={gender}
+          onChange={setGender}
+        />
+
 
         <Select
           label="Group *"

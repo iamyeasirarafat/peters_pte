@@ -99,8 +99,8 @@ const StudentRow = ({ item, setStatus }) => {
             </div>
           </div>
         </div>
-        {visible && <EditOrgModal {...{ visible, setVisible, editData }} />}
       </td>
+      {visible && <EditOrgModal {...{ visible, setVisible, editData }} />}
     </tr>
   );
 };
