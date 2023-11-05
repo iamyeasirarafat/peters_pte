@@ -1,5 +1,4 @@
 import React from "react";
-import { GoDeviceCameraVideo } from "react-icons/go";
 import { IoInformationSharp } from "react-icons/io5";
 import { PiChartLineUpBold } from "react-icons/pi";
 
@@ -11,9 +10,6 @@ const PageHeader = ({ title }) => {
         <div className="flex items-center gap-x-2">
           <button className="bg-primary rounded-full md:w-7 md:h-7 w-10 h-10 flex items-center justify-center cursor-pointer">
             <PiChartLineUpBold className="text-white md:text-base text-2xl" />
-          </button>
-          <button className="bg-primary rounded-full md:w-7 md:h-7 w-10 h-10 flex items-center justify-center cursor-pointer">
-            <GoDeviceCameraVideo className="text-white md:text-base text-2xl" />
           </button>
           <button className="bg-primary rounded-full md:w-7 md:h-7 w-10 h-10 flex items-center justify-center cursor-pointer">
             <IoInformationSharp className="text-white md:text-base text-2xl" />

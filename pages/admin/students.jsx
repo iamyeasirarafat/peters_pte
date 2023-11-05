@@ -1,34 +1,23 @@
+import Select from "@/components/AddStudentSelect";
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
-import Products from "@/components/Products";
-import Select from "@/components/Select";
 import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
+import Students from "../../components/Students_list";
 
-const Students = () => {
-  const [data, setData] = useState([
-    // {
-    //   userId: "Tushar123",
-    //   name: "Tushar Ahmen",
-    //   image: "/images/product-pic-1.jpg",
-    //   plan: "Free",
-    //   last_logged_in: "12/12/24",
-    //   avg_score: "55/90",
-    //   group: "Dhaka",
-    // },
-  ]);
+const StudentList = () => {
+  const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/students");
-      console.log(res.data);
       setData(res.data);
     };
     getData();
@@ -39,7 +28,7 @@ const Students = () => {
       {data?.length > 0 ? (
         <>
           <StudentFilter />
-          <Products student={true} items={data} />
+          <Students admin={true} setStatus={setStatus} items={data} />
           <TablePagination />
         </>
       ) : (
@@ -49,7 +38,7 @@ const Students = () => {
   );
 };
 
-export default Students;
+export default StudentList;
 
 const EmptyPage = ({ setStatus }) => {
   const [visible, setVisible] = useState(false);
@@ -71,7 +60,7 @@ const EmptyPage = ({ setStatus }) => {
         buttonText="Add new Student"
         onClick={() => setVisible(true)}
       />
-      <AddStudentModal
+      <AddStudentModalAdmin
         setStatus={setStatus}
         visible={visible}
         setVisible={setVisible}
@@ -80,29 +69,46 @@ const EmptyPage = ({ setStatus }) => {
   );
 };
 
-export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
+
+
+
+export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
+
   const plans = [
     {
       id: "2",
-      title: "Free Plan",
-    },
-  ];
-  const groups = [
-    {
-      id: "1",
-      title: "Dhaka Branch",
-    },
-    {
-      id: "1",
-      title: "Rangpur Branch",
-    },
-    {
-      id: "2",
-      title: "Khulna Branch",
+      name: "Free Plan",
     },
   ];
   const [plan, setPlan] = useState(plans[0]);
-  const [group, setGroup] = useState(groups[0]);
+  const [groups, setGroups] = useState([])
+  const [group, setGroup] = useState();
+  const [orgs, setOrgs] = useState([])
+  const [org, setOrg] = useState();
+  const [groupModal, setGroupModal] = useState(false)
+  const [refetchGroup, setRefetchGroup] = useState(1)
+  console.log(org)
+  //get groups
+  useEffect(() => {
+    const fetchGroup = async () => {
+      const res = await axios(org.id + "/groups")
+      setGroups(res.data)
+      setGroup(res.data[0])
+    }
+    org && fetchGroup()
+  }, [org, refetchGroup])
+
+  //get Organizations
+  useEffect(() => {
+    const fetchOrgs = async () => {
+      const res = await axios("/organizations")
+      let formattedOrgs = []
+      await res.data.forEach(item => formattedOrgs.push({ id: item.id, name: item.full_name }));
+      setOrgs(formattedOrgs)
+      setOrg(formattedOrgs[0])
+    }
+    fetchOrgs()
+  }, [])
   const {
     register,
     handleSubmit,
@@ -114,8 +120,9 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
-      group: group.title,
+      group: group.id,
       plan: plan.id,
+      organization: org.id
     };
     try {
       await axios.post("/student/add", submitData);
@@ -127,7 +134,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
       toast.error("Something went wrong");
     }
   };
-  console.log(errors);
+
   return (
     <Modal
       title="Add new Student"
@@ -181,14 +188,25 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
           onChange={setPlan}
         />
         <Select
+          label="Organization *"
+          className="mb-6 w-full"
+          items={orgs}
+          value={org}
+          onChange={setOrg}
+        />
+
+        <Select
           label="Group *"
-          className="mb-6"
+          className="mb-6 w-full"
           items={groups}
           value={group}
           onChange={setGroup}
         />
+
         <button className="btn-purple  w-full">Add Student</button>
       </form>
+
     </Modal>
   );
 };
+
