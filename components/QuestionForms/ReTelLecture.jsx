@@ -1,6 +1,7 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useState } from "react";
+import AudioVisualizer from "../AudioVisualizer";
 const RepeatSentence = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -93,11 +94,7 @@ const RepeatSentence = () => {
                 </span>
               </div>
               <div className="w-full">
-                <audio
-                  controls
-                  src={audioSrc}
-                  className="w-full   border  p-2"
-                ></audio>
+                <AudioVisualizer selectedFile={audioSrc} />
                 <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
                   <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
                   Generate Reference Text

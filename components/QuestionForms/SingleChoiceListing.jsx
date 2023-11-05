@@ -1,6 +1,7 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useState } from "react";
+import AudioVisualizer from "../AudioVisualizer";
 const SingleChoiceListing = () => {
   const [optionNumber, setOptionNumber] = useState(0);
   const [formData, setFormData] = useState({
@@ -101,7 +102,7 @@ const SingleChoiceListing = () => {
                 </span>
               </div>
               <div className="w-full">
-                <audio controls src={audioSrc} className="w-full   p-2"></audio>
+                <AudioVisualizer selectedFile={audioSrc} />
               </div>
             </div>
           )}

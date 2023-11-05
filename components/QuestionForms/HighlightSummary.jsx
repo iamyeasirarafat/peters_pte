@@ -2,6 +2,7 @@ import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useEffect } from "react";
 import { useState } from "react";
+import AudioVisualizer from "../AudioVisualizer";
 const HighlightSummary = () => {
   const [optionNumber, setOptionNumber] = useState(4);
   const [options, setOptions] = useState(
@@ -143,7 +144,7 @@ const HighlightSummary = () => {
                 </span>
               </div>
               <div className="w-full">
-                <audio controls src={audioSrc} className="w-full   p-2"></audio>
+                <AudioVisualizer selectedFile={audioSrc} />
               </div>
             </div>
           )}

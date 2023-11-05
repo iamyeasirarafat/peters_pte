@@ -1,6 +1,7 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useState } from "react";
+import AudioVisualizer from "../AudioVisualizer";
 const FillTheBlanks = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -93,11 +94,7 @@ const FillTheBlanks = () => {
                 </span>
               </div>
               <div className="w-full">
-                <audio
-                  controls
-                  src={audioSrc}
-                  className="w-full   border  p-2"
-                ></audio>
+                <AudioVisualizer selectedFile={audioSrc} />
               </div>
             </div>
           )}
