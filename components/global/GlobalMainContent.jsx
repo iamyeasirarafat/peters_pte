@@ -28,7 +28,7 @@ const GlobalMainContent = ({ children, data }) => {
           <CiBookmark className="text-3xl text-primary" />
         </div>
       </div>
-      <div className="px-4 md:px-6 py-1 space-y-5">{children}</div>
+      <div className="px-4 md:px-6 py-2 space-y-5">{children}</div>
     </div>
   );
 };
