@@ -3,6 +3,8 @@ import Icon from "@/components/Icon";
 import { useEffect } from "react";
 import { useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
+import toast from "react-hot-toast";
+import axios from "axios";
 const HighlightSummary = () => {
   const [optionNumber, setOptionNumber] = useState(4);
   const [options, setOptions] = useState(
@@ -11,19 +13,38 @@ const HighlightSummary = () => {
       value: "",
     }))
   );
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleCheckboxChange = (optionIndex) => {
+    if (selectedOptions.includes(optionIndex)) {
+      setSelectedOptions(
+        selectedOptions.filter((item) => item !== optionIndex)
+      );
+    } else {
+      setSelectedOptions([...selectedOptions, optionIndex]);
+    }
+  };
   const [formData, setFormData] = useState({
-    name: "",
-    options: options.map((option) => option.value),
+    title: "",
+    audio: null,
+    options: options,
+    right_option: selectedOptions.map((index) => {
+      const option = options.find((opt) => opt.index === index);
+      return option ? option.value : ""; // If an option is found, return its value, otherwise return an empty string.
+    }),
     appeared: 0,
     prediction: false,
   });
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      options: options.map((option) => option.value),
+      options: options,
+      right_option: selectedOptions.map((index) => {
+        const option = options.find((opt) => opt.index === index);
+        return option ? option.value : "";
+      }),
     }));
-  }, [options]);
-  console.log(formData);
+  }, [options, selectedOptions]);
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -31,12 +52,6 @@ const HighlightSummary = () => {
       [id]: type === "checkbox" ? checked : value,
     }));
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
   const [audioSrc, setAudioSrc] = useState(null);
   const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
@@ -44,9 +59,17 @@ const HighlightSummary = () => {
     if (file) {
       setAudioSrc(URL.createObjectURL(file));
       setAudioName(file?.name);
+      setFormData((prev) => ({
+        ...prev,
+        audio: file,
+      }));
     } else {
       setAudioSrc(null);
       setAudioName(null);
+      setFormData((prev) => ({
+        ...prev,
+        audio: null,
+      }));
     }
   };
 
@@ -74,20 +97,20 @@ const HighlightSummary = () => {
     updatedData[index] = { ...updatedData[index], value };
     setOptions(updatedData);
   };
-  const [selectedOptions, setSelectedOptions] = useState({});
-  console.log(selectedOptions);
 
-  const handleCheckboxChange = (optionIndex) => {
-    setSelectedOptions((prevSelectedOptions) => {
-      const updatedOptions = { ...prevSelectedOptions };
-      if (optionIndex in updatedOptions) {
-        delete updatedOptions[optionIndex];
-      } else {
-        updatedOptions[optionIndex] = true;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    try {
+      const response = await axios.post("/highlight_summary", formData);
+      toast.success("Create question successfully");
+      if (response?.data) {
+        router.back();
       }
-
-      return updatedOptions;
-    });
+    } catch (error) {
+      toast.error("something went wrong");
+      console.log(error);
+    }
   };
 
   return (
@@ -95,7 +118,7 @@ const HighlightSummary = () => {
       <form onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
-            <label for="name" className="font-bold text-sm">
+            <label for="title" className="font-bold text-sm">
               Question Name
             </label>
             <h3 className="text-sm font-semibold">Question Id #785263891</h3>
@@ -103,9 +126,9 @@ const HighlightSummary = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="name"
+            id="title"
             type="text"
-            value={formData.name}
+            value={formData.title}
             onChange={handleInputChange}
           />
         </div>
@@ -170,18 +193,18 @@ const HighlightSummary = () => {
                       type="checkbox"
                       value={option.index}
                       onChange={() => handleCheckboxChange(option.index)}
-                      checked={option.index in selectedOptions} // Use 'in' operator to check if the key exists
+                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        option.index in selectedOptions
+                        selectedOptions.includes(option.index)
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
                       }`}
                     >
                       <Icon
                         className={`fill-white transition-opacity ${
-                          option.index in selectedOptions
+                          selectedOptions.includes(option.index)
                             ? "opacity-100"
                             : "opacity-0"
                         }`}
