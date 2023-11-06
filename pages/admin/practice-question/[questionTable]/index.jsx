@@ -81,6 +81,8 @@ const Index = () => {
       url = "describe_images";
     } else if (questionTable === "Re-order Paragraphs") {
       url = "reorder_paragraphs";
+    } else if (questionTable === "Reading: MCM") {
+      url = "multi_choices/reading";
     }
 
     const fetchData = async () => {
