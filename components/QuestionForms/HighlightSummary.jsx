@@ -5,44 +5,32 @@ import { useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useRouter } from "next/router";
 const HighlightSummary = () => {
   const [optionNumber, setOptionNumber] = useState(4);
+  const router = useRouter();
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
       value: "",
     }))
   );
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
-  const handleCheckboxChange = (optionIndex) => {
-    if (selectedOptions.includes(optionIndex)) {
-      setSelectedOptions(
-        selectedOptions.filter((item) => item !== optionIndex)
-      );
-    } else {
-      setSelectedOptions([...selectedOptions, optionIndex]);
-    }
-  };
+  const [selectedOptions, setSelectedOptions] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     audio: null,
     options: options,
-    right_option: selectedOptions.map((index) => {
-      const option = options.find((opt) => opt.index === index);
-      return option ? option.value : ""; // If an option is found, return its value, otherwise return an empty string.
-    }),
+    right_option: "",
     appeared: 0,
     prediction: false,
   });
+
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       options: options,
-      right_option: selectedOptions.map((index) => {
-        const option = options.find((opt) => opt.index === index);
-        return option ? option.value : "";
-      }),
+      right_option:
+        options.find((opt) => opt.index === selectedOptions)?.value || "",
     }));
   }, [options, selectedOptions]);
   const handleInputChange = (e) => {
@@ -100,16 +88,37 @@ const HighlightSummary = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    try {
-      const response = await axios.post("/highlight_summary", formData);
-      toast.success("Create question successfully");
-      if (response?.data) {
-        router.back();
+    if (formData?.audio) {
+      console.log(formData.options);
+      try {
+        const formDatas = new FormData();
+        formDatas.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        formDatas.append("title", formData?.title);
+        const optionsJson = JSON.stringify(formData?.options);
+        formDatas.append("options", optionsJson);
+        formDatas.append("right_option", formData?.right_option);
+        formDatas.append("appeared", formData?.appeared);
+        formDatas.append("prediction", formData?.prediction);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data", // Use lowercase for header keys
+          },
+        };
+        const { data } = await axios.post(
+          "/highlight_summary",
+          formDatas,
+          config
+        );
+        toast.success("Create question successfully");
+        if (data) {
+          router.back();
+        }
+      } catch (error) {
+        console.error("Error create question:", error);
+        toast.error("Something went wrong, try again later.");
       }
-    } catch (error) {
-      toast.error("something went wrong");
-      console.log(error);
+    } else {
+      toast.error("You need provide dat successfuly!");
     }
   };
 
@@ -192,19 +201,19 @@ const HighlightSummary = () => {
                       className="absolute top-0 left-0 opacity-0 invisible"
                       type="checkbox"
                       value={option.index}
-                      onChange={() => handleCheckboxChange(option.index)}
-                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
+                      onChange={() => setSelectedOptions(option.index)}
+                      checked={selectedOptions == option.index} // Use 'in' operator to check if the key exists
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.index)
+                        selectedOptions == option.index
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
                       }`}
                     >
                       <Icon
                         className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.index)
+                          selectedOptions == option.index
                             ? "opacity-100"
                             : "opacity-0"
                         }`}

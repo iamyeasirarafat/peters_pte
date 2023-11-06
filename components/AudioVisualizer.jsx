@@ -13,7 +13,6 @@ function AudioVisualizer({ selectedFile }) {
       container: waveformRef.current,
       waveColor: "gray",
       progressColor: "black",
-      autoplay: true,
       height: 70,
     });
 
