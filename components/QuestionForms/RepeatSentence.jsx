@@ -14,7 +14,6 @@ const RepeatSentence = () => {
 
   const { register, handleSubmit, setError, formState } = useForm();
   const onsubmit = async (data) => {
-    console.log(data);
     if (audio) {
       try {
         const formData = new FormData();
