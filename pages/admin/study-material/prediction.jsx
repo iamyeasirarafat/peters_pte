@@ -7,28 +7,51 @@ import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useState } from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import axios from "axios";
+import { formatDateTime } from "../../../utils/formatDateTime";
+import Loading from "@/components/Loading";
 
 const Index = () => {
+  const [prediction, setPrediction] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+  // get prediction data
+  useEffect(() => {
+    setIsLoading(true);
+    const getStudyPrediction = async () => {
+      const res = await axios.get(`/study_materials/prediction`);
+      setPrediction(res?.data);
+      setIsLoading(false);
+    };
+    getStudyPrediction();
+  }, []);
+
   return (
     <Layout title="Prediction" back>
       <div className="mb-5">
-        <button className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary">
+        <button
+          onClick={() => router.push("/admin/study-material/add-prediction")}
+          className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary"
+        >
           <AiFillPlusCircle />
           Create New Prediction
         </button>
       </div>
-      {mounted && isTablet ? (
+      {isLoading ? (
+        <Loading />
+      ) : mounted && isTablet ? (
         <div className="bg-white dark:bg-black">
-          <PredictionListMobile />
+          <PredictionListMobile data={prediction?.results} />
         </div>
       ) : (
-        <PredictionList />
+        <PredictionList data={prediction?.results} />
       )}
-
       <TablePagination />
     </Layout>
   );
@@ -36,7 +59,7 @@ const Index = () => {
 
 export default Index;
 
-const PredictionList = () => {
+export const PredictionList = ({ data }) => {
   const [value, setValue] = useState(false);
   return (
     <div className="bg-white dark:bg-black w-full">
@@ -52,26 +75,35 @@ const PredictionList = () => {
         </div>
       </div>
       <div>
-        <AdminUserRow value={value} setValue={setValue} />
+        {data?.map((item, i) => (
+          <PredictionListRow
+            key={item?.id}
+            data={item}
+            value={value}
+            setValue={setValue}
+          />
+        ))}
       </div>
     </div>
   );
 };
-const AdminUserRow = () => {
+const PredictionListRow = ({ data }) => {
   const [value, setValue] = useState(false);
   return (
     <div className="flex items-center justify-between p-3">
       <div className="w-full flex items-center gap-x-2">
         <Checkbox value={value} onChange={() => setValue(!value)} />
-        <p className="text-sm font-bold">Prediction File 25/07/23 - 28/07/24</p>
+        <p className="text-sm font-bold">{data?.title}</p>
       </div>
       <div className="w-full flex items-center gap-x-6 justify-between">
-        <p className="text-sm font-bold">#7250589</p>
-        <p className="text-sm font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
-          Premium
+        <p className="text-sm font-bold">{data?.id}</p>
+        <p className="text-xs font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
+          {data?.premium ? "Premium" : "Free"}
         </p>
         <div className="flex items-center gap-x-5">
-          <p className="text-sm font-bold">05/07/23</p>
+          <p className="text-sm font-bold">
+            {formatDateTime(data?.uploaded_at, "date")}
+          </p>
           <button className="btn-transparent-dark btn-small btn-square">
             <Icon name="dots" />
           </button>
@@ -81,11 +113,11 @@ const AdminUserRow = () => {
   );
 };
 
-const PredictionListMobile = () => (
+export const PredictionListMobile = ({ data }) => (
   <div className="p-4 space-y-4">
     <div className="flex items-center justify-between">
       <p className="text-sm font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
-        Premium
+        {data?.premium ? "Premium" : "Free"}
       </p>
       <button className="btn-transparent-dark btn-small btn-square">
         <Icon name="dots" />
@@ -93,8 +125,8 @@ const PredictionListMobile = () => (
     </div>
     <div className="flex items-end justify-between">
       <div className="space-y-1">
-        <p className="text-sm font-bold">Prediction File 4582</p>
-        <p className="text-xs">#2145008352</p>
+        <p className="text-sm font-bold">{data?.title}</p>
+        <p className="text-xs">{data?.id}</p>
       </div>
       <p className="text-[#5F646D] dark:text-white text-xs">05/07/23</p>
     </div>
