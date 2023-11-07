@@ -1,34 +1,52 @@
 import Layout from "@/components/Layout";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { BsBookHalf, BsBroadcastPin } from "react-icons/bs";
 import { MdContentCopy } from "react-icons/md";
 
-const studyMaterial = [
-  {
-    name: "Prediction",
-    count: "5",
-    icon: <BsBroadcastPin />,
-    url: "/admin/study-material/prediction",
-  },
-  {
-    name: "Template",
-    count: "32",
-    icon: <MdContentCopy />,
-    url: "/admin/study-material/template",
-  },
-  {
-    name: "Study Material",
-    count: "25",
-    icon: <BsBookHalf />,
-    url: "/admin/study-material/material",
-  },
-];
 const Index = () => {
+  const [studyMaterial, setStudyMaterial] = useState([]);
+  useEffect(() => {
+    const getStudyMaterial = async () => {
+      const res = await axios.get(`/study_materials/all`);
+      setStudyMaterial(res?.data?.results);
+    };
+    getStudyMaterial();
+  }, []);
+
+  const countStudyMaterial = (category) =>
+    studyMaterial?.filter((item) => item?.category === category) || [];
+
+  const prediction = countStudyMaterial("prediction");
+  const template = countStudyMaterial("template");
+  const material = countStudyMaterial("study_material");
+
+  const studyMaterials = [
+    {
+      name: "Prediction",
+      count: prediction?.length || 0,
+      icon: <BsBroadcastPin />,
+      url: "/admin/study-material/prediction",
+    },
+    {
+      name: "Template",
+      count: template?.length || 0,
+      icon: <MdContentCopy />,
+      url: "/admin/study-material/template",
+    },
+    {
+      name: "Study Material",
+      count: material?.length || 0,
+      icon: <BsBookHalf />,
+      url: "/admin/study-material/material",
+    },
+  ];
   return (
     <Layout title="Study Material">
       <p className="text-lg font-extrabold">Material Type</p>
       <div className="flex md:flex-col flex-row items-center justify-between gap-x-5 gap-y-3 mt-4">
-        {studyMaterial?.map((item, i) => (
+        {studyMaterials?.map((item, i) => (
           <Link
             href={item?.url}
             key={i}
