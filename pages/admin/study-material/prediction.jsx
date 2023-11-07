@@ -46,9 +46,7 @@ const Index = () => {
       {isLoading ? (
         <Loading />
       ) : mounted && isTablet ? (
-        <div className="bg-white dark:bg-black">
-          <PredictionListMobile data={prediction?.results} />
-        </div>
+        <PredictionListMobile data={prediction?.results} />
       ) : (
         <PredictionList data={prediction?.results} />
       )}
@@ -96,7 +94,7 @@ const PredictionListRow = ({ data }) => {
         <p className="text-sm font-bold">{data?.title}</p>
       </div>
       <div className="w-full flex items-center gap-x-6 justify-between">
-        <p className="text-sm font-bold">{data?.id}</p>
+        <p className="text-sm font-bold">#{data?.id}</p>
         <p className="text-xs font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
           {data?.premium ? "Premium" : "Free"}
         </p>
@@ -113,22 +111,31 @@ const PredictionListRow = ({ data }) => {
   );
 };
 
-export const PredictionListMobile = ({ data }) => (
-  <div className="p-4 space-y-4">
-    <div className="flex items-center justify-between">
-      <p className="text-sm font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
-        {data?.premium ? "Premium" : "Free"}
-      </p>
-      <button className="btn-transparent-dark btn-small btn-square">
-        <Icon name="dots" />
-      </button>
+export const PredictionListMobile = ({ data }) => {
+  return (
+    <div className="bg-white dark:bg-black">
+      {data?.map((item) => (
+        <div key={item?.id} className="p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
+              {item?.premium ? "Premium" : "Free"}
+            </p>
+            <button className="btn-transparent-dark btn-small btn-square">
+              <Icon name="dots" />
+            </button>
+          </div>
+          <div className="flex items-end justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-bold">{item?.title}</p>
+              <p className="text-xs">#{item?.id}</p>
+            </div>
+            <p className="text-[#5F646D] dark:text-white text-xs">
+              {" "}
+              {formatDateTime(item?.uploaded_at, "date")}
+            </p>
+          </div>
+        </div>
+      ))}
     </div>
-    <div className="flex items-end justify-between">
-      <div className="space-y-1">
-        <p className="text-sm font-bold">{data?.title}</p>
-        <p className="text-xs">{data?.id}</p>
-      </div>
-      <p className="text-[#5F646D] dark:text-white text-xs">05/07/23</p>
-    </div>
-  </div>
-);
+  );
+};
