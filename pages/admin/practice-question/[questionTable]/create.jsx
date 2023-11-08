@@ -19,6 +19,7 @@ import FibReading from "@/components/QuestionForms/FibReading";
 import SummerizeWritten from "@/components/QuestionForms/SummerizeWritten";
 import HighlightSummary from "@/components/QuestionForms/HighlightSummary";
 import AnswerShotQues from "@/components/QuestionForms/AnswerShotQues";
+import MultipleSingleReading from "@/components/QuestionForms/MultipleSingleReading";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -63,7 +64,7 @@ const AllForms = () => {
   } else if (questionTable == "Reading: MCM") {
     content = <MultipleChoiceReading />;
   } else if (questionTable == "Reading: MCS") {
-    content = <MultipleChoiceReading />;
+    content = <MultipleSingleReading />;
   } else if (questionTable == "Re-order Paragraphs") {
     content = <ReOrderParagraph />;
   } else if (questionTable == "Reading: Fill in the Blanks") {

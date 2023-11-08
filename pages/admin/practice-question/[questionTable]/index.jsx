@@ -83,6 +83,8 @@ const Index = () => {
       url = "reorder_paragraphs";
     } else if (questionTable === "Reading: MCM") {
       url = "multi_choices/reading";
+    } else if (questionTable === "Reading: MCS") {
+      url = "multi_choices/reading/single-answer";
     }
 
     const fetchData = async () => {
