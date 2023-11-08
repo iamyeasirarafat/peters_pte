@@ -1,18 +1,48 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
+import axios from "axios";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import toast from "react-hot-toast";
 
 const ReOrderParagraph = () => {
-  const [optionNumber, setOptionNumber] = useState(0);
-  const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
+    title: "",
     paragraph: "",
+    options: [],
     appeared: 0,
     prediction: false,
+    answer_sequence: [],
   });
+  const router = useRouter();
+  const [optionNumber, setOptionNumber] = useState(4);
+  const [options, setOptions] = useState(
+    Array.from({ length: optionNumber }, (_, index) => ({
+      index: String.fromCharCode(65 + index),
+      value: "",
+    }))
+  );
+  useEffect(() => {
+    setOptions((prevOptions) => {
+      return Array.from({ length: optionNumber }, (_, index) => {
+        if (index < prevOptions.length) {
+          return prevOptions[index];
+        } else {
+          return {
+            index: String.fromCharCode(65 + index),
+            value: "",
+          };
+        }
+      });
+    });
+  }, [optionNumber]);
+  const handleTextAreaChange = (index, value) => {
+    const updatedData = [...options];
+    updatedData[index] = { ...updatedData[index], value };
+    setOptions(updatedData);
+  };
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -21,27 +51,32 @@ const ReOrderParagraph = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    router.back();
+    try {
+      const response = await axios.post("reorder_paragraph", formData);
+      toast.success("Create question successfully");
+      if (response?.data) {
+        router.back();
+      }
+    } catch (error) {
+      toast.error("something went wrong");
+      console.log(error);
+    }
   };
-
-  const [options, setOptions] = useState([
-    { label: "A" },
-    { label: "B" },
-    { label: "C" },
-    { label: "D" },
-  ]);
-
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      options: options,
+      answer_sequence: options.map((op) => op?.index),
+    }));
+  }, [options]);
   const onDragEnd = (result) => {
     if (!result.destination) return; // dropped outside the list
 
     const reorderedOptions = Array.from(options);
     const [movedOption] = reorderedOptions.splice(result.source.index, 1);
     reorderedOptions.splice(result.destination.index, 0, movedOption);
-
-    // Update the state with the new order
     setOptions(reorderedOptions);
   };
 
@@ -50,7 +85,7 @@ const ReOrderParagraph = () => {
       <form onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
-            <label for="name" className="font-bold text-sm">
+            <label for="title" className="font-bold text-sm">
               Question Name
             </label>
             <h3 className="text-sm font-semibold">Question Id #785263891</h3>
@@ -58,9 +93,9 @@ const ReOrderParagraph = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="name"
+            id="title"
             type="text"
-            value={formData.name}
+            value={formData.title}
             onChange={handleInputChange}
           />
         </div>
@@ -107,7 +142,7 @@ const ReOrderParagraph = () => {
                             >
                               <label>
                                 <span className="text-white font-bold px-3 py-2 bg-orange-300">
-                                  {option?.label}
+                                  {option?.index}
                                 </span>
                               </label>
                             </div>
@@ -124,24 +159,25 @@ const ReOrderParagraph = () => {
         </div>
 
         <div className="grid grid-cols-3 my-6 gap-3">
-          {options?.map((option, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-sm mb-2">
-                Option {option.label}
-              </h3>
-              <textarea
-                rows={5}
-                placeholder="Start Typing..."
-                className="w-full border-none py-4 px-5 text-sm "
-                id="paragraph"
-                type="text"
-                value={formData.paragraph}
-                onChange={handleInputChange}
-              />
-            </div>
-          ))}
+          {[...options]
+            .sort((a, b) => a.index.localeCompare(b.index))
+            ?.map((option, i) => (
+              <div key={i}>
+                <h3 className="font-semibold text-sm mb-2">
+                  Option {option.index}
+                </h3>
+                <textarea
+                  rows={5}
+                  placeholder="Start Typing..."
+                  className="w-full border-none py-4 px-5 text-sm "
+                  id="paragraph"
+                  type="text"
+                  value={option?.value}
+                  onChange={(e) => handleTextAreaChange(i, e.target.value)}
+                />
+              </div>
+            ))}
         </div>
-
         <div className="flex justify-between gap-6">
           <Counter
             className="bg-white w-1/2"
