@@ -18,6 +18,7 @@ import ReadingFillTheBlanks from "@/components/QuestionForms/ReadingFillTheBlank
 import FibReading from "@/components/QuestionForms/FibReading";
 import SummerizeWritten from "@/components/QuestionForms/SummerizeWritten";
 import HighlightSummary from "@/components/QuestionForms/HighlightSummary";
+import AnswerShotQues from "@/components/QuestionForms/AnswerShotQues";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -30,7 +31,7 @@ const AllForms = () => {
   } else if (questionTable == "Re-Tell Lecture") {
     content = <ReTelLecture />;
   } else if (questionTable == "Answer Short Question") {
-    content = <ReTelLecture />;
+    content = <AnswerShotQues />;
   } else if (questionTable == "Describe Image") {
     content = <DescribeImage />;
   } else if (questionTable == "Summarize Spoken Text") {

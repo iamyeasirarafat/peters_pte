@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-const ReTelLecture = () => {
+const AnswerShotQues = () => {
   const router = useRouter();
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
@@ -23,7 +23,7 @@ const ReTelLecture = () => {
         formData.append("audio", audio);
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-        const response = await axios.post("/retell_sentence", formData, config);
+        const response = await axios.post("/short_question", formData, config);
         toast.success("Create question successfully");
         if (response?.data) {
           router.back();
@@ -159,4 +159,4 @@ const ReTelLecture = () => {
   );
 };
 
-export default ReTelLecture;
+export default AnswerShotQues;
