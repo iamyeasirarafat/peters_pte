@@ -1,15 +1,68 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
-import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
-const MultipleChoiceListing = () => {
-  const [optionNumber, setOptionNumber] = useState(0);
+const MultipleChoiceReading = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
-    paragraph: "",
+    title: "",
+    content: "",
+    options: [],
+    right_options: [],
     appeared: 0,
     prediction: false,
+    audio: null,
   });
+
+  // array based on counter number
+  const [optionNumber, setOptionNumber] = useState(4);
+  const [options, setOptions] = useState(
+    Array.from({ length: optionNumber }, (_, index) => ({
+      index: String.fromCharCode(65 + index),
+      value: "",
+    }))
+  );
+  useEffect(() => {
+    setOptions((prevOptions) => {
+      return Array.from({ length: optionNumber }, (_, index) => {
+        if (index < prevOptions.length) {
+          return prevOptions[index];
+        } else {
+          return {
+            index: String.fromCharCode(65 + index),
+            value: "",
+          };
+        }
+      });
+    });
+  }, [optionNumber]);
+
+  // checkbox for selected option
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const handleCheckboxChange = (optionIndex) => {
+    if (selectedOptions.includes(optionIndex)) {
+      setSelectedOptions(
+        selectedOptions.filter((item) => item !== optionIndex)
+      );
+    } else {
+      setSelectedOptions([...selectedOptions, optionIndex]);
+    }
+  };
+
+  // update right_options and options
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      options: options,
+      right_options: selectedOptions.map((index) => {
+        const option = options.find((opt) => opt.index === index);
+        return option ? option.value : "";
+      }),
+    }));
+  }, [options, selectedOptions]);
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -18,9 +71,10 @@ const MultipleChoiceListing = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
+  const handleTextAreaChange = (index, value) => {
+    const updatedData = [...options];
+    updatedData[index] = { ...updatedData[index], value };
+    setOptions(updatedData);
   };
 
   const [audioSrc, setAudioSrc] = useState(null);
@@ -30,9 +84,17 @@ const MultipleChoiceListing = () => {
     if (file) {
       setAudioSrc(URL.createObjectURL(file));
       setAudioName(file?.name);
+      setFormData((prev) => ({
+        ...prev,
+        audio: file,
+      }));
     } else {
       setAudioSrc(null);
       setAudioName(null);
+      setFormData((prev) => ({
+        ...prev,
+        audio: null,
+      }));
     }
   };
 
@@ -41,19 +103,45 @@ const MultipleChoiceListing = () => {
     setAudioName(null);
   };
 
-  const options = [
-    { label: "A" },
-    { label: "B" },
-    { label: "C" },
-    { label: "D" },
-  ];
-  const [value, setValue] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData?.right_options);
+    if (formData?.audio) {
+      const optionsJson = JSON.stringify(formData?.options);
+      const rightOptionsJson = JSON.stringify(formData?.right_options);
+      try {
+        const newForm = new FormData();
+        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        newForm.append("title", formData?.title);
+        newForm.append("options", optionsJson);
+        newForm.append("right_options", rightOptionsJson);
+        newForm.append("appeared", formData?.appeared);
+        newForm.append("prediction", formData?.prediction);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data", // Use lowercase for header keys
+          },
+        };
+        const { data } = await axios.post("/multi_choice", newForm, config);
+        toast.success("Create question successfully");
+        if (data) {
+          router.back();
+        }
+      } catch (error) {
+        console.error("Error create question:", error);
+        toast.error("Something went wrong, try again later.");
+      }
+    } else {
+      toast.error("You need provide dat successfuly!");
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
-            <label for="name" className="font-bold text-sm">
+            <label for="title" className="font-bold text-sm">
               Question Name
             </label>
             <h3 className="text-sm font-semibold">Question Id #785263891</h3>
@@ -61,13 +149,12 @@ const MultipleChoiceListing = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="name"
+            id="title"
             type="text"
-            value={formData.name}
+            value={formData.title}
             onChange={handleInputChange}
           />
         </div>
-
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audioName && !audioSrc ? (
@@ -119,35 +206,38 @@ const MultipleChoiceListing = () => {
           <div className="w-1/2  bg-white flex items-center pl-4">
             <div className="grid grid-cols-4">
               {options?.map((option, i) => (
-                <label
-                  key={i}
-                  className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
-                >
-                  <input
-                    className="absolute top-0 left-0 opacity-0 invisible"
-                    type="checkbox"
-                    value={value}
-                    onChange={() => setValue(option.label)} // Update the selected value
-                    checked={value === option.label}
-                  />
-                  <span
-                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                      value == option.label
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                    }`}
+                <div key={i}>
+                  <label
+                    className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
                   >
-                    <Icon
-                      className={`fill-white transition-opacity ${
-                        value == option.label ? "opacity-100" : "opacity-0"
-                      }`}
-                      name="check"
+                    <input
+                      className="absolute top-0 left-0 opacity-0 invisible"
+                      type="checkbox"
+                      value={option.index}
+                      onChange={() => handleCheckboxChange(option.index)}
+                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
                     />
-                  </span>
-                  <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
-                    {option?.label}
-                  </span>
-                </label>
+                    <span
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions.includes(option.index)
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
+                    >
+                      <Icon
+                        className={`fill-white transition-opacity ${
+                          selectedOptions.includes(option.index)
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
+                        name="check"
+                      />
+                    </span>
+                    <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
+                      {option?.index}
+                    </span>
+                  </label>
+                </div>
               ))}
             </div>
           </div>
@@ -157,7 +247,7 @@ const MultipleChoiceListing = () => {
           {options?.map((option, i) => (
             <div key={i}>
               <h3 className="font-semibold text-sm mb-2">
-                Option {option.label}
+                Option {option.index}
               </h3>
               <textarea
                 rows={5}
@@ -165,8 +255,8 @@ const MultipleChoiceListing = () => {
                 className="w-full border-none py-4 px-5 text-sm "
                 id="paragraph"
                 type="text"
-                value={formData.paragraph}
-                onChange={handleInputChange}
+                value={option?.value}
+                onChange={(e) => handleTextAreaChange(i, e.target.value)}
               />
             </div>
           ))}
@@ -203,4 +293,4 @@ const MultipleChoiceListing = () => {
   );
 };
 
-export default MultipleChoiceListing;
+export default MultipleChoiceReading;
