@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
-const SingleChoiceListing = () => {
+const SelectMissingWord = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
@@ -123,11 +123,12 @@ const SingleChoiceListing = () => {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post("/multi_choice", newForm, config);
-        toast.success("Create question successfully");
-        if (data) {
-          router.back();
-        }
+        console.log(formData);
+        // const { data } = await axios.post("/multi_choice", newForm, config);
+        // toast.success("Create question successfully");
+        // if (data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -294,4 +295,4 @@ const SingleChoiceListing = () => {
   );
 };
 
-export default SingleChoiceListing;
+export default SelectMissingWord;

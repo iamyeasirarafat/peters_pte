@@ -20,6 +20,8 @@ import SummerizeWritten from "@/components/QuestionForms/SummerizeWritten";
 import HighlightSummary from "@/components/QuestionForms/HighlightSummary";
 import AnswerShotQues from "@/components/QuestionForms/AnswerShotQues";
 import MultipleSingleReading from "@/components/QuestionForms/MultipleSingleReading";
+import SelectMissingWord from "@/components/QuestionForms/SelectMissingWord";
+import Dictation from "@/components/QuestionForms/Dictation";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -38,7 +40,7 @@ const AllForms = () => {
   } else if (questionTable == "Summarize Spoken Text") {
     content = <ReTelLecture />;
   } else if (questionTable == "Write From Dictation") {
-    content = <ReTelLecture />;
+    content = <Dictation />;
   } else if (questionTable == "Summarize Written Text") {
     content = <SummerizeWritten />;
   } else if (questionTable == "Write Essay") {
@@ -56,7 +58,7 @@ const AllForms = () => {
   } else if (questionTable == "Highlight Correct Summary") {
     content = <HighlightSummary />;
   } else if (questionTable == "Select Missing Word") {
-    content = <SingleChoiceListing />;
+    content = <SelectMissingWord />;
   } else if (questionTable == "Fill in the Blanks") {
     content = <FillTheBlanks />;
   } else if (questionTable == "Highlight Incorrect Words") {
