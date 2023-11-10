@@ -35,9 +35,11 @@ const Students = ({ items, setStatus, admin }) => {
           <th className="th-custom">
             <Sorting title="Average Score" />
           </th>
-          {admin && <th className="th-custom ">
-            <Sorting title="Organization" />
-          </th>}
+          {admin && (
+            <th className="th-custom ">
+              <Sorting title="Organization" />
+            </th>
+          )}
           <th className="th-custom ">
             <Sorting title="Group" />
           </th>
@@ -45,9 +47,14 @@ const Students = ({ items, setStatus, admin }) => {
       </thead>
       <tbody>
         {items.map((product, i) => {
-
-          return <StudentRow admin={admin} setStatus={setStatus} item={product} key={i} />;
-
+          return (
+            <StudentRow
+              admin={admin}
+              setStatus={setStatus}
+              item={product}
+              key={i}
+            />
+          );
         })}
       </tbody>
     </table>
