@@ -56,32 +56,36 @@ const SpellingBee = () => {
             {options?.map((option, i) => (
               <label
                 key={i}
-                className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                className={`group relative inline-flex items-center gap-2 select-none cursor-pointer tap-highlight-color bg-white  py-3 px-2`}
               >
-                <input
-                  className="absolute top-0 left-0 opacity-0 invisible"
-                  type="checkbox"
-                  value={value}
-                  onChange={() => setValue(option.label)} // Update the selected value
-                  checked={value === option.label}
-                />
-                <span
-                  className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                    value == option.label
-                      ? "bg-green-1 border-green-1 dark:!border-green-1"
-                      : "bg-transparent border-n-1 dark:border-white"
-                  }`}
-                >
-                  <Icon
-                    className={`fill-white transition-opacity ${
-                      value == option.label ? "opacity-100" : "opacity-0"
-                    }`}
-                    name="check"
+                <div>
+                  <input
+                    className="absolute top-0 left-0 opacity-0 invisible"
+                    type="checkbox"
+                    value={value}
+                    onChange={() => setValue(option.label)} // Update the selected value
+                    checked={value === option.label}
                   />
-                </span>
-                <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
-                  {option?.label}
-                </span>
+                  <span
+                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                      value == option.label
+                        ? "bg-green-1 border-green-1 dark:!border-green-1"
+                        : "bg-transparent border-n-1 dark:border-white"
+                    }`}
+                  >
+                    <Icon
+                      className={`fill-white transition-opacity ${
+                        value == option.label ? "opacity-100" : "opacity-0"
+                      }`}
+                      name="check"
+                    />
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="type your answer"
+                  className="border-b border-t-0 w-full border-r-0 border-l-0 border-gray-500 focus:outline-none focus:border-indigo-500 pl-0 ml-2"
+                />
               </label>
             ))}
           </div>

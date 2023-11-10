@@ -1,23 +1,10 @@
 import Counter from "@/components/Counter";
 import { useState } from "react";
 const SpeakingSpell = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    paragraph: "",
-    appeared: 0,
-    prediction: false,
-  });
-  const handleInputChange = (e) => {
-    const { id, type, value, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: type === "checkbox" ? checked : value,
-    }));
-  };
-
+  const [title, setTitle] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    console.log(title);
   };
 
   return (
@@ -35,8 +22,7 @@ const SpeakingSpell = () => {
             className="w-full border-none py-4 px-5 text-sm "
             id="name"
             type="text"
-            value={formData.name}
-            onChange={handleInputChange}
+            onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <button

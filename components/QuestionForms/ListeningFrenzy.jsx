@@ -1,26 +1,11 @@
-import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
 const ListeningFrenzy = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    paragraph: "",
-    appeared: 0,
-    prediction: false,
+    title: "",
+    audio: null,
   });
-  const handleInputChange = (e) => {
-    const { id, type, value, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
 
   const [audioSrc, setAudioSrc] = useState(null);
   const [audioName, setAudioName] = useState(null);
@@ -29,9 +14,17 @@ const ListeningFrenzy = () => {
     if (file) {
       setAudioSrc(URL.createObjectURL(file));
       setAudioName(file?.name);
+      setFormData((prev) => ({
+        ...prev,
+        audio: file,
+      }));
     } else {
       setAudioSrc(null);
       setAudioName(null);
+      setFormData((prev) => ({
+        ...prev,
+        audio: null,
+      }));
     }
   };
 
@@ -40,6 +33,10 @@ const ListeningFrenzy = () => {
     setAudioName(null);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -55,8 +52,12 @@ const ListeningFrenzy = () => {
             className="w-full border-none py-4 px-5 text-sm "
             id="name"
             type="text"
-            value={formData.name}
-            onChange={handleInputChange}
+            onChange={({ target }) =>
+              setFormData((prev) => ({
+                ...prev,
+                title: target.value,
+              }))
+            }
           />
         </div>
 
