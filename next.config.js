@@ -4,7 +4,7 @@ const nextConfig = {
   ignoreBuildErrors: true,
 
   images: {
-    domains: ["api.codebyamirus.link"],
+    domains: ["api.codebyamirus.link", "lh3.googleusercontent.com"],
   },
 };
 
