@@ -7,26 +7,21 @@ import Modal from "@/components/Modal";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
-import {
-  useEffect,
-  useState
-} from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-
-
 const StudentRow = ({ admin, item, setStatus }) => {
   const [value, setValue] = useState(false);
-  const [isOpen, setIsOpen] = useState(false)
-  const [visible, setVisible] = useState(false)
-  const [editData, setEditData] = useState({})
+  const [isOpen, setIsOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [editData, setEditData] = useState({});
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
   return (
     <tr className="">
-      <td className="td-custom flex items-center gap-2">
+      <td className="td-custom flex items-center gap-3">
         <Checkbox value={value} onChange={() => setValue(!value)} />
         <Link
           className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
@@ -55,44 +50,50 @@ const StudentRow = ({ admin, item, setStatus }) => {
       </td>
       <td className="td-custom">
         <div
-          className={`min-w-[4rem] ${item.avl === "Paid"
-            ? "label-stroke-green"
-            : item.avl === "Med"
+          className={`border min-w-[4rem] ${
+            item.avl === "Paid"
+              ? "label-stroke-green"
+              : item.avl === "Med"
               ? "label-stroke-yellow"
               : item.avl === "Low"
-                ? "label-stroke-pink"
-                : "label-stroke"
-            }`}
+              ? "label-stroke-pink"
+              : "label-stroke"
+          }`}
         >
           {item.avg_score || "N/A"}
         </div>
       </td>
 
-      {
-        admin && <td className="td-custom font-bold">{item?.profile[0]?.organization?.full_name || "N/A"}</td>
-      }
-      <td className="td-custom font-bold">{item?.profile[0]?.group?.name || "N/A"}</td>
+      {admin && (
+        <td className="td-custom font-bold">
+          {item?.profile[0]?.organization?.full_name || "N/A"}
+        </td>
+      )}
+      <td className="td-custom font-bold">
+        {item?.profile[0]?.group?.name || "N/A"}
+      </td>
 
       <td className="td-custom text-right">
         <div className="flex justify-center bg-gray-100 ">
           <div
             className="relative inline-block text-left"
             onClick={toggleDropdown}
-          // onBlur={closeDropdown}
+            // onBlur={closeDropdown}
           >
             <button className="btn-transparent-dark btn-small btn-square">
               <Icon name="dots" />
             </button>
             <div
               style={{ backgroundColor: "#FAF4F0" }}
-              className={`${isOpen ? "block" : "hidden"
-                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              className={`${
+                isOpen ? "block" : "hidden"
+              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
             >
               <div role="none">
                 <button
                   onClick={() => {
-                    setEditData(item)
-                    setVisible(true)
+                    setEditData(item);
+                    setVisible(true);
                   }}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 >
@@ -118,8 +119,8 @@ const StudentRow = ({ admin, item, setStatus }) => {
                 </a>
                 <button
                   onClick={async () => {
-                    await axios.delete("/student/" + item.id)
-                    setStatus(Math.random())
+                    await axios.delete("/student/" + item.id);
+                    setStatus(Math.random());
                   }}
                   className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
                 >
@@ -129,13 +130,17 @@ const StudentRow = ({ admin, item, setStatus }) => {
             </div>
           </div>
         </div>
-        {visible && admin && <EditStudentModalAdmin {...{ visible, setVisible, editData }} />}
-        {visible && !admin && <EditStudentModal {...{ visible, setVisible, editData }} />}
+        {visible && admin && (
+          <EditStudentModalAdmin {...{ visible, setVisible, editData }} />
+        )}
+        {visible && !admin && (
+          <EditStudentModal {...{ visible, setVisible, editData }} />
+        )}
       </td>
     </tr>
   );
 };
-export default StudentRow
+export default StudentRow;
 
 const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
   const genders = [
@@ -147,30 +152,32 @@ const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
     },
   ];
   const [gender, setGender] = useState(genders[0]);
-  const [groups, setGroups] = useState([])
+  const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState({});
-  const [orgs, setOrgs] = useState([])
+  const [orgs, setOrgs] = useState([]);
   const [org, setOrg] = useState();
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios(org.id + "/groups")
-      setGroups(res.data)
-      setGroup(res.data[0])
-    }
-    org && fetchGroup()
-  }, [org])
+      const res = await axios(org.id + "/groups");
+      setGroups(res.data);
+      setGroup(res.data[0]);
+    };
+    org && fetchGroup();
+  }, [org]);
 
   //get Organizations
   useEffect(() => {
     const fetchOrgs = async () => {
-      const res = await axios("/organizations")
-      let formattedOrgs = []
-      await res.data.forEach(item => formattedOrgs.push({ id: item.id, name: item.full_name }));
-      setOrgs(formattedOrgs)
-    }
-    fetchOrgs()
-  }, [])
+      const res = await axios("/organizations");
+      let formattedOrgs = [];
+      await res.data.forEach((item) =>
+        formattedOrgs.push({ id: item.id, name: item.full_name })
+      );
+      setOrgs(formattedOrgs);
+    };
+    fetchOrgs();
+  }, []);
   const {
     register,
     handleSubmit,
@@ -181,31 +188,36 @@ const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
   } = useForm({});
   useEffect(() => {
     if (editData) {
-      setValue("full_name", editData?.full_name)
-      setValue("email", editData?.email)
-      setValue("phone", editData?.phone)
-      setValue("address", editData?.profile[0]?.address || "")
-      setValue("education", editData?.profile[0]?.education || "")
-      setValue("birth_date", editData?.profile[0]?.birth_date || "")
-      setGroup(editData?.profile[0]?.group || {})
-      setGender({ name: editData?.profile[0]?.gender } || {})
-      setOrg({ id: editData?.profile[0]?.organization.id, name: editData?.profile[0]?.organization.full_name } || {})
+      setValue("full_name", editData?.full_name);
+      setValue("email", editData?.email);
+      setValue("phone", editData?.phone);
+      setValue("address", editData?.profile[0]?.address || "");
+      setValue("education", editData?.profile[0]?.education || "");
+      setValue("birth_date", editData?.profile[0]?.birth_date || "");
+      setGroup(editData?.profile[0]?.group || {});
+      setGender({ name: editData?.profile[0]?.gender } || {});
+      setOrg(
+        {
+          id: editData?.profile[0]?.organization.id,
+          name: editData?.profile[0]?.organization.full_name,
+        } || {}
+      );
     }
-  }, [editData])
+  }, [editData]);
   const onSubmit = async (data) => {
     const submitData = {
-      "full_name": data.full_name,
-      "email": data.email,
-      "phone": data.phone,
+      full_name: data.full_name,
+      email: data.email,
+      phone: data.phone,
       group: group.id,
       organization: org.id,
-      "profile": {
+      profile: {
         gender: gender.name,
-        "birth_date": data.birth_date,
-        "education": data.education,
-        "address": data.address,
-        "country": data.country
-      }
+        birth_date: data.birth_date,
+        education: data.education,
+        address: data.address,
+        country: data.country,
+      },
     };
     try {
       await axios.put(`/student/${editData?.id}/update`, submitData);
@@ -233,7 +245,6 @@ const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
           register={register}
           name="full_name"
         />
-
 
         <Field
           errors={errors}
@@ -303,7 +314,7 @@ const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
           errors={errors}
           className="mb-6"
           label="Date of birth"
-          type='date'
+          type="date"
           placeholder="Enter Birth Date"
           register={register}
           name="birth_date"
@@ -311,7 +322,6 @@ const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
 
         <button className="btn-purple  w-full">Update Information</button>
       </form>
-
     </Modal>
   );
 };
@@ -326,18 +336,17 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
     },
   ];
   const [gender, setGender] = useState(genders[0]);
-  const [groups, setGroups] = useState([])
+  const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState({});
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios("/groups")
-      setGroups(res.data)
-      setGroup(res.data[0])
-    }
-    fetchGroup()
-  }, [])
-
+      const res = await axios("/groups");
+      setGroups(res.data);
+      setGroup(res.data[0]);
+    };
+    fetchGroup();
+  }, []);
 
   const {
     register,
@@ -349,29 +358,29 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
   } = useForm({});
   useEffect(() => {
     if (editData) {
-      setValue("full_name", editData?.full_name)
-      setValue("email", editData?.email)
-      setValue("phone", editData?.phone)
-      setValue("address", editData?.profile[0]?.address || "")
-      setValue("education", editData?.profile[0]?.education || "")
-      setValue("birth_date", editData?.profile[0]?.birth_date || "")
-      setGroup(editData?.profile[0]?.group || {})
-      setGender({ name: editData?.profile[0]?.gender } || {})
+      setValue("full_name", editData?.full_name);
+      setValue("email", editData?.email);
+      setValue("phone", editData?.phone);
+      setValue("address", editData?.profile[0]?.address || "");
+      setValue("education", editData?.profile[0]?.education || "");
+      setValue("birth_date", editData?.profile[0]?.birth_date || "");
+      setGroup(editData?.profile[0]?.group || {});
+      setGender({ name: editData?.profile[0]?.gender } || {});
     }
-  }, [editData])
+  }, [editData]);
   const onSubmit = async (data) => {
     const submitData = {
-      "full_name": data.full_name,
-      "email": data.email,
-      "phone": data.phone,
+      full_name: data.full_name,
+      email: data.email,
+      phone: data.phone,
       group: group.id,
-      "profile": {
+      profile: {
         gender: gender.name,
-        "birth_date": data.birth_date,
-        "education": data.education,
-        "address": data.address,
-        "country": data.country
-      }
+        birth_date: data.birth_date,
+        education: data.education,
+        address: data.address,
+        country: data.country,
+      },
     };
     try {
       await axios.put(`/student/${editData?.id}/update`, submitData);
@@ -399,7 +408,6 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
           register={register}
           name="full_name"
         />
-
 
         <Field
           errors={errors}
@@ -435,7 +443,6 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
           onChange={setGender}
         />
 
-
         <Select
           label="Group *"
           className="mb-6 w-full"
@@ -463,7 +470,7 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
           errors={errors}
           className="mb-6"
           label="Date of birth"
-          type='date'
+          type="date"
           placeholder="Enter Birth Date"
           register={register}
           name="birth_date"
@@ -471,7 +478,6 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
 
         <button className="btn-purple  w-full">Update Information</button>
       </form>
-
     </Modal>
   );
 };

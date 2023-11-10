@@ -36,7 +36,7 @@ const Students = ({ items, student }) => {
           <th className="th-custom">
             <Sorting title="Average Score" />
           </th>
-          <th className="th-custom text-right">
+          <th className="th-custom">
             <Sorting title="Group" />
           </th>
         </tr>

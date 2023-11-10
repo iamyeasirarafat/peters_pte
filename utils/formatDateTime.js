@@ -17,6 +17,8 @@ export const formatDateTime = (dateTimeString, format = "full") => {
     hours = 12;
   }
   switch (format.toLowerCase()) {
+    case "datere":
+      return `${year}-${month}-${day}`;
     case "date":
       return `${day}/${month}/${year}`;
     case "time":

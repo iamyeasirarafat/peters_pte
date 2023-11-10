@@ -9,10 +9,8 @@ const Row = ({ item }) => {
   const [value, setValue] = useState(false);
   return (
     <tr className="">
-      <td className="td-custom">
+      <td className="td-custom flex items-center gap-x-3">
         <Checkbox value={value} onChange={() => setValue(!value)} />
-      </td>
-      <td className="td-custom">
         <div className="flex items-center gap-x-2">
           <Image
             className="w-10 h-10 rounded-full"
@@ -31,7 +29,7 @@ const Row = ({ item }) => {
       <td className="td-custom">{item.lastLoggedIn}</td>
       <td className="td-custom">
         <div
-          className={`min-w-[4rem] ${
+          className={`border ${
             item.averageScore >= "80"
               ? "label-stroke-green"
               : item.averageScore >= "70"
@@ -44,8 +42,8 @@ const Row = ({ item }) => {
           {item.averageScore}/90
         </div>
       </td>
-      <td className="td-custom">{item.group}</td>
-      <td className="td-custom">
+      <td className="td-custom flex items-center gap-x-2">
+        {item.group}{" "}
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>

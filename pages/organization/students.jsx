@@ -13,23 +13,12 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import Students from "../../components/Students_list";
 
 const StudentList = () => {
-  const [data, setData] = useState([
-    // {
-    //   userId: "Tushar123",
-    //   name: "Tushar Ahmen",
-    //   image: "/images/product-pic-1.jpg",
-    //   plan: "Free",
-    //   last_logged_in: "12/12/24",
-    //   avg_score: "55/90",
-    //   group: "Dhaka",
-    // },
-  ]);
+  const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/students");
-      console.log(res.data);
       setData(res.data);
     };
     getData();
@@ -37,10 +26,10 @@ const StudentList = () => {
 
   return (
     <Layout title="Students" background>
-      {data?.length > 0 ? (
+      {data?.results?.length > 0 ? (
         <>
           <StudentFilter />
-          <Students setStatus={setStatus} items={data} />
+          <Students setStatus={setStatus} items={data?.results} />
           <TablePagination />
         </>
       ) : (
@@ -82,7 +71,6 @@ const EmptyPage = ({ setStatus }) => {
 };
 
 export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
-
   const plans = [
     {
       id: "2",
@@ -90,20 +78,19 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
     },
   ];
   const [plan, setPlan] = useState(plans[0]);
-  const [groups, setGroups] = useState([])
+  const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState();
-  const [groupModal, setGroupModal] = useState(false)
-  const [refetchGroup, setRefetchGroup] = useState(1)
+  const [groupModal, setGroupModal] = useState(false);
+  const [refetchGroup, setRefetchGroup] = useState(1);
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios("/groups")
-      console.log(res, "sss")
-      setGroups(res.data)
-      setGroup(res.data[0])
-    }
-    fetchGroup()
-  }, [refetchGroup])
+      const res = await axios("/groups");
+      setGroups(res.data);
+      setGroup(res.data[0]);
+    };
+    fetchGroup();
+  }, [refetchGroup]);
   const {
     register,
     handleSubmit,
@@ -190,19 +177,25 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
             onChange={setGroup}
           />
           <button
-            onClick={e => {
-              e.preventDefault()
-              setGroupModal(true)
+            onClick={(e) => {
+              e.preventDefault();
+              setGroupModal(true);
             }}
-            className="text-3xl"><IoIosAddCircleOutline /></button>
+            className="text-3xl"
+          >
+            <IoIosAddCircleOutline />
+          </button>
         </div>
         <button className="btn-purple  w-full">Add Student</button>
       </form>
-      <CreateGroupModal visible={groupModal} setVisible={setGroupModal} setRefetchGroup={setRefetchGroup} />
+      <CreateGroupModal
+        visible={groupModal}
+        setVisible={setGroupModal}
+        setRefetchGroup={setRefetchGroup}
+      />
     </Modal>
   );
 };
-
 
 const CreateGroupModal = ({ visible, setVisible, setRefetchGroup }) => {
   const {
@@ -218,29 +211,30 @@ const CreateGroupModal = ({ visible, setVisible, setRefetchGroup }) => {
       await axios.post("/group", data);
       toast.success("Successfully added");
       setVisible(false);
-      setRefetchGroup(Math.random())
+      setRefetchGroup(Math.random());
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
     }
   };
-  return <Modal
-    title="Create new Group"
-    visible={visible}
-    onClose={() => setVisible(false)}
-  >
-    <form action="" onSubmit={handleSubmit(onSubmit)}>
-      <Field
-        errors={errors}
-        className="mb-4"
-        label="Group Name *"
-        placeholder="Enter  name"
-        required
-        register={register}
-        name="name"
-      />
-      <button className="btn-purple  w-full">Create group</button>
-    </form>
-
-  </Modal>
-}
+  return (
+    <Modal
+      title="Create new Group"
+      visible={visible}
+      onClose={() => setVisible(false)}
+    >
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-4"
+          label="Group Name *"
+          placeholder="Enter  name"
+          required
+          register={register}
+          name="name"
+        />
+        <button className="btn-purple  w-full">Create group</button>
+      </form>
+    </Modal>
+  );
+};
