@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import Spinner from "../Spinner/Spinner";
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // react hook form
   const {
     register,
@@ -17,6 +19,7 @@ const Login = () => {
   } = useForm();
   const router = useRouter();
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       const res = await axios.post("/auth/token", data);
 
@@ -28,19 +31,19 @@ const Login = () => {
           maxAge: 60 * 60 * 24,
         });
       }
+      setIsLoading(false);
       router.push("/app");
     } catch (e) {
-      console.log(e.response.data.detail);
-      if (e.response.data.error) {
+      if (e?.response?.data?.error) {
         setError("email", {
           type: "manual",
-          message: e.response.data.error,
+          message: e?.response?.data?.error,
         });
       }
-      if (e.response.data.error) {
+      if (e?.response?.data?.error) {
         setError("password", {
           type: "manual",
-          message: e.response.data.error,
+          message: e?.response?.data?.error,
         });
       }
     }
@@ -94,9 +97,9 @@ const Login = () => {
       {/* login button */}
       <button
         type="submit"
-        className="py-5 w-full mt-2 font-semibold text-3xl text-center text-white bg-[#4399FF] rounded-[22px]"
+        className="py-5 w-full flex items-center gap-x-3 justify-center mt-2 font-semibold text-3xl text-white bg-[#4399FF] rounded-[22px]"
       >
-        Login
+        Login {isLoading && <Spinner />}
       </button>
     </form>
   );
