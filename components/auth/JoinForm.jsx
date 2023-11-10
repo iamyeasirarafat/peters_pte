@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import Spinner from "../Spinner/Spinner";
 const countryCodes = [
   {
     name: "Afghanistan",
@@ -1220,6 +1221,7 @@ const JoinForm = ({ setPage }) => {
   const [country, setCountry] = useState("+880");
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -1240,23 +1242,26 @@ const JoinForm = ({ setPage }) => {
       return;
     }
     try {
+      setIsLoading(true);
       const res = await axios.post("/auth/user/join", data);
       if (res.statusText === "OK") {
         toast.success("Account successfully created. Please log in");
+        setIsLoading(false);
         setPage("login");
       }
     } catch (e) {
-      Object.keys(e.response.data).length > 0 &&
-        Object.keys(e.response.data).map((item) => {
+      setIsLoading(false);
+      Object.keys(e?.response?.data).length > 0 &&
+        Object.keys(e?.response?.data).map((item) => {
           if (item === "email") {
             setError("email", {
               type: "manual",
-              message: e.response.data["email"][0],
+              message: e?.response?.data["email"][0],
             });
           } else if (item === "phone") {
             setError("phone", {
               type: "manual",
-              message: e.response.data["phone"][0],
+              message: e?.response?.data["phone"][0],
             });
           } else {
             setError("custom", {
@@ -1439,9 +1444,9 @@ const JoinForm = ({ setPage }) => {
       {/* login button */}
       <button
         type="submit"
-        className="py-5 w-full mt-2 font-semibold text-3xl text-center text-white bg-[#4399FF] rounded-[22px]"
+        className="py-5 w-full mt-2 font-semibold text-3xl flex items-center gap-x-3 justify-center text-white bg-[#4399FF] rounded-[22px]"
       >
-        Join Now
+        Join Now {isLoading && <Spinner />}
       </button>
     </form>
   );

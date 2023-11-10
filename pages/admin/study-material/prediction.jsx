@@ -12,8 +12,11 @@ import { useEffect } from "react";
 import axios from "axios";
 import { formatDateTime } from "../../../utils/formatDateTime";
 import Loading from "@/components/Loading";
+import toast from "react-hot-toast";
+import { GoTrash } from "react-icons/go";
 
 const Index = () => {
+  const [reFetch, setRefetch] = useState(false);
   const [prediction, setPrediction] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -59,6 +62,7 @@ export default Index;
 
 export const PredictionList = ({ data }) => {
   const [value, setValue] = useState(false);
+  const [openItemId, setOpenItemId] = useState(null);
   return (
     <div className="bg-white dark:bg-black w-full">
       <div className="flex items-center justify-between p-3">
@@ -77,15 +81,15 @@ export const PredictionList = ({ data }) => {
           <PredictionListRow
             key={item?.id}
             data={item}
-            value={value}
-            setValue={setValue}
+            openItemId={openItemId}
+            setOpenItemId={setOpenItemId}
           />
         ))}
       </div>
     </div>
   );
 };
-const PredictionListRow = ({ data }) => {
+const PredictionListRow = ({ data, openItemId, setOpenItemId }) => {
   const [value, setValue] = useState(false);
   return (
     <div className="flex items-center justify-between p-3">
@@ -102,9 +106,17 @@ const PredictionListRow = ({ data }) => {
           <p className="text-sm font-bold">
             {formatDateTime(data?.uploaded_at, "date")}
           </p>
-          <button className="btn-transparent-dark btn-small btn-square">
-            <Icon name="dots" />
-          </button>
+          <div className="relative">
+            <button
+              onClick={() =>
+                setOpenItemId(data?.id === openItemId ? null : data?.id)
+              }
+              className="btn-transparent-dark btn-small btn-square"
+            >
+              <Icon name="dots" />
+            </button>
+            {data?.id === openItemId && <StudyMore id={data?.id} />}
+          </div>
         </div>
       </div>
     </div>
@@ -112,6 +124,7 @@ const PredictionListRow = ({ data }) => {
 };
 
 export const PredictionListMobile = ({ data }) => {
+  const [showDelete, setShowDelete] = useState(null);
   return (
     <div className="bg-white dark:bg-black">
       {data?.map((item) => (
@@ -120,9 +133,17 @@ export const PredictionListMobile = ({ data }) => {
             <p className="text-sm font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
               {item?.premium ? "Premium" : "Free"}
             </p>
-            <button className="btn-transparent-dark btn-small btn-square">
-              <Icon name="dots" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() =>
+                  setShowDelete(item?.id === showDelete ? null : item?.id)
+                }
+                className="btn-transparent-dark btn-small btn-square"
+              >
+                <Icon name="dots" />
+              </button>
+              {showDelete === item?.id && <StudyMore id={item?.id} />}
+            </div>
           </div>
           <div className="flex items-end justify-between">
             <div className="space-y-1">
@@ -136,6 +157,23 @@ export const PredictionListMobile = ({ data }) => {
           </div>
         </div>
       ))}
+    </div>
+  );
+};
+
+const StudyMore = ({ id }) => {
+  const handelDelete = async () => {
+    const res = await axios.delete(`/study_material/${id}`);
+    toast.success("File Deleted");
+  };
+  return (
+    <div className="bg-white rounded shadow absolute top-1/2 p-2 right-full">
+      <button
+        className="flex items-center gap-x-2 border border-red rounded-md py-1 px-2"
+        onClick={handelDelete}
+      >
+        <GoTrash /> Delete
+      </button>
     </div>
   );
 };
