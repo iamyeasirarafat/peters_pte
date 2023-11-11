@@ -25,7 +25,7 @@ import Dictation from "@/components/QuestionEditForms/Dictation";
 const EditForms = () => {
   const router = useRouter();
   const { questionTable, item } = router.query;
-  const itemObj = JSON.parse(item);
+  const itemObj = item ? JSON.parse(item) : null;
   let content;
   if (questionTable == "Read Aloud") {
     content = <ReadAloud />;
