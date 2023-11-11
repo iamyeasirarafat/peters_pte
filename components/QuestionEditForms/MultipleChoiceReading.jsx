@@ -1,4 +1,4 @@
-import Counter from "@/components/Counter";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 const MultipleChoiceReading = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [optionNumber, setOptionNumber] = useState(4);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
@@ -35,6 +37,12 @@ const MultipleChoiceReading = () => {
     appeared: 0,
     prediction: false,
   });
+
+  useEffect(() => {
+    setFormData(itemObj);
+    setOptions(itemObj?.options);
+  }, [item]);
+
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -76,11 +84,11 @@ const MultipleChoiceReading = () => {
     e.preventDefault();
     console.log("reading", formData);
     try {
-      const response = await axios.post("/multi_choice/reading", formData);
-      toast.success("Create question successfully");
-      if (response?.data) {
-        router.back();
-      }
+      // const response = await axios.post("/multi_choice/reading", formData);
+      // toast.success("Create question successfully");
+      // if (response?.data) {
+      //   router.back();
+      // }
     } catch (error) {
       toast.error("something went wrong");
       console.log(error);
@@ -123,7 +131,7 @@ const MultipleChoiceReading = () => {
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Option Number"
             value={optionNumber}
@@ -189,7 +197,7 @@ const MultipleChoiceReading = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}

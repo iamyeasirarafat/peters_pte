@@ -1,4 +1,4 @@
-import Counter from "@/components/Counter";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 const MultipleSingleReading = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [optionNumber, setOptionNumber] = useState(4);
   const [selectedOptions, setSelectedOptions] = useState("");
   const [formData, setFormData] = useState({
@@ -23,6 +25,11 @@ const MultipleSingleReading = () => {
       value: "",
     }))
   );
+
+  useEffect(() => {
+    setFormData(itemObj);
+    setOptions(itemObj?.options);
+  }, [item]);
   useEffect(() => {
     setOptions((prevOptions) => {
       return Array.from({ length: optionNumber }, (_, index) => {
@@ -109,7 +116,7 @@ const MultipleSingleReading = () => {
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Option Number"
             value={optionNumber}
@@ -175,7 +182,7 @@ const MultipleSingleReading = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}

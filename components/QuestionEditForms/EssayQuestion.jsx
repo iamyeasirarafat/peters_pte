@@ -1,10 +1,13 @@
-import Counter from "@/components/Counter";
 import axios from "axios";
+import EditCounter from "./EditCounter.tsx";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 const EssayQuestion = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [formData, setFormData] = useState({
     title: "",
     question: "",
@@ -12,6 +15,9 @@ const EssayQuestion = () => {
     appeared: 0,
     prediction: false,
   });
+  useEffect(() => {
+    setFormData(itemObj);
+  }, [item]);
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -24,11 +30,11 @@ const EssayQuestion = () => {
     e.preventDefault();
     console.log(formData);
     try {
-      const response = await axios.post("/write_easy", formData);
-      toast.success("Create essay question successfully");
-      if (response?.data) {
-        router.back();
-      }
+      // const response = await axios.post("/write_easy", formData);
+      // toast.success("Create essay question successfully");
+      // if (response?.data) {
+      //   router.back();
+      // }
     } catch (error) {
       toast.error(error?.message);
       console.log(error);
@@ -82,7 +88,7 @@ const EssayQuestion = () => {
           />
         </div>
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}
