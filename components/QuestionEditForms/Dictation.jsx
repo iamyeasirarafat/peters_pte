@@ -1,18 +1,31 @@
-import Counter from "@/components/Counter";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 const Dictation = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
 
-  const { register, handleSubmit, setError, formState } = useForm();
+  const { register, handleSubmit, setValue, setError, formState } = useForm();
+  useEffect(() => {
+    // Set initial form values based on itemObj
+    if (itemObj) {
+      setValue("title", itemObj.title);
+      setValue("reference_text", itemObj.reference_text);
+      setValue("prediction", itemObj.prediction);
+      setAppeared(itemObj.appeared || 0);
+      setAudio(itemObj?.audio);
+      setAudioSrc(itemObj?.audio);
+    }
+  }, [item, setValue]);
   const onsubmit = async (data) => {
     if (audio) {
       try {
@@ -74,7 +87,7 @@ const Dictation = () => {
 
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
-          {!audio?.name && !audioSrc ? (
+          {!audioSrc ? (
             <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
@@ -132,7 +145,7 @@ const Dictation = () => {
           />
         </div>
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={appeared}

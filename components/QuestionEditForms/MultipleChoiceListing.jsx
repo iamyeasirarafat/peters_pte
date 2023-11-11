@@ -1,4 +1,4 @@
-import Counter from "@/components/Counter";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -7,6 +7,9 @@ import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 const MultipleChoiceReading = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
+  console.log("edit", itemObj);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -18,7 +21,7 @@ const MultipleChoiceReading = () => {
   });
 
   // array based on counter number
-  const [optionNumber, setOptionNumber] = useState(4);
+  const [optionNumber, setOptionNumber] = useState(0);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
@@ -51,6 +54,16 @@ const MultipleChoiceReading = () => {
       setSelectedOptions([...selectedOptions, optionIndex]);
     }
   };
+
+  // initial data based on editable
+  useEffect(() => {
+    if (item) {
+      setFormData(itemObj);
+      setOptions(itemObj?.options);
+      setOptionNumber(itemObj?.options?.length);
+      setAudioSrc(itemObj?.audio);
+    }
+  }, [item]);
 
   // update right_options and options
   useEffect(() => {
@@ -122,11 +135,11 @@ const MultipleChoiceReading = () => {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post("/multi_choice", newForm, config);
-        toast.success("Create question successfully");
-        if (data) {
-          router.back();
-        }
+        // const { data } = await axios.post("/multi_choice", newForm, config);
+        // toast.success("Create question successfully");
+        // if (data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -157,7 +170,7 @@ const MultipleChoiceReading = () => {
         </div>
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
-          {!audioName && !audioSrc ? (
+          {!audioSrc ? (
             <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
@@ -197,7 +210,7 @@ const MultipleChoiceReading = () => {
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Option Number"
             value={optionNumber}
@@ -263,7 +276,7 @@ const MultipleChoiceReading = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}

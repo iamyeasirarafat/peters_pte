@@ -1,4 +1,4 @@
-import Counter from "@/components/Counter";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 const SingleChoiceListing = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -26,6 +28,15 @@ const SingleChoiceListing = () => {
       value: "",
     }))
   );
+  useEffect(() => {
+    if (item) {
+      setFormData(itemObj);
+      setOptions(itemObj?.options);
+      setOptionNumber(itemObj?.options.length);
+      setAudioSrc(itemObj?.audio);
+    }
+  }, [item]);
+
   useEffect(() => {
     setOptions((prevOptions) => {
       return Array.from({ length: optionNumber }, (_, index) => {
@@ -158,7 +169,7 @@ const SingleChoiceListing = () => {
         </div>
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
-          {!audioName && !audioSrc ? (
+          {!audioSrc ? (
             <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
@@ -198,7 +209,7 @@ const SingleChoiceListing = () => {
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Option Number"
             value={optionNumber}
@@ -264,7 +275,7 @@ const SingleChoiceListing = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}

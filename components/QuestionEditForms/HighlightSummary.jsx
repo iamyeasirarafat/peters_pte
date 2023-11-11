@@ -1,4 +1,4 @@
-import Counter from "@/components/Counter";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 const HighlightSummary = () => {
   const [optionNumber, setOptionNumber] = useState(4);
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
+  console.log("his", itemObj);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
@@ -24,6 +27,14 @@ const HighlightSummary = () => {
     appeared: 0,
     prediction: false,
   });
+  useEffect(() => {
+    if (item) {
+      setFormData(itemObj);
+      setOptions(itemObj?.options);
+      setOptionNumber(itemObj?.options?.length);
+      setAudioSrc(itemObj?.audio);
+    }
+  }, [item]);
 
   useEffect(() => {
     setFormData((prevFormData) => ({
@@ -104,15 +115,15 @@ const HighlightSummary = () => {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post(
-          "/highlight_summary",
-          formDatas,
-          config
-        );
-        toast.success("Create question successfully");
-        if (data) {
-          router.back();
-        }
+        // const { data } = await axios.post(
+        //   "/highlight_summary",
+        //   formDatas,
+        //   config
+        // );
+        // toast.success("Create question successfully");
+        // if (data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -184,7 +195,7 @@ const HighlightSummary = () => {
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Option Number"
             value={optionNumber}
@@ -250,7 +261,7 @@ const HighlightSummary = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}
