@@ -24,7 +24,8 @@ import SelectMissingWord from "@/components/QuestionEditForms/SelectMissingWord"
 import Dictation from "@/components/QuestionEditForms/Dictation";
 const EditForms = () => {
   const router = useRouter();
-  const { questionTable } = router.query;
+  const { questionTable, item } = router.query;
+  const itemObj = JSON.parse(item);
   let content;
   if (questionTable == "Read Aloud") {
     content = <ReadAloud />;
@@ -76,7 +77,7 @@ const EditForms = () => {
     content = <h2>this is new question from</h2>;
   }
   return (
-    <AdminLayout back={true} title={`${questionTable} / edit`}>
+    <AdminLayout back={true} title={`${questionTable} / Q. # ${itemObj?.id}`}>
       {content}
     </AdminLayout>
   );

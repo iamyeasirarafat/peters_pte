@@ -29,6 +29,7 @@ const MultipleSingleReading = () => {
   useEffect(() => {
     setFormData(itemObj);
     setOptions(itemObj?.options);
+    setOptionNumber(itemObj?.options.length);
   }, [item]);
   useEffect(() => {
     setOptions((prevOptions) => {
@@ -205,7 +206,7 @@ const MultipleSingleReading = () => {
           type="submit"
           className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
         >
-          Create Question
+          Update Questions
         </button>
       </form>
     </div>
