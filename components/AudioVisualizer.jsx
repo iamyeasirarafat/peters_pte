@@ -55,6 +55,7 @@ function AudioVisualizer({ selectedFile }) {
     <div>
       <div className="flex justify-between border">
         <button
+          type="button"
           className="w-10 text-[1.7rem]  font-bold flex justify-center items-center mx-2"
           onClick={handlePlayPause}
         >

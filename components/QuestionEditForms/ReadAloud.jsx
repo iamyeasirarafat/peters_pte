@@ -15,7 +15,6 @@ const ReadAloud = () => {
     prediction: false,
   });
   useEffect(() => {
-    // If itemObj exists (i.e., editing an existing question), set formData with itemObj values
     if (itemObj) {
       setFormData(itemObj);
     }

@@ -8,6 +8,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 const RepeatSentence = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
+  console.log(itemObj);
   const [appeared, setAppeared] = useState(0);
   const [imageSrc, setImageSrc] = useState(null);
   const [image, setImage] = useState(null);
