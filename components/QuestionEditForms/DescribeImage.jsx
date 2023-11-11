@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import Counter from "@/components/Counter";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -10,11 +11,22 @@ const RepeatSentence = () => {
   const router = useRouter();
   const { item } = router.query;
   const itemObj = JSON.parse(item);
-  console.log(itemObj);
   const [appeared, setAppeared] = useState(0);
   const [imageSrc, setImageSrc] = useState(null);
   const [image, setImage] = useState(null);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
+
+  useEffect(() => {
+    // Set initial form values based on itemObj
+    if (itemObj) {
+      setValue("title", itemObj?.title);
+      setValue("reference_text", itemObj?.reference_text);
+      setValue("prediction", itemObj?.prediction);
+      setAppeared(itemObj.appeared || 0);
+      setImage(itemObj?.image);
+      setImageSrc(itemObj?.image);
+    }
+  }, [item, setValue]);
 
   const onSubmit = async (data) => {
     if (image) {
@@ -26,11 +38,11 @@ const RepeatSentence = () => {
         formData.append("image", image);
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-        const response = await axios.post("/describe_image", formData, config);
-        toast.success("Create question successfully");
-        if (response?.data) {
-          router.back();
-        }
+        // const response = await axios.post("/describe_image", formData, config);
+        // toast.success("Create question successfully");
+        // if (response?.data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -132,7 +144,7 @@ const RepeatSentence = () => {
           />
         </div>
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={appeared}
