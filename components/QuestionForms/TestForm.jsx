@@ -1,41 +1,75 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 
-function TestForm() {
-  let counterValue = 4;
-  const [formData, setFormData] = useState(
-    Array.from({ length: counterValue }, (_, index) => ({
-      index: String.fromCharCode(65 + index),
-      value: "",
-    }))
-  );
+const QuestionForm = () => {
+  const [text, setText] = useState("");
+  const [options, setOptions] = useState([]);
+  console.log(options);
+  const contentEditableRef = useRef(null);
+  const [buttonCounter, setButtonCounter] = useState(65); // ASCII code for 'A'
 
-  console.log(formData);
+  const handleButtonClick = () => {
+    if (contentEditableRef.current) {
+      const buttonText = String.fromCharCode(buttonCounter);
+      setButtonCounter(buttonCounter + 1);
+      const buttonElement = document.createElement("button");
+      buttonElement.innerHTML = `<b>${buttonText}</b>`;
+      buttonElement.className = "px-4 bg-orange-500 mx-3";
+      buttonElement.contentEditable = false;
 
-  const handleInputChange = (index, value) => {
-    const updatedData = [...formData];
-    updatedData[index] = { ...updatedData[index], value };
-    setFormData(updatedData);
+      // Insert the button element at the current caret position
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(buttonElement);
+
+      // Move the caret after the inserted button
+      range.setStartAfter(buttonElement);
+      range.setEndAfter(buttonElement);
+
+      // Update the state with the new HTML content
+      setText(contentEditableRef.current.innerHTML);
+
+      // Initialize the option in the state as an object with an empty string
+      setOptions((prevOptions) => [
+        ...prevOptions,
+        { id: buttonText, text: "" },
+      ]);
+    }
   };
-  console.log(formData);
-  return (
-    <div>
-      {formData.map((data, index) => {
-        return (
-          <div key={index}>
-            <button>{data.index}</button>
-            <input
-              type="checkbox"
-              onChange={(e) => handleInputChange(index, e.target.checked)}
-            />
-            <textarea
-              value={data.value}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
-export default TestForm;
+  const handleTextAreaChange = (id, e) => {
+    // Update the state with the text from the textarea
+    setOptions((prevOptions) =>
+      prevOptions.map((option) =>
+        option.id === id ? { ...option, text: e.target.value } : option
+      )
+    );
+  };
+
+  return (
+    <>
+      <div>
+        <div
+          ref={contentEditableRef}
+          contentEditable="true"
+          dangerouslySetInnerHTML={{ __html: text }}
+          placeholder="Type your text here..."
+        />
+      </div>
+      {options.map((option) => (
+        <div key={option.id}>
+          <textarea
+            value={option.text}
+            onChange={(e) => handleTextAreaChange(option.id, e)}
+            placeholder={`Option ${option.id}`}
+          />
+        </div>
+      ))}
+      <button className="px-3 py-2 bg-orange-500" onClick={handleButtonClick}>
+        +
+      </button>
+    </>
+  );
+};
+
+export default QuestionForm;
