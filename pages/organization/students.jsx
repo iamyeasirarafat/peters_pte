@@ -16,6 +16,8 @@ const StudentList = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
 
+  console.log("data", data);
+
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/students");

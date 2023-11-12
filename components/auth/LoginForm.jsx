@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
@@ -53,8 +52,9 @@ const Login = () => {
       <div className="p-4 space-y-2 bg-[#FFF4EB] rounded-[32px] w-full">
         <div className="w-full">
           <input
-            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${errors.email ? "border-red" : "border-[#B9B9B9] "
-              } rounded-[16px] outline-none`}
+            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${
+              errors.email ? "border-red" : "border-[#B9B9B9] "
+            } rounded-[16px] outline-none`}
             {...register("email", {
               required: "Password is required",
             })}
@@ -64,8 +64,9 @@ const Login = () => {
         </div>
         <div className="relative w-full">
           <input
-            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${errors.password ? "border-red" : "border-[#B9B9B9] "
-              } rounded-[16px] outline-none`}
+            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${
+              errors.password ? "border-red" : "border-[#B9B9B9] "
+            } rounded-[16px] outline-none`}
             {...register("password", {
               required: "Password is required",
             })}
@@ -97,7 +98,7 @@ const Login = () => {
         type="submit"
         className="py-5 w-full flex items-center gap-x-3 justify-center mt-2 font-semibold text-3xl text-white bg-[#4399FF] rounded-[22px]"
       >
-        Login {isLoading && <Spinner />}
+        Login {isLoading && <Spinner className="w-9 h-9" />}
       </button>
     </form>
   );

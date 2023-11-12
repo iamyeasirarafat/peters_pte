@@ -6,7 +6,8 @@ import Image from "@/components/Image";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { IoIosCall, IoMdMail } from "react-icons/io";
 import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
-import { RiSettings2Fill } from "react-icons/ri";
+import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
+import { CgRadioCheck } from "react-icons/cg";
 import Sorting from "@/components/Sorting";
 import Icon from "@/components/Icon";
 import TablePagination from "@/components/TablePagination";
@@ -19,6 +20,9 @@ import Field from "@/components/Field";
 import toast from "react-hot-toast";
 import Select from "@/components/AddStudentSelect";
 import { formatDateTime } from "@/utils/formatDateTime";
+import { formatDateWithName } from "@/utils/formatDateWithName";
+import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
+import Spinner from "@/components/Spinner/Spinner";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
@@ -43,6 +47,8 @@ export default function StudentDetails() {
   const myGroup = groups?.find(
     (item) => item?.id === studentDetails?.profile[0]?.group
   );
+
+  console.log("studentDetails", studentDetails);
 
   return (
     <Layout title="Student Details" back>
@@ -80,7 +86,7 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
         <div>
           <h2 className="text-xl font-extrabold">{data?.full_name}</h2>
           <p className="text-sm">
-            {data?.profile?.[0]?.country || "Not Available"}
+            {data?.profile[0]?.country || "Not Available"}
           </p>
         </div>
       </div>
@@ -96,19 +102,19 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
       <div>
         <p className="text-sm">Gender</p>
         <p className="text-sm font-bold">
-          {data?.profile?.[0]?.gender || "Not Available"}
+          {data?.profile[0]?.gender || "Not Available"}
         </p>
       </div>
       <div>
         <p className="text-sm">Education</p>
         <p className="text-sm font-bold">
-          {data?.profile?.[0]?.education || "Not Available"}
+          {data?.profile[0]?.education || "Not Available"}
         </p>
       </div>
       <div>
         <p className="text-sm">Address</p>
         <p className="text-sm font-bold">
-          {data?.profile?.[0]?.address || "Not Available"}
+          {data?.profile[0]?.address || "Not Available"}
         </p>
       </div>
       <div>
@@ -118,7 +124,7 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
       <div>
         <p className="text-sm">Birthday</p>
         <p className="text-sm font-bold">
-          {formatDateTime(data?.profile?.[0]?.birth_date, "date") ||
+          {formatDateTime(data?.profile[0]?.birth_date, "date") ||
             "Not Available"}
         </p>
       </div>
@@ -154,6 +160,10 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
 
 const StudentDetailsRight = ({ data }) => {
   const [openChangePassword, setOpenChangePassword] = useState({
+    state: false,
+    student: null,
+  });
+  const [openAssignNewPlan, setOpenAssignNewPlan] = useState({
     state: false,
     student: null,
   });
@@ -200,12 +210,30 @@ const StudentDetailsRight = ({ data }) => {
       <div className="bg-white dark:bg-black p-5 mt-9">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Account Plan History</p>
-          <button className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold">
+          <button
+            onClick={() =>
+              setOpenAssignNewPlan({
+                state: true,
+                student: data?.id,
+              })
+            }
+            className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
+          >
             <BsFillPlusCircleFill /> Assign New Plan
           </button>
         </div>
         {/* Plan */}
-        {mounted && isTablet ? <AccountPlanMobile /> : <AccountPlan />}
+        {mounted && isTablet ? (
+          data?.plans?.map((plan, i) => (
+            <AccountPlanMobile key={i} data={plan} />
+          ))
+        ) : (
+          <AccountPlan data={data} />
+        )}
+        <AssignNewPlan
+          openAssignNewPlan={openAssignNewPlan}
+          setOpenAssignNewPlan={setOpenAssignNewPlan}
+        />
       </div>
       <TablePagination />
 
@@ -241,7 +269,7 @@ const StudentDetailsRight = ({ data }) => {
   );
 };
 
-const AccountPlan = () => {
+const AccountPlan = ({ data }) => {
   return (
     <div>
       <table className="bg-white dark:bg-black w-full">
@@ -262,36 +290,46 @@ const AccountPlan = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="py-2 pr-3 font-bold">Premium 90 Days</td>
-            <td className="py-2 px-3 text-center font-bold">03 Oct 2023</td>
-            <td className="py-2 px-3 text-center font-bold">03 Dec 2023</td>
-            <td className="py-2 px-3 flex items-center justify-center gap-x-5">
-              <p className="py-[2px] px-2 rounded-sm bg-green-300 text-xs font-bold inline-block text-black">
-                56 Days Left
-              </p>
-              <button className="btn-transparent-dark btn-small btn-square">
-                <Icon name="dots" />
-              </button>
-            </td>
-          </tr>
+          {data?.plans?.map((plan, i) => (
+            <tr key={i}>
+              <td className="py-2 pr-3 font-bold">{plan?.title}</td>
+              <td className="py-2 px-3 text-center font-bold">
+                {formatDateWithName(plan?.start_date, "custom")}
+              </td>
+              <td className="py-2 px-3 text-center font-bold">
+                {formatDateWithName(plan?.end_date, "custom")}
+              </td>
+              <td className="py-2 px-3 flex items-center justify-center gap-x-5">
+                <p className="py-[2px] px-2 rounded-sm bg-green-300 text-xs font-bold inline-block text-black">
+                  {calculateDaysLeft(plan?.end_date)} Days Left
+                </p>
+                <button className="btn-transparent-dark btn-small btn-square">
+                  <Icon name="dots" />
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
   );
 };
 
-const AccountPlanMobile = () => {
+const AccountPlanMobile = ({ data }) => {
   return (
     <div className="space-y-2 py-3">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium">03 Oct 2023</p>
-        <p className="text-xs font-medium">03 Dec 2023</p>
+        <p className="text-xs font-medium">
+          {formatDateWithName(data?.start_date, "custom")}
+        </p>
+        <p className="text-xs font-medium">
+          {formatDateWithName(data?.end_date, "custom")}
+        </p>
       </div>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-bold">Premium 30 Days Pack </p>
+        <p className="text-sm font-bold">{data?.title}</p>
         <p className="py-[2px] px-2 rounded-sm bg-green-300 text-xs font-bold inline-block text-black">
-          56 Days Left
+          {calculateDaysLeft(data?.end_date)} Days Left
         </p>
       </div>
     </div>
@@ -299,7 +337,6 @@ const AccountPlanMobile = () => {
 };
 
 // Modal
-
 // Update Information profile
 const UpdateInformation = ({
   openUpdateInformation,
@@ -313,6 +350,7 @@ const UpdateInformation = ({
   const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState("");
   const [gender, setGender] = useState(genders[0]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -343,10 +381,12 @@ const UpdateInformation = ({
     };
 
     const updateProfile = async () => {
+      setLoading(true);
       const res = await axios.put(
         `/student/${openUpdateInformation?.data?.id}/update`,
         updateData
       );
+      setLoading(false);
       toast.success(res?.data?.success);
       setOpenUpdateInformation({ state: false, data: null });
       reset();
@@ -481,8 +521,8 @@ const UpdateInformation = ({
           register={register}
           name="profile.birth_date"
         />
-        <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Info
+        <button className="bg-primary py-3 text-base font-bold w-full flex items-center gap-x-2 justify-center">
+          Update Info {isLoading && <Spinner className="w-6 h-6" />}
         </button>
       </form>
     </Modal>
@@ -542,6 +582,113 @@ const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
         />
         <button className="bg-primary py-3 text-base font-bold w-full">
           Update Password
+        </button>
+      </form>
+    </Modal>
+  );
+};
+
+// Assign New Plan
+const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
+  const [planActive, setPlanActive] = useState("immediate");
+  const [plansData, setPlansData] = useState([]);
+  const [plan, setPlan] = useState({});
+  const plans = plansData?.map((item) => ({
+    id: item?.id,
+    name: item?.plan?.title,
+    planId: item?.plan?.id,
+  }));
+
+  // get plans
+  useEffect(() => {
+    const getPlans = async () => {
+      const res = await axios.get("/plans");
+      setPlansData(res?.data);
+    };
+    getPlans();
+  }, [openAssignNewPlan]);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    const planData = {
+      student: openAssignNewPlan?.student,
+      plan: plan?.planId,
+      // Immediate: "",
+    };
+    const AssignPlan = async () => {
+      const res = await axios.post("/plan/assign", planData);
+      toast.success(res?.data?.message);
+      setOpenAssignNewPlan({
+        state: false,
+        student: null,
+      });
+      reset();
+    };
+    AssignPlan();
+  };
+  return (
+    <Modal
+      title="Assign New Plan"
+      visible={openAssignNewPlan?.state}
+      onClose={() => {
+        setOpenAssignNewPlan({
+          state: false,
+          student: null,
+        });
+        reset();
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-2"
+          label="Current Plan"
+          placeholder="Free"
+          register={register}
+          name="plan"
+          isReadOnly
+        />
+        <Select
+          label="Choose Plan *"
+          className="mb-2"
+          items={plans}
+          value={plan}
+          onChange={setPlan}
+        />
+        <div className="flex items-center gap-x-4 my-4">
+          <button
+            onClick={() => setPlanActive("immediate")}
+            type="button"
+            className="flex items-center gap-x-2 text-xs font-bold"
+          >
+            {planActive === "immediate" ? (
+              <RiRadioButtonFill className="text-xl text-[#98E9AB]" />
+            ) : (
+              <CgRadioCheck className="text-xl text-black dark:text-white" />
+            )}
+            Immediate Assign
+          </button>
+          <button
+            onClick={() => setPlanActive("after")}
+            type="button"
+            className="flex items-center gap-x-2 text-xs font-bold"
+          >
+            {planActive === "after" ? (
+              <RiRadioButtonFill className="text-xl text-[#98E9AB]" />
+            ) : (
+              <CgRadioCheck className="text-xl text-black dark:text-white" />
+            )}
+            Start After Current Plan End
+          </button>
+        </div>
+        <button className="bg-primary py-3 text-base font-bold w-full">
+          Update Plan
         </button>
       </form>
     </Modal>
