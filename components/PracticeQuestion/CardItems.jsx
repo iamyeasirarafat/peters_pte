@@ -236,7 +236,7 @@ const CardItems = () => {
         </div>
       </div>
       <div>
-        <h2 className="text-lg font-bold mb-3 mt-5">Speaking Test</h2>
+        <h2 className="text-lg font-bold mb-3 mt-5">Listening Test</h2>
         <div className="grid grid-cols-3 gap-5">
           {Speaking2?.map((data, i) => (
             <Card

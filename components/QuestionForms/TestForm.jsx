@@ -1,14 +1,26 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const QuestionForm = () => {
   const [text, setText] = useState("");
+  const [modifiedString, setModifiedString] = useState("");
+
+  useEffect(() => {
+    setModifiedString(text.replace(/<button[^>]*>(.*?)<\/button>/g, "___"));
+  }, [text]);
+
   const [options, setOptions] = useState([]);
-  console.log(options);
   const contentEditableRef = useRef(null);
-  const [buttonCounter, setButtonCounter] = useState(65); // ASCII code for 'A'
+  const [buttonCounter, setButtonCounter] = useState(65);
 
   const handleButtonClick = () => {
-    if (contentEditableRef.current) {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+
+    // Check if the range is within the contentEditable div
+    if (
+      contentEditableRef.current &&
+      contentEditableRef.current.contains(range.commonAncestorContainer)
+    ) {
       const buttonText = String.fromCharCode(buttonCounter);
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
@@ -17,8 +29,6 @@ const QuestionForm = () => {
       buttonElement.contentEditable = false;
 
       // Insert the button element at the current caret position
-      const selection = window.getSelection();
-      const range = selection.getRangeAt(0);
       range.deleteContents();
       range.insertNode(buttonElement);
 
@@ -68,6 +78,7 @@ const QuestionForm = () => {
       <button className="px-3 py-2 bg-orange-500" onClick={handleButtonClick}>
         +
       </button>
+      <h2>{modifiedString}jfowjfoiwejo</h2>
     </>
   );
 };

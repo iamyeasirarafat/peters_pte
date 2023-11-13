@@ -48,17 +48,22 @@ const FillTheBlanks = () => {
   const [buttonCounter, setButtonCounter] = useState(65); // ASCII code for 'A'
 
   const handleButtonClick = () => {
-    if (contentEditableRef.current) {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+
+    // Check if the range is within the contentEditable div
+    if (
+      contentEditableRef.current &&
+      contentEditableRef.current.contains(range.commonAncestorContainer)
+    ) {
       const buttonText = String.fromCharCode(buttonCounter);
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
       buttonElement.innerHTML = `<b>${buttonText}</b>`;
-      buttonElement.className = "px-4 bg-orange-400 mx-3";
+      buttonElement.className = "px-4 bg-orange-500 mx-3";
       buttonElement.contentEditable = false;
 
       // Insert the button element at the current caret position
-      const selection = window.getSelection();
-      const range = selection.getRangeAt(0);
       range.deleteContents();
       range.insertNode(buttonElement);
 
@@ -179,7 +184,7 @@ const FillTheBlanks = () => {
             Question Paragraph
           </label>
           <div
-            className="w-full h-32 border p-5"
+            className="w-full h-32 border p-5 overflow-y-scroll overflow-x-hidden"
             ref={contentEditableRef}
             contentEditable="true"
             dangerouslySetInnerHTML={{ __html: text }}
