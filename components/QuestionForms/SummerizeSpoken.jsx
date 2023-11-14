@@ -24,7 +24,7 @@ const SummerizeSpoken = () => {
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
         console.log(formData);
-        // const response = await axios.post("/repeat_sentence", formData, config);
+        // const response = await axios.post("/url", formData, config);
         // toast.success("Create question successfully");
         // if (response?.data) {
         //   router.back();

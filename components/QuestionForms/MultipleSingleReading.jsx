@@ -1,5 +1,6 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
+import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ const MultipleSingleReading = () => {
   const router = useRouter();
   const [optionNumber, setOptionNumber] = useState(4);
   const [selectedOptions, setSelectedOptions] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -62,6 +64,7 @@ const MultipleSingleReading = () => {
     e.preventDefault();
     console.log("reading62", formData);
     try {
+      setLoading(true);
       const response = await axios.post("/multi_choice/reading", formData);
       toast.success("Create question successfully");
       if (response?.data) {
@@ -70,6 +73,8 @@ const MultipleSingleReading = () => {
     } catch (error) {
       toast.error("something went wrong");
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -194,12 +199,16 @@ const MultipleSingleReading = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

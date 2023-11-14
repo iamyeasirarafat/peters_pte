@@ -1,5 +1,6 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
+import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -11,11 +12,12 @@ const Dictation = () => {
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit, setError, formState } = useForm();
   const onsubmit = async (data) => {
     if (audio) {
       try {
+        setLoading(true);
         const formData = new FormData();
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
@@ -25,7 +27,7 @@ const Dictation = () => {
         const config = { headers: { "content-type": "multipart/form-data" } };
 
         console.log(formData);
-        // const response = await axios.post("/retell_sentence", formData, config);
+        // const response = await axios.post("/url ", formData, config);
         // toast.success("Create question successfully");
         // if (response?.data) {
         //   router.back();
@@ -33,6 +35,8 @@ const Dictation = () => {
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide data successfully!");
@@ -138,7 +142,7 @@ const Dictation = () => {
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
@@ -150,12 +154,16 @@ const Dictation = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

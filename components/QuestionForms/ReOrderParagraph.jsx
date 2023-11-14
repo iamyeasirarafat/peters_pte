@@ -1,4 +1,5 @@
 import Counter from "@/components/Counter";
+import LoadingButton from "@/components/LoadingButton";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -17,6 +18,7 @@ const ReOrderParagraph = () => {
     answer_sequence: [],
   });
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [optionNumber, setOptionNumber] = useState(4);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
@@ -54,6 +56,7 @@ const ReOrderParagraph = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await axios.post("reorder_paragraph", formData);
       toast.success("Create question successfully");
       if (response?.data) {
@@ -62,6 +65,8 @@ const ReOrderParagraph = () => {
     } catch (error) {
       toast.error("something went wrong");
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -198,12 +203,16 @@ const ReOrderParagraph = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

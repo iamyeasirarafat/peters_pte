@@ -6,16 +6,18 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import LoadingButton from "@/components/LoadingButton";
 const RepeatSentence = () => {
   const router = useRouter();
   const [appeared, setAppeared] = useState(0);
   const [imageSrc, setImageSrc] = useState(null);
   const [image, setImage] = useState(null);
   const { register, handleSubmit } = useForm();
-
+  const [loading, setLoading] = useState(false);
   const onSubmit = async (data) => {
     if (image) {
       try {
+        setLoading(true);
         const formData = new FormData();
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
@@ -31,6 +33,8 @@ const RepeatSentence = () => {
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide data successfully!");
@@ -135,7 +139,7 @@ const RepeatSentence = () => {
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
@@ -147,12 +151,16 @@ const RepeatSentence = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

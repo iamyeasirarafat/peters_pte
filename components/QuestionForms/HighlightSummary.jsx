@@ -1,4 +1,5 @@
 import Counter from "@/components/Counter";
+import LoadingButton from "@/components/LoadingButton";
 import Icon from "@/components/Icon";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -8,6 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 const HighlightSummary = () => {
   const [optionNumber, setOptionNumber] = useState(4);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
@@ -89,8 +91,8 @@ const HighlightSummary = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData?.audio) {
-      console.log(formData.options);
       try {
+        setLoading(true);
         const formDatas = new FormData();
         formDatas.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         formDatas.append("title", formData?.title);
@@ -116,6 +118,8 @@ const HighlightSummary = () => {
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide dat successfuly!");
@@ -269,12 +273,16 @@ const HighlightSummary = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

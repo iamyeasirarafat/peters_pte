@@ -1,5 +1,6 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
+import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 const MultipleChoiceReading = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -110,6 +112,7 @@ const MultipleChoiceReading = () => {
       const optionsJson = JSON.stringify(formData?.options);
       const rightOptionsJson = JSON.stringify(formData?.right_options);
       try {
+        setLoading(true);
         const newForm = new FormData();
         newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
@@ -130,6 +133,8 @@ const MultipleChoiceReading = () => {
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide dat successfuly!");
@@ -282,12 +287,16 @@ const MultipleChoiceReading = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

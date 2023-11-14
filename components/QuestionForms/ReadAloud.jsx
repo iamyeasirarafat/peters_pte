@@ -1,10 +1,12 @@
 import Counter from "@/components/Counter";
+import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
 const ReadAloud = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -22,6 +24,7 @@ const ReadAloud = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await axios.post("/practice/read_aloud", formData);
       toast.success("Create question successfully");
       if (response?.data) {
@@ -30,6 +33,8 @@ const ReadAloud = () => {
     } catch (error) {
       toast.error("something went wrong");
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,12 +93,16 @@ const ReadAloud = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

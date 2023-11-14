@@ -1,10 +1,12 @@
 import Counter from "@/components/Counter";
+import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
 const EssayQuestion = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     question: "",
@@ -24,6 +26,7 @@ const EssayQuestion = () => {
     e.preventDefault();
     console.log(formData);
     try {
+      setLoading(true);
       const response = await axios.post("/write_easy", formData);
       toast.success("Create essay question successfully");
       if (response?.data) {
@@ -32,6 +35,8 @@ const EssayQuestion = () => {
     } catch (error) {
       toast.error(error?.message);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,12 +106,16 @@ const EssayQuestion = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

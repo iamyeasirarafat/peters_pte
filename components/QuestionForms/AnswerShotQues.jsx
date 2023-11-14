@@ -6,16 +6,19 @@ import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import LoadingButton from "@/components/LoadingButton";
 const AnswerShotQues = () => {
   const router = useRouter();
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, setError, formState } = useForm();
   const onsubmit = async (data) => {
     if (audio) {
       try {
+        setLoading(true);
         const formData = new FormData();
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
@@ -31,6 +34,8 @@ const AnswerShotQues = () => {
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide data successfully!");
@@ -136,7 +141,7 @@ const AnswerShotQues = () => {
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
@@ -148,12 +153,16 @@ const AnswerShotQues = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

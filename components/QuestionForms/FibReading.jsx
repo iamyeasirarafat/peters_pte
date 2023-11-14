@@ -1,9 +1,11 @@
 import Counter from "@/components/Counter";
+import LoadingButton from "@/components/LoadingButton";
 import { useState } from "react";
 import Icon from "@/components/Icon";
 import { useRef } from "react";
 import { useEffect } from "react";
 const FibReading = () => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     paragraph: "",
@@ -209,12 +211,16 @@ const FibReading = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );
