@@ -60,7 +60,7 @@ const FillTheBlanks = () => {
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
       buttonElement.innerHTML = `<b>${buttonText}</b>`;
-      buttonElement.className = "px-4 bg-orange-500 mx-3";
+      buttonElement.className = "px-4 bg-orange-400 my-3 mx-3";
       buttonElement.contentEditable = false;
 
       // Insert the button element at the current caret position
@@ -189,6 +189,7 @@ const FillTheBlanks = () => {
             contentEditable="true"
             dangerouslySetInnerHTML={{ __html: text }}
             placeholder="Type your text here..."
+            id="paragraph"
           />
         </div>
 
