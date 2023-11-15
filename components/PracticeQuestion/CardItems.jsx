@@ -192,7 +192,7 @@ const CardItems = () => {
     <div>
       <div>
         <h2 className="text-lg font-bold mb-3">Speaking Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="sm:grid-cols-1 grid grid-cols-3 gap-5 md:grid-cols-2">
           {Speaking?.map((data, i) => (
             <Card
               key={i}
@@ -207,7 +207,7 @@ const CardItems = () => {
       </div>
       <div>
         <h2 className="text-lg font-bold mb-3 mt-5">Writing Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="sm:grid-cols-1 grid grid-cols-3 gap-5 md:grid-cols-2">
           {Writing?.map((data, i) => (
             <Card
               key={i}
@@ -222,7 +222,7 @@ const CardItems = () => {
       </div>
       <div>
         <h2 className="text-lg font-bold mb-3 mt-5">Reading Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="sm:grid-cols-1 grid grid-cols-3 gap-5 md:grid-cols-2">
           {reading?.map((data, i) => (
             <Card
               key={i}
@@ -237,7 +237,7 @@ const CardItems = () => {
       </div>
       <div>
         <h2 className="text-lg font-bold mb-3 mt-5">Listening Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="sm:grid-cols-1 grid grid-cols-3 gap-5 md:grid-cols-2">
           {Speaking2?.map((data, i) => (
             <Card
               key={i}
@@ -252,7 +252,7 @@ const CardItems = () => {
       </div>
       <div>
         <h2 className="text-lg font-bold mb-3 mt-5">Mini Game</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="sm:grid-cols-1 grid grid-cols-3 gap-5 md:grid-cols-2">
           {MiniGame?.map((data, i) => (
             <Card
               key={i}
