@@ -1,6 +1,5 @@
 import Glance from "@/components/Glance";
 import Layout from "@/components/Layout";
-// import Students from "@/components/Products";
 import TablePagination from "@/components/TablePagination";
 import { useEffect, useState } from "react";
 import axios from "axios";

@@ -41,7 +41,7 @@ function StudyMaterial() {
       </div>
       {/* file */}
       <div className={`${studyMaterial?.length > 0 ? "space-y-2" : ""}`}>
-        {studyMaterial?.map((material, i) => (
+        {studyMaterial?.results?.map((material, i) => (
           <StudyFile key={material?.id} data={material} />
         ))}
       </div>

@@ -18,7 +18,7 @@ function Template() {
       <p className="text-lg font-extrabold mb-2">Template File</p>
       {/* file */}
       <div className={`${templates?.length > 0 ? "space-y-2" : ""}`}>
-        {templates?.map((item, i) => (
+        {templates?.results?.map((item, i) => (
           <StudyFile key={item?.id} data={item} />
         ))}
       </div>
