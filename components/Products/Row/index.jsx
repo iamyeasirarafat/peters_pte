@@ -1,6 +1,7 @@
 import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
+import { formatDateTime } from "@/utils/formatDateTime";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,22 +12,29 @@ const Row = ({ item }) => {
     <tr className="">
       <td className="td-custom flex items-center gap-x-3">
         <Checkbox value={value} onChange={() => setValue(!value)} />
-        <div className="flex items-center gap-x-2">
-          <Image
-            className="w-10 h-10 rounded-full"
-            src={item.image}
-            width={42}
-            height={42}
-            alt=""
-          />
-          <p className="text-sm font-semibold">{item?.name}</p>
-        </div>
+        <Link
+          className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
+          href={`/organization/student-details?id=${item.id}`}
+        >
+          <div className="w-11 h-11  mr-3 ">
+            <Image
+              className="w-full h-full  rounded-full"
+              src={item.picture || "/images/img-2.jpg"}
+              width={1000}
+              height={1000}
+              alt=""
+            />
+          </div>
+          {item.full_name}
+        </Link>
       </td>
       <td className="td-custom">
-        <div className="label-stroke min-w-[7.25rem]">{item.accountPlan}</div>
+        <div className="label-stroke border min-w-[7.25rem]">
+          {item.premium ? "Premium" : "Free"}
+        </div>
       </td>
-      <td className="td-custom">{item.userId}</td>
-      <td className="td-custom">{item.lastLoggedIn}</td>
+      <td className="td-custom">{item?.profile[0]?.userid}</td>
+      <td className="td-custom">{formatDateTime(item.last_login, "date")}</td>
       <td className="td-custom">
         <div
           className={`border ${
@@ -43,7 +51,7 @@ const Row = ({ item }) => {
         </div>
       </td>
       <td className="td-custom flex items-center gap-x-2">
-        {item.group}{" "}
+        {item?.profile[0]?.group?.name}
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>

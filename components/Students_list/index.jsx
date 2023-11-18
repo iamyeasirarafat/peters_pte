@@ -12,7 +12,7 @@ const Students = ({ items, setStatus, admin }) => {
 
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black w-full">
-      {items.map((product, i) => (
+      {items?.map((product, i) => (
         <Item item={product} key={i} />
       ))}
     </div>
@@ -46,7 +46,7 @@ const Students = ({ items, setStatus, admin }) => {
         </tr>
       </thead>
       <tbody>
-        {items.map((product, i) => {
+        {items?.map((product, i) => {
           return (
             <StudentRow
               admin={admin}

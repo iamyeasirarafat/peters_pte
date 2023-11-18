@@ -171,6 +171,15 @@ const StudentDetailsRight = ({ data }) => {
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+
+  const [examDate, setExamDate] = useState("");
+  useEffect(() => {
+    const getExamDate = async () => {
+      const res = await axios.get(`/exam_countdown`);
+      console.log(res);
+    };
+    // getExamDate();
+  }, []);
   return (
     <div>
       {/* Student Progress & Performance */}
@@ -190,18 +199,18 @@ const StudentDetailsRight = ({ data }) => {
       {/* Exam Count Down */}
       <div className="flex items-center justify-between mt-2.5">
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <p className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
+          <button className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
             Exam Count Down
-          </p>
+          </button>
           <p className="text-xl font-medium text-gray dark:text-white">
             20d 03h 03m 52s
           </p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <p className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
+          <button className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
             Target Score
-          </p>
+          </button>
           <p className="text-3xl font-medium text-gray dark:text-white">79+</p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>

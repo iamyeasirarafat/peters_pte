@@ -13,8 +13,8 @@ const Students = ({ items, student }) => {
 
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black w-full">
-      {items.map((product, i) => (
-        <Item item={product} key={i} />
+      {items?.map((item, i) => (
+        <Item item={item} key={i} />
       ))}
     </div>
   ) : (
@@ -42,11 +42,11 @@ const Students = ({ items, student }) => {
         </tr>
       </thead>
       <tbody>
-        {items.map((product, i) => {
+        {items?.map((item, i) => {
           if (student) {
-            return <StudentRow item={product} key={i} />;
+            return <StudentRow item={item} key={i} />;
           } else {
-            return <Row item={product} key={i} />;
+            return <Row item={item} key={i} />;
           }
         })}
       </tbody>
