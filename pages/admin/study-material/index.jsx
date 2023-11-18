@@ -17,7 +17,6 @@ const Index = () => {
 
   const countStudyMaterial = (category) =>
     studyMaterial?.filter((item) => item?.category === category) || [];
-
   const prediction = countStudyMaterial("prediction");
   const template = countStudyMaterial("template");
   const material = countStudyMaterial("study_material");

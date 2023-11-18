@@ -69,11 +69,7 @@ const EmptyPage = ({ setStatus }) => {
   );
 };
 
-
-
-
 export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
-
   const plans = [
     {
       id: "2",
@@ -81,34 +77,35 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
     },
   ];
   const [plan, setPlan] = useState(plans[0]);
-  const [groups, setGroups] = useState([])
+  const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState();
-  const [orgs, setOrgs] = useState([])
+  const [orgs, setOrgs] = useState([]);
   const [org, setOrg] = useState();
-  const [groupModal, setGroupModal] = useState(false)
-  const [refetchGroup, setRefetchGroup] = useState(1)
-  console.log(org)
+  const [groupModal, setGroupModal] = useState(false);
+  const [refetchGroup, setRefetchGroup] = useState(1);
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios(org.id + "/groups")
-      setGroups(res.data)
-      setGroup(res.data[0])
-    }
-    org && fetchGroup()
-  }, [org, refetchGroup])
+      const res = await axios(org.id + "/groups");
+      setGroups(res.data);
+      setGroup(res.data[0]);
+    };
+    org && fetchGroup();
+  }, [org, refetchGroup]);
 
   //get Organizations
   useEffect(() => {
     const fetchOrgs = async () => {
-      const res = await axios("/organizations")
-      let formattedOrgs = []
-      await res.data.forEach(item => formattedOrgs.push({ id: item.id, name: item.full_name }));
-      setOrgs(formattedOrgs)
-      setOrg(formattedOrgs[0])
-    }
-    fetchOrgs()
-  }, [])
+      const res = await axios("/organizations");
+      let formattedOrgs = [];
+      await res.data.forEach((item) =>
+        formattedOrgs.push({ id: item.id, name: item.full_name })
+      );
+      setOrgs(formattedOrgs);
+      setOrg(formattedOrgs[0]);
+    };
+    fetchOrgs();
+  }, []);
   const {
     register,
     handleSubmit,
@@ -122,7 +119,7 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
       ...data,
       group: group.id,
       plan: plan.id,
-      organization: org.id
+      organization: org.id,
     };
     try {
       await axios.post("/student/add", submitData);
@@ -205,8 +202,6 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
 
         <button className="btn-purple  w-full">Add Student</button>
       </form>
-
     </Modal>
   );
 };
-

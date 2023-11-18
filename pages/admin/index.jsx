@@ -1,7 +1,10 @@
 import AdminLayout from "@/components/AdminLayout";
 import Glance from "@/components/Glance";
-import Students from "@/components/Products";
+import Students from "@/components/Students_list";
 import TablePagination from "@/components/TablePagination";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
 const studentsList = [
   {
     name: "Eshak khan",
@@ -50,6 +53,17 @@ const studentsList = [
   },
 ];
 const Index = () => {
+  const [students, setStudents] = useState({});
+  const [status, setStatus] = useState(true);
+
+  useEffect(() => {
+    // get students
+    const getStudents = async () => {
+      const res = await axios.get(`student/recentjoined`);
+      setStudents(res?.data);
+    };
+    getStudents();
+  }, [status]);
   return (
     <AdminLayout title="Dashboard">
       <div className="">
@@ -58,7 +72,7 @@ const Index = () => {
       </div>
       <div className="mt-10">
         <p className="text-lg font-extrabold mb-2">Recently Joined</p>
-        <Students student={false} items={studentsList} />
+        <Students setStatus={setStatus} items={students?.results} />
         <TablePagination />
       </div>
     </AdminLayout>

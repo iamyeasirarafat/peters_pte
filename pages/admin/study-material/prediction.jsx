@@ -64,19 +64,25 @@ export const PredictionList = ({ data }) => {
   const [value, setValue] = useState(false);
   const [openItemId, setOpenItemId] = useState(null);
   return (
-    <div className="bg-white dark:bg-black w-full">
-      <div className="flex items-center justify-between p-3">
-        <div className="w-full flex items-center gap-x-2">
-          <Checkbox value={value} onChange={() => setValue(!value)} />
-          <Sorting title="File Name" />
-        </div>
-        <div className="w-full flex items-center gap-x-6 justify-between">
-          <Sorting title="File Id" />
-          <Sorting title="Category" />
-          <Sorting title="Upload Date" />
-        </div>
-      </div>
-      <div>
+    <table className="bg-white dark:bg-black w-full">
+      <thead>
+        <tr>
+          <th className="th-custom flex items-center gap-x-4">
+            <Checkbox value={value} onChange={() => setValue(!value)} />
+            <Sorting title="File Name" />
+          </th>
+          <th className="th-custom text-center">
+            <Sorting title="File Id" />
+          </th>
+          <th className="th-custom text-center">
+            <Sorting title="Category" />
+          </th>
+          <th className="th-custom text-end">
+            <Sorting title="Upload Date" />
+          </th>
+        </tr>
+      </thead>
+      <tbody>
         {data?.map((item, i) => (
           <PredictionListRow
             key={item?.id}
@@ -85,41 +91,42 @@ export const PredictionList = ({ data }) => {
             setOpenItemId={setOpenItemId}
           />
         ))}
-      </div>
-    </div>
+      </tbody>
+    </table>
   );
 };
+
 const PredictionListRow = ({ data, openItemId, setOpenItemId }) => {
   const [value, setValue] = useState(false);
   return (
-    <div className="flex items-center justify-between p-3">
-      <div className="w-full flex items-center gap-x-2">
+    <tr>
+      <td className="td-custom flex items-center gap-x-4">
         <Checkbox value={value} onChange={() => setValue(!value)} />
         <p className="text-sm font-bold">{data?.title}</p>
-      </div>
-      <div className="w-full flex items-center gap-x-6 justify-between">
-        <p className="text-sm font-bold">#{data?.id}</p>
-        <p className="text-xs font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
+      </td>
+      <td className="td-custom text-center">
+        <p className="text-sm">#{data?.id}</p>
+      </td>
+      <td className="td-custom text-center">
+        <p className="text-xs font-bold border border-black dark:border-white py-1 px-3 rounded-sm inline-block">
           {data?.premium ? "Premium" : "Free"}
         </p>
-        <div className="flex items-center gap-x-5">
-          <p className="text-sm font-bold">
-            {formatDateTime(data?.uploaded_at, "date")}
-          </p>
-          <div className="relative">
-            <button
-              onClick={() =>
-                setOpenItemId(data?.id === openItemId ? null : data?.id)
-              }
-              className="btn-transparent-dark btn-small btn-square"
-            >
-              <Icon name="dots" />
-            </button>
-            {data?.id === openItemId && <StudyMore id={data?.id} />}
-          </div>
+      </td>
+      <td className="td-custom flex items-center justify-end gap-x-3">
+        <p className="text-sm"> {formatDateTime(data?.uploaded_at, "date")}</p>
+        <div className="relative">
+          <button
+            onClick={() =>
+              setOpenItemId(data?.id === openItemId ? null : data?.id)
+            }
+            className="btn-transparent-dark btn-small btn-square"
+          >
+            <Icon name="dots" />
+          </button>
+          {data?.id === openItemId && <StudyMore id={data?.id} />}
         </div>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };
 

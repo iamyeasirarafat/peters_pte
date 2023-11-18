@@ -17,8 +17,8 @@ function Prediction() {
     <Layout title="Prediction">
       <p className="text-lg font-extrabold mb-2">Prediction File</p>
       {/* file */}
-      <div className={`${prediction.length > 0 ? "space-y-2" : ""}`}>
-        {prediction?.map((item, i) => (
+      <div className={`${prediction?.length > 0 ? "space-y-2" : ""}`}>
+        {prediction?.results?.map((item, i) => (
           <StudyFile key={item.id} data={item} />
         ))}
       </div>
