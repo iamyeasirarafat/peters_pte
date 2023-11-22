@@ -18,7 +18,12 @@ function Index() {
   return (
     <Layout title={mocktest_List?.replace(/_/g, " ")} back>
       <div>
-        <button className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary">
+        <button
+          onClick={() =>
+            router.push(`/admin/mocktest/add-mocktest/${mocktest_List}`)
+          }
+          className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary"
+        >
           <AiFillPlusCircle />
           Create New Question
         </button>
