@@ -60,7 +60,7 @@ const FillTheBlanks = () => {
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
       buttonElement.innerHTML = `<b>${buttonText}</b>`;
-      buttonElement.className = "px-4 bg-orange-400 my-3 mx-3";
+      buttonElement.className = "px-4 bg-orange-400 mb-3 mx-3";
       buttonElement.contentEditable = false;
 
       // Insert the button element at the current caret position
@@ -193,7 +193,7 @@ const FillTheBlanks = () => {
           />
         </div>
 
-        <div className="grid grid-cols-4 gap-2 my-5">
+        <div className="grid grid-cols-4 gap-2 my-5 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {options.map((option) => (
             <div key={option.id}>
               <h3 className="text-sm font-bold mb-2">Correct {option?.id}</h3>
@@ -215,7 +215,7 @@ const FillTheBlanks = () => {
             value={formData.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
