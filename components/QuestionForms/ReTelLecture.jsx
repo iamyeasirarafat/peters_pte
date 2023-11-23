@@ -14,10 +14,11 @@ const ReTelLecture = () => {
   const [audio, setAudio] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, setError, formState } = useForm();
+  const { register, handleSubmit } = useForm();
   const onsubmit = async (data) => {
     if (audio) {
       try {
+        setLoading(true);
         const formData = new FormData();
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
@@ -33,6 +34,8 @@ const ReTelLecture = () => {
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide data successfully!");
@@ -138,7 +141,7 @@ const ReTelLecture = () => {
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2 bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"

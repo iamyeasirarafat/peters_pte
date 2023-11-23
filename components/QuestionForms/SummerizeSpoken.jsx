@@ -137,7 +137,7 @@ const SummerizeSpoken = () => {
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2 bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"

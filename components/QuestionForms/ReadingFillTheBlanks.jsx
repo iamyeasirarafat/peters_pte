@@ -51,7 +51,7 @@ const ReadingFillTheBlanks = () => {
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
       buttonElement.innerHTML = `<b>${buttonText}</b>`;
-      buttonElement.className = "px-4 bg-orange-400 my-3 mx-3";
+      buttonElement.className = "px-4 bg-orange-400 mb-3 mx-3";
       buttonElement.contentEditable = false;
 
       // Insert the button element at the current caret position
@@ -150,7 +150,7 @@ const ReadingFillTheBlanks = () => {
               <h2 className="font-bold my-2 text-sm">
                 Answer blank {option?.id}
               </h2>
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid grid-cols-4 gap-6 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
                 {optionss?.map((option, i) => (
                   <label
                     key={i}
@@ -194,7 +194,7 @@ const ReadingFillTheBlanks = () => {
             value={formData.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
