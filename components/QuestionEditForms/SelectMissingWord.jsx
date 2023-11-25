@@ -1,14 +1,16 @@
-import Counter from "@/components/Counter";
+/* eslint-disable react-hooks/exhaustive-deps */
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
-import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
-const MultipleChoiceReading = () => {
+const SelectMissingWord = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
+  console.log(122, itemObj);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -17,16 +19,28 @@ const MultipleChoiceReading = () => {
     appeared: 0,
     prediction: false,
     audio: null,
+    single: true,
   });
 
   // array based on counter number
   const [optionNumber, setOptionNumber] = useState(4);
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [audioName, setAudioName] = useState(null);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
       value: "",
     }))
   );
+
+  useEffect(() => {
+    if (item) {
+      setFormData(itemObj);
+      setOptions(itemObj?.options);
+      setOptionNumber(itemObj?.options.length);
+      setAudioSrc(itemObj?.audio);
+    }
+  }, [item]);
   useEffect(() => {
     setOptions((prevOptions) => {
       return Array.from({ length: optionNumber }, (_, index) => {
@@ -56,13 +70,12 @@ const MultipleChoiceReading = () => {
 
   // update right_options and options
   useEffect(() => {
+    const rightOption =
+      options.find((opt) => opt.index === selectedOptions)?.value || "";
     setFormData((prevFormData) => ({
       ...prevFormData,
       options: options,
-      right_options: selectedOptions.map((index) => {
-        const option = options.find((opt) => opt.index === index);
-        return option ? option.value : "";
-      }),
+      right_options: [rightOption],
     }));
   }, [options, selectedOptions]);
   const handleInputChange = (e) => {
@@ -79,8 +92,6 @@ const MultipleChoiceReading = () => {
     setOptions(updatedData);
   };
 
-  const [audioSrc, setAudioSrc] = useState(null);
-  const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -107,12 +118,10 @@ const MultipleChoiceReading = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData?.right_options);
     if (formData?.audio) {
       const optionsJson = JSON.stringify(formData?.options);
       const rightOptionsJson = JSON.stringify(formData?.right_options);
       try {
-        setLoading(true);
         const newForm = new FormData();
         newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
@@ -120,24 +129,24 @@ const MultipleChoiceReading = () => {
         newForm.append("right_options", rightOptionsJson);
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
+        newForm.append("single", true);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post("/multi_choice", newForm, config);
-        toast.success("Create question successfully");
-        if (data) {
-          router.back();
-        }
+        console.log(formData);
+        // const { data } = await axios.post("/multi_choice", newForm, config);
+        // toast.success("Create question successfully");
+        // if (data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
-      } finally {
-        setLoading(false);
       }
     } else {
-      toast.error("You need provide dat successfuly!");
+      toast.error("You need provide data successfuly!");
     }
   };
 
@@ -162,7 +171,7 @@ const MultipleChoiceReading = () => {
         </div>
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
-          {!audioName && !audioSrc ? (
+          {!audioSrc ? (
             <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
@@ -202,7 +211,7 @@ const MultipleChoiceReading = () => {
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Option Number"
             value={optionNumber}
@@ -219,19 +228,19 @@ const MultipleChoiceReading = () => {
                       className="absolute top-0 left-0 opacity-0 invisible"
                       type="checkbox"
                       value={option.index}
-                      onChange={() => handleCheckboxChange(option.index)}
-                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
+                      onChange={() => setSelectedOptions(option?.index)}
+                      checked={selectedOptions == option.index}
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.index)
+                        selectedOptions == option.index
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
                       }`}
                     >
                       <Icon
                         className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.index)
+                          selectedOptions == option.index
                             ? "opacity-100"
                             : "opacity-0"
                         }`}
@@ -268,7 +277,7 @@ const MultipleChoiceReading = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}
@@ -287,19 +296,15 @@ const MultipleChoiceReading = () => {
             </label>
           </div>
         </div>
-        {!loading ? (
-          <button
-            type="submit"
-            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-          >
-            Create Question
-          </button>
-        ) : (
-          <LoadingButton />
-        )}
+        <button
+          type="submit"
+          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+        >
+          Update Questions
+        </button>
       </form>
     </div>
   );
 };
 
-export default MultipleChoiceReading;
+export default SelectMissingWord;

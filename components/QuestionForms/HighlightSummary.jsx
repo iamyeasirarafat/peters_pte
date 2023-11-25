@@ -1,68 +1,38 @@
 import Counter from "@/components/Counter";
-import Icon from "@/components/Icon";
 import LoadingButton from "@/components/LoadingButton";
+import Icon from "@/components/Icon";
+import { useEffect } from "react";
+import { useState } from "react";
+import AudioVisualizer from "../AudioVisualizer";
+import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import AudioVisualizer from "../AudioVisualizer";
-const MultipleChoiceReading = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    options: [],
-    right_options: [],
-    appeared: 0,
-    prediction: false,
-    audio: null,
-  });
-
-  // array based on counter number
+const HighlightSummary = () => {
   const [optionNumber, setOptionNumber] = useState(4);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
       value: "",
     }))
   );
-  useEffect(() => {
-    setOptions((prevOptions) => {
-      return Array.from({ length: optionNumber }, (_, index) => {
-        if (index < prevOptions.length) {
-          return prevOptions[index];
-        } else {
-          return {
-            index: String.fromCharCode(65 + index),
-            value: "",
-          };
-        }
-      });
-    });
-  }, [optionNumber]);
+  const [selectedOptions, setSelectedOptions] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    audio: null,
+    options: options,
+    right_option: "",
+    appeared: 0,
+    prediction: false,
+  });
 
-  // checkbox for selected option
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const handleCheckboxChange = (optionIndex) => {
-    if (selectedOptions.includes(optionIndex)) {
-      setSelectedOptions(
-        selectedOptions.filter((item) => item !== optionIndex)
-      );
-    } else {
-      setSelectedOptions([...selectedOptions, optionIndex]);
-    }
-  };
-
-  // update right_options and options
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       options: options,
-      right_options: selectedOptions.map((index) => {
-        const option = options.find((opt) => opt.index === index);
-        return option ? option.value : "";
-      }),
+      right_option:
+        options.find((opt) => opt.index === selectedOptions)?.value || "",
     }));
   }, [options, selectedOptions]);
   const handleInputChange = (e) => {
@@ -72,13 +42,6 @@ const MultipleChoiceReading = () => {
       [id]: type === "checkbox" ? checked : value,
     }));
   };
-
-  const handleTextAreaChange = (index, value) => {
-    const updatedData = [...options];
-    updatedData[index] = { ...updatedData[index], value };
-    setOptions(updatedData);
-  };
-
   const [audioSrc, setAudioSrc] = useState(null);
   const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
@@ -105,27 +68,49 @@ const MultipleChoiceReading = () => {
     setAudioName(null);
   };
 
+  useEffect(() => {
+    setOptions((prevOptions) => {
+      return Array.from({ length: optionNumber }, (_, index) => {
+        if (index < prevOptions.length) {
+          return prevOptions[index];
+        } else {
+          return {
+            index: String.fromCharCode(65 + index),
+            value: "",
+          };
+        }
+      });
+    });
+  }, [optionNumber]);
+  const handleTextAreaChange = (index, value) => {
+    const updatedData = [...options];
+    updatedData[index] = { ...updatedData[index], value };
+    setOptions(updatedData);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData?.right_options);
     if (formData?.audio) {
-      const optionsJson = JSON.stringify(formData?.options);
-      const rightOptionsJson = JSON.stringify(formData?.right_options);
       try {
         setLoading(true);
-        const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
-        newForm.append("title", formData?.title);
-        newForm.append("options", optionsJson);
-        newForm.append("right_options", rightOptionsJson);
-        newForm.append("appeared", formData?.appeared);
-        newForm.append("prediction", formData?.prediction);
+        const formDatas = new FormData();
+        formDatas.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        formDatas.append("title", formData?.title);
+        const optionsJson = JSON.stringify(formData?.options);
+        formDatas.append("options", optionsJson);
+        formDatas.append("right_option", formData?.right_option);
+        formDatas.append("appeared", formData?.appeared);
+        formDatas.append("prediction", formData?.prediction);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post("/multi_choice", newForm, config);
+        const { data } = await axios.post(
+          "/highlight_summary",
+          formDatas,
+          config
+        );
         toast.success("Create question successfully");
         if (data) {
           router.back();
@@ -160,6 +145,7 @@ const MultipleChoiceReading = () => {
             onChange={handleInputChange}
           />
         </div>
+
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audioName && !audioSrc ? (
@@ -219,19 +205,19 @@ const MultipleChoiceReading = () => {
                       className="absolute top-0 left-0 opacity-0 invisible"
                       type="checkbox"
                       value={option.index}
-                      onChange={() => handleCheckboxChange(option.index)}
-                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
+                      onChange={() => setSelectedOptions(option.index)}
+                      checked={selectedOptions == option.index} // Use 'in' operator to check if the key exists
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.index)
+                        selectedOptions == option.index
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
                       }`}
                     >
                       <Icon
                         className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.index)
+                          selectedOptions == option.index
                             ? "opacity-100"
                             : "opacity-0"
                         }`}
@@ -302,4 +288,4 @@ const MultipleChoiceReading = () => {
   );
 };
 
-export default MultipleChoiceReading;
+export default HighlightSummary;

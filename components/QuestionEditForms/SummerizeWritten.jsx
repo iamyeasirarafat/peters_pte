@@ -1,18 +1,22 @@
-import Counter from "@/components/Counter";
-import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-const ReadAloud = () => {
+import EditCounter from "./EditCounter";
+const SummerizeWritten = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     appeared: 0,
     prediction: false,
   });
+  useEffect(() => {
+    setFormData(itemObj);
+  }, [item]);
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -24,17 +28,14 @@ const ReadAloud = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      const response = await axios.post("/practice/read_aloud", formData);
-      toast.success("Create question successfully");
-      if (response?.data) {
-        router.back();
-      }
+      // const response = await axios.post("/summarize", formData);
+      // toast.success("Create summarize question successfully");
+      // if (response?.data) {
+      //   router.back();
+      // }
     } catch (error) {
-      toast.error("something went wrong");
+      toast.error(error?.message);
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -74,7 +75,7 @@ const ReadAloud = () => {
           />
         </div>
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}
@@ -93,19 +94,15 @@ const ReadAloud = () => {
             </label>
           </div>
         </div>
-        {!loading ? (
-          <button
-            type="submit"
-            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-          >
-            Create Question
-          </button>
-        ) : (
-          <LoadingButton />
-        )}
+        <button
+          type="submit"
+          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+        >
+          Update Questions
+        </button>
       </form>
     </div>
   );
 };
 
-export default ReadAloud;
+export default SummerizeWritten;

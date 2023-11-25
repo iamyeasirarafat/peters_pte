@@ -1,14 +1,12 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
-import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
-const MultipleChoiceReading = () => {
+const SelectMissingWord = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -17,6 +15,7 @@ const MultipleChoiceReading = () => {
     appeared: 0,
     prediction: false,
     audio: null,
+    single: true,
   });
 
   // array based on counter number
@@ -56,13 +55,12 @@ const MultipleChoiceReading = () => {
 
   // update right_options and options
   useEffect(() => {
+    const rightOption =
+      options.find((opt) => opt.index === selectedOptions)?.value || "";
     setFormData((prevFormData) => ({
       ...prevFormData,
       options: options,
-      right_options: selectedOptions.map((index) => {
-        const option = options.find((opt) => opt.index === index);
-        return option ? option.value : "";
-      }),
+      right_options: [rightOption],
     }));
   }, [options, selectedOptions]);
   const handleInputChange = (e) => {
@@ -112,7 +110,6 @@ const MultipleChoiceReading = () => {
       const optionsJson = JSON.stringify(formData?.options);
       const rightOptionsJson = JSON.stringify(formData?.right_options);
       try {
-        setLoading(true);
         const newForm = new FormData();
         newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
@@ -120,24 +117,24 @@ const MultipleChoiceReading = () => {
         newForm.append("right_options", rightOptionsJson);
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
+        newForm.append("single", true);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post("/multi_choice", newForm, config);
-        toast.success("Create question successfully");
-        if (data) {
-          router.back();
-        }
+        console.log(formData);
+        // const { data } = await axios.post("/url", newForm, config);
+        // toast.success("Create question successfully");
+        // if (data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
-      } finally {
-        setLoading(false);
       }
     } else {
-      toast.error("You need provide dat successfuly!");
+      toast.error("You need provide data successfuly!");
     }
   };
 
@@ -219,19 +216,19 @@ const MultipleChoiceReading = () => {
                       className="absolute top-0 left-0 opacity-0 invisible"
                       type="checkbox"
                       value={option.index}
-                      onChange={() => handleCheckboxChange(option.index)}
-                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
+                      onChange={() => setSelectedOptions(option?.index)}
+                      checked={selectedOptions == option.index}
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.index)
+                        selectedOptions == option.index
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
                       }`}
                     >
                       <Icon
                         className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.index)
+                          selectedOptions == option.index
                             ? "opacity-100"
                             : "opacity-0"
                         }`}
@@ -287,19 +284,15 @@ const MultipleChoiceReading = () => {
             </label>
           </div>
         </div>
-        {!loading ? (
-          <button
-            type="submit"
-            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-          >
-            Create Question
-          </button>
-        ) : (
-          <LoadingButton />
-        )}
+        <button
+          type="submit"
+          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+        >
+          Create Question
+        </button>
       </form>
     </div>
   );
 };
 
-export default MultipleChoiceReading;
+export default SelectMissingWord;

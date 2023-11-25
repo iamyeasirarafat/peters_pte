@@ -1,5 +1,4 @@
-import Counter from "@/components/Counter";
-import LoadingButton from "@/components/LoadingButton";
+import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -18,7 +17,8 @@ const ReOrderParagraph = () => {
     answer_sequence: [],
   });
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [optionNumber, setOptionNumber] = useState(4);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
@@ -26,6 +26,14 @@ const ReOrderParagraph = () => {
       value: "",
     }))
   );
+
+  useEffect(() => {
+    if (item) {
+      setFormData(itemObj);
+      setOptions(itemObj?.options);
+      setOptionNumber(itemObj?.options.length);
+    }
+  }, [item]);
   useEffect(() => {
     setOptions((prevOptions) => {
       return Array.from({ length: optionNumber }, (_, index) => {
@@ -56,17 +64,14 @@ const ReOrderParagraph = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      const response = await axios.post("reorder_paragraph", formData);
-      toast.success("Create question successfully");
-      if (response?.data) {
-        router.back();
-      }
+      // const response = await axios.post("reorder_paragraph", formData);
+      // toast.success("Create question successfully");
+      // if (response?.data) {
+      //   router.back();
+      // }
     } catch (error) {
       toast.error("something went wrong");
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
   useEffect(() => {
@@ -121,7 +126,7 @@ const ReOrderParagraph = () => {
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Option Number"
             value={optionNumber}
@@ -184,7 +189,7 @@ const ReOrderParagraph = () => {
             ))}
         </div>
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}
@@ -203,16 +208,12 @@ const ReOrderParagraph = () => {
             </label>
           </div>
         </div>
-        {!loading ? (
-          <button
-            type="submit"
-            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-          >
-            Create Question
-          </button>
-        ) : (
-          <LoadingButton />
-        )}
+        <button
+          type="submit"
+          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+        >
+          Update Questions
+        </button>
       </form>
     </div>
   );

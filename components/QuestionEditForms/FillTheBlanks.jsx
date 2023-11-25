@@ -1,67 +1,51 @@
 import Counter from "@/components/Counter";
-import LoadingButton from "@/components/LoadingButton";
 import Icon from "@/components/Icon";
-import axios from "axios";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
-const RepeatSentence = () => {
-  const router = useRouter();
-  const [appeared, setAppeared] = useState(0);
-  const [audioSrc, setAudioSrc] = useState(null);
-  const [audio, setAudio] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const { register, handleSubmit, setError, formState } = useForm();
-  const onsubmit = async (data) => {
-    if (audio) {
-      try {
-        setLoading(true);
-        const formData = new FormData();
-        formData.append("title", data?.title);
-        formData.append("reference_text", data?.reference_text);
-        formData.append("prediction", data?.prediction);
-        formData.append("audio", audio);
-        formData.append("appeared", appeared);
-        const config = { headers: { "content-type": "multipart/form-data" } };
-        const response = await axios.post("/repeat_sentence", formData, config);
-        toast.success("Create question successfully");
-        if (response?.data) {
-          router.back();
-        }
-      } catch (error) {
-        console.error("Error create question:", error);
-        toast.error("Something went wrong, try again later.");
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      toast.error("You need provide data successfully!");
-    }
+const FillTheBlanks = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    paragraph: "",
+    appeared: 0,
+    prediction: false,
+  });
+  const handleInputChange = (e) => {
+    const { id, type, value, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: type === "checkbox" ? checked : value,
+    }));
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setAudioSrc(URL.createObjectURL(file));
-      setAudio(file);
+      setAudioName(file?.name);
     } else {
       setAudioSrc(null);
-      setAudio(null);
+      setAudioName(null);
     }
   };
+
   const handleDeleteAudio = () => {
     setAudioSrc(null);
-    setAudio(null);
+    setAudioName(null);
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onsubmit)} encType="multipart/form-data">
+      <form onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
-            <label for="title" className="font-bold text-sm">
+            <label for="name" className="font-bold text-sm">
               Question Name
             </label>
             <h3 className="text-sm font-semibold">Question Id #785263891</h3>
@@ -69,15 +53,16 @@ const RepeatSentence = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="title"
+            id="name"
             type="text"
-            {...register("title", { required: "Title is required" })}
+            value={formData.name}
+            onChange={handleInputChange}
           />
         </div>
 
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
-          {!audio?.name && !audioSrc ? (
+          {!audioName && !audioSrc ? (
             <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
@@ -105,67 +90,106 @@ const RepeatSentence = () => {
                   name="pause"
                 />
                 <span class="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
-                  {audio?.name}
+                  {audioName}
                 </span>
               </div>
               <div className="w-full">
                 <AudioVisualizer selectedFile={audioSrc} />
-                <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
-                  <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
-                  Generate Reference Text
-                </button>
               </div>
             </div>
           )}
         </div>
-
-        <div className="flex flex-col gap-2 my-5">
-          <label for="reference_text" className="font-bold text-sm">
-            Reference Text
+        <Counter
+          className="bg-white w-full mt-4"
+          title="Blanks Number"
+          value={formData.appeared}
+          setValue={(value) => setFormData({ ...formData, appeared: value })}
+        />
+        <div className="flex flex-col gap-2 my-5 relative">
+          <label for="paragraph" className="font-bold text-sm">
+            Question Paragraph
           </label>
           <textarea
             rows={5}
             placeholder="Start Typing..."
             className="w-full border-none py-4 px-5 text-sm "
-            id="reference_text"
+            id="paragraph"
             type="text"
-            {...register("reference_text", {
-              required: "reference text is required",
-            })}
+            value={formData.paragraph}
+            onChange={handleInputChange}
           />
+          <div className="flex gap-5 absolute top-10 left-38">
+            <span className="px-4 border">A</span>
+            <span className="px-4 border">B</span>
+            <span className="px-4 border">C</span>
+            <span className="px-4 border">D</span>
+          </div>
         </div>
+
+        <div className="grid grid-cols-4 gap-2 my-5">
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct A</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct B</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct C</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold mb-2">Correct D</h3>
+            <input
+              type="text"
+              placeholder="write your text"
+              className="border-none py-4"
+            />
+          </div>
+        </div>
+
         <div className="flex justify-between gap-6">
           <Counter
             className="bg-white w-1/2"
             title="Appeared Times"
-            value={appeared}
-            setValue={setAppeared}
+            value={formData.appeared}
+            setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
           <div className="w-1/2 border bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
               className="text-green-500 focus-visible:outline-none"
-              {...register("prediction")}
+              checked={formData.prediction}
+              onChange={handleInputChange}
             />
             <label for="prediction" className="text-sm font-bold ml-2">
               Prediction
             </label>
           </div>
         </div>
-        {!loading ? (
-          <button
-            type="submit"
-            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-          >
-            Create Question
-          </button>
-        ) : (
-          <LoadingButton />
-        )}
+        <button
+          type="submit"
+          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+        >
+          Create Question
+        </button>
       </form>
     </div>
   );
 };
 
-export default RepeatSentence;
+export default FillTheBlanks;

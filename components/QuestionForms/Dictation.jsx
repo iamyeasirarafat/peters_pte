@@ -1,35 +1,37 @@
-/* eslint-disable @next/next/no-img-element */
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import LoadingButton from "@/components/LoadingButton";
-const RepeatSentence = () => {
+import axios from "axios";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import AudioVisualizer from "../AudioVisualizer";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+const Dictation = () => {
   const router = useRouter();
   const [appeared, setAppeared] = useState(0);
-  const [imageSrc, setImageSrc] = useState(null);
-  const [image, setImage] = useState(null);
-  const { register, handleSubmit } = useForm();
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [audio, setAudio] = useState(null);
   const [loading, setLoading] = useState(false);
-  const onSubmit = async (data) => {
-    if (image) {
+  const { register, handleSubmit, setError, formState } = useForm();
+  const onsubmit = async (data) => {
+    if (audio) {
       try {
         setLoading(true);
         const formData = new FormData();
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
         formData.append("prediction", data?.prediction);
-        formData.append("image", image);
+        formData.append("audio", audio);
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-        const response = await axios.post("/describe_image", formData, config);
-        toast.success("Create question successfully");
-        if (response?.data) {
-          router.back();
-        }
+
+        console.log(formData);
+        // const response = await axios.post("/url ", formData, config);
+        // toast.success("Create question successfully");
+        // if (response?.data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -40,24 +42,24 @@ const RepeatSentence = () => {
       toast.error("You need provide data successfully!");
     }
   };
-
-  const handleImageChange = (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImageSrc(URL.createObjectURL(file));
-      setImage(file);
+      setAudioSrc(URL.createObjectURL(file));
+      setAudio(file);
     } else {
-      setImageSrc(null);
-      setImage(null);
+      setAudioSrc(null);
+      setAudio(null);
     }
   };
-  const handleDeleteImage = () => {
-    setImageSrc(null);
-    setImage(null);
+  const handleDeleteAudio = () => {
+    setAudioSrc(null);
+    setAudio(null);
   };
+
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onsubmit)} encType="multipart/form-data">
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
             <label for="title" className="font-bold text-sm">
@@ -70,48 +72,49 @@ const RepeatSentence = () => {
             className="w-full border-none py-4 px-5 text-sm "
             id="title"
             type="text"
-            {...register("title", {
-              required: "Title is required",
-            })}
+            {...register("title", { required: "Title is required" })}
           />
         </div>
 
         <div>
-          <h4 className="text-sm mt-5 mb-2 font-semibold">question image</h4>
-          {!image?.name && !imageSrc ? (
-            <label className="border w-28 flex flex-col items-center px-4 py-6 cursor-pointer">
+          <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
+          {!audio?.name && !audioSrc ? (
+            <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
                 name="upload"
               />
-              <span className="mt-2 text-base leading-normal">Upload</span>
+              <span class="mt-2 text-base leading-normal">Upload</span>
               <input
                 type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageChange}
+                class="hidden"
+                accept="audio/*"
+                onChange={handleFileChange}
               />
             </label>
           ) : (
             <div className="flex gap-5">
-              <div className="border relative w-28 flex flex-col items-center cursor-pointer">
-                <div
-                  onClick={handleDeleteImage}
-                  className="absolute top-0 right-0"
-                >
+              <div class="border relative w-28 flex flex-col items-center  cursor-pointer">
+                <div onClick={handleDeleteAudio} class="absolute top-0 right-0">
                   <Icon
-                    className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                    class="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
                     name="cross"
                   />
                 </div>
-                <img
-                  src={imageSrc}
-                  alt={image?.name}
-                  className="mt-5 w-16 h-12 object-contain"
+                <Icon
+                  className="icon-20 mt-5 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                  name="pause"
                 />
-                <span className="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
-                  {image?.name}
+                <span class="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
+                  {audio?.name}
                 </span>
+              </div>
+              <div className="w-full">
+                <AudioVisualizer selectedFile={audioSrc} />
+                <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
+                  <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+                  Generate Reference Text
+                </button>
               </div>
             </div>
           )}
@@ -128,7 +131,7 @@ const RepeatSentence = () => {
             id="reference_text"
             type="text"
             {...register("reference_text", {
-              required: "reference_text is required",
+              required: "reference text is required",
             })}
           />
         </div>
@@ -166,4 +169,4 @@ const RepeatSentence = () => {
   );
 };
 
-export default RepeatSentence;
+export default Dictation;

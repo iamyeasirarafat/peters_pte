@@ -1,25 +1,24 @@
 import Counter from "@/components/Counter";
-import LoadingButton from "@/components/LoadingButton";
 import Icon from "@/components/Icon";
+import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-const ReOrderParagraph = () => {
+const MultipleSingleReading = () => {
+  const router = useRouter();
+  const [optionNumber, setOptionNumber] = useState(4);
+  const [selectedOptions, setSelectedOptions] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
-    paragraph: "",
+    content: "",
     options: [],
+    right_options: [],
     appeared: 0,
     prediction: false,
-    answer_sequence: [],
+    single: true,
   });
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [optionNumber, setOptionNumber] = useState(4);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
@@ -40,11 +39,15 @@ const ReOrderParagraph = () => {
       });
     });
   }, [optionNumber]);
-  const handleTextAreaChange = (index, value) => {
-    const updatedData = [...options];
-    updatedData[index] = { ...updatedData[index], value };
-    setOptions(updatedData);
-  };
+  useEffect(() => {
+    const rightOption =
+      options.find((opt) => opt.index === selectedOptions)?.value || "";
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      options: options,
+      right_options: [rightOption],
+    }));
+  }, [options, selectedOptions]);
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -52,12 +55,17 @@ const ReOrderParagraph = () => {
       [id]: type === "checkbox" ? checked : value,
     }));
   };
-
+  const handleTextAreaChange = (index, value) => {
+    const updatedData = [...options];
+    updatedData[index] = { ...updatedData[index], value };
+    setOptions(updatedData);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("reading62", formData);
     try {
       setLoading(true);
-      const response = await axios.post("reorder_paragraph", formData);
+      const response = await axios.post("/multi_choice/reading", formData);
       toast.success("Create question successfully");
       if (response?.data) {
         router.back();
@@ -68,21 +76,6 @@ const ReOrderParagraph = () => {
     } finally {
       setLoading(false);
     }
-  };
-  useEffect(() => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      options: options,
-      answer_sequence: options.map((op) => op?.index),
-    }));
-  }, [options]);
-  const onDragEnd = (result) => {
-    if (!result.destination) return; // dropped outside the list
-
-    const reorderedOptions = Array.from(options);
-    const [movedOption] = reorderedOptions.splice(result.source.index, 1);
-    reorderedOptions.splice(result.destination.index, 0, movedOption);
-    setOptions(reorderedOptions);
   };
 
   return (
@@ -105,16 +98,16 @@ const ReOrderParagraph = () => {
           />
         </div>
         <div className="flex flex-col gap-2 my-5">
-          <label for="paragraph" className="font-bold text-sm">
+          <label for="content" className="font-bold text-sm">
             Question Paragraph
           </label>
           <textarea
             rows={5}
             placeholder="Start Typing..."
             className="w-full border-none py-4 px-5 text-sm "
-            id="paragraph"
+            id="content"
             type="text"
-            value={formData.paragraph}
+            value={formData.content}
             onChange={handleInputChange}
           />
         </div>
@@ -128,61 +121,64 @@ const ReOrderParagraph = () => {
             setValue={(value) => setOptionNumber(value)}
           />
           <div className="w-1/2  bg-white flex items-center pl-4">
-            <div>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="options" direction="horizontal">
-                  {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className="flex justify-start gap-4"
+            <div className="grid grid-cols-4">
+              {options?.map((option, i) => (
+                <div key={i}>
+                  <label
+                    className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                  >
+                    <input
+                      className="absolute top-0 left-0 opacity-0 invisible"
+                      type="checkbox"
+                      value={option.index}
+                      onChange={() => setSelectedOptions(option?.index)}
+                      checked={selectedOptions == option.index}
+                    />
+                    <span
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions == option.index
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
                     >
-                      {options?.map((option, i) => (
-                        <Draggable key={i} draggableId={i.toString()} index={i}>
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <label>
-                                <span className="text-white font-bold px-3 py-2 bg-orange-300">
-                                  {option?.index}
-                                </span>
-                              </label>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                      <Icon
+                        className={`fill-white transition-opacity ${
+                          selectedOptions == option.index
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
+                        name="check"
+                      />
+                    </span>
+                    <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
+                      {option?.index}
+                    </span>
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-3 my-6 gap-3">
-          {[...options]
-            .sort((a, b) => a.index.localeCompare(b.index))
-            ?.map((option, i) => (
-              <div key={i}>
-                <h3 className="font-semibold text-sm mb-2">
-                  Option {option.index}
-                </h3>
-                <textarea
-                  rows={5}
-                  placeholder="Start Typing..."
-                  className="w-full border-none py-4 px-5 text-sm "
-                  id="paragraph"
-                  type="text"
-                  value={option?.value}
-                  onChange={(e) => handleTextAreaChange(i, e.target.value)}
-                />
-              </div>
-            ))}
+          {options?.map((option, i) => (
+            <div key={i}>
+              <h3 className="font-semibold text-sm mb-2">
+                Option {option.index}
+              </h3>
+              <textarea
+                rows={5}
+                placeholder="Start Typing..."
+                className="w-full border-none py-4 px-5 text-sm "
+                id="paragraph"
+                type="text"
+                value={option?.value}
+                onChange={(e) => handleTextAreaChange(i, e.target.value)}
+              />
+            </div>
+          ))}
         </div>
+
         <div className="flex justify-between gap-6">
           <Counter
             className="bg-white w-1/2"
@@ -218,4 +214,4 @@ const ReOrderParagraph = () => {
   );
 };
 
-export default ReOrderParagraph;
+export default MultipleSingleReading;
