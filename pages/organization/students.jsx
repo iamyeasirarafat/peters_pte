@@ -1,34 +1,26 @@
+import Select from "@/components/AddStudentSelect";
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
-import Products from "@/components/Products";
-import Select from "@/components/Select";
 import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import Students from "../../components/Students_list";
 
 const StudentList = () => {
-  const [data, setData] = useState([
-    // {
-    //   userId: "Tushar123",
-    //   name: "Tushar Ahmen",
-    //   image: "/images/product-pic-1.jpg",
-    //   plan: "Free",
-    //   last_logged_in: "12/12/24",
-    //   avg_score: "55/90",
-    //   group: "Dhaka",
-    // },
-  ]);
+  const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
+
+  console.log("data", data);
 
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/students");
-      console.log(res.data);
       setData(res.data);
     };
     getData();
@@ -36,10 +28,10 @@ const StudentList = () => {
 
   return (
     <Layout title="Students" background>
-      {data?.length > 0 ? (
+      {data?.results?.length > 0 ? (
         <>
           <StudentFilter />
-          <Products student={true} items={data} />
+          <Students setStatus={setStatus} items={data?.results} />
           <TablePagination />
         </>
       ) : (
@@ -84,25 +76,23 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
   const plans = [
     {
       id: "2",
-      title: "Free Plan",
-    },
-  ];
-  const groups = [
-    {
-      id: "1",
-      title: "Dhaka Branch",
-    },
-    {
-      id: "1",
-      title: "Rangpur Branch",
-    },
-    {
-      id: "2",
-      title: "Khulna Branch",
+      name: "Free Plan",
     },
   ];
   const [plan, setPlan] = useState(plans[0]);
-  const [group, setGroup] = useState(groups[0]);
+  const [groups, setGroups] = useState([]);
+  const [group, setGroup] = useState();
+  const [groupModal, setGroupModal] = useState(false);
+  const [refetchGroup, setRefetchGroup] = useState(1);
+  //get groups
+  useEffect(() => {
+    const fetchGroup = async () => {
+      const res = await axios("/groups");
+      setGroups(res.data);
+      setGroup(res.data[0]);
+    };
+    fetchGroup();
+  }, [refetchGroup]);
   const {
     register,
     handleSubmit,
@@ -114,7 +104,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
-      group: group.title,
+      group: group.id,
       plan: plan.id,
     };
     try {
@@ -127,7 +117,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
       toast.error("Something went wrong");
     }
   };
-  console.log(errors);
+
   return (
     <Modal
       title="Add new Student"
@@ -180,14 +170,72 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
           value={plan}
           onChange={setPlan}
         />
-        <Select
-          label="Group *"
-          className="mb-6"
-          items={groups}
-          value={group}
-          onChange={setGroup}
-        />
+        <div className="flex items-center gap-2">
+          <Select
+            label="Group *"
+            className="mb-6 w-full"
+            items={groups}
+            value={group}
+            onChange={setGroup}
+          />
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setGroupModal(true);
+            }}
+            className="text-3xl"
+          >
+            <IoIosAddCircleOutline />
+          </button>
+        </div>
         <button className="btn-purple  w-full">Add Student</button>
+      </form>
+      <CreateGroupModal
+        visible={groupModal}
+        setVisible={setGroupModal}
+        setRefetchGroup={setRefetchGroup}
+      />
+    </Modal>
+  );
+};
+
+const CreateGroupModal = ({ visible, setVisible, setRefetchGroup }) => {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    watch,
+    formState: { errors },
+  } = useForm({});
+
+  const onSubmit = async (data) => {
+    try {
+      await axios.post("/group", data);
+      toast.success("Successfully added");
+      setVisible(false);
+      setRefetchGroup(Math.random());
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    }
+  };
+  return (
+    <Modal
+      title="Create new Group"
+      visible={visible}
+      onClose={() => setVisible(false)}
+    >
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-4"
+          label="Group Name *"
+          placeholder="Enter  name"
+          required
+          register={register}
+          name="name"
+        />
+        <button className="btn-purple  w-full">Create group</button>
       </form>
     </Modal>
   );

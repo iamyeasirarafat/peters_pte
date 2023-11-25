@@ -1,14 +1,10 @@
-import Checkbox from "@/components/Checkbox";
 import Sorting from "@/components/Sorting";
-import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
 import Item from "./Item";
 import Row, { StudentRow } from "./Row";
-
+import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 
 const Students = ({ items, student }) => {
-  const [valueAll, setValueAll] = useState(false);
   const { mounted } = useHydrated();
 
   const isTablet = useMediaQuery({
@@ -17,20 +13,14 @@ const Students = ({ items, student }) => {
 
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black w-full">
-      {items.map((product, i) => (
-        <Item item={product} key={i} />
+      {items?.map((item, i) => (
+        <Item item={item} key={i} />
       ))}
     </div>
   ) : (
     <table className="bg-white dark:bg-black w-full">
       <thead>
         <tr>
-          <th className="th-custom">
-            <Checkbox
-              value={valueAll}
-              onChange={() => setValueAll(!valueAll)}
-            />
-          </th>
           <th className="th-custom">
             <Sorting title="Student Name" />
           </th>
@@ -46,17 +36,17 @@ const Students = ({ items, student }) => {
           <th className="th-custom">
             <Sorting title="Average Score" />
           </th>
-          <th className="th-custom text-right">
+          <th className="th-custom">
             <Sorting title="Group" />
           </th>
         </tr>
       </thead>
       <tbody>
-        {items.map((product, i) => {
+        {items?.map((item, i) => {
           if (student) {
-            return <StudentRow item={product} key={i} />;
+            return <StudentRow item={item} key={i} />;
           } else {
-            return <Row item={product} key={i} />;
+            return <Row item={item} key={i} />;
           }
         })}
       </tbody>
