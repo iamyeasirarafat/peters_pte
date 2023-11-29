@@ -38,7 +38,6 @@ const MultipleChoiceAiModal = ({
     }
   }
   const value = (result?.score / result?.max_score) * 100;
-  console.log(value);
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -165,9 +164,8 @@ export default MultipleChoiceAiModal;
 const WordValue = ({ word, wrong }) => {
   return (
     <p
-      className={`text-[60px] text-gray ${
-        wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
-      } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
+      className={`text-[60px] text-gray ${wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
+        } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
     >
       {word}
     </p>

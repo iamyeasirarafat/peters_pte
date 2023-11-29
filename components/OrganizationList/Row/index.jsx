@@ -107,7 +107,6 @@ const StudentRow = ({ item, setStatus }) => {
 export default StudentRow
 
 const EditOrgModal = ({ visible, setVisible, editData }) => {
-  console.log(editData)
   const {
     register,
     handleSubmit,

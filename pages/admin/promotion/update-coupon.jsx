@@ -3,12 +3,28 @@ import Layout from "@/components/Layout";
 import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from "react-hot-toast";
 export default function CreateCoupon() {
     const [loading, setLoading] = useState(false)
-    const [type, setType] = useState("")
+    const [type, setType] = useState()
+    const {
+        handleSubmit,
+        register,
+        formState: {
+            errors
+        },
+        reset
+    } = useForm()
+    const [data, setData] = useState()
+    useEffect(() => {
+        const coupon = JSON.parse(localStorage.getItem("coupon"))
+        setData(coupon)
+        reset(coupon)
+        setType(coupon?.type)
+    }, [reset])
+
     const router = useRouter()
     const options = [{
         title: "Percentage",
@@ -17,18 +33,11 @@ export default function CreateCoupon() {
         title: "Fixed Amount ",
         value: "fixed"
     }]
-    const {
-        handleSubmit,
-        register,
-        formState: {
-            errors
-        }
-    } = useForm()
     const onSubmit = (data) => {
         setLoading(true)
         try {
-            axios.post("/coupon", { ...data, type: type })
-            toast.success("Successfully added Coupon")
+            axios.put("/coupon/" + data.id, { ...data, type: type })
+            toast.success("Successfully Updated Coupon")
             setLoading(false)
             router.push("/admin/promotion")
         }
@@ -39,11 +48,11 @@ export default function CreateCoupon() {
         }
     }
     return (
-        <Layout back title="Promotion/New coupon">
+        <Layout back title={`Promotion/CID ${data?.id}`}>
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                 <div className=" flex flex-col gap-2">
                     <div className="flex justify-between">
-                        <label htmlFor="title" className="font-bold text-sm">
+                        <label for="title" className="font-bold text-sm">
                             Coupon Name
                         </label>
                         <h3 className="text-sm font-semibold">Coupon Id #785263891</h3>
@@ -58,7 +67,7 @@ export default function CreateCoupon() {
                 </div>
                 <div className=" flex flex-col gap-2">
 
-                    <label htmlFor="code" className="font-bold text-sm">
+                    <label for="code" className="font-bold text-sm">
                         Coupon Code
                     </label>
                     <input
@@ -108,7 +117,7 @@ export default function CreateCoupon() {
                 </div>
                 <div className=" flex flex-col gap-2">
 
-                    <label htmlFor="amount" className="font-bold text-sm">
+                    <label for="amount" className="font-bold text-sm">
                         Amount
                     </label>
                     <input
@@ -121,7 +130,7 @@ export default function CreateCoupon() {
                 </div>
                 <div className=" flex flex-col gap-2">
 
-                    <label htmlFor="max_use" className="font-bold text-sm">
+                    <label for="max_use" className="font-bold text-sm">
                         Usage Amount
                     </label>
                     <input
@@ -135,7 +144,7 @@ export default function CreateCoupon() {
                 <div className="flex gap-5 w-full">
                     <div className=" flex flex-col gap-2 w-full">
 
-                        <label htmlFor="start_date" className="font-bold text-sm">
+                        <label for="start_date" className="font-bold text-sm">
                             Starting Date
                         </label>
                         <input
@@ -148,7 +157,7 @@ export default function CreateCoupon() {
                     </div>
                     <div className=" flex flex-col gap-2 w-full">
 
-                        <label htmlFor="end_date" className="font-bold text-sm">
+                        <label for="end_date" className="font-bold text-sm">
                             Ending Date
                         </label>
                         <input
@@ -165,7 +174,7 @@ export default function CreateCoupon() {
                         type="submit"
                         className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
                     >
-                        Create Coupon
+                        Update Coupon
                     </button>
                 ) : (
                     <LoadingButton />
