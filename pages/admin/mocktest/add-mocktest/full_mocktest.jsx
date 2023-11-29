@@ -16,7 +16,7 @@ function FullMocktest() {
   );
 }
 // handel question data get
-const getQuestion = async (api, setData) => {
+export const getQuestion = async (api, setData) => {
   const { data } = await axios.get(api);
   setData(data);
 };
@@ -260,7 +260,6 @@ const FullTestForm = () => {
         />
       </div>
       <div className="grid grid-cols-3 gap-x-5">
-        {/* missing api */}
         <MockTestSelectMulti
           dataArray={incorrectWords}
           selectedValue={incorrectWord}

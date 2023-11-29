@@ -131,12 +131,12 @@ const Courses = () => {
   return (
     <Layout title="Reports">
       {/* Students Report */}
-      <>
+      {/* <>
         <p className="text-lg font-extrabold mb-2">Students Report</p>
         <Filters />
         <Students student={false} items={studentsList} />
         <TablePagination />
-      </>
+      </> */}
       {/* At a Glance */}
       <div className="mt-10">
         <p className="text-lg font-extrabold mb-2">At a Glance</p>
