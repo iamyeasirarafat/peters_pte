@@ -14,26 +14,35 @@ import Students from "../../components/Students_list";
 const StudentList = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/students");
-      setData(res.data);
+      setData(res.data?.results);
+      setLoading(false)
     };
     getData();
   }, [status]);
 
   return (
     <Layout title="Students" background>
-      {data?.length > 0 ? (
-        <>
-          <StudentFilter />
-          <Students admin={true} setStatus={setStatus} items={data} />
-          <TablePagination />
-        </>
-      ) : (
-        <EmptyPage setStatus={setStatus} />
-      )}
+      {
+        loading ? <div className="flex justify-center items-center h-96">
+          <div
+            class="w-12 h-12 rounded-full animate-spin
+                  border-x-8 border-solid border-orange-400 border-t-transparent"
+          ></div>
+        </div> : data?.length > 0 ? (
+          <>
+            <StudentFilter />
+            <Students admin={true} setStatus={setStatus} items={data} />
+            <TablePagination />
+          </>
+        ) : (
+          <EmptyPage setStatus={setStatus} />
+        )
+      }
     </Layout>
   );
 };
