@@ -164,8 +164,9 @@ const RepeatSentence = () => {
               id="prediction"
               type="checkbox"
               className="text-green-500 focus-visible:outline-none"
-              checked={itemObj?.prediction}
-              {...register("prediction")}
+              {...register("prediction", {
+                defaultChecked: itemObj?.prediction,
+              })}
             />
             <label for="prediction" className="text-sm font-bold ml-2">
               Prediction
