@@ -3,6 +3,7 @@ import Field from "@/components/Field";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
+import { PhoneNumberInput } from "@/components/Students_list/Row";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -94,6 +95,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm({});
   useEffect(() => {
@@ -151,15 +153,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
           register={register}
           name="email"
         />
-        <Field
-          errors={errors}
-          className="mb-6"
-          label="Phone Number"
-          placeholder="Enter phone number"
-          type="tel"
-          register={register}
-          name="phone"
-        />
+        <PhoneNumberInput label="Phone Number" name="phone" control={control} errors={errors} />
         <Field
           errors={errors}
           className="mb-6"
