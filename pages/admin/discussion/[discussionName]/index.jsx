@@ -1,10 +1,13 @@
-import Layout from "@/components/Layout";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import Sorting from "@/components/Sorting";
 import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
+import Layout from "@/components/Layout";
+import Sorting from "@/components/Sorting";
 import { useHydrated } from "@/hooks/useHydrated";
+import axios from "axios";
+import dayjs from "dayjs";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 const discussionTab = [
@@ -14,16 +17,26 @@ const discussionTab = [
 ];
 function DiscussionList() {
   const router = useRouter();
+  const [data, setData] = useState([])
+  console.log(data)
   const { discussionName } = router?.query;
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await axios(`/${discussionName}/questions`)
+      setData(data)
+    }
+    router.isReady && fetch()
+  }, [router.isReady])
   return (
     <Layout title={discussionName?.replace(/_/g, " ")} back>
       {/* Tab */}
       <DiscussionTab data={discussionTab} />
-      {mounted && isTablet ? <DiscussionTableMobile /> : <DiscussionTable />}
+      {mounted && isTablet ? <DiscussionTableMobile /> : <DiscussionTable list={data} />}
     </Layout>
   );
 }
@@ -41,11 +54,10 @@ const DiscussionTab = ({ data }) => {
           className="flex items-center rounded-sm overflow-hidden"
         >
           <p
-            className={`py-2 px-8  text-xs font-bold capitalize hover:bg-black hover:text-white duration-200 ${
-              tab?.name === activeTab
-                ? "bg-black text-white"
-                : "bg-white text-black"
-            }`}
+            className={`py-2 px-8  text-xs font-bold capitalize hover:bg-black hover:text-white duration-200 ${tab?.name === activeTab
+              ? "bg-black text-white"
+              : "bg-white text-black"
+              }`}
           >
             {tab?.name?.replace("_", " ")}
           </p>
@@ -61,7 +73,7 @@ const DiscussionTab = ({ data }) => {
   );
 };
 
-const DiscussionTable = () => {
+const DiscussionTable = ({ list }) => {
   const [value, setValue] = useState(false);
   return (
     <div className="mt-4">
@@ -78,47 +90,47 @@ const DiscussionTable = () => {
             <th className="th-custom text-center">
               <Sorting title="Type" />
             </th>
-            <th className="th-custom text-center">
-              <Sorting title="ID" />
-            </th>
+
             <th className="th-custom text-center">
               <Sorting title="Comment" />
             </th>
             <th className="th-custom text-center ">
-              <Sorting title="Created In" />
+              <Sorting title="Last Discussed" />
             </th>
           </tr>
         </thead>
         <tbody>
-          <DiscussionRow />
+          {
+            list?.map(item => <DiscussionRow key={item?.id} data={item} />)
+          }
         </tbody>
       </table>
     </div>
   );
 };
 
-const DiscussionRow = () => {
+const DiscussionRow = ({ data }) => {
   const [value, setValue] = useState(false);
+  const router = useRouter();
+  const { discussionName } = router?.query;
   return (
     <tr>
       <td className="td-custom flex items-center gap-x-4">
         <Checkbox value={value} onChange={() => setValue(!value)} />
-        <p className="text-sm font-bold">Bill on the hill</p>
+        <Link href={`${discussionName}/${data?.id}`} className="text-sm hover:text-primary font-bold">{data?.title || "N/A"}</Link>
       </td>
       <td className="td-custom text-center">
-        <p className="text-sm">#7250589</p>
+        <p className="text-sm">#{data?.id || "N/A"}</p>
       </td>
       <td className="td-custom text-center">
         <p className="text-sm font-bold">Discussion</p>
       </td>
+
       <td className="td-custom text-center">
-        <p className="text-sm">#c782200004582</p>
-      </td>
-      <td className="td-custom text-center">
-        <p className="text-sm">5</p>
+        <p className="text-sm">{data?.discussions_count || "0"}</p>
       </td>
       <td className="td-custom flex items-center justify-center gap-x-3">
-        <p className="text-sm">05/07/23</p>
+        <p className="text-sm">{dayjs(data?.last_discussion_date).format("DD/MM/YY")}</p>
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>

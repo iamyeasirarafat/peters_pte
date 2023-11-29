@@ -188,8 +188,6 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
     register,
     handleSubmit,
     setValue,
-    setError,
-    watch,
     control,
     formState: { errors },
   } = useForm({});
@@ -487,7 +485,7 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
 
 
 
-const PhoneNumberInput = ({ name, control, errors, label }) => {
+export const PhoneNumberInput = ({ name, control, errors, label }) => {
   const error = errors[name] || false;
   return (
     <div>
