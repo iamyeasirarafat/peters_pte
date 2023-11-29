@@ -15,6 +15,8 @@ const StudentList = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
 
+  console.log("data", data);
+
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/students");
@@ -25,10 +27,10 @@ const StudentList = () => {
 
   return (
     <Layout title="Students" background>
-      {data?.length > 0 ? (
+      {data?.results?.length > 0 ? (
         <>
           <StudentFilter />
-          <Students admin={true} setStatus={setStatus} items={data} />
+          <Students admin={true} setStatus={setStatus} items={data?.results} />
           <TablePagination />
         </>
       ) : (

@@ -8,12 +8,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
-import OrganizationList from "../../components/OrganizationList";
+import OrganizationList from "../../../components/OrganizationList";
 
 const Organizations = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
-  console.log(data)
+  console.log(data);
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/organizations");
@@ -68,9 +68,6 @@ const EmptyPage = ({ setStatus }) => {
   );
 };
 
-
-
-
 export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
   const {
     register,
@@ -79,7 +76,6 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
   } = useForm({});
 
   const onSubmit = async (data) => {
-
     try {
       await axios.post("/organization/add", data);
       toast.success("Successfully added");
@@ -88,7 +84,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
     } catch (err) {
       const key = Object.keys(err?.response?.data)[0];
       const value = err?.response?.data[key];
-      toast.error(`${key} - ${value}`);;
+      toast.error(`${key} - ${value}`);
     }
   };
 
@@ -164,8 +160,6 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
         />
         <button className="btn-purple  w-full">Add Organization</button>
       </form>
-
     </Modal>
   );
 };
-

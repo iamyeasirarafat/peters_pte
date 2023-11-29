@@ -5,20 +5,15 @@ import Image from "@/components/Image";
 import Modal from "@/components/Modal";
 import axios from "axios";
 import Link from "next/link";
-import {
-  useEffect,
-  useState
-} from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-
-
 const StudentRow = ({ item, setStatus }) => {
   const [value, setValue] = useState(false);
-  const [isOpen, setIsOpen] = useState(false)
-  const [visible, setVisible] = useState(false)
-  const [editData, setEditData] = useState({})
+  const [isOpen, setIsOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [editData, setEditData] = useState({});
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -28,7 +23,7 @@ const StudentRow = ({ item, setStatus }) => {
         <Checkbox value={value} onChange={() => setValue(!value)} />
         <Link
           className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
-          href={`/organization/student-details?id=${item.id}`}
+          href={`/admin/organization/${item.id}`}
         >
           <div className="w-11 h-11  mr-3 ">
             <Image
@@ -42,23 +37,11 @@ const StudentRow = ({ item, setStatus }) => {
           {item.full_name}
         </Link>
       </td>
-      <td className="td-custom">
-        {item?.profile?.userid || "N/A"}
-      </td>
+      <td className="td-custom">{item?.profile?.userid || "N/A"}</td>
       <td className="td-custom">{item?.spent || "N/A"}</td>
-      <td className="td-custom">
-        {item?.students || "N/A"}
-      </td>
-      <td className="td-custom">
-
-        {item.mocks || "N/A"}
-
-      </td>
-      <td className="td-custom">
-
-        {item.accounts || "N/A"}
-
-      </td>
+      <td className="td-custom">{item?.students || "N/A"}</td>
+      <td className="td-custom">{item.mocks || "N/A"}</td>
+      <td className="td-custom">{item.accounts || "N/A"}</td>
       <td className="td-custom font-bold">{item?.profile?.country || "N/A"}</td>
 
       <td className="td-custom text-right">
@@ -66,21 +49,22 @@ const StudentRow = ({ item, setStatus }) => {
           <div
             className="relative inline-block text-left"
             onClick={toggleDropdown}
-          // onBlur={closeDropdown}
+            // onBlur={closeDropdown}
           >
             <button className="btn-transparent-dark btn-small btn-square">
               <Icon name="dots" />
             </button>
             <div
               style={{ backgroundColor: "#FAF4F0" }}
-              className={`${isOpen ? "block" : "hidden"
-                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              className={`${
+                isOpen ? "block" : "hidden"
+              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
             >
               <div role="none">
                 <button
                   onClick={() => {
-                    setEditData(item)
-                    setVisible(true)
+                    setEditData(item);
+                    setVisible(true);
                   }}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 >
@@ -88,8 +72,8 @@ const StudentRow = ({ item, setStatus }) => {
                 </button>
                 <button
                   onClick={async () => {
-                    await axios.delete("/student/" + item.id)
-                    setStatus(Math.random())
+                    await axios.delete("/student/" + item.id);
+                    setStatus(Math.random());
                   }}
                   className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
                 >
@@ -104,10 +88,10 @@ const StudentRow = ({ item, setStatus }) => {
     </tr>
   );
 };
-export default StudentRow
+export default StudentRow;
 
-const EditOrgModal = ({ visible, setVisible, editData }) => {
-  console.log(editData)
+export const EditOrgModal = ({ visible, setVisible, editData }) => {
+  console.log(editData);
   const {
     register,
     handleSubmit,
@@ -116,23 +100,23 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
   } = useForm({});
   useEffect(() => {
     if (editData) {
-      setValue("org_name", editData?.profile?.org_name)
-      setValue("email", editData?.email)
-      setValue("phone", editData?.phone)
-      setValue("address", editData?.profile?.address || "")
-      setValue("country", editData?.profile?.country || "")
+      setValue("org_name", editData?.profile?.org_name);
+      setValue("email", editData?.email);
+      setValue("phone", editData?.phone);
+      setValue("address", editData?.profile?.address || "");
+      setValue("country", editData?.profile?.country || "");
     }
-  }, [editData])
+  }, [editData]);
   const onSubmit = async (data) => {
     const submitData = {
-      "email": data.email,
-      "phone": data.phone,
-      "profile": {
-        "address": data.address,
-        "country": data.country,
-        "org_name": data.org_name
-      }
-    }
+      email: data.email,
+      phone: data.phone,
+      profile: {
+        address: data.address,
+        country: data.country,
+        org_name: data.org_name,
+      },
+    };
     try {
       await axios.put(`/organization/${editData?.id}/update`, submitData);
       toast.success("Successfully Updated");
@@ -196,7 +180,6 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
         />
         <button className="btn-purple  w-full">Update Info</button>
       </form>
-
     </Modal>
   );
 };

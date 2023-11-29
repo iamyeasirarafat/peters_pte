@@ -7,6 +7,7 @@ import Students from "@/components/Students_list";
 
 const Index = () => {
   const [students, setStudents] = useState({});
+  const [studentSCounts, setStudentsCounts] = useState({});
   const [status, setStatus] = useState(true);
 
   useEffect(() => {
@@ -20,16 +21,16 @@ const Index = () => {
     // get students count
     const getStudentsCount = async () => {
       const res = await axios.get(`student/counts`);
-      console.log(res);
+      setStudentsCounts(res?.data);
     };
-    // getStudentsCount();
+    getStudentsCount();
   }, [status]);
 
   return (
     <Layout title="Dashboard">
       <div className="">
         <p className="text-lg font-extrabold mb-2">At a Glance</p>
-        <Glance />
+        <Glance studentSCounts={studentSCounts} />
       </div>
       <div className="mt-8">
         <p className="text-lg font-extrabold mb-2">Recently Joined</p>
