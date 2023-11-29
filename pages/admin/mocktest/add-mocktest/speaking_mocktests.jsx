@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import Field from "@/components/Field";
 import MockTestSelectMulti from "@/components/MockTestSelectMulti";
 import { useForm } from "react-hook-form";
-import { getQuestion } from "./full_mocktest";
+import { getQuestion } from "./full_mocktests";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
