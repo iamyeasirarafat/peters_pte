@@ -3,13 +3,13 @@ import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
+import { PhoneNumberInput } from "@/components/Students_list/Row";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import OrganizationList from "../../../components/OrganizationList";
 import { TablePagination } from "../students";
-
 const Organizations = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
@@ -81,6 +81,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({});
 
@@ -142,15 +143,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
           register={register}
           name="email"
         />
-        <Field
-          errors={errors}
-          className="mb-6"
-          label="Phone"
-          placeholder="Enter Phone"
-          type="tel"
-          register={register}
-          name="phone"
-        />
+        <PhoneNumberInput label="Phone Number" name="phone" control={control} errors={errors} />
         <Field
           errors={errors}
           className="mb-6"

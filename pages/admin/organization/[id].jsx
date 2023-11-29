@@ -1,28 +1,27 @@
+import Select from "@/components/AddStudentSelect";
+import Field from "@/components/Field";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
 import Layout from "@/components/Layout";
+import Modal from "@/components/Modal";
+import Sorting from "@/components/Sorting";
+import { PhoneNumberInput } from "@/components/Students_list/Row";
+import TablePagination from "@/components/TablePagination";
+import { useHydrated } from "@/hooks/useHydrated";
+import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
+import { formatDateWithName } from "@/utils/formatDateWithName";
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Image from "@/components/Image";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-import { IoIosCall, IoMdMail } from "react-icons/io";
-import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
-import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
-import { CgRadioCheck } from "react-icons/cg";
-import Sorting from "@/components/Sorting";
-import Icon from "@/components/Icon";
-import TablePagination from "@/components/TablePagination";
-import { useMediaQuery } from "react-responsive";
-import { useHydrated } from "@/hooks/useHydrated";
-import Link from "next/link";
-import Modal from "@/components/Modal";
 import { useForm } from "react-hook-form";
-import Field from "@/components/Field";
 import toast from "react-hot-toast";
-import Select from "@/components/AddStudentSelect";
-import { formatDateTime } from "@/utils/formatDateTime";
-import { formatDateWithName } from "@/utils/formatDateWithName";
-import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
-import Spinner from "@/components/Spinner/Spinner";
+import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
+import { BsFillPlusCircleFill } from "react-icons/bs";
+import { CgRadioCheck } from "react-icons/cg";
+import { IoIosCall, IoMdMail } from "react-icons/io";
+import { RiRadioButtonFill } from "react-icons/ri";
+import { useMediaQuery } from "react-responsive";
 function OrgDetails() {
   const router = useRouter();
   const id = router?.query?.id;
@@ -120,11 +119,25 @@ const StudentProfileInfo = ({ data }) => {
 };
 
 const StudentDetailsRight = ({ data }) => {
+  const [groups, setGroups] = useState([])
+  useEffect(() => {
+    const fetchGroup = async () => {
+      const res = await axios(`/${data?.id}/groups`)
+      setGroups(res.data)
+    }
+    if (data) {
+      fetchGroup()
+    }
+  }, [data])
   const [openChangePassword, setOpenChangePassword] = useState({
     state: false,
     student: null,
   });
-  const [openAssignNewPlan, setOpenAssignNewPlan] = useState({
+  const [openChangeUserId, setOpenChangeUserId] = useState({
+    state: false,
+    student: null,
+  });
+  const [openGroupModal, setOpenGroupModal] = useState({
     state: false,
     student: null,
   });
@@ -166,7 +179,7 @@ const StudentDetailsRight = ({ data }) => {
           <p className="text-lg font-extrabold">Group Settings</p>
           <button
             onClick={() =>
-              setOpenAssignNewPlan({
+              setOpenGroupModal({
                 state: true,
                 student: data?.id,
               })
@@ -178,16 +191,13 @@ const StudentDetailsRight = ({ data }) => {
         </div>
         {/* Plan */}
         {mounted && isTablet ? (
-          data?.plans?.map((plan, i) => (
-            <AccountPlanMobile key={i} data={plan} />
+          groups?.map((item, i) => (
+            <AccountPlanMobile key={i} data={item} />
           ))
         ) : (
-          <AccountPlan data={data} />
+          <AccountPlan data={groups} />
         )}
-        <AssignNewPlan
-          openAssignNewPlan={openAssignNewPlan}
-          setOpenAssignNewPlan={setOpenAssignNewPlan}
-        />
+
       </div>
       <TablePagination />
 
@@ -195,14 +205,24 @@ const StudentDetailsRight = ({ data }) => {
       <div className="bg-white dark:bg-black p-5 mt-4">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Security</p>
-          <button
-            onClick={() =>
-              setOpenChangePassword({ state: true, student: data?.id })
-            }
-            className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
-          >
-            <BiSolidEditAlt /> Update Password
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() =>
+                setOpenChangeUserId({ state: true, student: data?.id })
+              }
+              className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
+            >
+              <BiSolidEditAlt /> Update Username
+            </button>
+            <button
+              onClick={() =>
+                setOpenChangePassword({ state: true, student: data?.id })
+              }
+              className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
+            >
+              <BiSolidEditAlt /> Update Password
+            </button>
+          </div>
         </div>
         <div className="flex items-center gap-x-13">
           <div>
@@ -218,6 +238,15 @@ const StudentDetailsRight = ({ data }) => {
           openChangePassword={openChangePassword}
           setOpenChangePassword={setOpenChangePassword}
         />
+        <ChangeUserId
+          openChangeUserId={openChangeUserId}
+          setOpenChangeUserId={setOpenChangeUserId}
+        />
+        <CreateGroupModal
+          openGroupModal={openGroupModal}
+          setOpenGroupModal={setOpenGroupModal}
+        />
+
       </div>
     </div>
   );
@@ -229,6 +258,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm({});
   useEffect(() => {
@@ -286,15 +316,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
           register={register}
           name="email"
         />
-        <Field
-          errors={errors}
-          className="mb-6"
-          label="Phone Number"
-          placeholder="Enter phone number"
-          type="tel"
-          register={register}
-          name="phone"
-        />
+        <PhoneNumberInput label="Phone Number" name="phone" control={control} errors={errors} />
         <Field
           errors={errors}
           className="mb-6"
@@ -338,19 +360,17 @@ const AccountPlan = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.plans?.map((plan, i) => (
+          {data?.map((plan, i) => (
             <tr key={i}>
-              <td className="py-2 pr-3 font-bold">{plan?.title}</td>
+              <td className="py-2 pr-3 font-bold">{plan?.name}</td>
               <td className="py-2 px-3 text-center font-bold">
-                {formatDateWithName(plan?.start_date, "custom")}
+                N/A
               </td>
               <td className="py-2 px-3 text-center font-bold">
-                {formatDateWithName(plan?.end_date, "custom")}
+                {formatDateWithName(plan?.created_at, "custom")}
               </td>
               <td className="py-2 px-3 flex items-center justify-center gap-x-5">
-                <p className="py-[2px] px-2 rounded-sm bg-green-300 text-xs font-bold inline-block text-black">
-                  {calculateDaysLeft(plan?.end_date)} Days Left
-                </p>
+                N/A
                 <button className="btn-transparent-dark btn-small btn-square">
                   <Icon name="dots" />
                 </button>
@@ -393,12 +413,12 @@ const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
   } = useForm();
   const onSubmit = (data) => {
     const passwordData = {
-      student: openChangePassword?.student,
+      organization: openChangePassword?.student,
       ...data,
     };
     const changePass = async () => {
-      const res = await axios.post(
-        `/organization/${openChangePassword?.student}/passwordchange`,
+      const res = await axios.put(
+        `/organization/passwordchange`,
         passwordData
       );
       setOpenChangePassword({ state: false, student: null });
@@ -439,6 +459,66 @@ const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
         />
         <button className="bg-primary py-3 text-base font-bold w-full">
           Update Password
+        </button>
+      </form>
+    </Modal>
+  );
+};
+const ChangeUserId = ({ openChangeUserId, setOpenChangeUserId }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    const passwordData = {
+      organization: openChangeUserId?.student,
+      ...data,
+    };
+    const changePass = async () => {
+      const res = await axios.put(
+        `/organization/useridchange`,
+        passwordData
+      );
+      setOpenChangeUserId({ state: false, student: null });
+      reset();
+      toast.success(res?.data?.message);
+    };
+    changePass();
+  };
+  return (
+    <Modal
+      title="Change Username"
+      visible={openChangeUserId?.state}
+      onClose={() => {
+        setOpenChangeUserId({ state: false, student: null });
+        reset();
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-4"
+          label=" New Username *"
+          placeholder="Enter new username"
+          type="text"
+          register={register}
+          name="userid"
+          required
+        />
+        <Field
+          errors={errors}
+          className="mb-4"
+          label="Type Your Password *"
+          placeholder="Enter your password"
+          type="password"
+          register={register}
+          name="my_password"
+          required
+        />
+        <button className="bg-primary py-3 text-base font-bold w-full">
+          Update Username
         </button>
       </form>
     </Modal>
@@ -546,6 +626,58 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
         <button className="bg-primary py-3 text-base font-bold w-full">
           Update Plan
         </button>
+      </form>
+    </Modal>
+  );
+};
+
+
+const CreateGroupModal = ({ setOpenGroupModal, openGroupModal }) => {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    watch,
+    formState: { errors },
+  } = useForm({});
+
+  const onSubmit = async (data) => {
+    try {
+      await axios.post("/group?oid=" + openGroupModal.student, data);
+      toast.success("Successfully added");
+      setOpenGroupModal({
+        state: false,
+        student: null,
+      });
+
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    }
+  };
+  return (
+    <Modal
+      title="Create new Group"
+      visible={openGroupModal.state}
+      onClose={() => {
+        setOpenGroupModal({
+          state: false,
+          student: null,
+        });
+        reset();
+      }}
+    >
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-4"
+          label="Group Name *"
+          placeholder="Enter  name"
+          required
+          register={register}
+          name="name"
+        />
+        <button className="btn-purple  w-full">Create group</button>
       </form>
     </Modal>
   );
