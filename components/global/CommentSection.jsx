@@ -17,7 +17,8 @@ import { GrClose } from "react-icons/gr";
 import { useSelector } from "react-redux";
 import ReusableModal from "./ReusableModal";
 
-function CommentSection() {
+function CommentSection({ discussionId, discussionName }) {
+  console.log(discussionId, discussionName)
   const [open, setOpen] = useState({ state: false, id: null });
   const [isAddReply, setIsAddReply] = useState({ state: false, id: null });
   const [parentComment, setParentComment] = useState([]);
@@ -35,23 +36,26 @@ function CommentSection() {
         : pageName;
     try {
       const getComment = async () => {
-        const res = await axios.get(`/${pageName}/${id}/discussions`);
+        const url = `/${discussionName ? discussionName : pageName}/${discussionId ? discussionId : id}/discussions`
+        const res = await axios.get(url);
         setParentComment(res?.data);
       };
       getComment();
     } catch (error) {
       toast.error(error?.message);
     }
-  }, [id, fetch, pathname]);
+  }, [id, fetch, pathname, discussionName, discussionId]);
   return (
     <>
       {/*add comment modal open */}
-      <button
-        onClick={() => setOpen({ state: true, id: id })}
-        className="py-2 px-3 bg-primary text-gray text-base rounded-[15px] flex items-center gap-x-2 mb-2"
-      >
-        Add comment <AiOutlinePlusCircle className="text-base" />
-      </button>
+      {
+        !discussionName && <button
+          onClick={() => setOpen({ state: true, id: id })}
+          className="py-2 px-3 bg-primary text-gray text-base rounded-[15px] flex items-center gap-x-2 mb-2"
+        >
+          Add comment <AiOutlinePlusCircle className="text-base" />
+        </button>
+      }
       {/* comment show*/}
       <div className="space-y-2">
         {parentComment?.map((item) => {
@@ -302,9 +306,8 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
                 type="button"
                 key={i}
                 onClick={() => setCommentType(type?.name)}
-                className={`text-base text-gray ${
-                  type?.name === commentType ? "bg-secondary" : "bg-white"
-                } border border-primary py-2 px-3 rounded-[10px] font-medium`}
+                className={`text-base text-gray ${type?.name === commentType ? "bg-secondary" : "bg-white"
+                  } border border-primary py-2 px-3 rounded-[10px] font-medium`}
               >
                 {type?.name}
               </button>

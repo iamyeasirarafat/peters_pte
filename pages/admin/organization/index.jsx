@@ -7,8 +7,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
-import OrganizationList from "../../components/OrganizationList";
-import { TablePagination } from "./students";
+import OrganizationList from "../../../components/OrganizationList";
+import { TablePagination } from "../students";
 
 const Organizations = () => {
   const [data, setData] = useState([]);
