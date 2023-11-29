@@ -3,25 +3,26 @@ import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
-import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import OrganizationList from "../../components/OrganizationList";
+import { TablePagination } from "./students";
 
 const Organizations = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
   useEffect(() => {
     const getData = async () => {
-      const res = await axios("/organizations");
+      const res = await axios("/organizations?page=" + page);
       setData(res.data);
       setLoading(false)
     };
     getData();
-  }, [status]);
+  }, [page, status]);
 
   return (
     <Layout title="Organizations" background>
@@ -31,11 +32,11 @@ const Organizations = () => {
             class="w-12 h-12 rounded-full animate-spin
                   border-x-8 border-solid border-orange-400 border-t-transparent"
           ></div>
-        </div> : data?.length > 0 ? (
+        </div> : data?.results?.length > 0 ? (
           <>
             <StudentFilter />
-            <OrganizationList setStatus={setStatus} items={data} />
-            <TablePagination />
+            <OrganizationList setStatus={setStatus} items={data?.results} />
+            <TablePagination data={data} setPage={setPage} />
           </>
         ) : (
           <EmptyPage setStatus={setStatus} />

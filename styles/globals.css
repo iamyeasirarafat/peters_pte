@@ -74,3 +74,16 @@
   justify-content: start !important;
 }
 /* swiper slider custom button CSS END */
+
+.PhoneInputInput {
+  border: none !important;
+}
+.PhoneInputInput:focus {
+  border: none !important;
+  outline: none !important;
+  --tw-ring-color: none;
+  box-shadow: none;
+}
+.PhoneInputCountryIcon {
+  margin-right: 2px;
+}

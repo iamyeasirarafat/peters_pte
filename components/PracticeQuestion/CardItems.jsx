@@ -1,10 +1,9 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import Card from "./Card";
-import axios from "axios";
 
 const CardItems = () => {
   const [itemNumber, setItemNumber] = useState({});
-  console.log(itemNumber);
   useEffect(() => {
     const fetchData = async () => {
       try {

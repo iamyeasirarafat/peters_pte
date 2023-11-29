@@ -14,7 +14,6 @@ const withSession = async ({ token, refreshToken }) => {
         }
       );
       const data = await res.json();
-      console.log(data, "data yeasir");
       if (data?.code === "token_not_valid") return [false, true];
       return [true, false];
     } catch (error) {

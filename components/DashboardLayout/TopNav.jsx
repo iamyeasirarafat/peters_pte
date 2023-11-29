@@ -138,7 +138,6 @@ const MenuItem = () => {
 const UserDropdown = () => {
   const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state?.user);
-  console.log(user)
   return (
     <div className="flex gap-2 relative">
       <button className="bg-gold md:hidden xs:flex text-lg text-white font-avantt font-semibold items-center py-3 px-5 rounded-[32px] gap-1">

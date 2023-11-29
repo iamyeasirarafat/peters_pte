@@ -46,7 +46,9 @@ const DiscussionTab = ({ }) => {
                 <Icon name="filters" />
                 <span>Apply Filters</span>
             </button>
-            <button className="btn-purple font-bold btn-small">
+            <button onClick={() => {
+                router.push("/admin/promotion/create-coupon")
+            }} className="btn-purple font-bold btn-small">
                 <Icon name="edit" />
                 <span>Create new coupon</span>
             </button>
@@ -101,6 +103,13 @@ const DiscussionTable = ({ data }) => {
 
 const DiscussionRow = ({ data }) => {
     const [value, setValue] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
+    const [visible, setVisible] = useState(false)
+    const [editData, setEditData] = useState({})
+    const router = useRouter()
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
 
     return (
         <tr>
@@ -122,9 +131,43 @@ const DiscussionRow = ({ data }) => {
             </td>
 
             <td className="td-custom  text-right ">
-                <button className="btn-transparent-dark btn-small btn-square">
-                    <Icon name="dots" />
-                </button>
+                <div className="flex justify-end bg-gray-100 ">
+                    <div
+                        className="relative inline-block text-left"
+                        onClick={toggleDropdown}
+                    // onBlur={closeDropdown}
+                    >
+                        <button className="btn-transparent-dark btn-small btn-square">
+                            <Icon name="dots" />
+                        </button>
+                        <div
+                            style={{ backgroundColor: "#FAF4F0" }}
+                            className={`${isOpen ? "block" : "hidden"
+                                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+                        >
+                            <div role="none">
+                                <button
+                                    onClick={() => {
+                                        localStorage.setItem("coupon", JSON.stringify(data))
+                                        router.push("/admin/promotion/update-coupon")
+                                    }}
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                >
+                                    <Icon name="settings" /> Edit Coupon
+                                </button>
+                                <button
+                                    onClick={async () => {
+                                        await axios.delete("/coupon/" + data.id)
+                                        router.replace("/admin/promotion")
+                                    }}
+                                    className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+                                >
+                                    <Icon name="cross" /> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
     );
