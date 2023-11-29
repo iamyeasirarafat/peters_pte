@@ -22,6 +22,7 @@ import AnswerShotQues from "@/components/QuestionForms/AnswerShotQues";
 import MultipleSingleReading from "@/components/QuestionForms/MultipleSingleReading";
 import SelectMissingWord from "@/components/QuestionForms/SelectMissingWord";
 import Dictation from "@/components/QuestionForms/Dictation";
+import SummerizeSpoken from "@/components/QuestionForms/SummerizeSpoken";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -38,7 +39,7 @@ const AllForms = () => {
   } else if (questionTable == "Describe Image") {
     content = <DescribeImage />;
   } else if (questionTable == "Summarize Spoken Text") {
-    content = <ReTelLecture />;
+    content = <SummerizeSpoken />;
   } else if (questionTable == "Write From Dictation") {
     content = <Dictation />;
   } else if (questionTable == "Summarize Written Text") {
