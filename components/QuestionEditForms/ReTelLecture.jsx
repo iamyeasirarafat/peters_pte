@@ -15,7 +15,6 @@ const ReTelLecture = () => {
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log(itemObj);
   const { register, handleSubmit, setValue, setError, formState } = useForm();
   useEffect(() => {
     // Set initial form values based on itemObj

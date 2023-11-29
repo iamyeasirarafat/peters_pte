@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
+import LoadingButton from "@/components/LoadingButton";
 import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -8,6 +9,7 @@ const SummerizeWritten = () => {
   const router = useRouter();
   const { item } = router.query;
   const itemObj = JSON.parse(item);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -28,14 +30,20 @@ const SummerizeWritten = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const response = await axios.post("/summarize", formData);
-      // toast.success("Create summarize question successfully");
-      // if (response?.data) {
-      //   router.back();
-      // }
+      setLoading(true);
+      const response = await axios.put(
+        `/summarize/${itemObj?.id}/update`,
+        formData
+      );
+      toast.success("Updated summarize question successfully");
+      if (response?.data) {
+        router.back();
+      }
     } catch (error) {
       toast.error(error?.message);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,12 +102,16 @@ const SummerizeWritten = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Update Questions
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Update Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );
