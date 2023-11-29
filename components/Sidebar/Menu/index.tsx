@@ -19,7 +19,7 @@ const Menu = ({ visible }: MenuProps) => {
           visible ? "w-full opacity-100" : "xl:w-0 xl:opacity-0"
         }`}
       >
-        Dhaka PTE
+        {router?.asPath?.includes("admin") ? "Navigation" : "Dhaka PTE"}
       </div>
       <SingleMenu
         router={router}

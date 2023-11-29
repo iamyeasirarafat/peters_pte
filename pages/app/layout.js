@@ -39,11 +39,13 @@ const DashboardLayout = ({ children }) => {
         )}
         <SideNav />
         <div
-          className={`max-w-7xl w-full
+          className={` w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"}
-        overflow-y-auto mx-auto px-5 md:px-10 2xl:px-0`}
+        overflow-y-auto  bg-white px-5 md:px-10 2xl:px-0`}
         >
-          <Suspense fallback={<SearchBarFallback />}>{children}</Suspense>
+          <Suspense fallback={<SearchBarFallback />}>
+            <div className="max-w-7xl w-full mx-auto">{children}</div>
+          </Suspense>
         </div>
         {/* <GlobalModal /> */}
       </div>

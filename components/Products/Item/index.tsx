@@ -1,5 +1,7 @@
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
+import Link from "next/link";
+import { formatDateTime } from "@/utils/formatDateTime";
 type ItemProps = {
   item: any;
 };
@@ -7,8 +9,8 @@ type ItemProps = {
 const Item = ({ item }: ItemProps) => (
   <div className="space-y-2 px-4 py-3 text-sm">
     <div className="w-full flex items-center justify-between">
-      <div className="label-stroke min-w-[7.25rem] text-xs">
-        {item.accountPlan}
+      <div className="label-stroke border min-w-[7.25rem] text-xs">
+        {item.premium ? "Premium" : "Free"}
       </div>
       <div className="flex items-center gap-x-2">
         <div
@@ -31,21 +33,30 @@ const Item = ({ item }: ItemProps) => (
     </div>
     <div className="w-full flex items-center justify-between">
       <div className="flex items-center gap-x-3">
-        <Image
-          className="w-10 h-10 rounded-full"
-          src={item.image}
-          width={42}
-          height={42}
-          alt=""
-        />
+        <Link
+          className="text-sm font-bold transition-colors hover:text-primary"
+          href={`/organization/student-details?id=${item.id}`}
+        >
+          <div className="w-11 h-11  mr-3 ">
+            <Image
+              className="w-full h-full  rounded-full"
+              src={item.picture || "/images/img-2.jpg"}
+              width={1000}
+              height={1000}
+              alt=""
+            />
+          </div>
+        </Link>
         <div className="flex flex-col gap-y-1">
-          <p className="text-sm font-semibold">{item?.name}</p>
-          <p className="text-sm font-semibold">{item?.userId}</p>
+          <p className="text-sm font-semibold"> {item.full_name}</p>
+          <p className="text-sm font-semibold">{item?.profile[0]?.userid}</p>
         </div>
       </div>
       <div className="space-y-1">
-        <p className="text-sm font-semibold">Dhaka Branch</p>
-        <p className="text-xs font-medium">05/10/23</p>
+        <p className="text-sm font-semibold">{item?.profile[0]?.group?.name}</p>
+        <p className="text-xs font-medium">
+          {formatDateTime(item.last_login, "date")}
+        </p>
       </div>
     </div>
   </div>

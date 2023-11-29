@@ -7,14 +7,6 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 const Auth = () => {
   const [page, setPage] = useState("join");
-  // const router = useRouter();
-  // useEffect(() => {
-  //   const accessToken = getCookie("access_token");
-  //   const refreshToken = getCookie("refresh_token");
-  //   if (accessToken || refreshToken) {
-  //     router.push("/app");
-  //   }
-  // }, [router]);
   return (
     <div className="flex h-screen">
       <Toaster />
