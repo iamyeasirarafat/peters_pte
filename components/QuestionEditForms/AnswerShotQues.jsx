@@ -1,4 +1,5 @@
 import Icon from "@/components/Icon";
+import LoadingButton from "@/components/LoadingButton";
 import EditCounter from "./EditCounter";
 import axios from "axios";
 import { useState } from "react";
@@ -11,14 +12,13 @@ const AnswerShotQues = () => {
   const router = useRouter();
   const { item } = router.query;
   const itemObj = JSON.parse(item);
-  console.log(itemObj);
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, setError, setValue, formState } = useForm();
   useEffect(() => {
-    // Set initial form values based on itemObj
     if (itemObj) {
       setValue("title", itemObj.title);
       setValue("reference_text", itemObj.reference_text);
@@ -31,6 +31,7 @@ const AnswerShotQues = () => {
   const onsubmit = async (data) => {
     if (audio) {
       try {
+        setLoading(true);
         const formData = new FormData();
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
@@ -38,14 +39,20 @@ const AnswerShotQues = () => {
         formData.append("audio", audio);
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-        // const response = await axios.post("/short_question", formData, config);
-        // toast.success("Create question successfully");
-        // if (response?.data) {
-        //   router.back();
-        // }
+        const response = await axios.put(
+          `/short_question/${itemObj?.id}/update`,
+          formData,
+          config
+        );
+        toast.success("Updated question successfully");
+        if (response?.data) {
+          router.back();
+        }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide data successfully!");
@@ -151,24 +158,30 @@ const AnswerShotQues = () => {
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2 bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
               className="text-green-500 focus-visible:outline-none"
-              {...register("prediction")}
+              {...register("prediction", {
+                defaultChecked: itemObj?.prediction,
+              })}
             />
             <label for="prediction" className="text-sm font-bold ml-2">
               Prediction
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Update Questions
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Update Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );
