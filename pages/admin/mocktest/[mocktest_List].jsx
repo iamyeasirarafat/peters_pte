@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import Sorting from "@/components/Sorting";
 import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useMediaQuery } from "react-responsive";
 import { AiFillPlusCircle } from "react-icons/ai";
+import axios from "axios";
 
 function Index() {
   const router = useRouter();
@@ -15,6 +16,16 @@ function Index() {
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+  const [mockTestList, setMockTestList] = useState([]);
+  useEffect(() => {
+    const getMockTest = async () => {
+      const res = await axios.get(`/${mocktest_List}`);
+      console.log(res);
+      setMockTestList(res?.data);
+    };
+    router.isReady && getMockTest();
+  }, [mocktest_List, router.isReady]);
+
   return (
     <Layout title={mocktest_List?.replace(/_/g, " ")} back>
       <div>
