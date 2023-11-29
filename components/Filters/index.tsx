@@ -1,8 +1,4 @@
 
-// <!-- import { useState } from "react";
-
-
-
 import { useState } from "react";
 import Icon from "../Icon";
 import Search from "../Search";
