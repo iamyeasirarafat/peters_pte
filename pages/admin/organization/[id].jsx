@@ -1,70 +1,59 @@
-import Select from "@/components/AddStudentSelect";
-import Field from "@/components/Field";
-import Icon from "@/components/Icon";
-import Image from "@/components/Image";
 import Layout from "@/components/Layout";
-import Modal from "@/components/Modal";
-import Sorting from "@/components/Sorting";
-import Spinner from "@/components/Spinner/Spinner";
-import TablePagination from "@/components/TablePagination";
-import { useHydrated } from "@/hooks/useHydrated";
-import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
-import { formatDateTime } from "@/utils/formatDateTime";
-import { formatDateWithName } from "@/utils/formatDateWithName";
 import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
+import Image from "@/components/Image";
 import { BsFillPlusCircleFill } from "react-icons/bs";
-import { CgRadioCheck } from "react-icons/cg";
 import { IoIosCall, IoMdMail } from "react-icons/io";
+import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
 import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
+import { CgRadioCheck } from "react-icons/cg";
+import Sorting from "@/components/Sorting";
+import Icon from "@/components/Icon";
+import TablePagination from "@/components/TablePagination";
 import { useMediaQuery } from "react-responsive";
-import { EditStudentModalAdmin } from "../../components/Students_list/Row";
-
-export default function StudentDetails() {
-  const [fetch, setFetch] = useState(false);
+import { useHydrated } from "@/hooks/useHydrated";
+import Link from "next/link";
+import Modal from "@/components/Modal";
+import { useForm } from "react-hook-form";
+import Field from "@/components/Field";
+import toast from "react-hot-toast";
+import Select from "@/components/AddStudentSelect";
+import { formatDateTime } from "@/utils/formatDateTime";
+import { formatDateWithName } from "@/utils/formatDateWithName";
+import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
+import Spinner from "@/components/Spinner/Spinner";
+function OrgDetails() {
   const router = useRouter();
-  const id = router.query.id;
-  const [studentDetails, setStudentDetails] = useState();
+  const id = router?.query?.id;
+  const [orgData, setOrgData] = useState({});
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios("/student/" + id);
-      setStudentDetails(res?.data);
+    const getOrgDetails = async () => {
+      const res = await axios.get(`/organization/${id}`);
+      setOrgData(res?.data);
     };
-
-    if (router.isReady) {
-      fetchData();
-      fetchGroup();
-    }
-  }, [id, router, fetch]);
-
-  console.log("studentDetails", studentDetails);
-
+    router.isReady && getOrgDetails();
+  }, [id, router.isReady]);
+  console.log("orgDetails", orgData);
   return (
-    <Layout title="Student Details" back>
+    <Layout title="Organizations Details" back>
       <div className="grid grid-cols-12 gap-x-20">
         <div className="col-span-4">
-          <StudentProfileInfo
-            data={studentDetails}
-            setFetch={setFetch}
-          />
+          <StudentProfileInfo data={orgData} />
         </div>
         <div className="col-span-8">
-          <StudentDetailsRight data={studentDetails} />
+          <StudentDetailsRight data={orgData} />
         </div>
       </div>
     </Layout>
   );
 }
 
-const StudentProfileInfo = ({ data, setFetch }) => {
-  const [visible, setVisible] = useState(false)
-  const [editData, setEditData] = useState({})
-  console.log(editData, visible)
+export default OrgDetails;
+
+const StudentProfileInfo = ({ data }) => {
+  const [visible, setVisible] = useState(false);
+  const [editData, setEditData] = useState({});
   return (
     <div className="space-y-3">
       <div className="space-y-2">
@@ -78,58 +67,35 @@ const StudentProfileInfo = ({ data, setFetch }) => {
         <div>
           <h2 className="text-xl font-extrabold">{data?.full_name}</h2>
           <p className="text-sm">
-            {data?.profile[0]?.country || "Not Available"}
+            {data?.profile ? data?.profile[0]?.country : "Not Available"}
           </p>
         </div>
       </div>
       <hr className="border-dotted border-black" />
+      <div>
+        <p className="text-sm">Owner Name</p>
+        <p className="text-sm font-bold">
+          {data?.profile && data?.profile[0]?.org_name}
+        </p>
+      </div>
       <div>
         <p className="text-sm">Email</p>
         <p className="text-sm font-bold">{data?.email}</p>
       </div>
       <div>
         <p className="text-sm">Phone</p>
-        <p className="text-sm font-bold">{data?.phone || "Not Available"}</p>
-      </div>
-      <div>
-        <p className="text-sm">Gender</p>
-        <p className="text-sm font-bold">
-          {data?.profile[0]?.gender || "Not Available"}
-        </p>
-      </div>
-      <div>
-        <p className="text-sm">Education</p>
-        <p className="text-sm font-bold">
-          {data?.profile[0]?.education || "Not Available"}
-        </p>
+        <p className="text-sm font-bold">{data?.phone}</p>
       </div>
       <div>
         <p className="text-sm">Address</p>
-        <p className="text-sm font-bold">
-          {data?.profile[0]?.address || "Not Available"}
-        </p>
-      </div>
-      <div>
-        <p className="text-sm">Organization</p>
-        <p className="text-sm font-bold">{data?.profile[0]?.organization?.full_name || "Not Available"}</p>
-      </div>
-      <div>
-        <p className="text-sm">Group</p>
-        <p className="text-sm font-bold">{data?.profile[0]?.group?.name || "Not Available"}</p>
-      </div>
-      <div>
-        <p className="text-sm">Birthday</p>
-        <p className="text-sm font-bold">
-          {formatDateTime(data?.profile[0]?.birth_date, "date") ||
-            "Not Available"}
-        </p>
+        <p className="text-sm font-bold">{data?.address || "Not Available"}</p>
       </div>
       <hr className="border-dotted border-black" />
       <div className="flex items-center gap-x-2">
         <button
           onClick={() => {
-            setEditData(data)
-            setVisible(true)
+            setEditData(data);
+            setVisible(true);
           }}
           className="flex items-center gap-x-3 bg-primary py-2.5 px-8 justify-center text-xs font-bold"
         >
@@ -148,9 +114,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           <IoIosCall />
         </Link>
       </div>
-      {
-        visible && <EditStudentModalAdmin visible={visible} setVisible={setVisible} editData={editData} />
-      }
+      <EditOrgModal {...{ visible, setVisible, editData }} />
     </div>
   );
 };
@@ -169,53 +133,37 @@ const StudentDetailsRight = ({ data }) => {
     query: "(max-width: 1023px)",
   });
 
-  const [examDate, setExamDate] = useState("");
-  useEffect(() => {
-    const getExamDate = async () => {
-      const res = await axios.get(`/exam_countdown`);
-      console.log(res);
-    };
-    // getExamDate();
-  }, []);
   return (
     <div>
-      {/* Student Progress & Performance */}
-      <div className="bg-[url('/images/student_progress.svg')] bg-cover bg-center bg-no-repeat px-5 pt-9 pb-7">
-        <h2 className="text-lg font-extrabold text-black">
-          Student Progress & Performance
+      {/* Setup up your PTE Identity */}
+      <div className="bg-[url('/images/Identity.png')] bg-cover bg-center bg-no-repeat p-5">
+        <h2 className="text-lg font-extrabold text-white">
+          Setup up your PTE Identity
         </h2>
         <div className="flex items-center gap-x-2 mt-2">
-          <button className="flex items-center gap-x-2 bg-primary py-2.5 px-4 justify-center text-xs font-bold">
-            PTE Progress <BiRightArrowAlt className="text-base" />
-          </button>
-          <button className="flex items-center gap-x-2 bg-primary py-2.5 px-4 justify-center text-xs font-bold">
-            PTE Performance <BiRightArrowAlt className="text-base" />
+          <button className="flex items-center gap-x-2 bg-white py-2.5 text-black px-4 justify-center text-xs font-bold">
+            Change Identity <BiRightArrowAlt className="text-base" />
           </button>
         </div>
       </div>
-      {/* Exam Count Down */}
-      <div className="flex items-center justify-between mt-2.5">
-        <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <button className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
-            Exam Count Down
+      {/*  */}
+      <div className="bg-[url('/images/edit_account.png')] bg-cover bg-center bg-no-repeat p-5 mt-3">
+        <h2 className="text-lg font-extrabold text-white">
+          Bluk Account Settings
+        </h2>
+        <div className="flex items-center gap-x-2 mt-2">
+          <button className="flex items-center gap-x-2 bg-white py-2.5 text-black px-4 justify-center text-xs font-bold">
+            Edit Bluk Account <BiRightArrowAlt className="text-base" />
           </button>
-          <p className="text-xl font-medium text-gray dark:text-white">
-            20d 03h 03m 52s
-          </p>
-          <RiSettings2Fill className="text-xl text-cream" />
-        </div>
-        <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <button className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
-            Target Score
+          <button className="flex items-center gap-x-2 bg-white py-2.5 text-black px-4 justify-center text-xs font-bold">
+            See Transaction <BiRightArrowAlt className="text-base" />
           </button>
-          <p className="text-3xl font-medium text-gray dark:text-white">79+</p>
-          <RiSettings2Fill className="text-xl text-cream" />
         </div>
       </div>
       {/* Account Plan History */}
       <div className="bg-white dark:bg-black p-5 mt-9">
         <div className="flex items-center justify-between">
-          <p className="text-lg font-extrabold">Account Plan History</p>
+          <p className="text-lg font-extrabold">Group Settings</p>
           <button
             onClick={() =>
               setOpenAssignNewPlan({
@@ -225,7 +173,7 @@ const StudentDetailsRight = ({ data }) => {
             }
             className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
           >
-            <BsFillPlusCircleFill /> Assign New Plan
+            <BsFillPlusCircleFill /> Create New Group
           </button>
         </div>
         {/* Plan */}
@@ -275,6 +223,100 @@ const StudentDetailsRight = ({ data }) => {
   );
 };
 
+const EditOrgModal = ({ visible, setVisible, editData }) => {
+  console.log(editData);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({});
+  useEffect(() => {
+    if (editData) {
+      setValue("org_name", editData?.profile?.org_name);
+      setValue("email", editData?.email);
+      setValue("phone", editData?.phone);
+      setValue("address", editData?.profile?.address || "");
+      setValue("country", editData?.profile?.country || "");
+    }
+  }, [editData]);
+  const onSubmit = async (data) => {
+    const submitData = {
+      email: data.email,
+      phone: data.phone,
+      profile: {
+        address: data.address,
+        country: data.country,
+        org_name: data.org_name,
+      },
+    };
+    try {
+      await axios.put(`/organization/${editData?.id}/update`, submitData);
+      toast.success("Successfully Updated");
+      setVisible(false);
+    } catch (err) {
+      const key = Object.keys(err?.response?.data)[0];
+      const value = err?.response?.data[key];
+      toast.error(`${key} - ${value}`);
+    }
+  };
+
+  return (
+    <Modal
+      title="Update Information"
+      visible={visible}
+      onClose={() => setVisible(false)}
+    >
+      <form action="" onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-4"
+          label="Owner Name"
+          placeholder="Enter  name"
+          register={register}
+          name="org_name"
+        />
+
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Email"
+          placeholder="Enter email"
+          type="email"
+          register={register}
+          name="email"
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Phone Number"
+          placeholder="Enter phone number"
+          type="tel"
+          register={register}
+          name="phone"
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Address"
+          placeholder="Enter Address"
+          register={register}
+          name="address"
+        />
+        <Field
+          errors={errors}
+          className="mb-6"
+          label="Country"
+          placeholder="Enter Country"
+          register={register}
+          name="country"
+        />
+        <button className="btn-purple  w-full">Update Info</button>
+      </form>
+    </Modal>
+  );
+};
+
 const AccountPlan = ({ data }) => {
   return (
     <div>
@@ -282,16 +324,16 @@ const AccountPlan = ({ data }) => {
         <thead>
           <tr>
             <th className="py-2 pr-3 text-start">
-              <Sorting title="Plan Name" />
+              <Sorting title="Group Name" />
             </th>
             <th className="th-custom text-center">
-              <Sorting title="Start In" />
+              <Sorting title="Students In" />
             </th>
             <th className="th-custom text-center">
-              <Sorting title="End In" />
+              <Sorting title="Created In" />
             </th>
             <th className="th-custom text-center">
-              <Sorting title="Remaining Days" />
+              <Sorting title="Average Score" />
             </th>
           </tr>
         </thead>
@@ -342,196 +384,6 @@ const AccountPlanMobile = ({ data }) => {
   );
 };
 
-// Modal
-// Update Information profile
-const UpdateInformation = ({
-  openUpdateInformation,
-  setOpenUpdateInformation,
-  setFetch,
-}) => {
-  console.log(openUpdateInformation)
-  const genders = [
-    { id: 1, name: "male" },
-    { id: 2, name: "female" },
-  ];
-  const [groups, setGroups] = useState([]);
-  const [group, setGroup] = useState(openUpdateInformation?.data?.profile[0]?.group);
-  const [gender, setGender] = useState(genders[0]);
-  const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchGroup = async () => {
-      const res = await axios("/" + openUpdateInformation?.data?.profile[0]?.organization.id + "/groups");
-      setGroups(res.data);
-    };
-    fetchGroup();
-  }, []);
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    const updateData = {
-      ...data,
-      group: group?.id,
-      organization: openUpdateInformation?.data?.profile[0]?.organization.id,
-      profile: {
-        gender: gender?.name,
-        ...data?.profile,
-      },
-    };
-
-    const updateProfile = async () => {
-      setLoading(true);
-      const res = await axios.put(
-        `/student/${openUpdateInformation?.data?.id}/update`,
-        updateData
-      );
-      setLoading(false);
-      toast.success(res?.data?.success);
-      setOpenUpdateInformation({ state: false, data: null });
-      reset();
-      setFetch((prev) => !prev);
-    };
-    updateProfile();
-  };
-
-  // set Default value
-  useEffect(() => {
-    setValue("full_name", openUpdateInformation?.data?.full_name);
-    setValue("email", openUpdateInformation?.data?.email);
-    setValue("phone", openUpdateInformation?.data?.phone?.slice(3));
-    setValue(
-      "profile.country",
-      openUpdateInformation?.data?.profile[0]?.country
-    );
-    setValue(
-      "profile.education",
-      openUpdateInformation?.data?.profile[0]?.education
-    );
-    setValue(
-      "profile.address",
-      openUpdateInformation?.data?.profile[0]?.address
-    );
-    setValue(
-      "profile.birth_date",
-      formatDateTime(
-        openUpdateInformation?.data?.profile[0]?.birth_date,
-        "datere"
-      )
-    );
-    setGender(
-      openUpdateInformation?.data?.profile[0]?.gender === "male"
-        ? genders[0]
-        : genders[1]
-    );
-    setGroup(openUpdateInformation?.data?.profile[0]?.group);
-  }, [openUpdateInformation?.data]);
-
-  return (
-    <Modal
-      title="Update Information"
-      visible={openUpdateInformation?.state}
-      onClose={() => {
-        setOpenUpdateInformation({ state: false, data: null });
-        reset();
-      }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Student Name"
-          placeholder="Student Name"
-          required
-          register={register}
-          name="full_name"
-        />
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Email"
-          placeholder="Enter email"
-          type="email"
-          required
-          register={register}
-          name="email"
-        />
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Phone Number"
-          placeholder="01712345678"
-          type="number"
-          required
-          register={register}
-          name="phone"
-        />
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Address"
-          placeholder="Enter Address"
-          required
-          register={register}
-          name="profile.address"
-        />
-        <Select
-          label="Gender"
-          className="mb-2"
-          items={genders}
-          value={gender}
-          onChange={setGender}
-        />
-        <Select
-          label="Group *"
-          className="mb-2"
-          items={groups}
-          value={group}
-          onChange={setGroup}
-        />
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Country"
-          placeholder="Enter Country"
-          required
-          register={register}
-          name="profile.country"
-        />
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Education"
-          placeholder="Enter Education"
-          required
-          register={register}
-          name="profile.education"
-        />
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Birth Date"
-          placeholder="Enter Birth Date"
-          type="date"
-          required
-          register={register}
-          name="profile.birth_date"
-        />
-        <button className="bg-primary py-3 text-base font-bold w-full flex items-center gap-x-2 justify-center">
-          Update Info {isLoading && <Spinner className="w-6 h-6" />}
-        </button>
-      </form>
-    </Modal>
-  );
-};
-
-// password change Modal
 const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
   const {
     register,
@@ -545,7 +397,10 @@ const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
       ...data,
     };
     const changePass = async () => {
-      const res = await axios.post(`/student/change_password`, passwordData);
+      const res = await axios.post(
+        `/organization/${openChangePassword?.student}/passwordchange`,
+        passwordData
+      );
       setOpenChangePassword({ state: false, student: null });
       reset();
       toast.success(res?.data?.message);
@@ -590,7 +445,6 @@ const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
   );
 };
 
-// Assign New Plan
 const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
   const [planActive, setPlanActive] = useState("immediate");
   const [plansData, setPlansData] = useState([]);

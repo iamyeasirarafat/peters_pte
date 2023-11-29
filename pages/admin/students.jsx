@@ -17,6 +17,8 @@ const StudentList = () => {
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
 
+  console.log("data", data);
+
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/students?page=" + page);

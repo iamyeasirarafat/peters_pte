@@ -7,6 +7,7 @@ import Modal from "@/components/Modal";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -19,6 +20,7 @@ const StudentRow = ({ admin, item, setStatus }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
+  const router = useRouter();
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };

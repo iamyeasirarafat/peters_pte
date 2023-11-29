@@ -23,6 +23,7 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDateWithName } from "@/utils/formatDateWithName";
 import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import Spinner from "@/components/Spinner/Spinner";
+import { timeLeftCountdown } from "@/utils/timeLeftCountdown";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
@@ -47,8 +48,6 @@ export default function StudentDetails() {
   const myGroup = groups?.find(
     (item) => item?.id === studentDetails?.profile[0]?.group
   );
-
-  console.log("studentDetails", studentDetails);
 
   return (
     <Layout title="Student Details" back>
@@ -167,19 +166,28 @@ const StudentDetailsRight = ({ data }) => {
     state: false,
     student: null,
   });
+  const [openExamCountDown, setOpenExamCountDown] = useState(false);
+  const [openTargetScore, setOpenTargetScore] = useState(false);
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
 
   const [examDate, setExamDate] = useState("");
+  const [score, setScore] = useState(0);
   useEffect(() => {
     const getExamDate = async () => {
       const res = await axios.get(`/exam_countdown`);
-      console.log(res);
+      setExamDate(res?.data);
     };
-    // getExamDate();
+    getExamDate();
+    const getScore = async () => {
+      const res = await axios.get("/target_score");
+      setScore(res?.data);
+    };
+    getScore();
   }, []);
+
   return (
     <div>
       {/* Student Progress & Performance */}
@@ -199,21 +207,38 @@ const StudentDetailsRight = ({ data }) => {
       {/* Exam Count Down */}
       <div className="flex items-center justify-between mt-2.5">
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <button className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
+          <button
+            onClick={() => setOpenExamCountDown(true)}
+            className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]"
+          >
             Exam Count Down
           </button>
           <p className="text-xl font-medium text-gray dark:text-white">
-            20d 03h 03m 52s
+            {/* {timeLeftCountdown(examDate?.exam_date)} */}
           </p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <button className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
+          <button
+            onClick={() => setOpenTargetScore(true)}
+            className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]"
+          >
             Target Score
           </button>
-          <p className="text-3xl font-medium text-gray dark:text-white">79+</p>
+          <p className="text-3xl font-medium text-gray dark:text-white">
+            {score?.score}+
+          </p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
+        <ExamCountDown
+          openExamCountDown={openExamCountDown}
+          setOpenExamCountDown={setOpenExamCountDown}
+        />
+        <TargetScore
+          openTargetScore={openTargetScore}
+          setOpenTargetScore={setOpenTargetScore}
+          set
+        />
       </div>
       {/* Account Plan History */}
       <div className="bg-white dark:bg-black p-5 mt-9">
@@ -696,6 +721,82 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
             Start After Current Plan End
           </button>
         </div>
+        <button className="bg-primary py-3 text-base font-bold w-full">
+          Update Plan
+        </button>
+      </form>
+    </Modal>
+  );
+};
+const ExamCountDown = ({ openExamCountDown, setOpenExamCountDown }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    const res = axios.post("/exam_countdown", data);
+    setOpenExamCountDown(false);
+    toast.success("Countdown added success");
+  };
+  return (
+    <Modal
+      title="Exam Countdown"
+      visible={openExamCountDown}
+      onClose={() => {
+        setOpenExamCountDown(false);
+        reset();
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-2"
+          label="Exam Date"
+          placeholder="05/07/23"
+          register={register}
+          name="exam_date"
+          type="date"
+        />
+        <button className="bg-primary py-3 text-base font-bold w-full">
+          Update Plan
+        </button>
+      </form>
+    </Modal>
+  );
+};
+const TargetScore = ({ openTargetScore, setOpenTargetScore }) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    const res = axios.post("/target_score", data);
+    setOpenTargetScore(false);
+    toast.success("Score added success");
+  };
+  return (
+    <Modal
+      title="Target Score"
+      visible={openTargetScore}
+      onClose={() => {
+        setOpenTargetScore(false);
+        reset();
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Field
+          errors={errors}
+          className="mb-2"
+          label="Target Score*"
+          placeholder="35"
+          register={register}
+          name="score"
+          type="number"
+        />
         <button className="bg-primary py-3 text-base font-bold w-full">
           Update Plan
         </button>
