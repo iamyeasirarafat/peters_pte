@@ -9,39 +9,38 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import OrganizationList from "../../../components/OrganizationList";
-import { TablePagination } from "../students";
 const Organizations = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
-  const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const getData = async () => {
       const res = await axios("/organizations?page=" + page);
       setData(res.data);
-      setLoading(false)
+      setLoading(false);
     };
     getData();
   }, [page, status]);
 
   return (
     <Layout title="Organizations" background>
-      {
-        loading ? <div className="flex justify-center items-center h-96">
+      {loading ? (
+        <div className="flex justify-center items-center h-96">
           <div
             class="w-12 h-12 rounded-full animate-spin
                   border-x-8 border-solid border-orange-400 border-t-transparent"
           ></div>
-        </div> : data?.results?.length > 0 ? (
-          <>
-            <StudentFilter />
-            <OrganizationList setStatus={setStatus} items={data?.results} />
-            <TablePagination data={data} setPage={setPage} />
-          </>
-        ) : (
-          <EmptyPage setStatus={setStatus} />
-        )
-      }
+        </div>
+      ) : data?.results?.length > 0 ? (
+        <>
+          <StudentFilter />
+          <OrganizationList setStatus={setStatus} items={data?.results} />
+          <TablePagination data={data} setPage={setPage} />
+        </>
+      ) : (
+        <EmptyPage setStatus={setStatus} />
+      )}
     </Layout>
   );
 };
