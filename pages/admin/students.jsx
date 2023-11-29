@@ -2,9 +2,9 @@ import Select from "@/components/AddStudentSelect";
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
+import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
-import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,28 +14,38 @@ import Students from "../../components/Students_list";
 const StudentList = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
+  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
 
   console.log("data", data);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios("/students");
+      const res = await axios("/students?page=" + page);
       setData(res.data);
+      setLoading(false)
     };
     getData();
-  }, [status]);
-
+  }, [status, page]);
+  console.log(data)
   return (
     <Layout title="Students" background>
-      {data?.results?.length > 0 ? (
-        <>
-          <StudentFilter />
-          <Students admin={true} setStatus={setStatus} items={data?.results} />
-          <TablePagination />
-        </>
-      ) : (
-        <EmptyPage setStatus={setStatus} />
-      )}
+      {
+        loading ? <div className="flex justify-center items-center h-96">
+          <div
+            class="w-12 h-12 rounded-full animate-spin
+                  border-x-8 border-solid border-orange-400 border-t-transparent"
+          ></div>
+        </div> : data?.results?.length > 0 ? (
+          <>
+            <StudentFilter />
+            <Students admin={true} setStatus={setStatus} items={data?.results} />
+            <TablePagination data={data} setPage={setPage} />
+          </>
+        ) : (
+          <EmptyPage setStatus={setStatus} />
+        )
+      }
     </Layout>
   );
 };
@@ -83,23 +93,23 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   const [group, setGroup] = useState();
   const [orgs, setOrgs] = useState([]);
   const [org, setOrg] = useState();
-  const [groupModal, setGroupModal] = useState(false);
-  const [refetchGroup, setRefetchGroup] = useState(1);
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
       const res = await axios(org.id + "/groups");
       setGroups(res.data);
-      setGroup(res.data[0]);
     };
-    org && fetchGroup();
-  }, [org, refetchGroup]);
+    org?.id && fetchGroup();
+  }, [org]);
 
   //get Organizations
   useEffect(() => {
     const fetchOrgs = async () => {
-      const res = await axios("/organizations");
-      let formattedOrgs = [];
+      const res = await axios("/organizations?all=true");
+      let formattedOrgs = [{
+        id: null,
+        name: "None"
+      }];
       await res.data.forEach((item) =>
         formattedOrgs.push({ id: item.id, name: item.full_name })
       );
@@ -119,9 +129,9 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
-      group: group.id,
+      ...group?.id && { group: group.id },
       plan: plan.id,
-      organization: org.id,
+      ...org?.id && { organization: org.id },
     };
     try {
       await axios.post("/student/add", submitData);
@@ -207,3 +217,22 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
     </Modal>
   );
 };
+
+
+export const TablePagination = ({ data, setPage }) => (
+  <div className="flex justify-between items-center mt-5 md:mt-5">
+    <button
+      onClick={() => setPage(old => old - 1)}
+      disabled={!data?.prev} className="btn-stroke disabled:cursor-not-allowed disabled:hover:opacity-40 btn-small">
+      <Icon name="arrow-prev" />
+      <span>Prev</span>
+    </button>
+    <div className="text-sm font-bold"> {data?.start_index} of {data?.total}</div>
+    <button
+      onClick={() => setPage(old => old + 1)}
+      disabled={!data?.next} className="btn-stroke disabled:cursor-not-allowed disabled:hover:opacity-40 btn-small">
+      <span>Next</span>
+      <Icon name="arrow-next" />
+    </button>
+  </div>
+);

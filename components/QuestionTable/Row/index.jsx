@@ -3,15 +3,25 @@ import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const Row = ({ item }) => {
+  const router = useRouter();
+  const { questionTable } = router.query;
   const [value, setValue] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleUpdateClick = (item) => {
+    router.push({
+      pathname: `/admin/practice-question/${questionTable}/edit`,
+      query: { item: JSON.stringify(item) },
+    });
+  };
+
   return (
     <tr className="">
       <td className="td-custom">
@@ -59,12 +69,12 @@ const Row = ({ item }) => {
               } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
             >
               <div role="none">
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                <div
+                  onClick={() => handleUpdateClick(item)}
+                  className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 >
                   <Icon name="settings" /> Edit Question
-                </a>
+                </div>
                 <a
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"

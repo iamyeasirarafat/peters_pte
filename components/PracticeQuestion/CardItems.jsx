@@ -1,6 +1,6 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import Card from "./Card";
-import axios from "axios";
 
 const CardItems = () => {
   const [itemNumber, setItemNumber] = useState({});
@@ -191,7 +191,7 @@ const CardItems = () => {
     <div>
       <div>
         <h2 className="text-lg font-bold mb-3">Speaking Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid   grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {Speaking?.map((data, i) => (
             <Card
               key={i}
@@ -206,7 +206,7 @@ const CardItems = () => {
       </div>
       <div>
         <h2 className="text-lg font-bold mb-3 mt-5">Writing Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid   grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {Writing?.map((data, i) => (
             <Card
               key={i}
@@ -221,7 +221,7 @@ const CardItems = () => {
       </div>
       <div>
         <h2 className="text-lg font-bold mb-3 mt-5">Reading Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid  grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {reading?.map((data, i) => (
             <Card
               key={i}
@@ -235,8 +235,8 @@ const CardItems = () => {
         </div>
       </div>
       <div>
-        <h2 className="text-lg font-bold mb-3 mt-5">Speaking Test</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <h2 className="text-lg font-bold mb-3 mt-5">Listening Test</h2>
+        <div className="grid   grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {Speaking2?.map((data, i) => (
             <Card
               key={i}
@@ -251,7 +251,7 @@ const CardItems = () => {
       </div>
       <div>
         <h2 className="text-lg font-bold mb-3 mt-5">Mini Game</h2>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid   grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {MiniGame?.map((data, i) => (
             <Card
               key={i}

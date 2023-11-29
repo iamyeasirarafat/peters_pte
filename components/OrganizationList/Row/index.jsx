@@ -49,16 +49,15 @@ const StudentRow = ({ item, setStatus }) => {
           <div
             className="relative inline-block text-left"
             onClick={toggleDropdown}
-            // onBlur={closeDropdown}
+          // onBlur={closeDropdown}
           >
             <button className="btn-transparent-dark btn-small btn-square">
               <Icon name="dots" />
             </button>
             <div
               style={{ backgroundColor: "#FAF4F0" }}
-              className={`${
-                isOpen ? "block" : "hidden"
-              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              className={`${isOpen ? "block" : "hidden"
+                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
             >
               <div role="none">
                 <button
@@ -90,8 +89,7 @@ const StudentRow = ({ item, setStatus }) => {
 };
 export default StudentRow;
 
-export const EditOrgModal = ({ visible, setVisible, editData }) => {
-  console.log(editData);
+const EditOrgModal = ({ visible, setVisible, editData }) => {
   const {
     register,
     handleSubmit,

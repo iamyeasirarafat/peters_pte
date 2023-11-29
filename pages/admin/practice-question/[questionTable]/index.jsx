@@ -63,6 +63,32 @@ const Index = () => {
       url = "practice/read_alouds";
     } else if (questionTable === "Summarize Written Text") {
       url = "summarizes";
+    } else if (questionTable === "Write Essay") {
+      url = "write_easies";
+    } else if (questionTable === "Highlight Correct Summary") {
+      url = "highlight_summarys";
+    } else if (questionTable === "Select Missing Word") {
+      url = "missing_words";
+    } else if (questionTable === "Write From Dictation") {
+      url = "dictations";
+    } else if (questionTable === "Repeat Sentence") {
+      url = "repeat_sentences";
+    } else if (questionTable === "Answer Short Question") {
+      url = "short_questions";
+    } else if (questionTable === "Re-Tell Lecture") {
+      url = "retell_sentences";
+    } else if (questionTable === "Describe Image") {
+      url = "describe_images";
+    } else if (questionTable === "Re-order Paragraphs") {
+      url = "reorder_paragraphs";
+    } else if (questionTable === "Reading: MCM") {
+      url = "multi_choices/reading";
+    } else if (questionTable === "Reading: MCS") {
+      url = "multi_choices/reading/single-answer";
+    } else if (questionTable === "Listening: MCM") {
+      url = "multi_choices";
+    } else if (questionTable === "Listening: MCS") {
+      url = "multi_choices/single-answer";
     }
 
     const fetchData = async () => {
@@ -78,7 +104,6 @@ const Index = () => {
     };
     fetchData();
   }, [questionTable]);
-  console.log(56666, tableData);
   return (
     <AdminLayout title={questionTable} back={true}>
       <div className="flex justify-between mb-6">

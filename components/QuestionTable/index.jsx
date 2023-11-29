@@ -6,30 +6,16 @@ import Item from "./Item";
 import Row, { StudentRow } from "./Row";
 import Icon from "@/components/Icon";
 
-import { useHydrated } from "@/hooks/useHydrated";
-
 const Students = ({ items, student }) => {
   const [valueAll, setValueAll] = useState(false);
-  const { mounted } = useHydrated();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-
-  const isTablet = useMediaQuery({
-    query: "(max-width: 1023px)",
-  });
-
-  return mounted && isTablet ? (
-    <div className="bg-white dark:bg-black w-full">
-      {items.map((product, i) => (
-        <Item item={product} key={i} />
-      ))}
-    </div>
-  ) : (
+  return (
     <table className="bg-white dark:bg-black w-full">
-      <thead>
+      <thead className="overflow-x-scroll">
         <tr>
           <th className="th-custom">
             <Checkbox
@@ -40,16 +26,16 @@ const Students = ({ items, student }) => {
           <th className="th-custom">
             <Sorting title="Question Name" />
           </th>
-          <th className="th-custom">
+          <th className="">
             <Sorting title="Question Id" />
           </th>
           <th className="th-custom">
             <Sorting title="Appeared No." />
           </th>
-          <th className="th-custom">
+          <th className="">
             <Sorting title="Prediction" />
           </th>
-          <th className="th-custom">
+          <th className="">
             <Sorting title="Upload Date" />
           </th>
           <th className="td-custom text-right">
@@ -101,7 +87,7 @@ const Students = ({ items, student }) => {
           </th> */}
         </tr>
       </thead>
-      <tbody>
+      <tbody className="overflow-x-scroll">
         {items.map((product, i) => {
           if (student) {
             return <StudentRow item={product} key={i} />;

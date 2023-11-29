@@ -1,59 +1,55 @@
-import Layout from "@/components/Layout";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import Image from "@/components/Image";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-import { IoIosCall, IoMdMail } from "react-icons/io";
-import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
-import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
-import { CgRadioCheck } from "react-icons/cg";
-import Sorting from "@/components/Sorting";
-import Icon from "@/components/Icon";
-import TablePagination from "@/components/TablePagination";
-import { useMediaQuery } from "react-responsive";
-import { useHydrated } from "@/hooks/useHydrated";
-import Link from "next/link";
-import Modal from "@/components/Modal";
-import { useForm } from "react-hook-form";
-import Field from "@/components/Field";
-import toast from "react-hot-toast";
 import Select from "@/components/AddStudentSelect";
+import Field from "@/components/Field";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Layout from "@/components/Layout";
+import Modal from "@/components/Modal";
+import Sorting from "@/components/Sorting";
+import Spinner from "@/components/Spinner/Spinner";
+import TablePagination from "@/components/TablePagination";
+import { useHydrated } from "@/hooks/useHydrated";
+import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDateWithName } from "@/utils/formatDateWithName";
-import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
-import Spinner from "@/components/Spinner/Spinner";
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
+import { BsFillPlusCircleFill } from "react-icons/bs";
+import { CgRadioCheck } from "react-icons/cg";
+import { IoIosCall, IoMdMail } from "react-icons/io";
+import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
+import { useMediaQuery } from "react-responsive";
+import { EditStudentModalAdmin } from "../../components/Students_list/Row";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
   const router = useRouter();
   const id = router.query.id;
   const [studentDetails, setStudentDetails] = useState();
-  const [groups, setGroups] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios("/student/" + id);
       setStudentDetails(res?.data);
     };
-    const fetchGroup = async () => {
-      const res = await axios("/groups");
-      setGroups(res.data);
-    };
+
     if (router.isReady) {
       fetchData();
       fetchGroup();
     }
   }, [id, router, fetch]);
-  const myGroup = groups?.find(
-    (item) => item?.id === studentDetails?.profile[0]?.group
-  );
+
+  console.log("studentDetails", studentDetails);
+
   return (
     <Layout title="Student Details" back>
       <div className="grid grid-cols-12 gap-x-20">
         <div className="col-span-4">
           <StudentProfileInfo
             data={studentDetails}
-            group={myGroup}
             setFetch={setFetch}
           />
         </div>
@@ -65,11 +61,10 @@ export default function StudentDetails() {
   );
 }
 
-const StudentProfileInfo = ({ data, group, setFetch }) => {
-  const [openUpdateInformation, setOpenUpdateInformation] = useState({
-    state: false,
-    data: null,
-  });
+const StudentProfileInfo = ({ data, setFetch }) => {
+  const [visible, setVisible] = useState(false)
+  const [editData, setEditData] = useState({})
+  console.log(editData, visible)
   return (
     <div className="space-y-3">
       <div className="space-y-2">
@@ -115,8 +110,12 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
         </p>
       </div>
       <div>
+        <p className="text-sm">Organization</p>
+        <p className="text-sm font-bold">{data?.profile[0]?.organization?.full_name || "Not Available"}</p>
+      </div>
+      <div>
         <p className="text-sm">Group</p>
-        <p className="text-sm font-bold">{group?.name || "Not Available"}</p>
+        <p className="text-sm font-bold">{data?.profile[0]?.group?.name || "Not Available"}</p>
       </div>
       <div>
         <p className="text-sm">Birthday</p>
@@ -128,7 +127,10 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
       <hr className="border-dotted border-black" />
       <div className="flex items-center gap-x-2">
         <button
-          onClick={() => setOpenUpdateInformation({ state: true, data: data })}
+          onClick={() => {
+            setEditData(data)
+            setVisible(true)
+          }}
           className="flex items-center gap-x-3 bg-primary py-2.5 px-8 justify-center text-xs font-bold"
         >
           <BsFillPlusCircleFill /> Update Info
@@ -146,11 +148,9 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
           <IoIosCall />
         </Link>
       </div>
-      <UpdateInformation
-        openUpdateInformation={openUpdateInformation}
-        setOpenUpdateInformation={setOpenUpdateInformation}
-        setFetch={setFetch}
-      />
+      {
+        visible && <EditStudentModalAdmin visible={visible} setVisible={setVisible} editData={editData} />
+      }
     </div>
   );
 };
@@ -164,28 +164,19 @@ const StudentDetailsRight = ({ data }) => {
     state: false,
     student: null,
   });
-  const [openExamCountDown, setOpenExamCountDown] = useState(false);
-  const [openTargetScore, setOpenTargetScore] = useState(false);
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
 
   const [examDate, setExamDate] = useState("");
-  const [score, setScore] = useState(0);
   useEffect(() => {
     const getExamDate = async () => {
       const res = await axios.get(`/exam_countdown`);
-      setExamDate(res?.data);
+      console.log(res);
     };
-    getExamDate();
-    const getScore = async () => {
-      const res = await axios.get("/target_score");
-      setScore(res?.data);
-    };
-    getScore();
+    // getExamDate();
   }, []);
-
   return (
     <div>
       {/* Student Progress & Performance */}
@@ -205,38 +196,21 @@ const StudentDetailsRight = ({ data }) => {
       {/* Exam Count Down */}
       <div className="flex items-center justify-between mt-2.5">
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <button
-            onClick={() => setOpenExamCountDown(true)}
-            className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]"
-          >
+          <button className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
             Exam Count Down
           </button>
           <p className="text-xl font-medium text-gray dark:text-white">
-            {/* {timeLeftCountdown(examDate?.exam_date)} */}
+            20d 03h 03m 52s
           </p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
-          <button
-            onClick={() => setOpenTargetScore(true)}
-            className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]"
-          >
+          <button className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]">
             Target Score
           </button>
-          <p className="text-3xl font-medium text-gray dark:text-white">
-            {score?.score}+
-          </p>
+          <p className="text-3xl font-medium text-gray dark:text-white">79+</p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
-        <ExamCountDown
-          openExamCountDown={openExamCountDown}
-          setOpenExamCountDown={setOpenExamCountDown}
-        />
-        <TargetScore
-          openTargetScore={openTargetScore}
-          setOpenTargetScore={setOpenTargetScore}
-          set
-        />
       </div>
       {/* Account Plan History */}
       <div className="bg-white dark:bg-black p-5 mt-9">
@@ -375,18 +349,19 @@ const UpdateInformation = ({
   setOpenUpdateInformation,
   setFetch,
 }) => {
+  console.log(openUpdateInformation)
   const genders = [
     { id: 1, name: "male" },
     { id: 2, name: "female" },
   ];
   const [groups, setGroups] = useState([]);
-  const [group, setGroup] = useState("");
+  const [group, setGroup] = useState(openUpdateInformation?.data?.profile[0]?.group);
   const [gender, setGender] = useState(genders[0]);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios("/groups");
+      const res = await axios("/" + openUpdateInformation?.data?.profile[0]?.organization.id + "/groups");
       setGroups(res.data);
     };
     fetchGroup();
@@ -403,9 +378,8 @@ const UpdateInformation = ({
   const onSubmit = (data) => {
     const updateData = {
       ...data,
-      phone: `+88${data?.phone}`,
       group: group?.id,
-      organization: openUpdateInformation?.data?.profile[0]?.organization,
+      organization: openUpdateInformation?.data?.profile[0]?.organization.id,
       profile: {
         gender: gender?.name,
         ...data?.profile,
@@ -456,11 +430,7 @@ const UpdateInformation = ({
         ? genders[0]
         : genders[1]
     );
-    setGroup(
-      groups?.find(
-        (item) => item?.id === openUpdateInformation?.data?.profile[0]?.group
-      )
-    );
+    setGroup(openUpdateInformation?.data?.profile[0]?.group);
   }, [openUpdateInformation?.data]);
 
   return (
@@ -719,82 +689,6 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
             Start After Current Plan End
           </button>
         </div>
-        <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Plan
-        </button>
-      </form>
-    </Modal>
-  );
-};
-const ExamCountDown = ({ openExamCountDown, setOpenExamCountDown }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    const res = axios.post("/exam_countdown", data);
-    setOpenExamCountDown(false);
-    toast.success("Countdown added success");
-  };
-  return (
-    <Modal
-      title="Exam Countdown"
-      visible={openExamCountDown}
-      onClose={() => {
-        setOpenExamCountDown(false);
-        reset();
-      }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Exam Date"
-          placeholder="05/07/23"
-          register={register}
-          name="exam_date"
-          type="date"
-        />
-        <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Plan
-        </button>
-      </form>
-    </Modal>
-  );
-};
-const TargetScore = ({ openTargetScore, setOpenTargetScore }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    const res = axios.post("/target_score", data);
-    setOpenTargetScore(false);
-    toast.success("Score added success");
-  };
-  return (
-    <Modal
-      title="Target Score"
-      visible={openTargetScore}
-      onClose={() => {
-        setOpenTargetScore(false);
-        reset();
-      }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Target Score*"
-          placeholder="35"
-          register={register}
-          name="score"
-          type="number"
-        />
         <button className="bg-primary py-3 text-base font-bold w-full">
           Update Plan
         </button>
