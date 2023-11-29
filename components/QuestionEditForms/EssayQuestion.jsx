@@ -1,11 +1,13 @@
 import axios from "axios";
 import EditCounter from "./EditCounter.tsx";
+import LoadingButton from "@/components/LoadingButton";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 const EssayQuestion = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const { item } = router.query;
   const itemObj = JSON.parse(item);
   const [formData, setFormData] = useState({
@@ -30,14 +32,20 @@ const EssayQuestion = () => {
     e.preventDefault();
     console.log(formData);
     try {
-      // const response = await axios.post("/write_easy", formData);
-      // toast.success("Create essay question successfully");
-      // if (response?.data) {
-      //   router.back();
-      // }
+      setLoading(true);
+      const response = await axios.put(
+        `/write_easy/${itemObj?.id}/update`,
+        formData
+      );
+      toast.success("Updated essay question successfully");
+      if (response?.data) {
+        router.back();
+      }
     } catch (error) {
       toast.error(error?.message);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,7 +99,7 @@ const EssayQuestion = () => {
           <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
-            value={formData.appeared}
+            value={formData.appeared ? formData.appeared : 0}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
           <div className="w-1/2 bg-white flex items-center pl-4">
@@ -107,12 +115,16 @@ const EssayQuestion = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Update Questions
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Update Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );
