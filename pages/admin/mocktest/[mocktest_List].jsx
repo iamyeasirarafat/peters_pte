@@ -20,11 +20,11 @@ function Index() {
   useEffect(() => {
     const getMockTest = async () => {
       const res = await axios.get(`/${mocktest_List}`);
-      console.log(res);
       setMockTestList(res?.data);
     };
     router.isReady && getMockTest();
   }, [mocktest_List, router.isReady]);
+  console.log("mockTestList", mockTestList);
 
   return (
     <Layout title={mocktest_List?.replace(/_/g, " ")} back>
@@ -39,14 +39,18 @@ function Index() {
           Create New Question
         </button>
       </div>
-      {mounted && isTablet ? <MocktestLisMobile /> : <MocktestList />}
+      {mounted && isTablet ? (
+        <MocktestLisMobile />
+      ) : (
+        <MocktestList data={mockTestList} />
+      )}
     </Layout>
   );
 }
 
 export default Index;
 
-const MocktestList = () => {
+const MocktestList = ({ data }) => {
   const [value, setValue] = useState(false);
   return (
     <div className="mt-4">
@@ -69,19 +73,21 @@ const MocktestList = () => {
           </tr>
         </thead>
         <tbody>
-          <MocktestListRow />
+          {data?.map((item, i) => (
+            <MocktestListRow key={i} item={item} />
+          ))}
         </tbody>
       </table>
     </div>
   );
 };
-const MocktestListRow = () => {
+const MocktestListRow = ({ item }) => {
   const [value, setValue] = useState(false);
   return (
     <tr>
       <td className="td-custom flex items-center gap-x-4">
         <Checkbox value={value} onChange={() => setValue(!value)} />
-        <p className="text-sm font-bold">Bill on the hill</p>
+        <p className="text-sm font-bold">{item?.title}</p>
       </td>
       <td className="td-custom text-center">
         <p className="text-sm">#7250589</p>
