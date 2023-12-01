@@ -6,6 +6,7 @@ import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
@@ -93,6 +94,12 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   const [group, setGroup] = useState();
   const [orgs, setOrgs] = useState([]);
   const [org, setOrg] = useState();
+  const router = useRouter()
+  const [replace, setReplace] = useState("")
+
+  useEffect(() => {
+    router.replace(router.asPath)
+  }, [replace])
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
@@ -101,6 +108,10 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
     };
     org?.id && fetchGroup();
   }, [org]);
+
+  useEffect(() => {
+    setGroup({})
+  }, [org])
 
   //get Organizations
   useEffect(() => {
@@ -138,6 +149,7 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
       toast.success("Successfully added");
       setVisible(false);
       setStatus && setStatus((state) => !state);
+      setReplace(Math.random())
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");

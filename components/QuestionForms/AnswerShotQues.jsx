@@ -1,20 +1,22 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
-import axios from "axios";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import AudioVisualizer from "../AudioVisualizer";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
 import LoadingButton from "@/components/LoadingButton";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import audioToText from "../../utils/audioToText";
+import AudioVisualizer from "../AudioVisualizer";
 const AnswerShotQues = () => {
   const router = useRouter();
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [getText, aiLoading, error] = audioToText()
   const { register, handleSubmit, setError, formState } = useForm();
+  console.log(aiLoading, "aiLoading")
   const onsubmit = async (data) => {
     if (audio) {
       try {
@@ -110,7 +112,13 @@ const AnswerShotQues = () => {
               </div>
               <div className="w-full">
                 <AudioVisualizer selectedFile={audioSrc} />
-                <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
+                <button
+                  onClick={async (e) => {
+                    e.preventDefault()
+                    const text = await getText(audio)
+                    console.log(text)
+                  }}
+                  className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
                   <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
                   Generate Reference Text
                 </button>
