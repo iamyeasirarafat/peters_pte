@@ -26,7 +26,11 @@ const SummerizeSpoken = () => {
         formData.append("audio", audio);
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-        const response = await axios.post("/retell_sentence", formData, config);
+        const response = await axios.post(
+          "/spoken/summarize",
+          formData,
+          config
+        );
         toast.success("Create question successfully");
         if (response?.data) {
           router.back();

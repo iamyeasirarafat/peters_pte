@@ -89,6 +89,8 @@ const Index = () => {
       url = "multi_choices";
     } else if (questionTable === "Listening: MCS") {
       url = "multi_choices/single-answer";
+    } else if (questionTable === "Summarize Spoken Text") {
+      url = "spoken/summarizes";
     }
 
     const fetchData = async () => {
