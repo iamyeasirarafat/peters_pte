@@ -7,8 +7,8 @@ import { useEffect } from "react";
 const FibReading = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    paragraph: "",
+    title: "",
+    paragraph: [],
     appeared: 0,
     prediction: false,
     options: [],
@@ -75,19 +75,80 @@ const FibReading = () => {
     );
   };
   useEffect(() => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      paragraph: text,
-      options: options,
-    }));
+    const extractSentences = (paragraph) => {
+      // Replace <button> elements with commas
+      const modifiedText = paragraph.replace(
+        /<button[^>]*>(.*?)<\/button>/g,
+        ","
+      );
+
+      // Split the modified text into an array of sentences
+      const sentences = modifiedText.match(/[^.!?]+[.!?]+/g);
+
+      // Filter out any null values from the array
+      const filteredSentences = sentences ? sentences.filter(Boolean) : [];
+
+      // Update the state with modified text and sentences array
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        paragraph: modifiedText,
+        options: options,
+        sentences: filteredSentences,
+      }));
+    };
+
+    extractSentences(text);
   }, [options, text]);
+
+  const [extraOption, setExtraOption] = useState(0);
+  const [extraAnswers, setExtraAnswers] = useState([]);
+  console.log(extraAnswers);
+  const handleExtraInputChange = (index, value) => {
+    const newExtraAnswers = [...extraAnswers];
+    const existingAnswer = newExtraAnswers.find(
+      (answer) => answer.index === index
+    );
+
+    if (existingAnswer) {
+      existingAnswer.value = value;
+    } else {
+      newExtraAnswers.push({ index, value });
+    }
+
+    setExtraAnswers(newExtraAnswers);
+  };
+
+  const renderInputFields = () => {
+    const inputFields = [];
+
+    for (let i = 0; i < extraOption; i++) {
+      const index = String.fromCharCode(65 + i); // Convert 0-based index to letters (A, B, C, ...)
+      const inputValue =
+        extraAnswers.find((answer) => answer.index === index)?.value || "";
+
+      inputFields.push(
+        <div key={index}>
+          <h3 className="text-sm font-bold mb-2">{`Extra option ${index}`}</h3>
+          <input
+            type="text"
+            placeholder="write your text"
+            className="border-none py-4"
+            value={inputValue}
+            onChange={(e) => handleExtraInputChange(index, e.target.value)}
+          />
+        </div>
+      );
+    }
+
+    return inputFields;
+  };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
-            <label for="name" className="font-bold text-sm">
+            <label for="title" className="font-bold text-sm">
               Question Name
             </label>
             <h3 className="text-sm font-semibold">Question Id #785263891</h3>
@@ -95,9 +156,9 @@ const FibReading = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="name"
+            id="title"
             type="text"
-            value={formData.name}
+            value={formData.title}
             onChange={handleInputChange}
           />
         </div>
@@ -153,43 +214,12 @@ const FibReading = () => {
         <Counter
           className="bg-white w-full mt-8"
           title="Extra Option Number"
-          value={formData.appeared}
-          setValue={(value) => setFormData({ ...formData, appeared: value })}
+          value={extraOption}
+          setValue={setExtraOption}
         />
 
         <div className="grid grid-cols-4 gap-2 my-5 mb-12 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
-          <div>
-            <h3 className="text-sm font-bold mb-2">Extra option A</h3>
-            <input
-              type="text"
-              placeholder="write your text"
-              className="border-none py-4"
-            />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold mb-2">Extra option B</h3>
-            <input
-              type="text"
-              placeholder="write your text"
-              className="border-none py-4"
-            />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold mb-2">Extra option C</h3>
-            <input
-              type="text"
-              placeholder="write your text"
-              className="border-none py-4"
-            />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold mb-2">Extra option D</h3>
-            <input
-              type="text"
-              placeholder="write your text"
-              className="border-none py-4"
-            />
-          </div>
+          {renderInputFields()}
         </div>
         <div className="flex justify-between gap-6">
           <Counter
