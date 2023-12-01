@@ -3,8 +3,7 @@ import Glance from "@/components/Glance";
 import Students from "@/components/Students_list";
 import TablePagination from "@/components/TablePagination";
 import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const studentsList = [
   {
     name: "Eshak khan",

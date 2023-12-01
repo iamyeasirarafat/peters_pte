@@ -169,6 +169,11 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
     org?.id && fetchGroup();
   }, [org]);
 
+  useEffect(() => {
+    setGroup({})
+  }, [org])
+
+
   //get Organizations
   useEffect(() => {
     const fetchOrgs = async () => {
@@ -201,7 +206,7 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       setValue("birth_date", editData?.profile[0]?.birth_date || "");
       setGroup(editData?.profile[0]?.group || {});
       setGender({ name: editData?.profile[0]?.gender } || {});
-      setOrg(
+      editData?.profile[0]?.organization && setOrg(
         {
           id: editData?.profile[0]?.organization.id,
           name: editData?.profile[0]?.organization.full_name,
@@ -214,8 +219,8 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       full_name: data.full_name,
       email: data.email,
       phone: data.phone,
-      group: group.id,
-      organization: org.id,
+      ...group && { group: group.id },
+      ...org && { organization: org.id },
       profile: {
         gender: gender.name,
         birth_date: data.birth_date,

@@ -1,11 +1,8 @@
-import Filters from "@/components/Filters";
 import Glance from "@/components/Glance";
 import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Chart from "@/components/LineChart/Chart";
 import Statistics from "@/components/LineChart/Statistics";
-import Students from "@/components/Products";
-import TablePagination from "@/components/TablePagination";
 export const studentsList = [
   {
     name: "Eshak khan",
@@ -131,12 +128,12 @@ const Courses = () => {
   return (
     <Layout title="Reports">
       {/* Students Report */}
-      <>
+      {/* <>
         <p className="text-lg font-extrabold mb-2">Students Report</p>
         <Filters />
         <Students student={false} items={studentsList} />
         <TablePagination />
-      </>
+      </> */}
       {/* At a Glance */}
       <div className="mt-10">
         <p className="text-lg font-extrabold mb-2">At a Glance</p>

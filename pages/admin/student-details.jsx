@@ -35,14 +35,12 @@ export default function StudentDetails() {
       const res = await axios("/student/" + id);
       setStudentDetails(res?.data);
     };
-
     if (router.isReady) {
       fetchData();
-      fetchGroup();
     }
   }, [id, router, fetch]);
 
-  console.log("studentDetails", studentDetails);
+
 
   return (
     <Layout title="Student Details" back>
