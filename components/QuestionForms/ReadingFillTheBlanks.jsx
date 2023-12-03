@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 const ReadingFillTheBlanks = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    paragraph: "",
+    title: "",
+    sentence: [],
     appeared: 0,
     prediction: false,
     options: [],
@@ -81,14 +81,27 @@ const ReadingFillTheBlanks = () => {
       )
     );
   };
+
   useEffect(() => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
+
+    // Extract text content from parsed document, excluding button text
+    const paragraphs = Array.from(doc.body.childNodes)
+      .map((node) => {
+        if (node.nodeName === "BUTTON") {
+          return ""; // Exclude button text
+        }
+        return node.textContent.trim();
+      })
+      .filter((sentence) => sentence !== ""); // Remove empty strings
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      paragraph: text,
-      options: options,
+      sentence: paragraphs,
+      answers: options,
     }));
   }, [options, text]);
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -102,9 +115,9 @@ const ReadingFillTheBlanks = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="name"
+            id="title"
             type="text"
-            value={formData.name}
+            value={formData.title}
             onChange={handleInputChange}
           />
         </div>
@@ -116,11 +129,10 @@ const ReadingFillTheBlanks = () => {
             </div>
             <button
               className="group"
-              // onClick={(e) => {
-              //   e.preventDefault();
-              //   handleIncrement();
-              // }}
-              onClick={handleButtonClick}
+              onClick={(e) => {
+                e.preventDefault();
+                handleButtonClick();
+              }}
             >
               <Icon
                 className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
