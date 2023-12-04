@@ -78,25 +78,28 @@ const ReTelLecture = () => {
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audio?.name && !audioSrc ? (
-            <label class=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
+            <label className=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
                 name="upload"
               />
-              <span class="mt-2 text-base leading-normal">Upload</span>
+              <span className="mt-2 text-base leading-normal">Upload</span>
               <input
                 type="file"
-                class="hidden"
+                className="hidden"
                 accept="audio/*"
                 onChange={handleFileChange}
               />
             </label>
           ) : (
             <div className="flex gap-5">
-              <div class="border relative w-28 flex flex-col items-center  cursor-pointer">
-                <div onClick={handleDeleteAudio} class="absolute top-0 right-0">
+              <div className="border relative w-28 flex flex-col items-center  cursor-pointer">
+                <div
+                  onClick={handleDeleteAudio}
+                  className="absolute top-0 right-0"
+                >
                   <Icon
-                    class="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                    className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
                     name="cross"
                   />
                 </div>
@@ -104,7 +107,7 @@ const ReTelLecture = () => {
                   className="icon-20 mt-5 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
                   name="pause"
                 />
-                <span class="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
+                <span className="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
                   {audio?.name}
                 </span>
               </div>

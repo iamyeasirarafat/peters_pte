@@ -6,6 +6,8 @@ import { getQuestion } from "./full_mocktests";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
+import Spinner from "../../../../components/Spinner/Spinner";
 function FullMocktest() {
   return (
     <Layout title="LMT / New Mocktest" back>
@@ -17,76 +19,50 @@ function FullMocktest() {
 export default FullMocktest;
 
 const ListeningTestForm = () => {
-  const [selectedRa, setSelectedRa] = useState([]);
-  const [readAlouds, setReadAlouds] = useState([]);
-  const [repeatSentence, setRepeatSentence] = useState([]);
-  const [repeatSentences, setRepeatSentences] = useState([]);
-  const [describeImage, setDescribeImage] = useState([]);
-  const [describeImages, setDescribeImages] = useState([]);
-  const [retellSentence, setRetellSentence] = useState([]);
-  const [retellSentences, setRetellSentences] = useState([]);
-  const [shortQuestion, setShortQuestion] = useState([]);
-  const [shortQuestions, setShortQuestions] = useState([]);
-  const [summarize, setSummarize] = useState([]);
-  const [summarizes, setSummarizes] = useState([]);
-  const [writeEasy, setWriteEasy] = useState([]);
-  const [writeEasys, setWriteEasys] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [rwblank, setRwblank] = useState([]);
   const [rwblanks, setRwblanks] = useState([]);
-  const [readingMcq, setReadingMcq] = useState([]);
-  const [readingMcqs, setReadingMcqs] = useState([]);
-  const [readingMcqSingle, setReadingMcqSingle] = useState([]);
-  const [readingMcqSingles, setReadingMcqSingles] = useState([]);
+  const [listeningMcq, setListeningMcq] = useState([]);
+  const [listeningMcqs, setListeningMcqs] = useState([]);
   const [reorderParagraph, setReorderParagraph] = useState([]);
   const [reorderParagraphs, setReorderParagraphs] = useState([]);
-  const [readingBlank, setReadingBlank] = useState([]);
-  const [readingBlanks, setReadingBlanks] = useState([]);
-  const [spokenSummarize, setSpokenSummarize] = useState([]);
-  const [spokenSummarizes, setSpokenSummarizes] = useState([]);
-  const [spokenMcq, setSpokenMcq] = useState([]);
-  const [spokenMcqs, setSpokenMcqs] = useState([]);
-  const [spokenMcqSingle, setSpokenMcqSingle] = useState([]);
-  const [spokenMcqSingles, setSpokenMcqSingles] = useState([]);
-  const [highlightSummary, setHighlightSummary] = useState([]);
-  const [highlightSummarys, setHighlightSummarys] = useState([]);
   const [listeningBlanck, setListeningBlanck] = useState([]);
   const [listeningBlancks, setListeningBlancks] = useState([]);
-  const [missingWord, setMissingWord] = useState([]);
-  const [missingWords, setMissingWords] = useState([]);
-  const [incorrectWord, setIncorrectWord] = useState([]);
-  const [incorrectWords, setIncorrectWords] = useState([]);
-  const [dictation, setDictation] = useState([]);
-  const [dictations, setDictations] = useState([]);
+  const [listeningMcqSingle, setListeningMcqSingle] = useState([]);
+  const [listeningMcqSingles, setListeningMcqSingles] = useState([]);
   useEffect(() => {
-    getQuestion("/practice/read_alouds", setReadAlouds);
-    getQuestion("/repeat_sentences", setRepeatSentences);
-    getQuestion("/describe_images", setDescribeImages);
-    getQuestion("/short_questions", setShortQuestions);
-    getQuestion("/retell_sentences", setRetellSentences);
-    getQuestion("/summarizes", setSummarizes);
-    getQuestion("/write_easies", setWriteEasys);
     getQuestion("/read-write/blanks", setRwblanks);
-    getQuestion("/multi_choices/reading", setReadingMcqs);
+    getQuestion("/multi_choices", setListeningMcqs);
     getQuestion("/reorder_paragraphs", setReorderParagraphs);
-    getQuestion("/reading_blanks", setReadingBlanks);
-    getQuestion("/multi_choices/reading/single-answer", setReadingMcqSingles);
-    getQuestion("/spoken/summarizes", setSpokenSummarizes);
-    getQuestion("/multi_choices", setSpokenMcqs);
-    getQuestion("/highlight_summarys", setHighlightSummarys);
     getQuestion("/blanks", setListeningBlancks);
-    getQuestion("/multi_choices/single-answer", setSpokenMcqSingles);
-    getQuestion("/missing_words", setMissingWords);
-    getQuestion("/dictations", setDictations);
-    getQuestion("/highlight_incorrect_words", setIncorrectWords);
+    getQuestion("/multi_choices/single-answer", setListeningMcqSingles);
   }, []);
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {};
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    const formData = {
+      title: data?.title,
+      reading_writting_blank: rwblank?.map((item) => item.id),
+      multi_choice_multi_answer: listeningMcq?.map((item) => item.id),
+      multi_choice_single_answer: listeningMcqSingle?.map((item) => item.id),
+      reorder_paragraph: reorderParagraph?.map((item) => item.id),
+      blank: listeningBlanck?.map((item) => item.id),
+    };
+    try {
+      const res = await axios.post("/listening_mocktest", formData);
+      toast.success("mocktest added successfully");
+      reset();
+      setIsLoading(false);
+    } catch (error) {
+      error?.response?.data?.title[0] &&
+        toast.error(error?.response?.data?.title[0]);
+    }
+  };
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
       <Field
@@ -105,9 +81,9 @@ const ListeningTestForm = () => {
           label="Reading & Writing: FIB"
         />
         <MockTestSelectMulti
-          dataArray={readingMcqs}
-          selectedValue={readingMcq}
-          setSelectedValue={setReadingMcq}
+          dataArray={listeningMcqs}
+          selectedValue={listeningMcq}
+          setSelectedValue={setListeningMcq}
           label="Multiple Choice (Multiple)"
         />
         <MockTestSelectMulti
@@ -119,23 +95,24 @@ const ListeningTestForm = () => {
       </div>
       <div className="grid grid-cols-3 gap-x-5">
         <MockTestSelectMulti
-          dataArray={readingBlanks}
-          selectedValue={readingBlank}
-          setSelectedValue={setReadingBlank}
+          dataArray={listeningBlancks}
+          selectedValue={listeningBlanck}
+          setSelectedValue={setListeningBlanck}
           label="Reading: Fill in the Blanks"
         />
         <MockTestSelectMulti
-          dataArray={readingMcqSingles}
-          selectedValue={readingMcqSingle}
-          setSelectedValue={setReadingMcqSingle}
-          label="Multiple Choice (Single)"
+          dataArray={listeningMcqSingles}
+          selectedValue={listeningMcqSingle}
+          setSelectedValue={setListeningMcqSingle}
+          label="Reading: Fill in the Blanks"
         />
       </div>
       <button
+        disabled={isLoading}
         type="submit"
-        className="p-5 rounded-sm bg-primary text-center w-full  font-extrabold"
+        className="p-4 rounded-sm bg-primary w-full  font-extrabold flex items-center justify-center gap-x-2"
       >
-        Create Mocktest
+        {isLoading && <Spinner className="w-5 h-5" />}Create Mocktest
       </button>
     </form>
   );

@@ -10,7 +10,7 @@ const AuthBanner = () => {
   const pagination = {
     clickable: true,
     renderBullet: function (index, className) {
-      return '<span class="' + className + '">' + "</span>";
+      return '<span className="' + className + '">' + "</span>";
     },
   };
   return (

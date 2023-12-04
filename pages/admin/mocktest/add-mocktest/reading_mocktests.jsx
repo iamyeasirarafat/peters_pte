@@ -6,6 +6,8 @@ import { getQuestion } from "./full_mocktests";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
+import Spinner from "../../../../components/Spinner/Spinner";
 function FullMocktest() {
   return (
     <Layout title="RMT / New Mocktest" back>
@@ -17,6 +19,7 @@ function FullMocktest() {
 export default FullMocktest;
 
 const ReadingTestForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [spokenSummarize, setSpokenSummarize] = useState([]);
   const [spokenSummarizes, setSpokenSummarizes] = useState([]);
   const [spokenMcq, setSpokenMcq] = useState([]);
@@ -46,11 +49,11 @@ const ReadingTestForm = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setIsLoading(true);
     const formData = {
       title: data?.title,
       summarize_spoken: spokenSummarize?.map((item) => item.id),
@@ -64,8 +67,15 @@ const ReadingTestForm = () => {
         (item) => item.id
       ),
     };
-    const res = axios.post("/reading_mocktest", formData);
-    console.log(res);
+    try {
+      const res = await axios.post("/reading_mocktest", formData);
+      toast.success("mocktest added successfully");
+      reset();
+      setIsLoading(false);
+    } catch (error) {
+      error?.response?.data?.title[0] &&
+        toast.error(error?.response?.data?.title[0]);
+    }
   };
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
@@ -132,10 +142,11 @@ const ReadingTestForm = () => {
         />
       </div>
       <button
+        disabled={isLoading}
         type="submit"
-        className="p-5 rounded-sm bg-primary text-center w-full  font-extrabold"
+        className="p-4 rounded-sm bg-primary w-full  font-extrabold flex items-center justify-center gap-x-2"
       >
-        Create Mocktest
+        {isLoading && <Spinner className="w-5 h-5" />}Create Mocktest
       </button>
     </form>
   );
