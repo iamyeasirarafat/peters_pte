@@ -56,7 +56,7 @@ export default Index;
 const MocktestCart = ({ item }) => {
   return (
     <Link
-      href={`${item?.url}`}
+      href={item?.url}
       className="bg-white dark:bg-black rounded-sm flex justify-start items-center gap-5 p-6"
     >
       <div

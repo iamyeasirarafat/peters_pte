@@ -6,6 +6,8 @@ import { getQuestion } from "./full_mocktests";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
+import Spinner from "../../../../components/Spinner/Spinner";
 
 function FullMocktest() {
   return (
@@ -18,6 +20,7 @@ function FullMocktest() {
 export default FullMocktest;
 
 const SpeakingTestForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedRa, setSelectedRa] = useState([]);
   const [readAlouds, setReadAlouds] = useState([]);
   const [repeatSentence, setRepeatSentence] = useState([]);
@@ -38,11 +41,11 @@ const SpeakingTestForm = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setIsLoading(true);
     const MockTestData = {
       title: data?.title,
       read_aloud: selectedRa?.map((item) => item.id),
@@ -51,8 +54,15 @@ const SpeakingTestForm = () => {
       retell_sentence: retellSentence?.map((item) => item.id),
       short_question: shortQuestion?.map((item) => item.id),
     };
-    const res = axios.post("/speaking_mocktest", MockTestData);
-    console.log(res);
+    try {
+      const res = await axios.post("/speaking_mocktest", MockTestData);
+      toast.success("mocktest added successfully");
+      reset();
+      setIsLoading(false);
+    } catch (error) {
+      error?.response?.data?.title[0] &&
+        toast.error(error?.response?.data?.title[0]);
+    }
   };
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
@@ -99,10 +109,11 @@ const SpeakingTestForm = () => {
         />
       </div>
       <button
+        disabled={isLoading}
         type="submit"
-        className="p-5 rounded-sm bg-primary text-center w-full  font-extrabold"
+        className="p-4 rounded-sm bg-primary w-full  font-extrabold flex items-center justify-center gap-x-2"
       >
-        Create Mocktest
+        {isLoading && <Spinner className="w-5 h-5" />}Create Mocktest
       </button>
     </form>
   );
