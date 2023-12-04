@@ -62,6 +62,7 @@ function Index() {
 export default Index;
 
 const MocktestList = ({ data }) => {
+  const [showDot, setShowDot] = useState("");
   const [value, setValue] = useState(false);
   return (
     <div className="mt-4">
@@ -85,7 +86,12 @@ const MocktestList = ({ data }) => {
         </thead>
         <tbody>
           {data?.map((item, i) => (
-            <MocktestListRow key={i} item={item} />
+            <MocktestListRow
+              key={i}
+              item={item}
+              showDot={showDot}
+              setShowDot={setShowDot}
+            />
           ))}
         </tbody>
       </table>
@@ -93,7 +99,7 @@ const MocktestList = ({ data }) => {
   );
 };
 
-const MocktestListRow = ({ item }) => {
+const MocktestListRow = ({ item, showDot, setShowDot }) => {
   const [value, setValue] = useState(false);
   return (
     <tr>
@@ -106,8 +112,13 @@ const MocktestListRow = ({ item }) => {
       </td>
       <td className="td-custom flex items-center justify-end gap-x-3">
         <p className="text-sm">{formatDateTime(item?.created_at, "date")}</p>
-        <button className="btn-transparent-dark btn-small btn-square">
+        <button
+          onClick={() => setShowDot(showDot === item?.id ? null : item?.id)}
+          // onBlur={() => setShowDot(null)}
+          className="px-3 btn-transparent-dark btn-small btn-square relative"
+        >
           <Icon name="dots" />
+          {showDot === item?.id && <ActionDialog />}
         </button>
       </td>
     </tr>
@@ -115,7 +126,7 @@ const MocktestListRow = ({ item }) => {
 };
 
 const MocktestLisMobile = ({ data }) => {
-  console.log("file from Mobile", data);
+  const [showDot, setShowDot] = useState("");
   return (
     <div
       className={`bg-white dark:bg-black p-4 mt-4 ${
@@ -129,8 +140,15 @@ const MocktestLisMobile = ({ data }) => {
               <p className="text-sm">
                 {formatDateTime(item?.created_at, "date")}
               </p>
-              <button className="btn-transparent-dark btn-small btn-square">
+              <button
+                onClick={() =>
+                  setShowDot(showDot === item?.id ? null : item?.id)
+                }
+                // onBlur={() => setShowDot(null)}
+                className="px-3 relative"
+              >
                 <Icon name="dots" />
+                {showDot === item?.id && <ActionDialog />}
               </button>
             </div>
             <div className="flex items-center justify-between">
@@ -140,6 +158,20 @@ const MocktestLisMobile = ({ data }) => {
           </div>
         );
       })}
+    </div>
+  );
+};
+
+const ActionDialog = () => {
+  return (
+    <div className="bg-white py-2 z-50 px-3 rounded-md shadow absolute right-8 top-1/2 space-y-2">
+      <button
+        onClick={(e) => e.stopPropagation()}
+        className="text-black hover:text-green-500 duration-200"
+      >
+        Edit
+      </button>
+      <button className="text-black hover:text-red duration-200">Delete</button>
     </div>
   );
 };
