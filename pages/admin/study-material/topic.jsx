@@ -17,24 +17,28 @@ import toast from "react-hot-toast";
 import { GoTrash } from "react-icons/go";
 
 function Topic() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [reFetch, setRefetch] = useState(false);
   const [topic, setTopic] = useState([]);
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 7;
   const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
     const getTopic = async () => {
-      setIsLoading(true);
-      const { data } = await axios.get("/topic");
+      const { data } = await axios.get(
+        `/topic?limit=${pageLimit}&page=${pageNumber}`
+      );
       setTopic(data);
       setIsLoading(false);
     };
     getTopic();
-  }, [reFetch]);
+  }, [reFetch, pageNumber]);
+
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("/topic", data);
@@ -66,12 +70,16 @@ function Topic() {
         {isLoading ? (
           <Loading />
         ) : mounted && isTablet ? (
-          <TopicMobile data={topic} setRefetch={setRefetch} />
+          <TopicMobile data={topic?.results} setRefetch={setRefetch} />
         ) : (
-          <TopicList data={topic} setRefetch={setRefetch} />
+          <TopicList data={topic?.results} setRefetch={setRefetch} />
         )}
       </div>
-      <TablePagination />
+      <TablePagination
+        pageNumber={pageNumber}
+        totalPage={Math.ceil(topic?.total / pageLimit)}
+        prevNext={setPageNumber}
+      />
     </Layout>
   );
 }

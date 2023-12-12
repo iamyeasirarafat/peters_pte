@@ -5,36 +5,33 @@ import Image from "@/components/Image";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import Sorting from "@/components/Sorting";
-import TablePagination from "@/components/TablePagination";
 import { useHydrated } from "@/hooks/useHydrated";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useMediaQuery } from "react-responsive";
-;
-
 const AdminUser = () => {
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
-  const [data, setData] = useState([])
-  const [visible, setVisible] = useState(false)
-  const [status, setStatus] = useState(12)
+  const [data, setData] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [status, setStatus] = useState(12);
   useEffect(() => {
     const fetch = async () => {
-      const res = await axios("/adminusers")
-      setData(res.data)
-    }
-    fetch()
-  }, [status])
+      const res = await axios("/adminusers");
+      setData(res.data);
+    };
+    fetch();
+  }, [status]);
   return (
     <Layout title="Admin User">
       <Toaster />
-      <button
-        onClick={() => setVisible(true)}
-        className="btn-purple w-48 mb-2">Add Admin User</button>
+      <button onClick={() => setVisible(true)} className="btn-purple w-48 mb-2">
+        Add Admin User
+      </button>
       {mounted && isTablet ? (
         <div className="bg-white dark:bg-black">
           <AdminUserMobile data={data} />
@@ -42,8 +39,6 @@ const AdminUser = () => {
       ) : (
         <AdminUserList data={data} setStatus={setStatus} />
       )}
-
-      <TablePagination />
       <AddAdminUser {...{ visible, setVisible, setStatus }} />
     </Layout>
   );
@@ -66,14 +61,16 @@ const AdminUserList = ({ data, setStatus }) => {
         </div>
       </div>
       <div>
-        {data.map(item => <AdminUserRow setStatus={setStatus} key={item.id} data={item} />)}
+        {data.map((item) => (
+          <AdminUserRow setStatus={setStatus} key={item.id} data={item} />
+        ))}
       </div>
     </div>
   );
 };
 const AdminUserRow = ({ data, setStatus }) => {
-  console.log(data, "yes")
-  const [isOpen, setIsOpen] = useState(false)
+  console.log(data, "yes");
+  const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(false);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -99,21 +96,22 @@ const AdminUserRow = ({ data, setStatus }) => {
             <div
               className="relative inline-block text-left"
               onClick={toggleDropdown}
-            // onBlur={closeDropdown}
+              // onBlur={closeDropdown}
             >
               <button className="btn-transparent-dark btn-small btn-square">
                 <Icon name="dots" />
               </button>
               <div
                 style={{ backgroundColor: "#FAF4F0" }}
-                className={`${isOpen ? "block" : "hidden"
-                  } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+                className={`${
+                  isOpen ? "block" : "hidden"
+                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
               >
                 <div role="none">
                   <button
                     onClick={async () => {
-                      await axios.delete("/adminuser/" + data.id)
-                      setStatus(Math.random())
+                      await axios.delete("/adminuser/" + data.id);
+                      setStatus(Math.random());
                     }}
                     className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
                   >
@@ -165,7 +163,6 @@ export const AddAdminUser = ({ visible, setVisible, setStatus }) => {
   } = useForm({});
 
   const onSubmit = async (data) => {
-
     try {
       await axios.post("/adminuser/add", data);
       toast.success("Successfully added");
@@ -174,7 +171,7 @@ export const AddAdminUser = ({ visible, setVisible, setStatus }) => {
     } catch (err) {
       const key = Object.keys(err?.response?.data)[0];
       const value = err?.response?.data[key];
-      toast.error(`${key} - ${value}`);;
+      toast.error(`${key} - ${value}`);
     }
   };
 
@@ -235,7 +232,6 @@ export const AddAdminUser = ({ visible, setVisible, setStatus }) => {
         />
         <button className="btn-purple  w-full">Confirm</button>
       </form>
-
     </Modal>
   );
 };

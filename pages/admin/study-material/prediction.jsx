@@ -18,22 +18,25 @@ import { GoTrash } from "react-icons/go";
 const Index = () => {
   const [reFetch, setRefetch] = useState(false);
   const [prediction, setPrediction] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 8;
   // get prediction data
   useEffect(() => {
-    setIsLoading(true);
     const getStudyPrediction = async () => {
-      const res = await axios.get(`/study_materials/prediction`);
+      const res = await axios.get(
+        `/study_materials/prediction?limit=${pageLimit}&page=${pageNumber}`
+      );
       setPrediction(res?.data);
       setIsLoading(false);
     };
     getStudyPrediction();
-  }, [reFetch]);
+  }, [reFetch, pageNumber]);
 
   return (
     <Layout title="Prediction" back>
@@ -56,7 +59,11 @@ const Index = () => {
       ) : (
         <PredictionList data={prediction?.results} setRefetch={setRefetch} />
       )}
-      <TablePagination />
+      <TablePagination
+        pageNumber={pageNumber}
+        totalPage={Math.ceil(prediction?.total / pageLimit)}
+        prevNext={setPageNumber}
+      />
     </Layout>
   );
 };

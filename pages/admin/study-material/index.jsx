@@ -6,37 +6,31 @@ import { BsBookHalf, BsBroadcastPin } from "react-icons/bs";
 import { MdContentCopy } from "react-icons/md";
 
 const Index = () => {
-  const [studyMaterial, setStudyMaterial] = useState([]);
+  const [studyCount, setStudyCount] = useState({});
   useEffect(() => {
     const getStudyMaterial = async () => {
-      const res = await axios.get(`/study_materials/all`);
-      setStudyMaterial(res?.data?.results);
+      const res = await axios.get(`/study_material/count`);
+      setStudyCount(res?.data);
     };
     getStudyMaterial();
   }, []);
 
-  const countStudyMaterial = (category) =>
-    studyMaterial?.filter((item) => item?.category === category) || [];
-  const prediction = countStudyMaterial("prediction");
-  const template = countStudyMaterial("template");
-  const material = countStudyMaterial("study_material");
-
   const studyMaterials = [
     {
       name: "Prediction",
-      count: prediction?.length || 0,
+      count: studyCount?.prediction || 0,
       icon: <BsBroadcastPin />,
       url: "/admin/study-material/prediction",
     },
     {
       name: "Template",
-      count: template?.length || 0,
+      count: studyCount?.template || 0,
       icon: <MdContentCopy />,
       url: "/admin/study-material/template",
     },
     {
       name: "Study Material",
-      count: material?.length || 0,
+      count: studyCount?.study_material || 0,
       icon: <BsBookHalf />,
       url: "/admin/study-material/material",
     },

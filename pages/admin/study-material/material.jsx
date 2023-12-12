@@ -13,23 +13,26 @@ import Loading from "@/components/Loading";
 const Index = () => {
   const [reFetch, setRefetch] = useState(false);
   const [studyMaterial, setStudyMaterial] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 8;
 
   // get Data
   useEffect(() => {
-    setIsLoading(true);
     const getStudyMaterial = async () => {
-      const res = await axios.get(`/study_materials/study_material`);
+      const res = await axios.get(
+        `/study_materials/study_material?limit=${pageLimit}&page=${pageNumber}`
+      );
       setStudyMaterial(res?.data);
       setIsLoading(false);
     };
     getStudyMaterial();
-  }, [reFetch]);
+  }, [reFetch, pageNumber]);
   return (
     <Layout title="Material" back>
       <div className="mb-5 flex items-center gap-x-2">
@@ -62,7 +65,11 @@ const Index = () => {
       ) : (
         <PredictionList data={studyMaterial?.results} setRefetch={setRefetch} />
       )}
-      <TablePagination />
+      <TablePagination
+        pageNumber={pageNumber}
+        totalPage={Math.ceil(studyMaterial?.total / pageLimit)}
+        prevNext={setPageNumber}
+      />
     </Layout>
   );
 };
