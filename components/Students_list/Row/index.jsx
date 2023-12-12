@@ -7,11 +7,10 @@ import Modal from "@/components/Modal";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { twMerge } from "tailwind-merge";
 
@@ -20,7 +19,6 @@ const StudentRow = ({ admin, item, setStatus }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
-  const router = useRouter();
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -30,7 +28,9 @@ const StudentRow = ({ admin, item, setStatus }) => {
         <Checkbox value={value} onChange={() => setValue(!value)} />
         <Link
           className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
-          href={`/${admin ? "admin" : "organization"}/student-details?id=${item.id}`}
+          href={`/${admin ? "admin" : "organization"}/student-details?id=${
+            item.id
+          }`}
         >
           <div className="w-11 h-11  mr-3 ">
             <Image
@@ -55,14 +55,15 @@ const StudentRow = ({ admin, item, setStatus }) => {
       </td>
       <td className="td-custom">
         <div
-          className={`border min-w-[4rem] ${item.avl === "Paid"
-            ? "label-stroke-green"
-            : item.avl === "Med"
+          className={`border min-w-[4rem] ${
+            item.avl === "Paid"
+              ? "label-stroke-green"
+              : item.avl === "Med"
               ? "label-stroke-yellow"
               : item.avl === "Low"
-                ? "label-stroke-pink"
-                : "label-stroke"
-            }`}
+              ? "label-stroke-pink"
+              : "label-stroke"
+          }`}
         >
           {item.avg_score || "N/A"}
         </div>
@@ -82,15 +83,16 @@ const StudentRow = ({ admin, item, setStatus }) => {
           <div
             className="relative inline-block text-left"
             onClick={toggleDropdown}
-          // onBlur={closeDropdown}
+            // onBlur={closeDropdown}
           >
             <button className="btn-transparent-dark btn-small btn-square">
               <Icon name="dots" />
             </button>
             <div
               style={{ backgroundColor: "#FAF4F0" }}
-              className={`${isOpen ? "block" : "hidden"
-                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              className={`${
+                isOpen ? "block" : "hidden"
+              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
             >
               <div role="none">
                 <button
@@ -170,18 +172,19 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
   }, [org]);
 
   useEffect(() => {
-    setGroup({})
-  }, [org])
-
+    setGroup({});
+  }, [org]);
 
   //get Organizations
   useEffect(() => {
     const fetchOrgs = async () => {
       const res = await axios("/organizations?all=true");
-      let formattedOrgs = [{
-        id: null,
-        name: "None"
-      }];
+      let formattedOrgs = [
+        {
+          id: null,
+          name: "None",
+        },
+      ];
       await res.data.forEach((item) =>
         formattedOrgs.push({ id: item.id, name: item.full_name })
       );
@@ -206,12 +209,13 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       setValue("birth_date", editData?.profile[0]?.birth_date || "");
       setGroup(editData?.profile[0]?.group || {});
       setGender({ name: editData?.profile[0]?.gender } || {});
-      editData?.profile[0]?.organization && setOrg(
-        {
-          id: editData?.profile[0]?.organization.id,
-          name: editData?.profile[0]?.organization.full_name,
-        } || {}
-      );
+      editData?.profile[0]?.organization &&
+        setOrg(
+          {
+            id: editData?.profile[0]?.organization.id,
+            name: editData?.profile[0]?.organization.full_name,
+          } || {}
+        );
     }
   }, [editData]);
   const onSubmit = async (data) => {
@@ -219,8 +223,8 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       full_name: data.full_name,
       email: data.email,
       phone: data.phone,
-      ...group && { group: group.id },
-      ...org && { organization: org.id },
+      ...(group && { group: group.id }),
+      ...(org && { organization: org.id }),
       profile: {
         gender: gender.name,
         birth_date: data.birth_date,
@@ -266,7 +270,12 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
           name="email"
         />
 
-        <PhoneNumberInput label="Phone Number" name="phone" control={control} errors={errors} />
+        <PhoneNumberInput
+          label="Phone Number"
+          name="phone"
+          control={control}
+          errors={errors}
+        />
         <Field
           errors={errors}
           className="mb-6"
@@ -485,11 +494,6 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
   );
 };
 
-
-
-
-
-
 export const PhoneNumberInput = ({ name, control, errors, label }) => {
   const error = errors[name] || false;
   return (
@@ -499,7 +503,7 @@ export const PhoneNumberInput = ({ name, control, errors, label }) => {
         name={name}
         control={control}
         rules={{
-          validate: (value) => isValidPhoneNumber(value || "")
+          validate: (value) => isValidPhoneNumber(value || ""),
         }}
         render={({ field: { onChange, value } }) => (
           <div className="relative">
@@ -509,11 +513,12 @@ export const PhoneNumberInput = ({ name, control, errors, label }) => {
               defaultCountry="BD"
               id={name}
               className={twMerge(
-                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${error ? "pr-15 !border-pink-1" : ""
+                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${
+                  error ? "pr-15 !border-pink-1" : ""
                 }`
               )}
             />
-            {(error) && (
+            {error && (
               <Icon
                 className={`absolute top-1/2 cursor-pointer right-5 icon-20 -translate-y-1/2 pointer-events-none fill-pink-1
                   }`}
@@ -523,9 +528,7 @@ export const PhoneNumberInput = ({ name, control, errors, label }) => {
           </div>
         )}
       />
-      {errors[name] && (
-        <p className="error-message">Invalid Phone</p>
-      )}
+      {errors[name] && <p className="error-message">Invalid Phone</p>}
     </div>
-  )
-}
+  );
+};

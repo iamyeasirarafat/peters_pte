@@ -9,20 +9,24 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import OrganizationList from "../../../components/OrganizationList";
-import { TablePagination } from "../students";
+import TablePagination from "@/components/TablePagination";
 const Organizations = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 9;
+
   useEffect(() => {
     const getData = async () => {
-      const res = await axios("/organizations?page=" + page);
+      const res = await axios(
+        `/organizations?limit=${pageLimit}&page=${pageNumber}`
+      );
       setData(res.data);
       setLoading(false);
     };
     getData();
-  }, [page, status]);
+  }, [pageNumber, status]);
 
   return (
     <Layout title="Organizations" background>
@@ -37,7 +41,11 @@ const Organizations = () => {
         <>
           <StudentFilter />
           <OrganizationList setStatus={setStatus} items={data?.results} />
-          <TablePagination data={data} setPage={setPage} />
+          <TablePagination
+            pageNumber={pageNumber}
+            totalPage={Math.ceil(data?.total / pageLimit)}
+            prevNext={setPageNumber}
+          />
         </>
       ) : (
         <EmptyPage setStatus={setStatus} />

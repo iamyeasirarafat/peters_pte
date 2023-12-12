@@ -11,23 +11,27 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import Students from "../../components/Students_list";
+import TablePagination from "@/components/TablePagination";
 
 const StudentList = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 9;
 
   console.log("data", data);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios("/students?page=" + page);
+      const res = await axios(
+        `/students?limit=${pageLimit}&page=${pageNumber}`
+      );
       setData(res.data);
       setLoading(false);
     };
     getData();
-  }, [status, page]);
+  }, [status, pageNumber]);
   console.log(data);
   return (
     <Layout title="Students" background>
@@ -42,7 +46,11 @@ const StudentList = () => {
         <>
           <StudentFilter />
           <Students admin={true} setStatus={setStatus} items={data?.results} />
-          <TablePagination data={data} setPage={setPage} />
+          <TablePagination
+            pageNumber={pageNumber}
+            totalPage={Math.ceil(data?.total / pageLimit)}
+            prevNext={setPageNumber}
+          />
         </>
       ) : (
         <EmptyPage setStatus={setStatus} />
@@ -231,28 +239,3 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
     </Modal>
   );
 };
-
-export const TablePagination = ({ data, setPage }) => (
-  <div className="flex justify-between items-center mt-5 md:mt-5">
-    <button
-      onClick={() => setPage((old) => old - 1)}
-      disabled={!data?.prev}
-      className="btn-stroke disabled:cursor-not-allowed disabled:hover:opacity-40 btn-small"
-    >
-      <Icon name="arrow-prev" />
-      <span>Prev</span>
-    </button>
-    <div className="text-sm font-bold">
-      {" "}
-      {data?.start_index} of {data?.total}
-    </div>
-    <button
-      onClick={() => setPage((old) => old + 1)}
-      disabled={!data?.next}
-      className="btn-stroke disabled:cursor-not-allowed disabled:hover:opacity-40 btn-small"
-    >
-      <span>Next</span>
-      <Icon name="arrow-next" />
-    </button>
-  </div>
-);

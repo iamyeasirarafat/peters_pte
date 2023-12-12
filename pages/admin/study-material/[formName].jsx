@@ -10,7 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Select from "@/components/Select";
 function AddStudyMaterial() {
   const [loading, setLoading] = useState(false);
-  const [studyFile, setStudyFile] = useState();
+  const [studyFile, setStudyFile] = useState(null);
   const [topic, setTopic] = useState({});
   const [fileType, setFiletype] = useState("premium");
   const router = useRouter();
@@ -35,6 +35,7 @@ function AddStudyMaterial() {
         reset();
         toast.success("File uploaded successfully");
         setLoading(false);
+        setStudyFile(null);
       }
     } catch (error) {
       toast.error(

@@ -6,7 +6,6 @@ import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import Sorting from "@/components/Sorting";
 import Spinner from "@/components/Spinner/Spinner";
-import TablePagination from "@/components/TablePagination";
 import { useHydrated } from "@/hooks/useHydrated";
 import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import { formatDateTime } from "@/utils/formatDateTime";
@@ -57,7 +56,6 @@ export default function StudentDetails() {
 const StudentProfileInfo = ({ data, setFetch }) => {
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
-  console.log(editData, visible);
   return (
     <div className="space-y-3">
       <div className="space-y-2">
@@ -242,7 +240,6 @@ const StudentDetailsRight = ({ data }) => {
           setOpenAssignNewPlan={setOpenAssignNewPlan}
         />
       </div>
-      <TablePagination />
 
       {/* Security */}
       <div className="bg-white dark:bg-black p-5 mt-4">

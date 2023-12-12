@@ -11,23 +11,26 @@ import Loading from "@/components/Loading";
 const Index = () => {
   const [reFetch, setRefetch] = useState(false);
   const [templates, setTemplates] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 8;
 
   // get Data
   useEffect(() => {
-    setIsLoading(true);
     const getStudyTemplate = async () => {
-      const res = await axios.get(`/study_materials/template`);
+      const res = await axios.get(
+        `/study_materials/template?limit=${pageLimit}&page=${pageNumber}`
+      );
       setTemplates(res?.data);
       setIsLoading(false);
     };
     getStudyTemplate();
-  }, [reFetch]);
+  }, [reFetch, pageNumber]);
   return (
     <Layout title="Template" back>
       <div className="mb-5">
@@ -51,7 +54,11 @@ const Index = () => {
       ) : (
         <PredictionList data={templates?.results} setRefetch={setRefetch} />
       )}
-      <TablePagination />
+      <TablePagination
+        pageNumber={pageNumber}
+        totalPage={Math.ceil(templates?.total / pageLimit)}
+        prevNext={setPageNumber}
+      />
     </Layout>
   );
 };
