@@ -6,51 +6,65 @@ import { FaUsers } from "react-icons/fa";
 import { IoDiamondSharp } from "react-icons/io5";
 import { MdAccountBalanceWallet, MdQuiz } from "react-icons/md";
 import { BiRightArrowAlt } from "react-icons/bi";
-const premiumAccounts = [
-  {
-    name: "Premium 7 Days Account",
-    price: "499",
-    image: "/images/payment/7days.png",
-  },
-  {
-    name: "Premium 15 Days Account",
-    price: "799",
-    image: "/images/payment/15days.png",
-  },
-  {
-    name: "Premium 30 Days Account",
-    price: "1499",
-    image: "/images/payment/30days.png",
-  },
-  {
-    name: "Premium 90 Days Account",
-    price: "3999",
-    image: "/images/payment/90days.png",
-  },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+
 const fullMocktest = [
   {
-    name: "25x Full Mocktest",
+    title: "25x Full Mocktest",
     price: "499",
-    image: "/images/payment/25x.png",
+    thumbnail: "/images/payment/25x.png",
   },
   {
-    name: "50x Full Mocktest ",
+    title: "50x Full Mocktest ",
     price: "799",
-    image: "/images/payment/50x.png",
+    thumbnail: "/images/payment/50x.png",
   },
   {
-    name: "100x Full Mocktest ",
+    title: "100x Full Mocktest ",
     price: "1499",
-    image: "/images/payment/100x.png",
+    thumbnail: "/images/payment/100x.png",
   },
   {
-    name: "250x Full Mocktest ",
+    title: "250x Full Mocktest ",
     price: "3999",
-    image: "/images/payment/250x.png",
+    thumbnail: "/images/payment/250x.png",
   },
 ];
 function BillingPayment() {
+  const router = useRouter();
+  const [plans, setPlans] = useState([]);
+  useEffect(() => {
+    const getPlans = async () => {
+      const res = await axios.get("/plans");
+      setPlans(res?.data);
+    };
+    getPlans();
+  }, []);
+  console.log("plans", plans);
+  const premiumAccounts = [
+    {
+      name: "Premium 7 Days Account",
+      price: "499",
+      image: "/images/payment/7days.png",
+    },
+    {
+      name: "Premium 15 Days Account",
+      price: "799",
+      image: "/images/payment/15days.png",
+    },
+    {
+      name: "Premium 30 Days Account",
+      price: "1499",
+      image: "/images/payment/30days.png",
+    },
+    {
+      name: "Premium 90 Days Account",
+      price: "3999",
+      image: "/images/payment/90days.png",
+    },
+  ];
   return (
     <Layout title="Billing & Payment">
       <div className="grid grid-cols-12 gap-5">
@@ -59,12 +73,9 @@ function BillingPayment() {
           <p className="text-lg font-extrabold">Purchase Bluk Account</p>
           <p className="text-xs font-bold my-5">Click to Purchase</p>
           {/* Offer*/}
-          <div className="flex md:flex-col items-center gap-x-4 gap-y-3">
+          <div className="grid grid-cols-2 items-center gap-x-4 gap-y-3">
             <div className="w-full">
-              <Pricing data={premiumAccounts} />
-            </div>
-            <div className="w-full">
-              <Pricing data={fullMocktest} />
+              <Pricing data={plans} />
             </div>
           </div>
           {/* payment method */}
@@ -82,7 +93,14 @@ function BillingPayment() {
             <p className="text-lg font-extrabold text-white">
               Transaction History
             </p>
-            <button className="flex items-center gap-x-2 bg-white text-black text-lg font-extrabold py-2 px-4 rounded-sm">
+            <button
+              onClick={() =>
+                router.push(
+                  "/organization/billing-payment/transactions-history"
+                )
+              }
+              className="flex items-center gap-x-2 bg-white text-black text-lg font-extrabold py-2 px-4 rounded-sm"
+            >
               See All Your Transaction <BiRightArrowAlt />
             </button>
           </div>
@@ -95,26 +113,32 @@ function BillingPayment() {
 export default BillingPayment;
 
 const Pricing = ({ data }) => {
+  const router = useRouter();
   return (
     <div className="space-y-3">
-      {data?.map((type, i) => {
+      {data?.map((item, i) => {
         return (
           <div
-            key={i}
-            className="flex items-center bg-secondary dark:bg-[#161616] p-3 gap-x-3"
+            key={item?.id || i}
+            onClick={() =>
+              router.push(
+                `/organization/billing-payment/checkout?id=${item?.id}`
+              )
+            }
+            className="flex items-center bg-secondary dark:bg-[#161616] p-3 gap-x-3 cursor-pointer"
           >
             {/* image */}
             <Image
               className="w-13 h-13 rounded-sm"
-              src={type?.image}
+              src={item?.thumbnail}
               width={100}
               height={100}
               alt=""
             />
             {/* name & price */}
             <div>
-              <p className="text-sm font-bold">{type?.name}</p>
-              <p className="text-sm font-bold">{type?.price} BDT</p>
+              <p className="text-sm font-bold">{item?.title}</p>
+              <p className="text-sm font-bold">{item?.price} BDT</p>
             </div>
           </div>
         );

@@ -636,7 +636,7 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
   // get plans
   useEffect(() => {
     const getPlans = async () => {
-      const res = await axios.get("/plans");
+      const res = await axios.get("/student/plans");
       setPlansData(res?.data);
     };
     getPlans();
