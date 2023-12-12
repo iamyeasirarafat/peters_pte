@@ -40,16 +40,11 @@ export default function StudentDetails() {
     }
   }, [id, router, fetch]);
 
-
-
   return (
     <Layout title="Student Details" back>
       <div className="grid grid-cols-12 gap-x-20">
         <div className="col-span-4">
-          <StudentProfileInfo
-            data={studentDetails}
-            setFetch={setFetch}
-          />
+          <StudentProfileInfo data={studentDetails} setFetch={setFetch} />
         </div>
         <div className="col-span-8">
           <StudentDetailsRight data={studentDetails} />
@@ -60,9 +55,9 @@ export default function StudentDetails() {
 }
 
 const StudentProfileInfo = ({ data, setFetch }) => {
-  const [visible, setVisible] = useState(false)
-  const [editData, setEditData] = useState({})
-  console.log(editData, visible)
+  const [visible, setVisible] = useState(false);
+  const [editData, setEditData] = useState({});
+  console.log(editData, visible);
   return (
     <div className="space-y-3">
       <div className="space-y-2">
@@ -109,11 +104,15 @@ const StudentProfileInfo = ({ data, setFetch }) => {
       </div>
       <div>
         <p className="text-sm">Organization</p>
-        <p className="text-sm font-bold">{data?.profile[0]?.organization?.full_name || "Not Available"}</p>
+        <p className="text-sm font-bold">
+          {data?.profile[0]?.organization?.full_name || "Not Available"}
+        </p>
       </div>
       <div>
         <p className="text-sm">Group</p>
-        <p className="text-sm font-bold">{data?.profile[0]?.group?.name || "Not Available"}</p>
+        <p className="text-sm font-bold">
+          {data?.profile[0]?.group?.name || "Not Available"}
+        </p>
       </div>
       <div>
         <p className="text-sm">Birthday</p>
@@ -126,8 +125,8 @@ const StudentProfileInfo = ({ data, setFetch }) => {
       <div className="flex items-center gap-x-2">
         <button
           onClick={() => {
-            setEditData(data)
-            setVisible(true)
+            setEditData(data);
+            setVisible(true);
           }}
           className="flex items-center gap-x-3 bg-primary py-2.5 px-8 justify-center text-xs font-bold"
         >
@@ -146,9 +145,13 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           <IoIosCall />
         </Link>
       </div>
-      {
-        visible && <EditStudentModalAdmin visible={visible} setVisible={setVisible} editData={editData} />
-      }
+      {visible && (
+        <EditStudentModalAdmin
+          visible={visible}
+          setVisible={setVisible}
+          editData={editData}
+        />
+      )}
     </div>
   );
 };
@@ -347,19 +350,25 @@ const UpdateInformation = ({
   setOpenUpdateInformation,
   setFetch,
 }) => {
-  console.log(openUpdateInformation)
+  console.log(openUpdateInformation);
   const genders = [
     { id: 1, name: "male" },
     { id: 2, name: "female" },
   ];
   const [groups, setGroups] = useState([]);
-  const [group, setGroup] = useState(openUpdateInformation?.data?.profile[0]?.group);
+  const [group, setGroup] = useState(
+    openUpdateInformation?.data?.profile[0]?.group
+  );
   const [gender, setGender] = useState(genders[0]);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios("/" + openUpdateInformation?.data?.profile[0]?.organization.id + "/groups");
+      const res = await axios(
+        "/" +
+          openUpdateInformation?.data?.profile[0]?.organization.id +
+          "/groups"
+      );
       setGroups(res.data);
     };
     fetchGroup();
@@ -602,7 +611,7 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
   // get plans
   useEffect(() => {
     const getPlans = async () => {
-      const res = await axios.get("/plans");
+      const res = await axios.get("/student/plans");
       setPlansData(res?.data);
     };
     getPlans();

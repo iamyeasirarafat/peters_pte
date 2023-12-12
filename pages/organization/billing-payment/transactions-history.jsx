@@ -7,7 +7,7 @@ import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 function TransactionsHistory() {
   return (
-    <Layout title="Transactions History">
+    <Layout title="Transactions History" back>
       <TransactionsHistoryTable />
       <TablePagination />
     </Layout>

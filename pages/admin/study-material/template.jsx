@@ -9,6 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Loading from "@/components/Loading";
 const Index = () => {
+  const [reFetch, setRefetch] = useState(false);
   const [templates, setTemplates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -26,7 +27,7 @@ const Index = () => {
       setIsLoading(false);
     };
     getStudyTemplate();
-  }, []);
+  }, [reFetch]);
   return (
     <Layout title="Template" back>
       <div className="mb-5">
@@ -42,10 +43,13 @@ const Index = () => {
         <Loading />
       ) : mounted && isTablet ? (
         <div className="bg-white dark:bg-black">
-          <PredictionListMobile data={templates?.results} />
+          <PredictionListMobile
+            data={templates?.results}
+            setRefetch={setRefetch}
+          />
         </div>
       ) : (
-        <PredictionList data={templates?.results} />
+        <PredictionList data={templates?.results} setRefetch={setRefetch} />
       )}
       <TablePagination />
     </Layout>

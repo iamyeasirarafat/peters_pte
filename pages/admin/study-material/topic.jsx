@@ -1,4 +1,8 @@
 import Layout from "@/components/Layout";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+
+// ============================================
 import TablePagination from "@/components/TablePagination";
 import Sorting from "@/components/Sorting";
 import Checkbox from "@/components/Checkbox";
@@ -6,64 +10,75 @@ import Icon from "@/components/Icon";
 import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useState } from "react";
-import { AiFillPlusCircle } from "react-icons/ai";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
-import axios from "axios";
 import { formatDateTime } from "../../../utils/formatDateTime";
 import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
 import { GoTrash } from "react-icons/go";
 
-const Index = () => {
-  const [reFetch, setRefetch] = useState(false);
-  const [prediction, setPrediction] = useState([]);
+function Topic() {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const [reFetch, setRefetch] = useState(false);
+  const [topic, setTopic] = useState([]);
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
-  // get prediction data
+  const { register, handleSubmit, reset } = useForm();
+
   useEffect(() => {
-    setIsLoading(true);
-    const getStudyPrediction = async () => {
-      const res = await axios.get(`/study_materials/prediction`);
-      setPrediction(res?.data);
+    const getTopic = async () => {
+      setIsLoading(true);
+      const { data } = await axios.get("/topic");
+      setTopic(data);
       setIsLoading(false);
     };
-    getStudyPrediction();
+    getTopic();
   }, [reFetch]);
-
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post("/topic", data);
+      toast.success("Topic added successfully");
+      reset();
+      setRefetch(!reFetch);
+    } catch (error) {
+      toast.error(error?.response?.data?.title[0]);
+    }
+  };
   return (
-    <Layout title="Prediction" back>
-      <div className="mb-5">
-        <button
-          onClick={() => router.push("/admin/study-material/add-prediction")}
-          className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary"
-        >
-          <AiFillPlusCircle />
-          Create New Prediction
-        </button>
-      </div>
-      {isLoading ? (
-        <Loading />
-      ) : mounted && isTablet ? (
-        <PredictionListMobile
-          data={prediction?.results}
-          setRefetch={setRefetch}
+    <Layout title="Study Material / Topic" back>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+        <p className="text-xs font-bold">Topic Name</p>
+        <input
+          {...register("title")}
+          className="p-5 bg-white text-gray font-semibold outline-none border-0 w-full ring-0 focus:ring-0"
+          placeholder="Vocabulary"
+          type="text"
         />
-      ) : (
-        <PredictionList data={prediction?.results} setRefetch={setRefetch} />
-      )}
+        <button
+          className="bg-primary py-4 w-full text-center text-base font-bold"
+          type="submit"
+        >
+          Create Topic
+        </button>
+      </form>
+      <div className="mt-5">
+        {isLoading ? (
+          <Loading />
+        ) : mounted && isTablet ? (
+          <TopicMobile data={topic} setRefetch={setRefetch} />
+        ) : (
+          <TopicList data={topic} setRefetch={setRefetch} />
+        )}
+      </div>
       <TablePagination />
     </Layout>
   );
-};
+}
 
-export default Index;
+export default Topic;
 
-export const PredictionList = ({ data, setRefetch }) => {
+const TopicList = ({ data, setRefetch }) => {
   const [value, setValue] = useState(false);
   const [openItemId, setOpenItemId] = useState(null);
   return (
@@ -72,22 +87,22 @@ export const PredictionList = ({ data, setRefetch }) => {
         <tr>
           <th className="th-custom flex items-center gap-x-4">
             <Checkbox value={value} onChange={() => setValue(!value)} />
-            <Sorting title="File Name" />
+            <Sorting title="Topic Name" />
           </th>
           <th className="th-custom text-center">
-            <Sorting title="File Id" />
+            <Sorting title="Topic Id" />
           </th>
           <th className="th-custom text-center">
-            <Sorting title="Category" />
+            <Sorting title="File Number" />
           </th>
           <th className="th-custom text-end">
-            <Sorting title="Upload Date" />
+            <Sorting title="Create Date" />
           </th>
         </tr>
       </thead>
       <tbody>
         {data?.map((item, i) => (
-          <PredictionListRow
+          <TopicRow
             key={item?.id}
             data={item}
             openItemId={openItemId}
@@ -100,7 +115,7 @@ export const PredictionList = ({ data, setRefetch }) => {
   );
 };
 
-const PredictionListRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
+const TopicRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
   const [value, setValue] = useState(false);
   return (
     <tr>
@@ -112,12 +127,10 @@ const PredictionListRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
         <p className="text-sm">#{data?.id}</p>
       </td>
       <td className="td-custom text-center">
-        <p className="text-xs font-bold border border-black dark:border-white py-1 px-3 rounded-sm inline-block">
-          {data?.premium ? "Premium" : "Free"}
-        </p>
+        <p className="text-sm">{data?.file}</p>
       </td>
       <td className="td-custom flex items-center justify-end gap-x-3">
-        <p className="text-sm"> {formatDateTime(data?.uploaded_at, "date")}</p>
+        <p className="text-sm"> {formatDateTime(data?.created_at, "date")}</p>
         <div className="relative">
           <button
             onClick={() =>
@@ -128,7 +141,7 @@ const PredictionListRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
             <Icon name="dots" />
           </button>
           {data?.id === openItemId && (
-            <StudyMore id={data?.id} setRefetch={setRefetch} />
+            <TopicMore id={data?.id} setRefetch={setRefetch} />
           )}
         </div>
       </td>
@@ -136,16 +149,14 @@ const PredictionListRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
   );
 };
 
-export const PredictionListMobile = ({ data, setRefetch }) => {
+const TopicMobile = ({ data, setRefetch }) => {
   const [showDelete, setShowDelete] = useState(null);
   return (
     <div className="bg-white dark:bg-black">
       {data?.map((item) => (
         <div key={item?.id} className="p-4 space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-bold border border-black dark:border-white py-1 px-3 rounded-sm">
-              {item?.premium ? "Premium" : "Free"}
-            </p>
+            <p className="text-sm">{item?.file}</p>
             <div className="relative">
               <button
                 onClick={() =>
@@ -156,7 +167,7 @@ export const PredictionListMobile = ({ data, setRefetch }) => {
                 <Icon name="dots" />
               </button>
               {showDelete === item?.id && (
-                <StudyMore id={item?.id} setRefetch={setRefetch} />
+                <TopicMore id={item?.id} setRefetch={setRefetch} />
               )}
             </div>
           </div>
@@ -167,7 +178,7 @@ export const PredictionListMobile = ({ data, setRefetch }) => {
             </div>
             <p className="text-[#5F646D] dark:text-white text-xs">
               {" "}
-              {formatDateTime(item?.uploaded_at, "date")}
+              {formatDateTime(item?.created_at, "date")}
             </p>
           </div>
         </div>
@@ -176,10 +187,10 @@ export const PredictionListMobile = ({ data, setRefetch }) => {
   );
 };
 
-const StudyMore = ({ id, setRefetch }) => {
+const TopicMore = ({ id, setRefetch }) => {
   const handelDelete = async () => {
-    const res = await axios.delete(`/study_material/${id}`);
-    toast.success("File Deleted");
+    const res = await axios.delete(`/topic/${id}`);
+    toast.success("Topic Deleted");
     setRefetch && setRefetch((prev) => !prev);
   };
   return (

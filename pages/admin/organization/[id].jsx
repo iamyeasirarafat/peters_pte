@@ -119,16 +119,16 @@ const StudentProfileInfo = ({ data }) => {
 };
 
 const StudentDetailsRight = ({ data }) => {
-  const [groups, setGroups] = useState([])
+  const [groups, setGroups] = useState([]);
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios(`/${data?.id}/groups`)
-      setGroups(res.data)
-    }
+      const res = await axios(`/${data?.id}/groups`);
+      setGroups(res.data);
+    };
     if (data) {
-      fetchGroup()
+      fetchGroup();
     }
-  }, [data])
+  }, [data]);
   const [openChangePassword, setOpenChangePassword] = useState({
     state: false,
     student: null,
@@ -191,13 +191,10 @@ const StudentDetailsRight = ({ data }) => {
         </div>
         {/* Plan */}
         {mounted && isTablet ? (
-          groups?.map((item, i) => (
-            <AccountPlanMobile key={i} data={item} />
-          ))
+          groups?.map((item, i) => <AccountPlanMobile key={i} data={item} />)
         ) : (
           <AccountPlan data={groups} />
         )}
-
       </div>
       <TablePagination />
 
@@ -246,7 +243,6 @@ const StudentDetailsRight = ({ data }) => {
           openGroupModal={openGroupModal}
           setOpenGroupModal={setOpenGroupModal}
         />
-
       </div>
     </div>
   );
@@ -316,7 +312,12 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
           register={register}
           name="email"
         />
-        <PhoneNumberInput label="Phone Number" name="phone" control={control} errors={errors} />
+        <PhoneNumberInput
+          label="Phone Number"
+          name="phone"
+          control={control}
+          errors={errors}
+        />
         <Field
           errors={errors}
           className="mb-6"
@@ -363,9 +364,7 @@ const AccountPlan = ({ data }) => {
           {data?.map((plan, i) => (
             <tr key={i}>
               <td className="py-2 pr-3 font-bold">{plan?.name}</td>
-              <td className="py-2 px-3 text-center font-bold">
-                N/A
-              </td>
+              <td className="py-2 px-3 text-center font-bold">N/A</td>
               <td className="py-2 px-3 text-center font-bold">
                 {formatDateWithName(plan?.created_at, "custom")}
               </td>
@@ -417,10 +416,7 @@ const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
       ...data,
     };
     const changePass = async () => {
-      const res = await axios.put(
-        `/organization/passwordchange`,
-        passwordData
-      );
+      const res = await axios.put(`/organization/passwordchange`, passwordData);
       setOpenChangePassword({ state: false, student: null });
       reset();
       toast.success(res?.data?.message);
@@ -477,10 +473,7 @@ const ChangeUserId = ({ openChangeUserId, setOpenChangeUserId }) => {
       ...data,
     };
     const changePass = async () => {
-      const res = await axios.put(
-        `/organization/useridchange`,
-        passwordData
-      );
+      const res = await axios.put(`/organization/useridchange`, passwordData);
       setOpenChangeUserId({ state: false, student: null });
       reset();
       toast.success(res?.data?.message);
@@ -538,7 +531,7 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
   // get plans
   useEffect(() => {
     const getPlans = async () => {
-      const res = await axios.get("/plans");
+      const res = await axios.get("/student/plans");
       setPlansData(res?.data);
     };
     getPlans();
@@ -631,7 +624,6 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
   );
 };
 
-
 const CreateGroupModal = ({ setOpenGroupModal, openGroupModal }) => {
   const {
     register,
@@ -649,7 +641,6 @@ const CreateGroupModal = ({ setOpenGroupModal, openGroupModal }) => {
         state: false,
         student: null,
       });
-
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
