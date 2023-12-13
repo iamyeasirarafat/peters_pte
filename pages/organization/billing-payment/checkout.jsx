@@ -3,79 +3,79 @@ import Field from "@/components/Field";
 import Select from "@/components/Select";
 import { useForm } from "react-hook-form";
 import Image from "@/components/Image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsCheck2 } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
 import CustomModal from "@/components/CustomModal";
-const accountsType = [
-  {
-    id: "1",
-    title: "Premium 7 Days",
-  },
-  {
-    id: "2",
-    title: "Premium 15 Days",
-  },
-  {
-    id: "3",
-    title: "Premium 30 Days",
-  },
-  {
-    id: "4",
-    title: "Premium 90 Days",
-  },
-  {
-    id: "5",
-    title: "25x Full Mocktest",
-  },
-  {
-    id: "6",
-    title: "50x Full Mocktest",
-  },
-  {
-    id: "7",
-    title: "100x Full Mocktest",
-  },
-  {
-    id: "8",
-    title: "250x Full Mocktest",
-  },
-];
-const accountsCount = [
-  {
-    id: "1",
-    title: "7 Account Pack",
-  },
-  {
-    id: "2",
-    title: "15 Account Pack",
-  },
-  {
-    id: "3",
-    title: "30 Account Pack",
-  },
-  {
-    id: "4",
-    title: "90 Account Pack",
-  },
-];
-const paymentMethods = [
-  { id: 1, title: "SSL Commerce" },
-  { id: 2, title: "Stripe" },
-];
+import axios from "axios";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+
+const paymentMethods = [{ id: 1, title: "SSL Commerce" }];
 function Checkout() {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { id } = router.query;
   const [open, setOpen] = useState(false);
-  const [accountType, setAccountType] = useState(accountsType[0]);
-  const [accountCount, setAccountCount] = useState(accountsCount[0]);
+  const [paymentModalOpen, setPaymentModalOpen] = useState({
+    state: false,
+    url: null,
+  });
+  const [accountsType, setAccountsType] = useState([]);
+  const [accountType, setAccountType] = useState({});
+  const [accountsCount, setAccountsCount] = useState([]);
+  const [accountCount, setAccountCount] = useState({});
   const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0]);
+
+  useEffect(() => {
+    const getPackage = async () => {
+      try {
+        const res = await axios.get(`/packages/organization`);
+        setAccountsType(res?.data);
+      } catch (error) {
+        console.error("Error fetching package:", error);
+      }
+    };
+    router.isReady && getPackage();
+  }, [id, router.isReady]);
+  useEffect(() => {
+    if (Array.isArray(accountsType) && accountsType.length > 0 && id) {
+      const selectedAccountType = accountsType.find(
+        (item) => item.id === parseInt(id)
+      );
+      setAccountType(selectedAccountType || {});
+    }
+  }, [accountsType, id]);
+  useEffect(() => {
+    if (!accountType) return;
+    setAccountsCount(accountType?.validation || []);
+  }, [accountType]);
+  useEffect(() => {
+    if (!accountsCount || accountsCount.length === 0) return;
+    setAccountCount(accountsCount[0]);
+  }, [accountsCount]);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+
+  const onSubmit = async () => {
+    setIsLoading(true);
+    const formData = {
+      package: accountType?.id,
+      validation: accountCount?.id,
+    };
+    try {
+      const res = await axios.post("/payment/organization", formData);
+      setIsLoading(false);
+      setPaymentModalOpen({ state: true, url: res?.data?.redirect_url });
+    } catch (error) {
+      toast.error("Something went wrong");
+      setIsLoading(false);
+    }
   };
   return (
     <Layout title="Checkout" back>
@@ -98,11 +98,11 @@ function Checkout() {
         <Field
           errors={errors}
           label="Total Cost"
-          placeholder="5950.00 BDT"
-          currency="You saved 15 BDT"
-          required
+          placeholder={accountCount?.cost}
+          currency={accountCount?.saving}
           register={register}
           name="total_cost"
+          isReadOnly
         />
         <Select
           label="Select Payment Method"
@@ -132,19 +132,48 @@ function Checkout() {
           Policy
         </p>
         <button
-          onClick={() => setOpen(true)}
+          disabled={isLoading}
           type="submit"
-          className="text-base font-bold w-full py-3 bg-primary mt-10"
+          className="text-base font-bold w-full py-3 bg-primary mt-10 flex items-center justify-center gap-x-3"
         >
+          {isLoading && (
+            <div className="w-5 h-5 rounded-full border-t-2 border-r-2 border-white animate-spin" />
+          )}
           Make Payment
         </button>
       </form>
       <CheckoutModal open={open} setOpen={setOpen} />
+      <PaymentModal open={paymentModalOpen} setOpen={setPaymentModalOpen} />
     </Layout>
   );
 }
 
 export default Checkout;
+
+const PaymentModal = ({ open, setOpen }) => {
+  return (
+    <CustomModal
+      visible={open?.state}
+      onClose={() => setOpen({ state: false, url: null })}
+    >
+      <div className="h-[720px] bg-white">
+        <iframe
+          className="w-full h-full"
+          src={open?.url}
+          allowFullScreen
+        ></iframe>
+        <div className="w-full bg-white p-3">
+          <button
+            onClick={() => setOpen({ state: false, url: null })}
+            className="py-2 px-3 bg-red text-white rounded-md"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </CustomModal>
+  );
+};
 
 const CheckoutModal = ({ open, setOpen }) => {
   return (
