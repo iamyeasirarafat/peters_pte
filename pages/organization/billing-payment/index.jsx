@@ -10,61 +10,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-const fullMocktest = [
-  {
-    title: "25x Full Mocktest",
-    price: "499",
-    thumbnail: "/images/payment/25x.png",
-  },
-  {
-    title: "50x Full Mocktest ",
-    price: "799",
-    thumbnail: "/images/payment/50x.png",
-  },
-  {
-    title: "100x Full Mocktest ",
-    price: "1499",
-    thumbnail: "/images/payment/100x.png",
-  },
-  {
-    title: "250x Full Mocktest ",
-    price: "3999",
-    thumbnail: "/images/payment/250x.png",
-  },
-];
 function BillingPayment() {
   const router = useRouter();
-  const [plans, setPlans] = useState([]);
+  const [packages, setPackages] = useState([]);
   useEffect(() => {
-    const getPlans = async () => {
-      const res = await axios.get("/plans");
-      setPlans(res?.data);
+    const getPackage = async () => {
+      const res = await axios.get("/packages/organization");
+      setPackages(res?.data);
     };
-    getPlans();
+    getPackage();
   }, []);
-  console.log("plans", plans);
-  const premiumAccounts = [
-    {
-      name: "Premium 7 Days Account",
-      price: "499",
-      image: "/images/payment/7days.png",
-    },
-    {
-      name: "Premium 15 Days Account",
-      price: "799",
-      image: "/images/payment/15days.png",
-    },
-    {
-      name: "Premium 30 Days Account",
-      price: "1499",
-      image: "/images/payment/30days.png",
-    },
-    {
-      name: "Premium 90 Days Account",
-      price: "3999",
-      image: "/images/payment/90days.png",
-    },
-  ];
+
   return (
     <Layout title="Billing & Payment">
       <div className="grid grid-cols-12 gap-5">
@@ -73,10 +29,8 @@ function BillingPayment() {
           <p className="text-lg font-extrabold">Purchase Bluk Account</p>
           <p className="text-xs font-bold my-5">Click to Purchase</p>
           {/* Offer*/}
-          <div className="grid grid-cols-2 items-center gap-x-4 gap-y-3">
-            <div className="w-full">
-              <Pricing data={plans} />
-            </div>
+          <div className="w-full">
+            <Pricing data={packages} />
           </div>
           {/* payment method */}
           <div className="mt-30 space-y-5">
@@ -115,7 +69,7 @@ export default BillingPayment;
 const Pricing = ({ data }) => {
   const router = useRouter();
   return (
-    <div className="space-y-3">
+    <div className="grid grid-cols-2 items-center gap-x-4 gap-y-3">
       {data?.map((item, i) => {
         return (
           <div
@@ -138,7 +92,10 @@ const Pricing = ({ data }) => {
             {/* name & price */}
             <div>
               <p className="text-sm font-bold">{item?.title}</p>
-              <p className="text-sm font-bold">{item?.price} BDT</p>
+              <p className="text-sm font-bold">
+                {item?.validation?.length}{" "}
+                {item?.validation?.length > 0 ? "Variations" : "Variation"}
+              </p>
             </div>
           </div>
         );
