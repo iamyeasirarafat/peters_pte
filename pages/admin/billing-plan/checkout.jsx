@@ -143,7 +143,6 @@ function Checkout() {
     </Layout>
   );
 }
-
 export default Checkout;
 
 const CheckoutModal = ({ open, setOpen }) => {
