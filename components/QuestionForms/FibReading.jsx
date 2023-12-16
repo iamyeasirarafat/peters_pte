@@ -1,17 +1,24 @@
-import Counter from "@/components/Counter";
 import LoadingButton from "@/components/LoadingButton";
+import EditCounter from "@/components/EditCounter";
 import { useState } from "react";
 import Icon from "@/components/Icon";
 import { useRef } from "react";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/router";
 const FibReading = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [extraOption, setExtraOption] = useState(0);
+  const [extraAnswers, setExtraAnswers] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
-    paragraph: [],
+    sentence: [],
     appeared: 0,
     prediction: false,
-    options: [],
+    answers: [],
+    extra_answers: [],
   });
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
@@ -19,11 +26,6 @@ const FibReading = () => {
       ...prevData,
       [id]: type === "checkbox" ? checked : value,
     }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
   };
 
   const [text, setText] = useState("");
@@ -61,7 +63,7 @@ const FibReading = () => {
       // Initialize the option in the state as an object with an empty string
       setOptions((prevOptions) => [
         ...prevOptions,
-        { id: buttonText, text: "" },
+        { index: buttonText, value: "" },
       ]);
     }
   };
@@ -70,39 +72,32 @@ const FibReading = () => {
     // Update the state with the text from the textarea
     setOptions((prevOptions) =>
       prevOptions.map((option) =>
-        option.id === id ? { ...option, text: e.target.value } : option
+        option.index === id ? { ...option, value: e.target.value } : option
       )
     );
   };
   useEffect(() => {
-    const extractSentences = (paragraph) => {
-      // Replace <button> elements with commas
-      const modifiedText = paragraph.replace(
-        /<button[^>]*>(.*?)<\/button>/g,
-        ","
-      );
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
 
-      // Split the modified text into an array of sentences
-      const sentences = modifiedText.match(/[^.!?]+[.!?]+/g);
+    // Extract text content from parsed document, excluding button text
+    const paragraphs = Array.from(doc.body.childNodes)
+      .map((node) => {
+        if (node.nodeName === "BUTTON") {
+          return ""; // Exclude button text
+        }
+        return node.textContent.trim();
+      })
+      .filter((sentence) => sentence !== ""); // Remove empty strings
 
-      // Filter out any null values from the array
-      const filteredSentences = sentences ? sentences.filter(Boolean) : [];
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      sentence: paragraphs,
+      answers: options,
+      extra_answers: extraAnswers,
+    }));
+  }, [extraAnswers, options, text]);
 
-      // Update the state with modified text and sentences array
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        paragraph: modifiedText,
-        options: options,
-        sentences: filteredSentences,
-      }));
-    };
-
-    extractSentences(text);
-  }, [options, text]);
-
-  const [extraOption, setExtraOption] = useState(0);
-  const [extraAnswers, setExtraAnswers] = useState([]);
-  console.log(extraAnswers);
   const handleExtraInputChange = (index, value) => {
     const newExtraAnswers = [...extraAnswers];
     const existingAnswer = newExtraAnswers.find(
@@ -116,6 +111,23 @@ const FibReading = () => {
     }
 
     setExtraAnswers(newExtraAnswers);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await axios.post("/reading_blank", formData);
+      toast.success("Create question successfully");
+      if (response?.data) {
+        router.back();
+      }
+    } catch (error) {
+      toast.error("something went wrong");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderInputFields = () => {
@@ -170,11 +182,10 @@ const FibReading = () => {
             </div>
             <button
               className="group"
-              // onClick={(e) => {
-              //   e.preventDefault();
-              //   handleIncrement();
-              // }}
-              onClick={handleButtonClick}
+              onClick={(e) => {
+                e.preventDefault();
+                handleButtonClick();
+              }}
             >
               <Icon
                 className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
@@ -199,11 +210,13 @@ const FibReading = () => {
         <div className="grid grid-cols-4 gap-2 my-5 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {options.map((option) => (
             <div key={option.id}>
-              <h3 className="text-sm font-bold mb-2">Correct {option?.id}</h3>
+              <h3 className="text-sm font-bold mb-2">
+                Correct {option?.index}
+              </h3>
               <input
                 type="text"
-                value={option.text}
-                onChange={(e) => handleTextAreaChange(option.id, e)}
+                value={option.value}
+                onChange={(e) => handleTextAreaChange(option.index, e)}
                 placeholder="write your text"
                 className="border-none py-4"
               />
@@ -211,7 +224,7 @@ const FibReading = () => {
           ))}
         </div>
 
-        <Counter
+        <EditCounter
           className="bg-white w-full mt-8"
           title="Extra Option Number"
           value={extraOption}
@@ -222,13 +235,13 @@ const FibReading = () => {
           {renderInputFields()}
         </div>
         <div className="flex justify-between gap-6">
-          <Counter
+          <EditCounter
             className="bg-white w-1/2"
             title="Appeared Times"
             value={formData.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2 bg-white flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"

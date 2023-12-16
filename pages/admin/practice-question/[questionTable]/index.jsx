@@ -91,6 +91,8 @@ const Index = () => {
       url = "multi_choices/single-answer";
     } else if (questionTable === "Summarize Spoken Text") {
       url = "spoken/summarizes";
+    } else if (questionTable === "Reading & Writing: FIB") {
+      url = "reading_blanks";
     }
 
     const fetchData = async () => {

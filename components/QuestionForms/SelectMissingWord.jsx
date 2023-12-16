@@ -1,4 +1,5 @@
 import Counter from "@/components/Counter";
+import LoadingButton from "@/components/LoadingButton";
 import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -7,6 +8,7 @@ import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 const SelectMissingWord = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -110,6 +112,7 @@ const SelectMissingWord = () => {
       const optionsJson = JSON.stringify(formData?.options);
       const rightOptionsJson = JSON.stringify(formData?.right_options);
       try {
+        setLoading(true);
         const newForm = new FormData();
         newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
@@ -124,14 +127,16 @@ const SelectMissingWord = () => {
           },
         };
         console.log(formData);
-        // const { data } = await axios.post("/url", newForm, config);
-        // toast.success("Create question successfully");
-        // if (data) {
-        //   router.back();
-        // }
+        const { data } = await axios.post("/missing_word", newForm, config);
+        toast.success("Create question successfully");
+        if (data) {
+          router.back();
+        }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
       }
     } else {
       toast.error("You need provide data successfuly!");
@@ -287,12 +292,16 @@ const SelectMissingWord = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

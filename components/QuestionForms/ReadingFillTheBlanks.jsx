@@ -4,9 +4,10 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 const ReadingFillTheBlanks = () => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    paragraph: "",
+    title: "",
+    sentence: [],
     appeared: 0,
     prediction: false,
     options: [],
@@ -23,14 +24,6 @@ const ReadingFillTheBlanks = () => {
     e.preventDefault();
     console.log(formData);
   };
-
-  const optionss = [
-    { label: "Generic" },
-    { label: "Theory" },
-    { label: "query" },
-    { label: "type your option" },
-  ];
-  const [value, setValue] = useState("");
 
   // fill the blanks
   const [text, setText] = useState("");
@@ -68,27 +61,33 @@ const ReadingFillTheBlanks = () => {
       // Initialize the option in the state as an object with an empty string
       setOptions((prevOptions) => [
         ...prevOptions,
-        { id: buttonText, text: "" },
+        { index: buttonText, options: [], answer: "" },
       ]);
     }
   };
 
-  const handleTextAreaChange = (id, e) => {
-    // Update the state with the text from the textarea
-    setOptions((prevOptions) =>
-      prevOptions.map((option) =>
-        option.id === id ? { ...option, text: e.target.value } : option
-      )
-    );
-  };
   useEffect(() => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
+
+    // Extract text content from parsed document, excluding button text
+    const paragraphs = Array.from(doc.body.childNodes)
+      .map((node) => {
+        if (node.nodeName === "BUTTON") {
+          return ""; // Exclude button text
+        }
+        return node.textContent.trim();
+      })
+      .filter((sentence) => sentence !== ""); // Remove empty strings
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      paragraph: text,
+      sentence: paragraphs,
       options: options,
     }));
   }, [options, text]);
 
+  console.log(options);
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -102,9 +101,9 @@ const ReadingFillTheBlanks = () => {
           <input
             placeholder="Bill On The Hill"
             className="w-full border-none py-4 px-5 text-sm "
-            id="name"
+            id="title"
             type="text"
-            value={formData.name}
+            value={formData.title}
             onChange={handleInputChange}
           />
         </div>
@@ -116,11 +115,10 @@ const ReadingFillTheBlanks = () => {
             </div>
             <button
               className="group"
-              // onClick={(e) => {
-              //   e.preventDefault();
-              //   handleIncrement();
-              // }}
-              onClick={handleButtonClick}
+              onClick={(e) => {
+                e.preventDefault();
+                handleButtonClick();
+              }}
             >
               <Icon
                 className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
@@ -148,40 +146,133 @@ const ReadingFillTheBlanks = () => {
           {options.map((option, i) => (
             <div key={i} className="my-4">
               <h2 className="font-bold my-2 text-sm">
-                Answer blank {option?.id}
+                Answer blank {option?.index}
               </h2>
               <div className="grid grid-cols-4 gap-6 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
-                {optionss?.map((option, i) => (
-                  <label
-                    key={i}
-                    className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                <label
+                  key={i}
+                  className={`group relative inline-flex items-center gap-3 select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                >
+                  <input
+                    className="absolute top-0 left-0 opacity-0 invisible"
+                    type="checkbox"
+                    value={value}
+                    onChange={() => setOptions(option.label)}
+                    checked={value === option.label}
+                  />
+                  <span
+                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                      value == option.label
+                        ? "bg-green-1 border-green-1 dark:!border-green-1"
+                        : "bg-transparent border-n-1 dark:border-white"
+                    }`}
                   >
-                    <input
-                      className="absolute top-0 left-0 opacity-0 invisible"
-                      type="checkbox"
-                      value={value}
-                      onChange={() => setValue(option.label)} // Update the selected value
-                      checked={value === option.label}
-                    />
-                    <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        value == option.label
-                          ? "bg-green-1 border-green-1 dark:!border-green-1"
-                          : "bg-transparent border-n-1 dark:border-white"
+                    <Icon
+                      className={`fill-white transition-opacity ${
+                        value == option.label ? "opacity-100" : "opacity-0"
                       }`}
-                    >
-                      <Icon
-                        className={`fill-white transition-opacity ${
-                          value == option.label ? "opacity-100" : "opacity-0"
-                        }`}
-                        name="check"
-                      />
-                    </span>
-                    <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
-                      {option?.label}
-                    </span>
-                  </label>
-                ))}
+                      name="check"
+                    />
+                  </span>
+                  <input
+                    className="w-full py-0 "
+                    placeholder="type your option...."
+                    type="text"
+                  />
+                </label>
+                <label
+                  key={i}
+                  className={`group relative inline-flex items-center gap-3 select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                >
+                  <input
+                    className="absolute top-0 left-0 opacity-0 invisible"
+                    type="checkbox"
+                    value={value}
+                    onChange={() => setValue(option.label)} // Update the selected value
+                    checked={value === option.label}
+                  />
+                  <span
+                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                      value == option.label
+                        ? "bg-green-1 border-green-1 dark:!border-green-1"
+                        : "bg-transparent border-n-1 dark:border-white"
+                    }`}
+                  >
+                    <Icon
+                      className={`fill-white transition-opacity ${
+                        value == option.label ? "opacity-100" : "opacity-0"
+                      }`}
+                      name="check"
+                    />
+                  </span>
+                  <input
+                    className="w-full py-0 "
+                    placeholder="type your option...."
+                    type="text"
+                  />
+                </label>
+                {/* <label
+                  key={i}
+                  className={`group relative inline-flex items-center gap-3 select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                >
+                  <input
+                    className="absolute top-0 left-0 opacity-0 invisible"
+                    type="checkbox"
+                    value={value}
+                    onChange={() => setValue(option.label)} // Update the selected value
+                    checked={value === option.label}
+                  />
+                  <span
+                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                      value == option.label
+                        ? "bg-green-1 border-green-1 dark:!border-green-1"
+                        : "bg-transparent border-n-1 dark:border-white"
+                    }`}
+                  >
+                    <Icon
+                      className={`fill-white transition-opacity ${
+                        value == option.label ? "opacity-100" : "opacity-0"
+                      }`}
+                      name="check"
+                    />
+                  </span>
+                  <input
+                    className="w-full py-0 "
+                    placeholder="type your option...."
+                    type="text"
+                  />
+                </label>
+                <label
+                  key={i}
+                  className={`group relative inline-flex items-center gap-3 select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                >
+                  <input
+                    className="absolute top-0 left-0 opacity-0 invisible"
+                    type="checkbox"
+                    value={value}
+                    onChange={() => setValue(option.label)} // Update the selected value
+                    checked={value === option.label}
+                  />
+                  <span
+                    className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                      value == option.label
+                        ? "bg-green-1 border-green-1 dark:!border-green-1"
+                        : "bg-transparent border-n-1 dark:border-white"
+                    }`}
+                  >
+                    <Icon
+                      className={`fill-white transition-opacity ${
+                        value == option.label ? "opacity-100" : "opacity-0"
+                      }`}
+                      name="check"
+                    />
+                  </span>
+                  <input
+                    className="w-full py-0 "
+                    placeholder="type your option...."
+                    type="text"
+                  />
+                </label> */}
               </div>
             </div>
           ))}

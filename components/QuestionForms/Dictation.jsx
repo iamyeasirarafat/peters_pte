@@ -20,18 +20,18 @@ const Dictation = () => {
         setLoading(true);
         const formData = new FormData();
         formData.append("title", data?.title);
-        formData.append("reference_text", data?.reference_text);
+        formData.append("content", data?.reference_text);
         formData.append("prediction", data?.prediction);
         formData.append("audio", audio);
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
 
         console.log(formData);
-        // const response = await axios.post("/url ", formData, config);
-        // toast.success("Create question successfully");
-        // if (response?.data) {
-        //   router.back();
-        // }
+        const response = await axios.post("/dictation ", formData, config);
+        toast.success("Create question successfully");
+        if (response?.data) {
+          router.back();
+        }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");

@@ -33,14 +33,14 @@ const CardItems = () => {
     },
     {
       title: "Describe Image",
-      items: "233",
+      items: itemNumber?.describe_image,
       bg: "#CF8800",
       link: "Describe Image",
       text: "DI",
     },
     {
       title: "Answer Short Question",
-      items: "233",
+      items: itemNumber?.short_question,
       bg: "#CF8800",
       link: "Answer Short Question",
       text: "ASQ",
@@ -72,7 +72,7 @@ const CardItems = () => {
   const reading = [
     {
       title: "Reading & Writing: FIB",
-      items: "233",
+      items: itemNumber?.read_write_blank,
       bg: "#4399FF",
       link: "Reading & Writing: FIB",
       text: "FIB",
@@ -86,14 +86,14 @@ const CardItems = () => {
     },
     {
       title: "Re-order Paragraphs",
-      items: "233",
+      items: itemNumber?.reorder_paragraph,
       bg: "#4399FF",
       link: "Re-order Paragraphs",
       text: "RP",
     },
     {
       title: "Reading: Fill in the Blanks",
-      items: "233",
+      items: itemNumber?.blank_reading,
       bg: "#4399FF",
       link: "Reading: Fill in the Blanks",
       text: "FIB",
@@ -109,7 +109,7 @@ const CardItems = () => {
   const Speaking2 = [
     {
       title: "Summarize Spoken Text",
-      items: "233",
+      items: itemNumber?.summarize_spoken,
       bg: "#5F646D",
       link: "Summarize Spoken Text",
       text: "SST",
@@ -130,14 +130,14 @@ const CardItems = () => {
     },
     {
       title: "Fill in the Blanks",
-      items: "233",
+      items: itemNumber?.blank_listening,
       bg: "#5F646D",
       link: "Fill in the Blanks",
       text: "FIB",
     },
     {
       title: "Multiple Choice (Singles)",
-      items: "233",
+      items: itemNumber?.multi_choice_reading_single_answer,
       bg: "#5F646D",
       link: "Listening: MCS",
       text: "MCS",
@@ -151,7 +151,7 @@ const CardItems = () => {
     },
     {
       title: "Highlight Incorrect Words",
-      items: "233",
+      items: itemNumber?.highlight_incorrect_word,
       bg: "#5F646D",
       link: "Highlight Incorrect Words",
       text: "HIW",
