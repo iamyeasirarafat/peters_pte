@@ -1,9 +1,11 @@
 import Layout from "@/components/Layout";
 
-const AddStdPkg = () => {
-    return (<Layout>
-        <div>Add student package</div>
-    </Layout>);
-}
+const AddOrgPkg = () => {
+  return (
+    <Layout title="Student Package / New" back>
+      <div>student pack form</div>
+    </Layout>
+  );
+};
 
-export default AddStdPkg;
+export default AddOrgPkg;

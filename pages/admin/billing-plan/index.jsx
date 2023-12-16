@@ -13,8 +13,6 @@ import { IoDiamondSharp } from "react-icons/io5";
 import { MdAccountBalanceWallet, MdQuiz } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
 
-
-
 function BillingPayment() {
   const router = useRouter();
   const [plans, setPlans] = useState([]);
@@ -31,14 +29,14 @@ function BillingPayment() {
       name: "Student Package",
       count: "7",
       image: "/std_pkg.png",
-      link: "/admin/billing-plan/add-student-package"
+      link: "/admin/billing-plan/students_package",
     },
     {
       name: "Organization Package",
       count: "48",
       image: "/org_pkg.png",
-      link: "/admin/billing-plan/add-org-package"
-    }
+      link: "/admin/billing-plan/organization_package",
+    },
   ];
   return (
     <Layout title="Billing & Payment">
@@ -72,9 +70,7 @@ function BillingPayment() {
             </p>
             <button
               onClick={() =>
-                router.push(
-                  "/organization/billing-payment/transactions-history"
-                )
+                router.push("/admin/billing-plan/transactions-history")
               }
               className="flex items-center gap-x-2 bg-white text-black text-lg font-extrabold py-2 px-4 rounded-sm"
             >
@@ -95,15 +91,8 @@ const Pricing = ({ data }) => {
     <div className="space-x-3 flex w-full">
       {data?.map((item, i) => {
         return (
-          <Link
-            key={item?.id || i}
-            href={item.link}
-            className="w-full"
-          >
-            <div
-
-              className="flex w-full items-center bg-secondary dark:bg-[#161616] p-3 gap-x-3 cursor-pointer"
-            >
+          <Link key={item?.id || i} href={item.link} className="w-full">
+            <div className="flex w-full items-center bg-secondary dark:bg-[#161616] p-3 gap-x-3 cursor-pointer">
               {/* image */}
               <Image
                 className="w-13 h-13 rounded-sm"
@@ -192,22 +181,20 @@ const CountCart = () => {
   );
 };
 
-
-
 const Switch = ({ className, value, setValue }) => (
   <div className={`inline-flex bg-secondary shrink-0 ${className}`}>
     <SwitchReact
       checked={value}
       onChange={setValue}
-      className={`relative inline-flex items-center w-10 h-6 pl-0.75 cursor-pointer rounded-sm transition-colors outline-none  ${value ? "bg-primary" : "bg-primary-3"
-        }`}
+      className={`relative inline-flex items-center w-10 h-6 pl-0.75 cursor-pointer rounded-sm transition-colors outline-none  ${
+        value ? "bg-primary" : "bg-primary-3"
+      }`}
     >
       <span
         aria-hidden="true"
         className={twMerge(
-          `pointer-events-none inline-block w-4 h-4 transition-all ${value
-            ? "translate-x-4 bg-n-1"
-            : "translate-x-0 bg-primary"
+          `pointer-events-none inline-block w-4 h-4 transition-all ${
+            value ? "translate-x-4 bg-n-1" : "translate-x-0 bg-primary"
           }`
         )}
       />
