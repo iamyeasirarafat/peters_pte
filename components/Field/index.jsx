@@ -42,7 +42,6 @@ const Field = ({
   const [visiblePassword, setVisiblePassword] = useState(false);
   const error = errors && errors[name] || false;
   const success = false;
-  console.log(errors, "ssss")
   return (
     <div className={`${className}`}>
       <div className="">
@@ -75,6 +74,7 @@ const Field = ({
               }
               {...register(name, {
                 required: required && `${name} is required`,
+                valueAsNumber: type === "number" || false
               })}
               value={value}
               onChange={onChange}

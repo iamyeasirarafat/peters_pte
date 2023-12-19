@@ -2,6 +2,7 @@ import Field from "@/components/Field";
 import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -32,11 +33,12 @@ const AddOrgQ = () => {
     name: "validation",
   });
   useEffect(() => {
-    append({ title: "", saving: "", cost: "", quantity: "" });
+    append({ title: "", saving: "", cost: 0, quantity: "" });
   }, [append]);
-
+  const router = useRouter()
   // upload Package
   const onSubmit = async (data) => {
+    console.log(data)
     if (image) {
       const formData = new FormData();
       formData.append("thumbnail", image);
@@ -54,6 +56,7 @@ const AddOrgQ = () => {
         });
         console.log("res", res);
         toast.success("Successfully created package")
+        router.push("/admin/billing-plan/organization_package")
       } catch (error) {
         toast.error("Error creating package")
         console.error("Error:", error);
@@ -76,7 +79,6 @@ const AddOrgQ = () => {
     setImageSrc(null);
     setImage(null);
   };
-  console.log(errors)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Field
@@ -155,7 +157,6 @@ const AddOrgQ = () => {
         <div key={item.id} className="flex items-center gap-x-8 mt-4">
           <Field
             errors={errors}
-            classInput={`${errors?.validation[index]?.title && "border-red-500"}`}
             className="w-full"
             label={`Variation ${index + 1} Name`}
             placeholder="7 Bluk Account"
@@ -165,7 +166,6 @@ const AddOrgQ = () => {
           />
           <Field
             errors={errors}
-            classInput={`${errors?.validation[index]?.saving && "border-red-500"}`}
             className="w-full"
             label="Savings"
             placeholder="You Saved 250 TK"
@@ -176,7 +176,6 @@ const AddOrgQ = () => {
           />
           <Field
             errors={errors}
-            classInput={`${errors?.validation[index]?.cost && "border-red-500"}`}
             className="w-full"
             label="Cost"
             placeholder="3750 BDT"
@@ -187,7 +186,6 @@ const AddOrgQ = () => {
           />
           <Field
             errors={errors}
-            classInput={`${errors?.validation[index]?.quantity && "border-red-500"}`}
             className="w-full"
             label="Quantity"
             placeholder="7"
