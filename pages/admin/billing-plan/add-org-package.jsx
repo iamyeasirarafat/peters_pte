@@ -1,11 +1,13 @@
-import Layout from "@/components/Layout";
 import Field from "@/components/Field";
-import { useFieldArray, useForm } from "react-hook-form";
-import { GoPlusCircle } from "react-icons/go";
-import { FiMinusCircle } from "react-icons/fi";
-import { BiSolidCloudUpload } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import Icon from "@/components/Icon";
+import Layout from "@/components/Layout";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { FiMinusCircle } from "react-icons/fi";
+import { GoPlusCircle } from "react-icons/go";
 
 const AddOrgPkg = () => {
   return (
@@ -17,7 +19,8 @@ const AddOrgPkg = () => {
 export default AddOrgPkg;
 
 const AddOrgQ = () => {
-  const [thumbnail, setThumbnail] = useState([]);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [image, setImage] = useState(null);
   const {
     register,
     handleSubmit,
@@ -30,33 +33,51 @@ const AddOrgQ = () => {
     name: "validation",
   });
   useEffect(() => {
-    append({ title: "", saving: "", cost: "", quantity: "" });
+    append({ title: "", saving: "", cost: 0, quantity: "" });
   }, [append]);
-
+  const router = useRouter()
   // upload Package
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append("thumbnail", thumbnail[0]);
+    console.log(data)
+    if (image) {
+      const formData = new FormData();
+      formData.append("thumbnail", image);
+      formData.append("premium_practice_access", data?.premium_practice_access);
+      formData.append("mocktest_access", data?.mocktest_access);
+      formData.append("title", data.title);
+      formData.append("validity", data.validity);
+      formData.append("validation", JSON.stringify(data.validation));
 
-    const finalData = {
-      premium_practice_access: data?.premium_practice_access,
-      mocktest_access: data?.mocktest_access,
-      title: data?.title,
-      validity: data?.validity,
-      validation: [],
-      thumbnail: thumbnail[0],
-    };
-
-    try {
-      const res = await axios.post("/package/organization", finalData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("res", res);
-    } catch (error) {
-      console.error("Error:", error);
+      try {
+        const res = await axios.post("/package/organization", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("res", res);
+        toast.success("Successfully created package")
+        router.push("/admin/billing-plan/organization_package")
+      } catch (error) {
+        toast.error("Error creating package")
+        console.error("Error:", error);
+      }
+    } else {
+      toast.error("Image required")
     }
+  };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageSrc(URL.createObjectURL(file));
+      setImage(file);
+    } else {
+      setImageSrc(null);
+      setImage(null);
+    }
+  };
+  const handleDeleteImage = () => {
+    setImageSrc(null);
+    setImage(null);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -179,22 +200,45 @@ const AddOrgQ = () => {
       <div className="mt-4 flex items-end gap-x-8">
         <div className="w-full flex items-center gap-x-5">
           <div>
-            <p className="text-sm font-bold mb-3">Thumbnail</p>
-            <label
-              htmlFor="uploadThumbnail"
-              className=" inline-block py-5 px-6 text-center space-y-2 border cursor-pointer"
-            >
-              <BiSolidCloudUpload className="text-xl inline-block" />
-              <p className="text-xs font-bold">Upload</p>
-              <input
-                onChange={(e) => setThumbnail(e.target.files)}
-                id="uploadThumbnail"
-                className="hidden"
-                type="file"
-              />
-            </label>
+            <h4 className="text-sm mt-5 mb-2 font-semibold">Thumbnail</h4>
+            {!image?.name && !imageSrc ? (
+              <label className="border w-28 flex flex-col items-center px-4 py-6 cursor-pointer">
+                <Icon
+                  className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                  name="upload"
+                />
+                <span className="mt-2 text-base leading-normal">Upload</span>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </label>
+            ) : (
+              <div className="flex gap-5">
+                <div className="border relative w-28 flex flex-col items-center cursor-pointer">
+                  <div
+                    onClick={handleDeleteImage}
+                    className="absolute top-0 right-0"
+                  >
+                    <Icon
+                      className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                      name="cross"
+                    />
+                  </div>
+                  <img
+                    src={imageSrc}
+                    alt={image?.name}
+                    className="mt-5 w-16 h-12 object-contain"
+                  />
+                  <span className="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
+                    {image?.name}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
-          <p className="text-base font-bold">File : {thumbnail[0]?.name}</p>
         </div>
         <div className="w-full">
           <button className="w-full bg-primary py-3 px-4 flex items-center justify-center text-base font-bold">

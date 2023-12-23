@@ -40,9 +40,8 @@ const Field = ({
   isReadOnly,
 }) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
-  const error = errors[name] || false;
+  const error = errors && errors[name] || false;
   const success = false;
-
   return (
     <div className={`${className}`}>
       <div className="">
@@ -51,10 +50,8 @@ const Field = ({
           {textarea ? (
             <textarea
               className={twMerge(
-                `w-full h-24 px-5 py-3 bg-white border-none   rounded-sm text-sm text-n-1 font-bold outline-none resize-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75 ${
-                  icon ? "pr-15" : ""
-                } ${success ? "pr-15 !border-green-1" : ""} ${
-                  error ? "pr-15 !border-pink-1" : ""
+                `w-full h-24 px-5 py-3 bg-white border-none   rounded-sm text-sm text-n-1 font-bold outline-none resize-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75 ${icon ? "pr-15" : ""
+                } ${success ? "pr-15 !border-green-1" : ""} ${error ? "pr-15 !border-pink-1" : ""
                 } ${image || currency ? "pr-15" : ""} ${classInput}`
               )}
               value={value}
@@ -65,10 +62,8 @@ const Field = ({
           ) : (
             <input
               className={twMerge(
-                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75 ${
-                  icon || type === "password" ? "pr-15" : ""
-                } ${success ? "pr-15 !border-green-1" : ""} ${
-                  error ? "pr-15 !border-pink-1" : ""
+                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75 ${icon || type === "password" ? "pr-15" : ""
+                } ${success ? "pr-15 !border-green-1" : ""} ${error ? "pr-15 !border-pink-1" : ""
                 } ${image || currency ? "pr-15" : ""} ${classInput}`
               )}
               type={
@@ -79,12 +74,13 @@ const Field = ({
               }
               {...register(name, {
                 required: required && `${name} is required`,
+                valueAsNumber: type === "number" || false
               })}
               value={value}
               onChange={onChange}
               placeholder={placeholder}
               readOnly={isReadOnly}
-              //   required={required}
+            //   required={required}
             />
           )}
           {icon && type !== "password" && !success && !error && (
@@ -107,9 +103,8 @@ const Field = ({
           )}
           {(success || error) && (
             <Icon
-              className={`absolute top-1/2 cursor-pointer right-5 icon-20 -translate-y-1/2 pointer-events-none ${
-                success ? "fill-green-1" : "fill-pink-1"
-              }`}
+              className={`absolute top-1/2 cursor-pointer right-5 icon-20 -translate-y-1/2 pointer-events-none ${success ? "fill-green-1" : "fill-pink-1"
+                }`}
               name={success ? "check-circle" : "info-circle"}
             />
           )}
