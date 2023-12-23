@@ -15,14 +15,11 @@ import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { twMerge } from "tailwind-merge";
 
-const StudentRow = ({ admin, item, setStatus }) => {
+const StudentRow = ({ admin, item, setStatus, setIsOpen, isOpen }) => {
   const [value, setValue] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+
   return (
     <tr className="">
       <td className="td-custom flex items-center gap-3">
@@ -85,57 +82,19 @@ const StudentRow = ({ admin, item, setStatus }) => {
         <div className="flex justify-center bg-gray-100 ">
           <div
             className="relative inline-block text-left"
-            onClick={toggleDropdown}
-            // onBlur={closeDropdown}
+            onClick={() => setIsOpen(isOpen === item.id ? null : item.id)}
           >
             <button className="btn-transparent-dark btn-small btn-square">
               <Icon name="dots" />
             </button>
-            <div
-              style={{ backgroundColor: "#FAF4F0" }}
-              className={`${
-                isOpen ? "block" : "hidden"
-              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-            >
-              <div role="none">
-                <button
-                  onClick={() => {
-                    setEditData(item);
-                    setVisible(true);
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="settings" /> Edit Student
-                </button>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="report2" /> Student Analytics
-                </a>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="assignPlan" /> Assign Plan
-                </a>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="students" /> Assign Group
-                </a>
-                <button
-                  onClick={async () => {
-                    await axios.delete("/student/" + item.id);
-                    setStatus(Math.random());
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="cross" /> Remove
-                </button>
-              </div>
-            </div>
+            {isOpen === item.id && (
+              <StudentMoreButton
+                data={item}
+                setEditData={setEditData}
+                setVisible={setVisible}
+                setStatus={setStatus}
+              />
+            )}
           </div>
         </div>
         {visible && admin && (
@@ -149,6 +108,53 @@ const StudentRow = ({ admin, item, setStatus }) => {
   );
 };
 export default StudentRow;
+
+const StudentMoreButton = ({ data, setEditData, setVisible, setStatus }) => {
+  return (
+    <div
+      className={`origin-top-right font-semibold absolute right-8 top-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary dark:bg-black dark:border border-white`}
+    >
+      <div role="none">
+        <button
+          onClick={() => {
+            setEditData(data);
+            setVisible(true);
+          }}
+          className="block px-4 py-2 hover:text-purple-1 duration-200 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="settings" /> Edit Student
+        </button>
+        <a
+          href="#"
+          className="block px-4 py-2 hover:text-purple-1 duration-200 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="report2" /> Student Analytics
+        </a>
+        <a
+          href="#"
+          className="block px-4 py-2 hover:text-purple-1 duration-200 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="assignPlan" /> Assign Plan
+        </a>
+        <a
+          href="#"
+          className="block px-4 py-2 hover:text-purple-1 duration-200 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="students" /> Assign Group
+        </a>
+        <button
+          onClick={async () => {
+            await axios.delete("/student/" + data.id);
+            setStatus(Math.random());
+          }}
+          className="block px-4 py-2 hover:text-purple-1 duration-200 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="cross" /> Remove
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
   const genders = [
