@@ -124,7 +124,7 @@ const PredictionListRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
         </p>
       </td>
       <td className="td-custom flex items-center justify-end gap-x-3">
-        <p className="text-sm"> {formatDateTime(data?.uploaded_at, "date")}</p>
+        <p className="text-sm">{formatDateTime(data?.uploaded_at, "date")}</p>
         <div className="relative">
           <button
             onClick={() =>

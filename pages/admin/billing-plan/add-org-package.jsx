@@ -2,6 +2,7 @@ import Field from "@/components/Field";
 import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -35,10 +36,10 @@ const AddOrgQ = () => {
   useEffect(() => {
     append({ title: "", saving: "", cost: 0, quantity: "" });
   }, [append]);
-  const router = useRouter()
+  const router = useRouter();
   // upload Package
   const onSubmit = async (data) => {
-    console.log(data)
+    console.log(data);
     if (image) {
       const formData = new FormData();
       formData.append("thumbnail", image);
@@ -55,14 +56,14 @@ const AddOrgQ = () => {
           },
         });
         console.log("res", res);
-        toast.success("Successfully created package")
-        router.push("/admin/billing-plan/organization_package")
+        toast.success("Successfully created package");
+        router.push("/admin/billing-plan/organization_package");
       } catch (error) {
-        toast.error("Error creating package")
+        toast.error("Error creating package");
         console.error("Error:", error);
       }
     } else {
-      toast.error("Image required")
+      toast.error("Image required");
     }
   };
   const handleImageChange = (e) => {
@@ -227,10 +228,12 @@ const AddOrgQ = () => {
                       name="cross"
                     />
                   </div>
-                  <img
-                    src={imageSrc}
-                    alt={image?.name}
+                  <Image
                     className="mt-5 w-16 h-12 object-contain"
+                    src={imageSrc}
+                    width={500}
+                    height={500}
+                    alt={image?.name}
                   />
                   <span className="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
                     {image?.name}
