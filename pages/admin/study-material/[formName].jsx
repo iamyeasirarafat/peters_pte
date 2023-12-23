@@ -82,14 +82,15 @@ const FileForm = ({
   topic,
   setTopic,
 }) => {
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState({});
   useEffect(() => {
     const getTopic = async () => {
       const { data } = await axios.get("/topic");
       setTopics(data);
+      setTopic(data?.results?.[0]);
     };
     getTopic();
-  }, []);
+  }, [setTopic]);
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="flex items-center justify-between">
@@ -106,7 +107,7 @@ const FileForm = ({
         <Select
           label="Topic"
           className="mb-2"
-          items={topics}
+          items={topics?.results}
           value={topic}
           onChange={setTopic}
         />

@@ -3,18 +3,16 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-
-
 const Index = () => {
-  const [count, setCount] = useState({})
-  console.log(count)
+  const [count, setCount] = useState({});
+  console.log(count);
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios("/discussion/count")
-      setCount(data)
-    }
-    fetchData()
-  }, [])
+      const { data } = await axios("/discussion/count");
+      setCount(data);
+    };
+    fetchData();
+  }, []);
   const DiscussionList = {
     Speaking_Test: [
       {

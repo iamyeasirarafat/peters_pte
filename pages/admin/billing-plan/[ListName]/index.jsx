@@ -12,26 +12,29 @@ import { useMediaQuery } from "react-responsive";
 const Index = () => {
   const router = useRouter();
   const { ListName } = router.query || {};
-  const [data, setData] = useState()
-  console.log(data)
+  const [data, setData] = useState([]);
+  console.log(data);
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios(
-        `/packages/${ListName === "students_package" ? "student" : "organization"}`
+        `/packages/${
+          ListName === "students_package" ? "student" : "organization"
+        }`
       );
-      setData(res.data)
-    }
-    fetchData()
-  }, [ListName])
+      setData(res?.data);
+    };
+    fetchData();
+  }, [ListName]);
   return (
     <Layout title={ListName?.replace("_", " ")} back>
       <div>
         <button
           onClick={() => {
             router.push(
-              `/admin/billing-plan/${ListName === "students_package"
-                ? "add-student-package"
-                : "add-org-package"
+              `/admin/billing-plan/${
+                ListName === "students_package"
+                  ? "add-student-package"
+                  : "add-org-package"
               }`
             );
           }}
@@ -41,8 +44,14 @@ const Index = () => {
         </button>
         {/* Package list */}
         <div className="mt-4">
-          <ListTable data={data} />
-          <TablePagination />
+          {data ? (
+            <>
+              <ListTable data={data} />
+              <TablePagination />
+            </>
+          ) : (
+            <p>{ListName?.replace("_", " ")} Package not available</p>
+          )}
         </div>
       </div>
     </Layout>
@@ -77,14 +86,13 @@ const ListTable = ({ data }) => {
           <th className="th-custom text-right">
             <Sorting title="Price" />
           </th>
-          <th className="th-custom text-right">
-          </th>
+          <th className="th-custom text-right"></th>
         </tr>
       </thead>
       <tbody>
-        {
-          data?.map(item => <TransactionsHistoryRow data={item} key={item.id} />)
-        }
+        {data?.map((item) => (
+          <TransactionsHistoryRow data={item} key={item.id} />
+        ))}
       </tbody>
     </table>
   );
@@ -107,19 +115,16 @@ const TransactionsHistoryRow = ({ data }) => {
           </p>
         </div>
       </td>
-      <td className="td-custom text-sm font-bold text-right">
-        N/a
-      </td>
+      <td className="td-custom text-sm font-bold text-right">N/a</td>
       <td className="td-custom text-right">
         {data?.validation?.length} Variation
       </td>
 
       <td className="td-custom text-right">
-        <p className="text-sm font-bold">{
-          data?.validation[0]?.cost
-
-        } - {data?.validation[data?.validation.length - 1]?.cost} BDT</p>
-
+        <p className="text-sm font-bold">
+          {data?.validation?.[0]?.cost} -{" "}
+          {data?.validation?.[data?.validation.length - 1]?.cost} BDT
+        </p>
       </td>
       <td className="td-custom flex justify-end">
         <button className="btn-transparent-dark btn-small btn-square">
