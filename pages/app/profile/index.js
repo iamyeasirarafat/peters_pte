@@ -23,7 +23,7 @@ function Index() {
                   src="/images/payment/best-price.svg"
                   fill
                   alt="price-image"
-                ></Image>
+                />
               </div>
             </div>
             <div className="w-[227px] h-[96px]">
@@ -33,7 +33,7 @@ function Index() {
                   src="/images/payment/satisisfaction.svg"
                   fill
                   alt="price-image"
-                ></Image>
+                />
               </div>
             </div>
           </div>

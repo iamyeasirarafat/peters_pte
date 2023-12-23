@@ -23,41 +23,25 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDateWithName } from "@/utils/formatDateWithName";
 import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import Spinner from "@/components/Spinner/Spinner";
-import { timeLeftCountdown } from "@/utils/timeLeftCountdown";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
   const router = useRouter();
   const id = router.query.id;
   const [studentDetails, setStudentDetails] = useState();
-  const [groups, setGroups] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios("/student/" + id);
       setStudentDetails(res?.data);
     };
-    const fetchGroup = async () => {
-      const res = await axios("/groups");
-      setGroups(res.data);
-    };
-    if (router.isReady) {
-      fetchData();
-      fetchGroup();
-    }
+    router.isReady && fetchData();
   }, [id, router, fetch]);
-  const myGroup = groups?.find(
-    (item) => item?.id === studentDetails?.profile[0]?.group
-  );
-
+  console.log("studentDetails", studentDetails);
   return (
     <Layout title="Student Details" back>
       <div className="grid grid-cols-12 gap-x-20">
         <div className="col-span-4">
-          <StudentProfileInfo
-            data={studentDetails}
-            group={myGroup}
-            setFetch={setFetch}
-          />
+          <StudentProfileInfo data={studentDetails} setFetch={setFetch} />
         </div>
         <div className="col-span-8">
           <StudentDetailsRight data={studentDetails} />
@@ -67,7 +51,7 @@ export default function StudentDetails() {
   );
 }
 
-const StudentProfileInfo = ({ data, group, setFetch }) => {
+const StudentProfileInfo = ({ data, setFetch }) => {
   const [openUpdateInformation, setOpenUpdateInformation] = useState({
     state: false,
     data: null,
@@ -118,7 +102,9 @@ const StudentProfileInfo = ({ data, group, setFetch }) => {
       </div>
       <div>
         <p className="text-sm">Group</p>
-        <p className="text-sm font-bold">{group?.name || "Not Available"}</p>
+        <p className="text-sm font-bold">
+          {data?.profile[0]?.group?.name || "Not Available"}
+        </p>
       </div>
       <div>
         <p className="text-sm">Birthday</p>
@@ -372,7 +358,7 @@ const AccountPlanMobile = ({ data }) => {
 
 // Modal
 // Update Information profile
-const UpdateInformation = ({
+export const UpdateInformation = ({
   openUpdateInformation,
   setOpenUpdateInformation,
   setFetch,
@@ -382,7 +368,7 @@ const UpdateInformation = ({
     { id: 2, name: "female" },
   ];
   const [groups, setGroups] = useState([]);
-  const [group, setGroup] = useState("");
+  const [group, setGroup] = useState({});
   const [gender, setGender] = useState(genders[0]);
   const [isLoading, setLoading] = useState(false);
 
@@ -402,31 +388,35 @@ const UpdateInformation = ({
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const updateData = {
       ...data,
       phone: `+88${data?.phone}`,
       group: group?.id,
-      organization: openUpdateInformation?.data?.profile[0]?.organization,
+      organization: openUpdateInformation?.data?.profile[0]?.organization?.id,
       profile: {
         gender: gender?.name,
         ...data?.profile,
       },
     };
-
-    const updateProfile = async () => {
+    try {
       setLoading(true);
       const res = await axios.put(
         `/student/${openUpdateInformation?.data?.id}/update`,
         updateData
       );
-      setLoading(false);
       toast.success(res?.data?.success);
       setOpenUpdateInformation({ state: false, data: null });
       reset();
       setFetch((prev) => !prev);
-    };
-    updateProfile();
+      setLoading(false);
+      toast.success(
+        res?.data?.response?.message || "Student Data update success"
+      );
+    } catch (error) {
+      setLoading(false);
+      toast.error(error?.data?.response?.message || "Something went wrong");
+    }
   };
 
   // set Default value
@@ -458,12 +448,8 @@ const UpdateInformation = ({
         ? genders[0]
         : genders[1]
     );
-    setGroup(
-      groups?.find(
-        (item) => item?.id === openUpdateInformation?.data?.profile[0]?.group
-      )
-    );
-  }, [openUpdateInformation?.data]);
+    setGroup(openUpdateInformation?.data?.profile[0]?.group);
+  }, [openUpdateInformation?.data, groups, setValue]);
 
   return (
     <Modal
@@ -556,7 +542,7 @@ const UpdateInformation = ({
           name="profile.birth_date"
         />
         <button className="bg-primary py-3 text-base font-bold w-full flex items-center gap-x-2 justify-center">
-          Update Info {isLoading && <Spinner className="w-6 h-6" />}
+          Update Information {isLoading && <Spinner className="w-6 h-6" />}
         </button>
       </form>
     </Modal>

@@ -1,55 +1,61 @@
+import Filters from "@/components/Filters";
 import Glance from "@/components/Glance";
 import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Chart from "@/components/LineChart/Chart";
 import Statistics from "@/components/LineChart/Statistics";
-export const studentsList = [
-  {
-    name: "Eshak khan",
-    image: "/images/product-pic-1.jpg",
-    accountPlan: "Premium",
-    userId: "tusha789",
-    lastLoggedIn: "05/07/23",
-    averageScore: "85",
-    group: "Dhaka Branch",
-  },
-  {
-    name: "Eshak khan",
-    image: "/images/product-pic-1.jpg",
-    accountPlan: "Premium",
-    userId: "tusha789",
-    lastLoggedIn: "05/07/23",
-    averageScore: "70",
-    group: "Dhaka Branch",
-  },
-  {
-    name: "Eshak khan",
-    image: "/images/product-pic-1.jpg",
-    accountPlan: "Premium",
-    userId: "tusha789",
-    lastLoggedIn: "05/07/23",
-    averageScore: "60",
-    group: "Dhaka Branch",
-  },
-  {
-    name: "Eshak khan",
-    image: "/images/product-pic-1.jpg",
-    accountPlan: "Premium",
-    userId: "tusha789",
-    lastLoggedIn: "05/07/23",
-    averageScore: "50",
-    group: "Dhaka Branch",
-  },
-  {
-    name: "Eshak khan",
-    image: "/images/product-pic-1.jpg",
-    accountPlan: "Premium",
-    userId: "tusha789",
-    lastLoggedIn: "05/07/23",
-    averageScore: "79",
-    group: "Dhaka Branch",
-  },
-];
+import Students from "@/components/Students_list";
+import TablePagination from "@/components/TablePagination";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { AnimatedLoading } from ".";
+// export const studentsList = [
+//   {
+//     name: "Eshak khan",
+//     image: "/images/product-pic-1.jpg",
+//     accountPlan: "Premium",
+//     userId: "tusha789",
+//     lastLoggedIn: "05/07/23",
+//     averageScore: "85",
+//     group: "Dhaka Branch",
+//   },
+//   {
+//     name: "Eshak khan",
+//     image: "/images/product-pic-1.jpg",
+//     accountPlan: "Premium",
+//     userId: "tusha789",
+//     lastLoggedIn: "05/07/23",
+//     averageScore: "70",
+//     group: "Dhaka Branch",
+//   },
+//   {
+//     name: "Eshak khan",
+//     image: "/images/product-pic-1.jpg",
+//     accountPlan: "Premium",
+//     userId: "tusha789",
+//     lastLoggedIn: "05/07/23",
+//     averageScore: "60",
+//     group: "Dhaka Branch",
+//   },
+//   {
+//     name: "Eshak khan",
+//     image: "/images/product-pic-1.jpg",
+//     accountPlan: "Premium",
+//     userId: "tusha789",
+//     lastLoggedIn: "05/07/23",
+//     averageScore: "50",
+//     group: "Dhaka Branch",
+//   },
+//   {
+//     name: "Eshak khan",
+//     image: "/images/product-pic-1.jpg",
+//     accountPlan: "Premium",
+//     userId: "tusha789",
+//     lastLoggedIn: "05/07/23",
+//     averageScore: "79",
+//     group: "Dhaka Branch",
+//   },
+// ];
 const legend = [
   {
     title: "Full Mocktest",
@@ -125,19 +131,54 @@ const barsDoubleData = [
 ];
 
 const Courses = () => {
+  const [loading, setLoading] = useState(true);
+  const [students, setStudents] = useState({});
+  const [studentSCounts, setStudentsCounts] = useState({});
+  const [status, setStatus] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 4;
+
+  useEffect(() => {
+    // get students
+    const getStudents = async () => {
+      const res = await axios.get(
+        `student/recentjoined?limit=${pageLimit}&page=${pageNumber}`
+      );
+      setStudents(res?.data);
+      setLoading(false);
+    };
+    getStudents();
+
+    // get students count
+    const getStudentsCount = async () => {
+      const res = await axios.get(`student/counts`);
+      setStudentsCounts(res?.data);
+    };
+    getStudentsCount();
+  }, [status, pageNumber]);
   return (
     <Layout title="Reports">
       {/* Students Report */}
-      {/* <>
+      <>
         <p className="text-lg font-extrabold mb-2">Students Report</p>
         <Filters />
-        <Students student={false} items={studentsList} />
-        <TablePagination />
-      </> */}
+        {loading ? (
+          <AnimatedLoading />
+        ) : (
+          <>
+            <Students setStatus={setStatus} items={students?.results} />
+            <TablePagination
+              pageNumber={pageNumber}
+              totalPage={Math.ceil(students?.total / pageLimit)}
+              prevNext={setPageNumber}
+            />
+          </>
+        )}
+      </>
       {/* At a Glance */}
       <div className="mt-10">
         <p className="text-lg font-extrabold mb-2">At a Glance</p>
-        <Glance />
+        <Glance studentSCounts={studentSCounts} />
       </div>
       {/* Mocktest Report */}
       <div className="mt-10">

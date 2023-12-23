@@ -23,24 +23,24 @@ const Students = ({ items, setStatus, admin }) => {
           <th className="th-custom">
             <Sorting title="Student Name" />
           </th>
-          <th className="th-custom">
+          <th className="th-custom text-center">
             <Sorting title="Account Plan" />
           </th>
-          <th className="th-custom">
+          <th className="th-custom text-center">
             <Sorting title="User Id" />
           </th>
-          <th className="th-custom">
+          <th className="th-custom text-center">
             <Sorting title="Last Logged In" />
           </th>
-          <th className="th-custom">
+          <th className="th-custom text-center">
             <Sorting title="Average Score" />
           </th>
           {admin && (
-            <th className="th-custom ">
+            <th className="th-custom text-center ">
               <Sorting title="Organization" />
             </th>
           )}
-          <th className="th-custom ">
+          <th className="th-custom text-right">
             <Sorting title="Group" />
           </th>
         </tr>

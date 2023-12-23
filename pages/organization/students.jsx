@@ -4,35 +4,50 @@ import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
+import Students from "@/components/Students_list";
 import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import Students from "../../components/Students_list";
+import { AnimatedLoading } from ".";
 
 const StudentList = () => {
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
-
-  console.log("data", data);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 9;
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios("/students");
+      const res = await axios(
+        `/students?limit=${pageLimit}&page=${pageNumber}`
+      );
       setData(res.data);
+      setLoading(false);
     };
     getData();
-  }, [status]);
+  }, [status, pageNumber]);
 
   return (
     <Layout title="Students" background>
       {data?.results?.length > 0 ? (
         <>
           <StudentFilter />
-          <Students setStatus={setStatus} items={data?.results} />
-          <TablePagination />
+          {loading ? (
+            <AnimatedLoading />
+          ) : (
+            <>
+              <Students setStatus={setStatus} items={data?.results} />
+              <TablePagination
+                pageNumber={pageNumber}
+                totalPage={Math.ceil(data?.total / pageLimit)}
+                prevNext={setPageNumber}
+              />
+            </>
+          )}
         </>
       ) : (
         <EmptyPage setStatus={setStatus} />

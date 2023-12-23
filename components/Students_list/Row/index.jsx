@@ -4,6 +4,7 @@ import Field from "@/components/Field";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
+import { formatDateTime } from "@/utils/formatDateTime";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -44,16 +45,18 @@ const StudentRow = ({ admin, item, setStatus }) => {
           {item.full_name}
         </Link>
       </td>
-      <td className="td-custom">
+      <td className="td-custom text-center">
         <div className="label-stroke border border-n-1 min-w-[7.25rem]">
           {item.premium ? "premium" : "free"}
         </div>
       </td>
-      <td className="td-custom">{item?.profile[0]?.userid || "N/A"}</td>
-      <td className="td-custom">
+      <td className="td-custom text-center">
+        {item?.profile[0]?.userid || "N/A"}
+      </td>
+      <td className="td-custom text-center">
         {dayjs(item.last_login).format("DD/MM/YYYY")}
       </td>
-      <td className="td-custom">
+      <td className="td-custom text-center">
         <div
           className={`border min-w-[4rem] ${
             item.avl === "Paid"
@@ -70,11 +73,11 @@ const StudentRow = ({ admin, item, setStatus }) => {
       </td>
 
       {admin && (
-        <td className="td-custom font-bold">
+        <td className="td-custom text-center font-bold">
           {item?.profile[0]?.organization?.full_name || "N/A"}
         </td>
       )}
-      <td className="td-custom font-bold">
+      <td className="td-custom font-bold text-right pr-5">
         {item?.profile[0]?.group?.name || "N/A"}
       </td>
 
@@ -206,7 +209,12 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       setValue("phone", editData?.phone);
       setValue("address", editData?.profile[0]?.address || "");
       setValue("education", editData?.profile[0]?.education || "");
-      setValue("birth_date", editData?.profile[0]?.birth_date || "");
+      // setValue("birth_date", editData?.profile[0]?.birth_date || "");
+      setValue(
+        "birth_date",
+        formatDateTime(editData?.profile[0]?.birth_date, "datere") || ""
+      );
+
       setGroup(editData?.profile[0]?.group || {});
       setGender({ name: editData?.profile[0]?.gender } || {});
       editData?.profile[0]?.organization &&
@@ -217,7 +225,7 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
           } || {}
         );
     }
-  }, [editData]);
+  }, [editData, setValue]);
   const onSubmit = async (data) => {
     const submitData = {
       full_name: data.full_name,
