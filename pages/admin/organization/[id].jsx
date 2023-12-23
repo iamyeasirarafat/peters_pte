@@ -120,15 +120,14 @@ const StudentProfileInfo = ({ data }) => {
 
 const StudentDetailsRight = ({ data }) => {
   const [groups, setGroups] = useState([]);
+  const router = useRouter();
   useEffect(() => {
     const fetchGroup = async () => {
       const res = await axios(`/${data?.id}/groups`);
       setGroups(res.data);
     };
-    if (data) {
-      fetchGroup();
-    }
-  }, [data]);
+    data?.id && router.isReady && fetchGroup();
+  }, [data, router.isReady]);
   const [openChangePassword, setOpenChangePassword] = useState({
     state: false,
     student: null,
@@ -265,7 +264,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
       setValue("address", editData?.profile?.address || "");
       setValue("country", editData?.profile?.country || "");
     }
-  }, [editData]);
+  }, [editData, setValue]);
   const onSubmit = async (data) => {
     const submitData = {
       email: data.email,
@@ -628,8 +627,7 @@ const CreateGroupModal = ({ setOpenGroupModal, openGroupModal }) => {
   const {
     register,
     handleSubmit,
-    setError,
-    watch,
+    reset,
     formState: { errors },
   } = useForm({});
 
