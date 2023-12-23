@@ -187,7 +187,6 @@ const AddOrgQ = () => {
               <BiSolidCloudUpload className="text-xl inline-block" />
               <p className="text-xs font-bold">Upload</p>
               <input
-                // {...register("thumbnail", { required: "thumbnail is required" })}
                 onChange={(e) => setThumbnail(e.target.files)}
                 id="uploadThumbnail"
                 className="hidden"

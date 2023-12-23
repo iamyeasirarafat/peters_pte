@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import Field from "@/components/Field";
 import toast from "react-hot-toast";
 import Select from "@/components/AddStudentSelect";
+import Countdown from "@/components/Countdown";
 import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDateWithName } from "@/utils/formatDateWithName";
 import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
@@ -29,6 +30,7 @@ export default function StudentDetails() {
   const router = useRouter();
   const id = router.query.id;
   const [studentDetails, setStudentDetails] = useState();
+  console.log("studentDetails", studentDetails);
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios("/student/" + id);
@@ -161,6 +163,7 @@ const StudentDetailsRight = ({ data }) => {
 
   const [examDate, setExamDate] = useState("");
   const [score, setScore] = useState(0);
+  const [reFetch, setRefetch] = useState(false);
   useEffect(() => {
     const getExamDate = async () => {
       const res = await axios.get(`/exam_countdown`);
@@ -172,7 +175,9 @@ const StudentDetailsRight = ({ data }) => {
       setScore(res?.data);
     };
     getScore();
-  }, []);
+  }, [reFetch]);
+
+  console.log("score", score);
 
   return (
     <div>
@@ -200,7 +205,7 @@ const StudentDetailsRight = ({ data }) => {
             Exam Count Down
           </button>
           <p className="text-xl font-medium text-gray dark:text-white">
-            {/* {timeLeftCountdown(examDate?.exam_date)} */}
+            <Countdown targetDate={examDate?.exam_date} />
           </p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
@@ -219,11 +224,12 @@ const StudentDetailsRight = ({ data }) => {
         <ExamCountDown
           openExamCountDown={openExamCountDown}
           setOpenExamCountDown={setOpenExamCountDown}
+          setRefetch={setRefetch}
         />
         <TargetScore
           openTargetScore={openTargetScore}
           setOpenTargetScore={setOpenTargetScore}
-          set
+          setRefetch={setRefetch}
         />
       </div>
       {/* Account Plan History */}
@@ -615,14 +621,14 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
   const [plan, setPlan] = useState({});
   const plans = plansData?.map((item) => ({
     id: item?.id,
-    name: item?.plan?.title,
-    planId: item?.plan?.id,
+    name: item?.title,
+    planId: item?.id,
   }));
 
   // get plans
   useEffect(() => {
     const getPlans = async () => {
-      const res = await axios.get("/student/plans");
+      const res = await axios.get("/packages/student");
       setPlansData(res?.data);
     };
     getPlans();
@@ -714,17 +720,31 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
     </Modal>
   );
 };
-const ExamCountDown = ({ openExamCountDown, setOpenExamCountDown }) => {
+const ExamCountDown = ({
+  openExamCountDown,
+  setOpenExamCountDown,
+  setRefetch,
+}) => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    const res = axios.post("/exam_countdown", data);
-    setOpenExamCountDown(false);
-    toast.success("Countdown added success");
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      const res = await axios.post("/exam_countdown", data);
+      setOpenExamCountDown(false);
+      toast.success("Countdown added success");
+      setRefetch((prev) => !prev);
+      setLoading(false);
+      reset();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      setLoading(false);
+    }
   };
   return (
     <Modal
@@ -743,16 +763,20 @@ const ExamCountDown = ({ openExamCountDown, setOpenExamCountDown }) => {
           placeholder="05/07/23"
           register={register}
           name="exam_date"
-          type="date"
+          type="datetime-local"
         />
-        <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Plan
+        <button
+          disabled={loading}
+          className="bg-primary disabled:opacity-70 py-3 text-base font-bold w-full flex items-center justify-center gap-x-2"
+        >
+          Update Plan {loading && <Spinner className="w-6 h-6" />}
         </button>
       </form>
     </Modal>
   );
 };
-const TargetScore = ({ openTargetScore, setOpenTargetScore }) => {
+const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -760,9 +784,18 @@ const TargetScore = ({ openTargetScore, setOpenTargetScore }) => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    const res = axios.post("/target_score", data);
-    setOpenTargetScore(false);
-    toast.success("Score added success");
+    try {
+      setLoading(true);
+      const res = axios.post("/target_score", data);
+      setOpenTargetScore(false);
+      toast.success("Score added success");
+      setRefetch((prev) => !prev);
+      setLoading(false);
+      reset();
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      setLoading(false);
+    }
   };
   return (
     <Modal
@@ -783,8 +816,8 @@ const TargetScore = ({ openTargetScore, setOpenTargetScore }) => {
           name="score"
           type="number"
         />
-        <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Plan
+        <button className="bg-primary disabled:opacity-70 py-3 text-base font-bold w-full flex items-center justify-center gap-x-2">
+          Update Plan {loading && <Spinner className="w-6 h-6" />}
         </button>
       </form>
     </Modal>
