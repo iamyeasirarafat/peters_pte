@@ -1,22 +1,22 @@
-import Layout from "@/components/Layout";
-import Field from "@/components/Field";
-import Select from "@/components/Select";
-import { useForm } from "react-hook-form";
-import Image from "@/components/Image";
-import { useEffect, useState } from "react";
-import { BsCheck2 } from "react-icons/bs";
-import { FaCheckCircle } from "react-icons/fa";
-import { AiFillPrinter } from "react-icons/ai";
 import CustomModal from "@/components/CustomModal";
+import Field from "@/components/Field";
+import Image from "@/components/Image";
+import Layout from "@/components/Layout";
+import Select from "@/components/Select";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { AiFillPrinter } from "react-icons/ai";
+import { BsCheck2 } from "react-icons/bs";
+import { FaCheckCircle } from "react-icons/fa";
 
 const paymentMethods = [{ id: 1, title: "SSL Commerce" }];
 function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { id } = router.query;
+  const { id, status } = router.query;
   const [open, setOpen] = useState(false);
   const [paymentModalOpen, setPaymentModalOpen] = useState({
     state: false,
@@ -71,12 +71,21 @@ function Checkout() {
     try {
       const res = await axios.post("/payment/organization", formData);
       setIsLoading(false);
-      setPaymentModalOpen({ state: true, url: res?.data?.redirect_url });
+      router.push(res?.data?.redirect_url)
+      window.open(res?.data?.redirect_url, '_blank', 'noopener,noreferrer')
+      // setPaymentModalOpen({ state: true, url: res?.data?.redirect_url });
     } catch (error) {
       toast.error("Something went wrong");
       setIsLoading(false);
     }
   };
+  console.log(status)
+  useEffect(() => {
+    if (router.isReady) {
+      setOpen(status)
+    }
+  }, [router.isReady, status])
+
   return (
     <Layout title="Checkout" back>
       <form
@@ -99,7 +108,7 @@ function Checkout() {
           errors={errors}
           label="Total Cost"
           placeholder={accountCount?.cost}
-          currency={accountCount?.saving}
+          currency={`You Saved ${accountCount?.saving}`}
           register={register}
           name="total_cost"
           isReadOnly
@@ -159,6 +168,7 @@ const PaymentModal = ({ open, setOpen }) => {
       <div className="h-[720px] bg-white">
         <iframe
           className="w-full h-full"
+          // src={open?.url}
           src={open?.url}
           allowFullScreen
         ></iframe>
@@ -177,7 +187,7 @@ const PaymentModal = ({ open, setOpen }) => {
 
 const CheckoutModal = ({ open, setOpen }) => {
   return (
-    <CustomModal visible={open} onClose={() => setOpen(false)}>
+    <CustomModal visible={open ? true : false} onClose={() => setOpen(false)}>
       <div className="bg-[#00AA01] h-[130px] relative">
         <h1 className="text-lg font-extrabold text-white p-5">
           Payment details
