@@ -39,7 +39,6 @@ const AddOrgQ = () => {
   const router = useRouter();
   // upload Package
   const onSubmit = async (data) => {
-    console.log(data);
     if (image) {
       const formData = new FormData();
       formData.append("thumbnail", image);
@@ -55,7 +54,7 @@ const AddOrgQ = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log("res", res);
+        reset();
         toast.success("Successfully created package");
         router.push("/admin/billing-plan/organization_package");
       } catch (error) {

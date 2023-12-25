@@ -30,7 +30,6 @@ export default function StudentDetails() {
   const router = useRouter();
   const id = router.query.id;
   const [studentDetails, setStudentDetails] = useState();
-  console.log("studentDetails", studentDetails);
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios("/student/" + id);
@@ -38,20 +37,28 @@ export default function StudentDetails() {
     };
     router.isReady && fetchData();
   }, [id, router, fetch]);
-  console.log("studentDetails", studentDetails);
   return (
     <Layout title="Student Details" back>
-      <div className="grid grid-cols-12 gap-x-20">
-        <div className="col-span-4">
-          <StudentProfileInfo data={studentDetails} setFetch={setFetch} />
-        </div>
-        <div className="col-span-8">
-          <StudentDetailsRight data={studentDetails} />
-        </div>
-      </div>
+      <StudentsDetailsMain
+        studentDetails={studentDetails}
+        setFetch={setFetch}
+      />
     </Layout>
   );
 }
+
+export const StudentsDetailsMain = ({ studentDetails, setFetch }) => {
+  return (
+    <div className="grid grid-cols-12 gap-x-20">
+      <div className="col-span-4">
+        <StudentProfileInfo data={studentDetails} setFetch={setFetch} />
+      </div>
+      <div className="col-span-8">
+        <StudentDetailsRight data={studentDetails} />
+      </div>
+    </div>
+  );
+};
 
 const StudentProfileInfo = ({ data, setFetch }) => {
   const [openUpdateInformation, setOpenUpdateInformation] = useState({
@@ -720,6 +727,7 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
     </Modal>
   );
 };
+
 const ExamCountDown = ({
   openExamCountDown,
   setOpenExamCountDown,
@@ -775,6 +783,7 @@ const ExamCountDown = ({
     </Modal>
   );
 };
+
 const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
   const [loading, setLoading] = useState(false);
   const {
