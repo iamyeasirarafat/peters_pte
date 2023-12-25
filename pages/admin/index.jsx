@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 const Index = () => {
   const [loading, setLoading] = useState(true);
   const [students, setStudents] = useState({});
+  const [studentSCounts, setStudentsCounts] = useState({});
   const [status, setStatus] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 5;
@@ -21,13 +22,19 @@ const Index = () => {
       setStudents(res?.data);
       setLoading(false);
     };
+    // get students count
+    const getStudentsCount = async () => {
+      const res = await axios.get(`student/counts`);
+      setStudentsCounts(res?.data);
+    };
+    getStudentsCount();
     getStudents();
   }, [status, pageNumber]);
   return (
     <AdminLayout title="Dashboard">
-      <div className="">
+      <div>
         <p className="text-lg font-extrabold mb-2">At a Glance</p>
-        <Glance />
+        <Glance studentSCounts={studentSCounts} />
       </div>
       <div className="mt-10">
         <p className="text-lg font-extrabold mb-2">Recently Joined</p>
