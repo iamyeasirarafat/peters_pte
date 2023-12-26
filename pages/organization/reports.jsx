@@ -9,53 +9,6 @@ import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AnimatedLoading } from ".";
-// export const studentsList = [
-//   {
-//     name: "Eshak khan",
-//     image: "/images/product-pic-1.jpg",
-//     accountPlan: "Premium",
-//     userId: "tusha789",
-//     lastLoggedIn: "05/07/23",
-//     averageScore: "85",
-//     group: "Dhaka Branch",
-//   },
-//   {
-//     name: "Eshak khan",
-//     image: "/images/product-pic-1.jpg",
-//     accountPlan: "Premium",
-//     userId: "tusha789",
-//     lastLoggedIn: "05/07/23",
-//     averageScore: "70",
-//     group: "Dhaka Branch",
-//   },
-//   {
-//     name: "Eshak khan",
-//     image: "/images/product-pic-1.jpg",
-//     accountPlan: "Premium",
-//     userId: "tusha789",
-//     lastLoggedIn: "05/07/23",
-//     averageScore: "60",
-//     group: "Dhaka Branch",
-//   },
-//   {
-//     name: "Eshak khan",
-//     image: "/images/product-pic-1.jpg",
-//     accountPlan: "Premium",
-//     userId: "tusha789",
-//     lastLoggedIn: "05/07/23",
-//     averageScore: "50",
-//     group: "Dhaka Branch",
-//   },
-//   {
-//     name: "Eshak khan",
-//     image: "/images/product-pic-1.jpg",
-//     accountPlan: "Premium",
-//     userId: "tusha789",
-//     lastLoggedIn: "05/07/23",
-//     averageScore: "79",
-//     group: "Dhaka Branch",
-//   },
-// ];
 const legend = [
   {
     title: "Full Mocktest",
@@ -130,7 +83,7 @@ const barsDoubleData = [
   },
 ];
 
-const Courses = () => {
+const Reports = () => {
   const [loading, setLoading] = useState(true);
   const [students, setStudents] = useState({});
   const [studentSCounts, setStudentsCounts] = useState({});
@@ -227,4 +180,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default Reports;

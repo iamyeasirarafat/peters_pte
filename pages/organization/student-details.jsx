@@ -212,7 +212,11 @@ const StudentDetailsRight = ({ data }) => {
             Exam Count Down
           </button>
           <p className="text-xl font-medium text-gray dark:text-white">
-            <Countdown targetDate={examDate?.exam_date} />
+            {examDate?.exam_date ? (
+              <Countdown targetDate={examDate?.exam_date} />
+            ) : (
+              <p>Not set Exam date</p>
+            )}
           </p>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
