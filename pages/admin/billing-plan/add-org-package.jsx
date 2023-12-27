@@ -11,23 +11,37 @@ import { FiMinusCircle } from "react-icons/fi";
 import { GoPlusCircle } from "react-icons/go";
 
 const AddOrgPkg = () => {
+  const [packData, setPackData] = useState(null);
+  const router = useRouter();
+  const { id } = router?.query || {};
+  useEffect(() => {
+    const getData = async () => {
+      const res = await axios.get(`/package/organization/${id}/details`);
+      setPackData(res?.data);
+    };
+    router?.isReady && id && getData();
+  }, [id, router?.isReady]);
   return (
-    <Layout title="Organization Package / New" back>
-      <AddOrgQ />
+    <Layout title={`Organization Package / ${id ? `#${id}` : "New"}`} back>
+      <AddOrgQ packData={packData} />
     </Layout>
   );
 };
 export default AddOrgPkg;
 
-const AddOrgQ = () => {
+const AddOrgQ = ({ packData }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
   const [image, setImage] = useState(null);
+  const router = useRouter();
+  const packId = packData?.id || "";
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
+    setValue,
   } = useForm();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -36,12 +50,12 @@ const AddOrgQ = () => {
   useEffect(() => {
     append({ title: "", saving: "", cost: 0, quantity: "" });
   }, [append]);
-  const router = useRouter();
+
   // upload Package
   const onSubmit = async (data) => {
-    if (image) {
+    if (image || packId) {
       const formData = new FormData();
-      formData.append("thumbnail", image);
+      image && formData.append("thumbnail", image);
       formData.append("premium_practice_access", data?.premium_practice_access);
       formData.append("mocktest_access", data?.mocktest_access);
       formData.append("title", data.title);
@@ -49,17 +63,35 @@ const AddOrgQ = () => {
       formData.append("validation", JSON.stringify(data.validation));
 
       try {
-        const res = await axios.post("/package/organization", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        setIsLoading(true);
+        if (packData === null) {
+          const res = await axios.post("/package/organization", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          toast.success("Successfully created package");
+          setIsLoading(false);
+        }
+        if (packData) {
+          const res = await axios.put(
+            `/package/organization/${packId}`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          toast.success("Successfully update package");
+          setIsLoading(false);
+        }
         reset();
-        toast.success("Successfully created package");
         router.push("/admin/billing-plan/organization_package");
       } catch (error) {
         toast.error("Error creating package");
         console.error("Error:", error);
+        setIsLoading(false);
       }
     } else {
       toast.error("Image required");
@@ -79,6 +111,17 @@ const AddOrgQ = () => {
     setImageSrc(null);
     setImage(null);
   };
+  // Set default Data
+  useEffect(() => {
+    if (packData) {
+      setValue("title", packData?.title);
+      setValue("validity", packData?.validity);
+      setValue("premium_practice_access", packData?.premium_practice_access);
+      setValue("mocktest_access", packData?.mocktest_access);
+      reset({ validation: packData?.validation });
+      setImageSrc(packData?.thumbnail);
+    }
+  }, [setValue, packData, reset]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Field
@@ -243,8 +286,11 @@ const AddOrgQ = () => {
           </div>
         </div>
         <div className="w-full">
-          <button className="w-full bg-primary py-3 px-4 flex items-center justify-center text-base font-bold">
-            Create Package
+          <button className="w-full bg-primary py-3 px-4 flex items-center justify-center text-base font-bold gap-x-3">
+            {isLoading && (
+              <div className="w-5 h-5 rounded-full border-t-2 border-r-2 border-white animate-spin" />
+            )}{" "}
+            {packData ? "Update" : "Create"} Package
           </button>
         </div>
       </div>
