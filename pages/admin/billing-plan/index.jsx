@@ -15,15 +15,6 @@ import { twMerge } from "tailwind-merge";
 
 function BillingPayment() {
   const router = useRouter();
-  const [plans, setPlans] = useState([]);
-  useEffect(() => {
-    const getPlans = async () => {
-      const res = await axios.get("/plans");
-      setPlans(res?.data);
-    };
-    getPlans();
-  }, []);
-  console.log("plans", plans);
   const premiumAccounts = [
     {
       name: "Student Package",
@@ -86,7 +77,6 @@ function BillingPayment() {
 export default BillingPayment;
 
 const Pricing = ({ data }) => {
-  const router = useRouter();
   return (
     <div className="space-x-3 flex w-full">
       {data?.map((item, i) => {
