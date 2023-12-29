@@ -9,50 +9,6 @@ import { useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 const Index = () => {
-  // const studentsList = [
-  //   {
-  //     name: "Bill on the hill",
-  //     accountPlan: "#7250589",
-  //     userId: "12",
-  //     lastLoggedIn: true,
-  //     averageScore: "05/07/23",
-  //   },
-  //   {
-  //     name: "Bill on the hill",
-  //     accountPlan: "#7250589",
-  //     userId: "12",
-  //     lastLoggedIn: false,
-  //     averageScore: "05/07/23",
-  //   },
-  //   {
-  //     name: "Bill on the hill",
-  //     accountPlan: "#7250589",
-  //     userId: "12",
-  //     lastLoggedIn: true,
-  //     averageScore: "05/07/23",
-  //   },
-  //   {
-  //     name: "Bill on the hill",
-  //     accountPlan: "#7250589",
-  //     userId: "12",
-  //     lastLoggedIn: true,
-  //     averageScore: "05/07/23",
-  //   },
-  //   {
-  //     name: "Bill on the hill",
-  //     accountPlan: "#7250589",
-  //     userId: "12",
-  //     lastLoggedIn: true,
-  //     averageScore: "05/07/23",
-  //   },
-  //   {
-  //     name: "Bill on the hill",
-  //     accountPlan: "#7250589",
-  //     userId: "12",
-  //     lastLoggedIn: true,
-  //     averageScore: "05/07/23",
-  //   },
-  // ];
   const router = useRouter();
   const { questionTable } = router.query;
   const [tableData, setTableData] = useState([]);
@@ -93,6 +49,8 @@ const Index = () => {
       url = "spoken/summarizes";
     } else if (questionTable === "Reading & Writing: FIB") {
       url = "reading_blanks";
+    } else if (questionTable === "spelling-bee") {
+      url = "games/spelling_bees";
     }
 
     const fetchData = async () => {

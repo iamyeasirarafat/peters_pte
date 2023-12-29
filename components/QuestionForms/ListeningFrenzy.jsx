@@ -1,8 +1,12 @@
 import Icon from "@/components/Icon";
 import { useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import axios from "axios";
 const ListeningFrenzy = () => {
-  const [formData, setFormData] = useState({
+  const [loading, setLoading] = useState(false);
+  const [formDataState, setFormDataState] = useState({
     title: "",
     audio: null,
   });
@@ -14,32 +18,49 @@ const ListeningFrenzy = () => {
     if (file) {
       setAudioSrc(URL.createObjectURL(file));
       setAudioName(file?.name);
-      setFormData((prev) => ({
+      setFormDataState((prev) => ({
         ...prev,
         audio: file,
       }));
     } else {
       setAudioSrc(null);
       setAudioName(null);
-      setFormData((prev) => ({
+      setFormDataState((prev) => ({
         ...prev,
         audio: null,
       }));
     }
   };
-
   const handleDeleteAudio = () => {
     setAudioSrc(null);
     setAudioName(null);
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
+  const { handleSubmit } = useForm();
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("word", formDataState?.title);
+    formData.append("audio", formDataState?.audio);
+    try {
+      setLoading(true);
+      const res = await axios.post("/games/listening_frenzy", formData);
+      console.log(res);
+      toast.success("Question created successfully");
+      setLoading(false);
+      setAudioSrc(null);
+      setAudioName(null);
+      setFormDataState({
+        title: "",
+        audio: null,
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error || "Something went wrong");
+      setLoading(false);
+    }
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className=" flex flex-col gap-2">
           <div className="flex justify-between">
             <label for="name" className="font-bold text-sm">
@@ -53,7 +74,7 @@ const ListeningFrenzy = () => {
             id="name"
             type="text"
             onChange={({ target }) =>
-              setFormData((prev) => ({
+              setFormDataState((prev) => ({
                 ...prev,
                 title: target.value,
               }))
@@ -105,8 +126,12 @@ const ListeningFrenzy = () => {
         </div>
         <button
           type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          disabled={loading}
+          className="h-10 w-full flex items-center justify-center gap-x-3 mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
         >
+          {loading && (
+            <div className="w-5 h-5 rounded-full border-t-2 border-r-2 border-white animate-spin" />
+          )}
           Create Question
         </button>
       </form>
