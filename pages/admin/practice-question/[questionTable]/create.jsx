@@ -50,7 +50,7 @@ const AllForms = () => {
     content = <SpeakingSpell />;
   } else if (questionTable == "Listening Frenzy") {
     content = <ListeningFrenzy />;
-  } else if (questionTable == "Spelling Bee") {
+  } else if (questionTable == "spelling-bee") {
     content = <SpellingBee />;
   } else if (questionTable == "Listening: MCM") {
     content = <MultipleChoiceListing />;

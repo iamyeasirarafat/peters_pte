@@ -3,6 +3,7 @@ import DashboardLayout from "../layout";
 import Image from "next/image";
 import { MdCheckCircle, MdShoppingCartCheckout } from "react-icons/md";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 function Index() {
   return (
@@ -23,6 +24,7 @@ export default Index;
 
 const StudentPack = () => {
   const [studentPack, setStudentPack] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
@@ -76,7 +78,12 @@ const StudentPack = () => {
               </div>
             </div>
             {/* button */}
-            <button className="text-xl font-bold py-4 bg-blue text-white flex items-center justify-center gap-x-2 w-full">
+            <button
+              onClick={() =>
+                router.push(`/app/profile/checkout?id=${pack?.id}`)
+              }
+              className="text-xl font-bold py-4 bg-blue text-white flex items-center justify-center gap-x-2 w-full"
+            >
               <MdShoppingCartCheckout className="text-base" /> Buy Now
             </button>
             {/* Offers */}
