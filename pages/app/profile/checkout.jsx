@@ -54,7 +54,7 @@ function Checkout() {
     setIsLoading(true);
     const formData = {
       package: accountType?.id,
-      coupon_code: data?.coupon_code,
+      ...(data?.coupon && { coupon: data?.coupon }),
     };
     try {
       const res = await axios.post("/payment/student", formData);
@@ -94,7 +94,7 @@ function Checkout() {
               label="Coupon Code"
               placeholder="Coupon Code"
               register={register}
-              name="coupon_code"
+              name="coupon"
             />
             <Field
               errors={errors}
