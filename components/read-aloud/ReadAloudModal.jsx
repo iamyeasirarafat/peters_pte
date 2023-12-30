@@ -7,6 +7,7 @@ import { VscDebugStart } from "react-icons/vsc";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 import WordHighlight from "../global/WordHighlight";
+import { useRouter } from "next/router";
 
 const ReadAloudModal = ({ open, setOpen, result }) => {
   const router = useRouter();
