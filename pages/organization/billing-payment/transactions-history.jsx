@@ -5,10 +5,21 @@ import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
+import { useEffect, useState } from "react";
+import { formatDateWithName } from "@/utils/formatDateWithName";
+import axios from "axios";
 function TransactionsHistory() {
+  const [transactions, setTransactions] = useState([]);
+  useEffect(() => {
+    const getData = async () => {
+      const res = await axios.get("/payment/history");
+      setTransactions(res.data);
+    };
+    getData();
+  }, []);
   return (
     <Layout title="Transactions History" back>
-      <TransactionsHistoryTable />
+      <TransactionsHistoryTable data={transactions} />
       <TablePagination />
     </Layout>
   );
@@ -16,14 +27,16 @@ function TransactionsHistory() {
 
 export default TransactionsHistory;
 
-const TransactionsHistoryTable = () => {
+const TransactionsHistoryTable = ({ data }) => {
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black">
-      <MobileTRTable />
+      {data?.map((item, index) => (
+        <MobileTRTable key={index} data={item} />
+      ))}
     </div>
   ) : (
     <table className="bg-white dark:bg-black w-full">
@@ -47,42 +60,31 @@ const TransactionsHistoryTable = () => {
         </tr>
       </thead>
       <tbody>
-        <TransactionsHistoryRow />
+        {data?.map((item, index) => (
+          <TransactionsHistoryRow key={index} data={item} />
+        ))}
       </tbody>
     </table>
   );
 };
 
-const TransactionsHistoryRow = () => {
+const TransactionsHistoryRow = ({ data }) => {
   return (
     <tr>
       <td className="td-custom">
         <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-          4 Aug 1:00 PM
+          {formatDateWithName(data?.tran_date)}
         </p>
       </td>
       <td className="td-custom text-sm font-bold">
-        Premium 30 Days Account - 7 Bluk Account
+        {data?.purchase?.title} - {data?.purchase?.validate_title} Bluk Account
       </td>
-      <td className="td-custom">
-        <div className="flex items-center gap-x-3">
-          <Image
-            className="w-9 h-9 rounded-full"
-            src={"/images/payment/stripe.png"}
-            width={50}
-            height={50}
-            alt=""
-          />
-          <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-            Stripe
-          </p>
-        </div>
-      </td>
+      <td className="td-custom">{data?.card_type}</td>
       <td className="td-custom text-[#5F646D] dark:text-white text-sm font-medium">
-        #PPTE - 548602
+        #{data?.tran_id}
       </td>
       <td className="td-custom flex items-center justify-between">
-        <p className="text-sm font-bold">5940 BDT</p>
+        <p className="text-sm font-bold">{data?.amount} BDT</p>
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>
@@ -91,27 +93,18 @@ const TransactionsHistoryRow = () => {
   );
 };
 
-const MobileTRTable = () => (
+const MobileTRTable = ({ data }) => (
   <div className="flex items-center justify-between p-4">
-    <div className="flex items-center gap-x-3 ">
-      <Image
-        className="w-10 h-10 rounded-full"
-        src={"/images/payment/stripe.png"}
-        width={50}
-        height={50}
-        alt=""
-      />
-      <div className="space-y-1">
-        <p className="text-sm font-bold">Premium 30 Days</p>
-        <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-          Stripe
-        </p>
-      </div>
+    <div className="space-y-1">
+      <p className="text-sm font-bold">{data?.purchase?.title}</p>
+      <p className="text-[#5F646D] dark:text-white text-sm font-medium">
+        {data?.purchase?.validate_title} Bluk Account
+      </p>
     </div>
     <div className="text-right space-y-1">
-      <p className="text-sm font-bold">5940 BDT</p>
+      <p className="text-sm font-bold">{data?.amount} BDT</p>
       <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-        #PPTE - 548602
+        #{data?.tran_id}
       </p>
     </div>
   </div>

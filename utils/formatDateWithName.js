@@ -42,7 +42,7 @@ export const formatDateWithName = (dateTimeString, format = "full") => {
     case "time":
       return `${hours}:${minutes} ${ampm}`;
     case "full":
-      return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+      return `${day} ${month} ${year} ${hours}:${minutes}:${seconds} ${ampm}`;
     case "custom":
       return `${day} ${month} ${year}`;
     default:
