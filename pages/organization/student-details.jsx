@@ -208,11 +208,11 @@ const StudentDetailsRight = ({ data }) => {
       const res = await axios.get(`/exam_countdown`);
       setExamDate(res?.data);
     };
-    getExamDate();
     const getScore = async () => {
       const res = await axios.get("/target_score");
       setScore(res?.data);
     };
+    getExamDate();
     getScore();
   }, [reFetch]);
 
@@ -821,17 +821,22 @@ const ExamCountDown = ({
 };
 
 const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
+  const scores = [
+    { id: 1, name: "35" },
+    { id: 2, name: "55" },
+    { id: 3, name: "75" },
+    { id: 4, name: "90" },
+  ];
+  const [score, setScore] = useState(scores[0]);
   const [loading, setLoading] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
+  const { handleSubmit, reset } = useForm();
+  const onSubmit = () => {
+    const scoreData = {
+      score: score?.name,
+    };
     try {
       setLoading(true);
-      const res = axios.post("/target_score", data);
+      const res = axios.post("/target_score", scoreData);
       setOpenTargetScore(false);
       toast.success("Score added success");
       setRefetch((prev) => !prev);
@@ -852,16 +857,17 @@ const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-2"
+        <Select
           label="Target Score*"
-          placeholder="35"
-          register={register}
-          name="score"
-          type="number"
+          className="mb-4"
+          items={scores}
+          value={score}
+          onChange={setScore}
         />
-        <button className="bg-primary disabled:opacity-70 py-3 text-base font-bold w-full flex items-center justify-center gap-x-2">
+        <button
+          disabled={loading}
+          className="bg-primary disabled:opacity-70 py-3 text-base font-bold w-full flex items-center justify-center gap-x-2"
+        >
           Update Plan {loading && <Spinner className="w-6 h-6" />}
         </button>
       </form>
