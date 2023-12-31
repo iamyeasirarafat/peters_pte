@@ -74,7 +74,7 @@ const ContactsV2Page = () => {
                     ))}
                 </tbody>
             </table>
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

@@ -64,7 +64,7 @@ const CustomersV2Page = () => {
                     </tbody>
                 </table>
             )}
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

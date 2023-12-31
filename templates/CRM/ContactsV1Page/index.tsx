@@ -1,13 +1,12 @@
+import Checkbox from "@/components/Checkbox";
+import Icon from "@/components/Icon";
+import Layout from "@/components/Layout";
+import Sorting from "@/components/Sorting";
+import Tabs from "@/components/Tabs";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import Layout from "@/components/Layout";
-import Tabs from "@/components/Tabs";
-import Icon from "@/components/Icon";
-import Sorting from "@/components/Sorting";
-import Checkbox from "@/components/Checkbox";
-import TablePagination from "@/components/TablePagination";
-import Row from "./Row";
 import Item from "./Item";
+import Row from "./Row";
 
 import { useHydrated } from "@/hooks/useHydrated";
 
@@ -94,7 +93,7 @@ const ContactsV1Page = () => {
           </tbody>
         </table>
       )}
-      <TablePagination />
+      {/* <TablePagination /> */}
     </Layout>
   );
 };

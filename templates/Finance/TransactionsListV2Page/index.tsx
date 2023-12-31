@@ -76,7 +76,7 @@ const TransactionsListV2Page = () => {
                     ))}
                 </tbody>
             </table>
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

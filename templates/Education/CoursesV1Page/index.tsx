@@ -41,7 +41,7 @@ const CoursesV1Page = () => {
             ))}
           </div>
         </div>
-        <TablePagination />
+        {/* <TablePagination /> */}
       </>
     </Layout>
   );

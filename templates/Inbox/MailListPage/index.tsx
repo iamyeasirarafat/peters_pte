@@ -71,7 +71,7 @@ const MailListPage = () => {
                     )
                 )}
             </div>
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

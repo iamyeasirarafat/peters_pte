@@ -33,7 +33,7 @@ const SearchResultPage = () => {
                     <Post item={post} key={post.id} />
                 ))}
             </div>
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

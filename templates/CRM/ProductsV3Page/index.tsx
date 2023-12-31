@@ -11,7 +11,7 @@ const ProductsV3Page = () => {
         <Layout title="Products">
             <Actions />
             {/* <Products items={products3} /> */}
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

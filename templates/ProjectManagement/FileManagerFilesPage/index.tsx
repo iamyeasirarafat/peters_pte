@@ -68,7 +68,7 @@ const FileManagerFilesPage = () => {
                         </div>
                     ))}
                 </div>
-                <TablePagination />
+                {/* <TablePagination /> */}
             </div>
         </Layout>
     );

@@ -53,7 +53,7 @@ const ProductsV1Page = () => {
                     </tbody>
                 </table>
             )}
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

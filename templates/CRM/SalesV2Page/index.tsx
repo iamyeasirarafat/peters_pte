@@ -10,7 +10,7 @@ const SalesV2Page = () => {
         <Layout title="Sales">
             <Filters />
             {/* <Products items={sales2} /> */}
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

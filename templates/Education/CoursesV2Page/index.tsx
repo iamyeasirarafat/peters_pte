@@ -30,11 +30,10 @@ const CoursesV2Page = () => {
                 <div className="flex flex-wrap justify-center -mt-1.5 -ml-0.75">
                     {variantsCourse.map((variant) => (
                         <button
-                            className={`label-black mt-1.5 ml-0.75 dark:border-transparent ${
-                                activeId === variant.id
+                            className={`label-black mt-1.5 ml-0.75 dark:border-transparent ${activeId === variant.id
                                     ? "bg-purple-1 border-purple-1 dark:bg-purple-1"
                                     : ""
-                            }`}
+                                }`}
                             key={variant.id}
                             onClick={() => setActiveId(variant.id)}
                         >
@@ -51,7 +50,7 @@ const CoursesV2Page = () => {
                     ))}
                 </div>
             </div>
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

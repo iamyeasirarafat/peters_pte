@@ -14,7 +14,7 @@ const CustomersV3Page = () => {
                     <Item item={customer} key={customer.id} />
                 ))}
             </div>
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };

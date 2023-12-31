@@ -140,7 +140,7 @@ const CryptoAssetsPage = () => {
                     ))}
                 </tbody>
             </table>
-            <TablePagination />
+            {/* <TablePagination /> */}
         </Layout>
     );
 };
