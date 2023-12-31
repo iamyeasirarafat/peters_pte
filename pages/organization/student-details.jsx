@@ -10,6 +10,7 @@ import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
 import { CgRadioCheck } from "react-icons/cg";
 import Sorting from "@/components/Sorting";
 import Icon from "@/components/Icon";
+import ReusableModal from "@/components/global/ReusableModal";
 import TablePagination from "@/components/TablePagination";
 import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
@@ -24,6 +25,9 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDateWithName } from "@/utils/formatDateWithName";
 import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import Spinner from "@/components/Spinner/Spinner";
+import LineProgressBar from "@/components/global/LineProgressBar";
+import { FiAward, FiTrendingUp, FiUpload } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
@@ -56,6 +60,7 @@ export const StudentsDetailsMain = ({ studentDetails, setFetch }) => {
       <div className="col-span-8">
         <StudentDetailsRight data={studentDetails} />
       </div>
+      {/* <ProgressModal /> */}
     </div>
   );
 };
@@ -65,16 +70,43 @@ const StudentProfileInfo = ({ data, setFetch }) => {
     state: false,
     data: null,
   });
+  const handelImageChange = (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = axios.post(`/user/picture/upload`, formData);
+      setFetch((prev) => !prev);
+      toast.success("Profile image update success");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    }
+  };
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Image
-          className="w-21 h-w-21 rounded-full"
-          src={"/images/img-2.jpg"}
-          width={1000}
-          height={1000}
-          alt=""
-        />
+        <label
+          htmlFor="profile_image"
+          className="group cursor-pointer relative w-21 h-21 inline-block"
+        >
+          <Image
+            className="w-21 h-w-21 rounded-full"
+            src={"/images/img-2.jpg"}
+            width={1000}
+            height={1000}
+            alt=""
+          />
+          <input
+            className="hidden"
+            onChange={(e) => handelImageChange(e)}
+            type="file"
+            name=""
+            id="profile_image"
+          />
+          <div className="group-hover:opacity-100 opacity-0 duration-200 absolute bottom-0 right-0 bg-[#f2b2777c] rounded-full w-full h-full">
+            <FiUpload className="absolute top-1/2  left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-xl" />
+          </div>
+        </label>
+
         <div>
           <h2 className="text-xl font-extrabold">{data?.full_name}</h2>
           <p className="text-sm">
@@ -176,11 +208,11 @@ const StudentDetailsRight = ({ data }) => {
       const res = await axios.get(`/exam_countdown`);
       setExamDate(res?.data);
     };
-    getExamDate();
     const getScore = async () => {
       const res = await axios.get("/target_score");
       setScore(res?.data);
     };
+    getExamDate();
     getScore();
   }, [reFetch]);
 
@@ -789,17 +821,22 @@ const ExamCountDown = ({
 };
 
 const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
+  const scores = [
+    { id: 1, name: "35" },
+    { id: 2, name: "55" },
+    { id: 3, name: "75" },
+    { id: 4, name: "90" },
+  ];
+  const [score, setScore] = useState(scores[0]);
   const [loading, setLoading] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
+  const { handleSubmit, reset } = useForm();
+  const onSubmit = () => {
+    const scoreData = {
+      score: score?.name,
+    };
     try {
       setLoading(true);
-      const res = axios.post("/target_score", data);
+      const res = axios.post("/target_score", scoreData);
       setOpenTargetScore(false);
       toast.success("Score added success");
       setRefetch((prev) => !prev);
@@ -820,19 +857,99 @@ const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
       }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-2"
+        <Select
           label="Target Score*"
-          placeholder="35"
-          register={register}
-          name="score"
-          type="number"
+          className="mb-4"
+          items={scores}
+          value={score}
+          onChange={setScore}
         />
-        <button className="bg-primary disabled:opacity-70 py-3 text-base font-bold w-full flex items-center justify-center gap-x-2">
+        <button
+          disabled={loading}
+          className="bg-primary disabled:opacity-70 py-3 text-base font-bold w-full flex items-center justify-center gap-x-2"
+        >
           Update Plan {loading && <Spinner className="w-6 h-6" />}
         </button>
       </form>
     </Modal>
+  );
+};
+
+// student progress & performance
+
+const ProgressModal = ({ data }) => {
+  const [open, setOpen] = useState(true);
+  const [tab, setTab] = useState("performance");
+  return (
+    <div>
+      <ReusableModal open={open} setOpen={setOpen}>
+        <div className="bg-[#faf4f0] w-[1240px] mx-auto p-4 rounded-md">
+          <div className="flex items-center justify-between">
+            <p className="text-lg font-extrabold">Progress & Performance</p>
+            <IoCloseSharp
+              onClick={() => setOpen(false)}
+              className="text-xl cursor-pointer text-red hover:text-primary duration-200"
+            />
+          </div>
+
+          <div className="flex justify-between mt-4">
+            {/* tabs */}
+            <div className="flex items-center gap-x-4 w-full">
+              <button
+                onClick={() => setTab("performance")}
+                className={` ${
+                  tab === "performance" ? "bg-[#849C3E] text-white" : "bg-white"
+                } p-2.5 text-xl text-center rounded border border-[#849C3E]`}
+              >
+                <p className="leading-none">Your Performance</p>
+                <FiAward className="text-2xl inline-block mt-2" />
+              </button>
+              <button
+                onClick={() => setTab("progress")}
+                className={`${
+                  tab === "progress" ? "bg-blue text-white" : "bg-white"
+                } p-2.5 text-xl text-center rounded border border-blue`}
+              >
+                <p className="leading-none">Practice Progress</p>
+                <FiTrendingUp className="text-2xl inline-block mt-2" />
+              </button>
+            </div>
+            <div className="w-full flex flex-col items-end gap-2">
+              <select className="appearance-none py-2 px-3 bg-white rounded-md border focus:ring-primary focus:border-primary w-1/5 border-primary">
+                <option value="all-time">All Time</option>
+              </select>
+              <p className="text-gray text-base">Last updated on 25/07/2023</p>
+            </div>
+          </div>
+          {/*  */}
+          <div className="bg-secondary border border-primary mt-4 pb-2.5 rounded-md font-cabin">
+            <p className="py-2.5 text-gray text-xl text-center font-medium">
+              All Time Progress
+            </p>
+            {/*  */}
+            <div className="px-2.5">
+              <div className="bg-white rounded-md p-2.5 grid grid-cols-5 gap-x-2">
+                <Progress />
+                <Progress />
+                <Progress />
+                <Progress />
+                <Progress />
+              </div>
+            </div>
+            <hr className="border border-primary my-2.5" />
+          </div>
+        </div>
+      </ReusableModal>
+    </div>
+  );
+};
+
+const Progress = ({ data }) => {
+  return (
+    <div className="rounded-xl border border-primary p-3 bg-white text-start">
+      <p className="text-base text-gray">Mock Test Questions</p>
+      <p className="text-4xl font-bold text-red">52/475</p>
+      <LineProgressBar height={8} lineColor={"red"} strokeWidth={50} />
+    </div>
   );
 };

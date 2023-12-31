@@ -7,14 +7,16 @@ const CardItems = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/superadmin/test/counts");
-        setItemNumber(response.data);
+        const res = await axios.get("/superadmin/test/counts");
+        setItemNumber(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
+
+  console.log("itemNumber", itemNumber);
 
   const Speaking = [
     {
@@ -166,10 +168,10 @@ const CardItems = () => {
   ];
   const MiniGame = [
     {
-      title: "Spelling Bee",
+      title: "spelling-bee",
       items: "233",
       bg: "#AE7AFF",
-      link: "Spelling Bee",
+      link: "spelling-bee",
       text: "SB",
     },
     {

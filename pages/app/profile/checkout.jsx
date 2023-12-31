@@ -1,7 +1,6 @@
 import CustomModal from "@/components/CustomModal";
 import Field from "@/components/Field";
 import Image from "@/components/Image";
-import Layout from "@/components/Layout";
 import Select from "@/components/Select";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -11,6 +10,7 @@ import toast from "react-hot-toast";
 import { AiFillPrinter } from "react-icons/ai";
 import { BsCheck2 } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
+import DashboardLayout from "../layout";
 
 const paymentMethods = [{ id: 1, title: "SSL Commerce" }];
 function Checkout() {
@@ -22,17 +22,15 @@ function Checkout() {
     state: false,
     url: null,
   });
-  const [accountsType, setAccountsType] = useState([]);
+  const [pack, setPack] = useState([]);
   const [accountType, setAccountType] = useState({});
-  const [accountsCount, setAccountsCount] = useState([]);
-  const [accountCount, setAccountCount] = useState({});
   const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0]);
 
   useEffect(() => {
     const getPackage = async () => {
       try {
-        const res = await axios.get(`/packages/organization`);
-        setAccountsType(res?.data);
+        const res = await axios.get(`/packages/student`);
+        setPack(res?.data);
       } catch (error) {
         console.error("Error fetching package:", error);
       }
@@ -40,21 +38,11 @@ function Checkout() {
     router.isReady && getPackage();
   }, [id, router.isReady]);
   useEffect(() => {
-    if (Array.isArray(accountsType) && accountsType.length > 0 && id) {
-      const selectedAccountType = accountsType.find(
-        (item) => item.id === parseInt(id)
-      );
+    if (Array.isArray(pack) && pack.length > 0 && id) {
+      const selectedAccountType = pack.find((item) => item.id === parseInt(id));
       setAccountType(selectedAccountType || {});
     }
-  }, [accountsType, id]);
-  useEffect(() => {
-    if (!accountType) return;
-    setAccountsCount(accountType?.validation || []);
-  }, [accountType]);
-  useEffect(() => {
-    if (!accountsCount || accountsCount.length === 0) return;
-    setAccountCount(accountsCount[0]);
-  }, [accountsCount]);
+  }, [pack, id]);
 
   const {
     register,
@@ -62,14 +50,14 @@ function Checkout() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     setIsLoading(true);
     const formData = {
       package: accountType?.id,
-      validation: accountCount?.id,
+      ...(data?.coupon && { coupon: data?.coupon }),
     };
     try {
-      const res = await axios.post("/payment/organization", formData);
+      const res = await axios.post("/payment/student", formData);
       setIsLoading(false);
       router.push(res?.data?.redirect_url);
       window.open(res?.data?.redirect_url, "_blank", "noopener,noreferrer");
@@ -87,73 +75,81 @@ function Checkout() {
   }, [router.isReady, status]);
 
   return (
-    <Layout title="Checkout" back>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="lg:w-full xl:w-2/3 w-1/2 mx-auto flex flex-col gap-3"
-      >
-        <Select
-          label="Bulk Account Type"
-          items={accountsType}
-          value={accountType}
-          onChange={setAccountType}
-        />
-        <Select
-          label="Quantity"
-          items={accountsCount}
-          value={accountCount}
-          onChange={setAccountCount}
-        />
-        <Field
-          errors={errors}
-          label="Total Cost"
-          placeholder={`${accountCount?.cost} BDT`}
-          currency={`You Saved ${accountCount?.saving} BDT`}
-          register={register}
-          name="total_cost"
-          isReadOnly
-        />
-        <Select
-          label="Select Payment Method"
-          items={paymentMethods}
-          value={paymentMethod}
-          onChange={setPaymentMethod}
-        />
-        <div className="pt-5 flex lg:flex-col flex-row items-center justify-between gap-2.5">
-          <Image
-            className="w-full h-[50px] rounded-sm"
-            src={"/images/payment/GUARANTEED.svg"}
-            width={100}
-            height={100}
-            alt=""
-          />
-          <Image
-            className="w-full h-[50px] rounded-sm"
-            src={"/images/payment/safe.svg"}
-            width={100}
-            height={100}
-            alt=""
-          />
+    <DashboardLayout>
+      <div className="mt-5">
+        <h2 className="text-4xl text-gray">Checkout</h2>
+        <div className="bg-secondary py-4 mt-3">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="lg:w-full xl:w-2/3 w-1/2 mx-auto flex flex-col gap-3"
+          >
+            <Select
+              label="Bulk Account Type"
+              items={pack}
+              value={accountType}
+              onChange={setAccountType}
+            />
+            <Field
+              errors={errors}
+              label="Coupon Code"
+              placeholder="Coupon Code"
+              register={register}
+              name="coupon"
+            />
+            <Field
+              errors={errors}
+              label="Total Cost"
+              placeholder={`${accountType?.cost} BDT`}
+              currency={`You Saved ${
+                accountType?.pre_price - accountType?.cost
+              } BDT`}
+              register={register}
+              name="total_cost"
+              isReadOnly
+            />
+            <Select
+              label="Select Payment Method"
+              items={paymentMethods}
+              value={paymentMethod}
+              onChange={setPaymentMethod}
+            />
+            <div className="pt-5 flex lg:flex-col flex-row items-center justify-between gap-2.5">
+              <Image
+                className="w-full h-[50px] rounded-sm"
+                src={"/images/payment/GUARANTEED.svg"}
+                width={100}
+                height={100}
+                alt=""
+              />
+              <Image
+                className="w-full h-[50px] rounded-sm"
+                src={"/images/payment/safe.svg"}
+                width={100}
+                height={100}
+                alt=""
+              />
+            </div>
+            <p className="text-[#949494] pt-2 flex items-center gap-x-2">
+              <BsCheck2 />
+              By making payment you are agreed to our Terms & Conditions and
+              Privacy Policy
+            </p>
+            <button
+              disabled={isLoading}
+              type="submit"
+              className="text-base font-bold w-full py-3 bg-primary mt-10 flex items-center justify-center gap-x-3"
+            >
+              {isLoading && (
+                <div className="w-5 h-5 rounded-full border-t-2 border-r-2 border-white animate-spin" />
+              )}
+              Make Payment
+            </button>
+          </form>
+          <CheckoutModal open={open} setOpen={setOpen} />
+          <PaymentModal open={paymentModalOpen} setOpen={setPaymentModalOpen} />
         </div>
-        <p className="text-[#949494] pt-2 flex items-center gap-x-2">
-          <BsCheck2 />
-          By making payment you are agreed to our Terms & Conditions and Privacy
-          Policy
-        </p>
-        <button
-          disabled={isLoading}
-          type="submit"
-          className="text-base font-bold w-full py-3 bg-primary mt-10 flex items-center justify-center gap-x-3"
-        >
-          {isLoading && (
-            <div className="w-5 h-5 rounded-full border-t-2 border-r-2 border-white animate-spin" />
-          )}
-          Make Payment
-        </button>
-      </form>
-      <CheckoutModal open={open} setOpen={setOpen} />
-      <PaymentModal open={paymentModalOpen} setOpen={setPaymentModalOpen} />
-    </Layout>
+      </div>
+    </DashboardLayout>
   );
 }
 

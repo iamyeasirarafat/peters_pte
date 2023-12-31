@@ -192,7 +192,7 @@ const StudentDetailsRight = ({ data }) => {
         {mounted && isTablet ? (
           groups?.map((item, i) => <AccountPlanMobile key={i} data={item} />)
         ) : (
-          <AccountPlan data={groups} />
+          <AccountPlan data={groups?.result} />
         )}
       </div>
       <TablePagination />
