@@ -4,6 +4,7 @@ import Image from "@/components/Image";
 import Layout from "@/components/Layout";
 import Select from "@/components/Select";
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,6 +15,7 @@ import { FaCheckCircle } from "react-icons/fa";
 
 const paymentMethods = [{ id: 1, title: "SSL Commerce" }];
 function Checkout() {
+  const [acceptPolicy, setAcceptPolicy] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { id, status } = router.query;
@@ -135,15 +137,36 @@ function Checkout() {
             alt=""
           />
         </div>
-        <p className="text-[#949494] pt-2 flex items-center gap-x-2">
-          <BsCheck2 />
-          By making payment you are agreed to our Terms & Conditions and Privacy
-          Policy
-        </p>
+        <div className="pt-2 flex items-center gap-x-2">
+          <input
+            onChange={() => setAcceptPolicy(!acceptPolicy)}
+            className="text-primary border-2 w-4 h-4 bg-transparent outline-none ring-transparent border-primary focus:ring-transparent cursor-pointer"
+            type="checkbox"
+            id="policy"
+          />
+          <label className="text-[#949494]" htmlFor="policy">
+            By making payment you are agreed to our{" "}
+            <Link
+              target="_blank"
+              className="underline text-blue"
+              href="https://peterspte.com/terms-conditions/"
+            >
+              Terms & Conditions
+            </Link>{" "}
+            and{" "}
+            <Link
+              target="_blank"
+              className="underline text-blue"
+              href="https://peterspte.com/privacy-policy/"
+            >
+              Privacy Policy
+            </Link>
+          </label>
+        </div>
         <button
-          disabled={isLoading}
+          disabled={isLoading || !acceptPolicy}
           type="submit"
-          className="text-base font-bold w-full py-3 bg-primary mt-10 flex items-center justify-center gap-x-3"
+          className="text-base font-bold w-full py-3 bg-primary disabled:opacity-70 mt-10 flex items-center justify-center gap-x-3"
         >
           {isLoading && (
             <div className="w-5 h-5 rounded-full border-t-2 border-r-2 border-white animate-spin" />
