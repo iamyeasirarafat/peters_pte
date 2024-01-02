@@ -10,10 +10,11 @@ import { AiFillPlusCircle } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import axios from "axios";
-import { formatDateTime } from "../../../utils/formatDateTime";
+import { formatDateTime } from "@/utils/formatDateTime";
 import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
 import { GoTrash } from "react-icons/go";
+import { FaEdit } from "react-icons/fa";
 
 const Index = () => {
   const [reFetch, setRefetch] = useState(false);
@@ -26,27 +27,30 @@ const Index = () => {
   });
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 8;
+
+  const { list } = router.query;
+  console.log("list", list);
   // get prediction data
   useEffect(() => {
     const getStudyPrediction = async () => {
       const res = await axios.get(
-        `/study_materials/prediction?limit=${pageLimit}&page=${pageNumber}`
+        `/study_materials/${list}?limit=${pageLimit}&page=${pageNumber}`
       );
       setPrediction(res?.data);
       setIsLoading(false);
     };
     getStudyPrediction();
-  }, [reFetch, pageNumber]);
+  }, [reFetch, pageNumber, list]);
 
   return (
-    <Layout title="Prediction" back>
+    <Layout title={list?.replace("_", " ")} back>
       <div className="mb-5">
         <button
-          onClick={() => router.push("/admin/study-material/add-prediction")}
+          onClick={() => router.push(`/admin/study-material/form/add-${list}`)}
           className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary"
         >
           <AiFillPlusCircle />
-          Create New Prediction
+          Create New {list?.replace("_", " ")}
         </button>
       </div>
       {isLoading ? (
@@ -190,9 +194,12 @@ const StudyMore = ({ id, setRefetch }) => {
     setRefetch && setRefetch((prev) => !prev);
   };
   return (
-    <div className="bg-white rounded shadow absolute top-1/2 p-2 right-full">
+    <div className="bg-secondary rounded shadow absolute top-1/2 p-2 right-full space-y-2">
+      <button className="flex items-center gap-x-2 border border-green-500 hover:text-green-500 duration-200 rounded-md py-1 px-2">
+        <FaEdit /> Edit
+      </button>
       <button
-        className="flex items-center gap-x-2 border border-red rounded-md py-1 px-2"
+        className="flex items-center gap-x-2 border border-red hover:text-red duration-200 rounded-md py-1 px-2"
         onClick={handelDelete}
       >
         <GoTrash /> Delete
