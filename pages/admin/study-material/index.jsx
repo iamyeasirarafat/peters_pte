@@ -32,7 +32,7 @@ const Index = () => {
       name: "Study Material",
       count: studyCount?.study_material || 0,
       icon: <BsBookHalf />,
-      url: "/admin/study-material/material",
+      url: "/admin/study-material/study_material",
     },
   ];
   return (

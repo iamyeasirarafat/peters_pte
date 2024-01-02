@@ -1,44 +1,54 @@
 import Layout from "@/components/Layout";
+import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const mocktest = [
-  {
-    id: 1,
-    name: "Full Mocktest",
-    icon: "MT",
-    Items: "3157",
-    url: "/admin/mocktest/full_mocktests",
-  },
-  {
-    id: 2,
-    name: "Speaking Mocktest",
-    icon: "SMT",
-    Items: "3157",
-    url: "/admin/mocktest/speaking_mocktests",
-  },
-  {
-    id: 3,
-    name: "Listening Mocktest",
-    icon: "LMT",
-    Items: "3157",
-    url: "/admin/mocktest/listening_mocktests",
-  },
-  {
-    id: 4,
-    name: "Writing Mocktest",
-    icon: "WMT",
-    Items: "3157",
-    url: "/admin/mocktest/witting_mocktests",
-  },
-  {
-    id: 5,
-    name: "Reading Mocktest",
-    icon: "RMT",
-    Items: "3157",
-    url: "/admin/mocktest/reading_mocktests",
-  },
-];
 const Index = () => {
+  const [testCount, setTestCount] = useState(0);
+  useEffect(() => {
+    const getCount = async () => {
+      const res = await axios.get("/mocktest/count");
+      setTestCount(res?.data);
+    };
+    getCount();
+  }, []);
+  const mocktest = [
+    {
+      id: 1,
+      name: "Full Mocktest",
+      icon: "MT",
+      Items: testCount?.full || 0,
+      url: "/admin/mocktest/full_mocktests",
+    },
+    {
+      id: 2,
+      name: "Speaking Mocktest",
+      icon: "SMT",
+      Items: testCount?.speaking || 0,
+      url: "/admin/mocktest/speaking_mocktests",
+    },
+    {
+      id: 3,
+      name: "Listening Mocktest",
+      icon: "LMT",
+      Items: testCount?.listening || 0,
+      url: "/admin/mocktest/listening_mocktests",
+    },
+    {
+      id: 4,
+      name: "Writing Mocktest",
+      icon: "WMT",
+      Items: testCount?.writting || 0,
+      url: "/admin/mocktest/witting_mocktests",
+    },
+    {
+      id: 5,
+      name: "Reading Mocktest",
+      icon: "RMT",
+      Items: testCount?.reading || 0,
+      url: "/admin/mocktest/reading_mocktests",
+    },
+  ];
   return (
     <Layout title="Mocktest">
       <p className="text-lg font-extrabold">Mock Test Type</p>

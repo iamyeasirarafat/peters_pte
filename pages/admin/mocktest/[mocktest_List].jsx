@@ -19,7 +19,6 @@ function Index() {
     query: "(max-width: 1023px)",
   });
   const [mockTestList, setMockTestList] = useState([]);
-  console.log("mockTestList", mockTestList);
   useEffect(() => {
     const getMockTest = async () => {
       setIsLoading(true);

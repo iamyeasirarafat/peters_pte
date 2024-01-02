@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import Sorting from "@/components/Sorting";
 import TablePagination from "@/components/TablePagination";
 import Icon from "@/components/Icon";
-import Image from "@/components/Image";
 import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useEffect, useState } from "react";

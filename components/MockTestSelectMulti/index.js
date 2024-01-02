@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
+import { FaCheck } from "react-icons/fa6";
 
 const MockTestSelect = ({
   dataArray,
@@ -83,49 +84,35 @@ const MockTestSelect = ({
                 leave="transition ease-in duration-100"
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
-                className="absolute mt-1 w-full rounded-md bg-[#e6e6e6] dark:bg-black z-50"
+                className="absolute mt-1 w-full rounded-md bg-secondary dark:bg-black z-50 shadow-md"
               >
                 <Listbox.Options
                   onMouseLeave={() => setIsOpen(false)}
                   static
-                  className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto content-scrollbar sm:text-sm sm:leading-5"
+                  className="max-h-60 rounded-md text-base leading-6 shadow-xs overflow-auto content-scrollbar sm:text-sm sm:leading-5"
                 >
-                  {dataArray.map((item) => {
+                  {dataArray.map((item, index) => {
                     const selected = isSelected(item);
                     return (
                       <Listbox.Option key={item.id} value={item}>
                         {({ active }) => (
                           <div
-                            className={`${
-                              active ? "text-gray-900" : "text-gray-900"
-                            } cursor-pointer select-none relative py-2 pl-8 pr-4`}
+                            className={`${active && "text-gray-500"} ${
+                              dataArray?.length - 1 !== index &&
+                              "border-b border-primary"
+                            } cursor-pointer py-2 pl-8 pr-4 flex items-center justify-between dark:shadow-white hover:bg-primary dark:hover:bg-slate-950`}
                           >
-                            <span
+                            <p
                               className={`${
                                 selected ? "font-semibold" : "font-normal"
-                              } block truncate`}
+                              } block truncate capitalize dark:text-white`}
                             >
                               {item?.title}
-                            </span>
+                            </p>
                             {selected && (
-                              <span
-                                className={`${
-                                  active ? "text-white" : "text-blue-600"
-                                } absolute inset-y-0 left-0 flex items-center pl-1.5`}
-                              >
-                                <svg
-                                  className="h-5 w-5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                              <p>
+                                <FaCheck />
+                              </p>
                             )}
                           </div>
                         )}
