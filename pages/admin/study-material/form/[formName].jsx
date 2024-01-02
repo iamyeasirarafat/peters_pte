@@ -36,6 +36,7 @@ function AddStudyMaterial() {
         toast.success("File uploaded successfully");
         setLoading(false);
         setStudyFile(null);
+        router.push(`/admin/study-material/${formPage}`);
       }
     } catch (error) {
       toast.error(
