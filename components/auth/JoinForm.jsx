@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Spinner from "@/components/Spinner/Spinner";
+import { PhoneNumberInputJoin } from "@/components/Students_list/Row";
 
 const JoinForm = ({ setPage }) => {
-  const [country, setCountry] = useState("+880");
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,13 +14,9 @@ const JoinForm = ({ setPage }) => {
     register,
     handleSubmit,
     setError,
-    watch,
+    control,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      phone: country,
-    },
-  });
+  } = useForm();
   const onSubmit = async (data) => {
     if (data.password !== data.confirm_password) {
       setError("confirm_password", {
@@ -61,16 +57,6 @@ const JoinForm = ({ setPage }) => {
     }
   };
 
-  //setting default number code
-  // useEffect(() => {
-  //   if (watch().country !== "") {
-  //     const code = countryCodes.find(
-  //       (item) => item.name === watch().country
-  //     ).dial_code;
-  //     setCountry(code);
-  //   }
-  // }, [watch().country]);
-
   // Custom validation function to check for uppercase, lowercase, and symbol
   const validatePassword = (value) => {
     const caseRegex = /^(?=.*?[A-Z])(?=.*?[a-z]).*$/;
@@ -109,34 +95,10 @@ const JoinForm = ({ setPage }) => {
             placeholder="myiosio@gmail.com"
           />
         </div>
-        <div className="flex md:flex-col flex-row items-center gap-3">
-          <select
-            className={`bg-white md:w-full w-2/5 text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 ${
-              errors?.country ? "border-red" : "border-[#B9B9B9]"
-            }  rounded-[16px] outline-none`}
-            {...register("country", {
-              required: "Country is required",
-            })}
-          >
-            <option value="bangladesh">Bangladesh</option>
-            {/* {countryCodes?.map((country, i) => (
-              <option key={i} value={country?.name}>
-                {country?.name}
-              </option>
-            ))} */}
-          </select>
 
-          <input
-            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 ${
-              errors?.phone ? "border-red" : "border-[#B9B9B9]"
-            }  rounded-[16px] outline-none`}
-            {...register("phone", {
-              required: "Phone number is required",
-            })}
-            type="text"
-            placeholder="01739398952"
-          />
-        </div>
+        {/* phone */}
+        <PhoneNumberInputJoin name="phone" control={control} errors={errors} />
+        {/* pass */}
         <div className="flex md:flex-col flex-row items-center gap-3">
           <div className="relative w-full">
             <input

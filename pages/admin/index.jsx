@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/AdminLayout";
+import Layout from "@/components/Layout";
 import Glance from "@/components/Glance";
 import Students from "@/components/Students_list";
 import TablePagination from "@/components/TablePagination";
@@ -31,7 +31,7 @@ const Index = () => {
     getStudents();
   }, [status, pageNumber]);
   return (
-    <AdminLayout title="Dashboard">
+    <Layout title="Dashboard">
       <div>
         <p className="text-lg font-extrabold mb-2">At a Glance</p>
         <Glance studentSCounts={studentSCounts} />
@@ -54,7 +54,7 @@ const Index = () => {
           prevNext={setPageNumber}
         />
       </div>
-    </AdminLayout>
+    </Layout>
   );
 };
 
