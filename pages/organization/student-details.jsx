@@ -28,6 +28,7 @@ import Spinner from "@/components/Spinner/Spinner";
 import LineProgressBar from "@/components/global/LineProgressBar";
 import { FiAward, FiTrendingUp, FiUpload } from "react-icons/fi";
 import { IoCloseSharp } from "react-icons/io5";
+import { PhoneNumberInput } from "@/components/Students_list/Row";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
@@ -97,7 +98,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           />
           <input
             className="hidden"
-            onChange={(e) => handelImageChange(e)}
+            // onChange={(e) => handelImageChange(e)}
             type="file"
             name=""
             id="profile_image"
@@ -433,6 +434,7 @@ export const UpdateInformation = ({
     register,
     handleSubmit,
     setValue,
+    control,
     reset,
     formState: { errors },
   } = useForm();
@@ -440,7 +442,6 @@ export const UpdateInformation = ({
   const onSubmit = async (data) => {
     const updateData = {
       ...data,
-      phone: `+88${data?.phone}`,
       group: group?.id,
       organization: openUpdateInformation?.data?.profile[0]?.organization?.id,
       profile: {
@@ -472,7 +473,7 @@ export const UpdateInformation = ({
   useEffect(() => {
     setValue("full_name", openUpdateInformation?.data?.full_name);
     setValue("email", openUpdateInformation?.data?.email);
-    setValue("phone", openUpdateInformation?.data?.phone?.slice(3));
+    setValue("phone", openUpdateInformation?.data?.phone);
     setValue(
       "profile.country",
       openUpdateInformation?.data?.profile[0]?.country
@@ -529,15 +530,11 @@ export const UpdateInformation = ({
           register={register}
           name="email"
         />
-        <Field
-          errors={errors}
-          className="mb-2"
+        <PhoneNumberInput
           label="Phone Number"
-          placeholder="01712345678"
-          type="number"
-          required
-          register={register}
           name="phone"
+          control={control}
+          errors={errors}
         />
         <Field
           errors={errors}
@@ -606,18 +603,21 @@ const ChangePassword = ({ openChangePassword, setOpenChangePassword }) => {
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const passwordData = {
       student: openChangePassword?.student,
       ...data,
     };
-    const changePass = async () => {
+    try {
       const res = await axios.post(`/student/change_password`, passwordData);
       setOpenChangePassword({ state: false, student: null });
       reset();
       toast.success(res?.data?.message);
-    };
-    changePass();
+    } catch (error) {
+      const key = Object?.keys(error?.response?.data)[0];
+      const value = error?.response?.data[key];
+      toast.error(value);
+    }
   };
   return (
     <Modal

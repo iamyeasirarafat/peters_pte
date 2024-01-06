@@ -2,13 +2,18 @@ import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Logo from "@/components/Logo";
 import Link from "next/link";
-import { useState } from "react";
+import { use, useState } from "react";
 import Menu from "./Menu";
+import { useSelector } from "react-redux";
+import { MdLogout } from "react-icons/md";
+import { Logout } from "@/utils/Logout";
 
 type SidebarProps = {};
 
 const Sidebar = ({}: SidebarProps) => {
   const [visible, setVisible] = useState<boolean>(false);
+  const [showUserDialog, setShowUserDialog] = useState<boolean>(false);
+  const user = useSelector((state: any) => state.user?.user);
 
   return (
     <div
@@ -23,17 +28,16 @@ const Sidebar = ({}: SidebarProps) => {
         </button>
       </div>
       <Menu visible={visible} />
-      {/* <TeamMembers visible={visible} /> */}
       <div
         className={`flex items-center h-18 mt-auto mx-0 pt-10 ${
           visible ? "mx-0" : "xl:-mx-4"
-        }`}
+        } relative`}
       >
         <Link
           className={`inline-flex items-center font-bold text-white text-sm transition-colors hover:text-purple-1 ${
             visible ? "mx-0 text-sm" : "xl:mx-auto xl:text-0"
           }`}
-          href="/profile"
+          href="#"
         >
           <div
             className={`relative w-5.5 h-5.5 mr-2.5 rounded-full overflow-hidden ${
@@ -42,23 +46,46 @@ const Sidebar = ({}: SidebarProps) => {
           >
             <Image
               className="object-cover scale-105"
-              src="/images/avatars/avatar.jpg"
+              src={user?.picture || "/images/avatars/avatar.jpg"}
               fill
               alt="Avatar"
             />
           </div>
-          Henry Richardson
+          <span className="capitalize">{user?.full_name}</span>
         </Link>
         <button
+          onClick={() => setShowUserDialog(!showUserDialog)}
           className={`btn-transparent-light btn-square btn-small ml-auto ${
             visible ? "flex" : "xl:hidden"
           }`}
         >
           <Icon name="dots" />
         </button>
+        {showUserDialog && <UserDialog setShowUserDialog={setShowUserDialog} />}
       </div>
     </div>
   );
 };
 
 export default Sidebar;
+
+const UserDialog = ({ setShowUserDialog }: any) => {
+  return (
+    <div className=" bg-white dark:bg-black rounded-md py-2 px-7 absolute bottom-10 left-0 w-full">
+      <Link
+        onClick={() => setShowUserDialog(false)}
+        href="/admin/profile"
+        className="flex items-center gap-x-3 py-2 hover:text-primary duration-200"
+      >
+        <Icon name="settings" />
+        <span className="text-sm font-bold">Profile Settings</span>
+      </Link>
+      <button
+        onClick={() => Logout()}
+        className="flex items-center gap-x-4 py-2 w-full hover:text-red duration-200"
+      >
+        <MdLogout className="text-xl" /> Log Out
+      </button>
+    </div>
+  );
+};

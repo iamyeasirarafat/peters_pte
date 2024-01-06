@@ -15,16 +15,24 @@ import { twMerge } from "tailwind-merge";
 
 function BillingPayment() {
   const router = useRouter();
+  const [packCount, setPackCount] = useState({});
+  useEffect(() => {
+    const getCount = async () => {
+      const res = await axios.get("/package/count");
+      setPackCount(res.data);
+    };
+    getCount();
+  }, []);
   const premiumAccounts = [
     {
       name: "Student Package",
-      count: "7",
+      count: packCount?.student_package || 0,
       image: "/std_pkg.png",
       link: "/admin/billing-plan/students_package",
     },
     {
       name: "Organization Package",
-      count: "48",
+      count: packCount?.organization_package || 0,
       image: "/org_pkg.png",
       link: "/admin/billing-plan/organization_package",
     },
@@ -48,7 +56,6 @@ function BillingPayment() {
           <div className=" space-y-5">
             <p className="text-lg font-extrabold">Payment Method</p>
             {/* method */}
-            <PaymentMethod />
             <PaymentMethod />
           </div>
         </div>
