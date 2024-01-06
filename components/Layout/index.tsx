@@ -4,6 +4,9 @@ import Image from "@/components/Image";
 import Sidebar from "@/components/Sidebar";
 import Head from "next/head";
 import Menu from "./Menu";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getUser } from "@/redux/slice/userSlice";
 
 type LayoutProps = {
   background?: boolean;
@@ -13,6 +16,10 @@ type LayoutProps = {
 };
 
 const Layout = ({ background, back, title, children }: LayoutProps) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
   return (
     <>
       <Head>

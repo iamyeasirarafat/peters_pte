@@ -1,16 +1,110 @@
 import Icon from "@/components/Icon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-import { navigation, adminNavigation } from "@/constants/navigation";
+import { navigation } from "@/constants/navigation";
 import { twMerge } from "tailwind-merge";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 type MenuProps = {
   visible?: boolean;
 };
 
 const Menu = ({ visible }: MenuProps) => {
+  const [saNavCount, setSaNavCount] = useState(0);
+  const [orgNavCount, setOrgNavCount] = useState(0);
   const router = useRouter();
+  useEffect(() => {
+    const getCount = async () => {
+      const res = await axios.get("/sidebar/count");
+      router?.asPath?.includes("admin") && setSaNavCount(res.data);
+    };
+    getCount();
+  }, [router?.asPath]);
+  const adminNavigation: {
+    title: string;
+    icon: string;
+    counter?: number;
+    url: string;
+  }[] = [
+    {
+      title: "Dashboard",
+      icon: "dashboard",
+      // counter: 16,
+      url: "/admin",
+    },
+    {
+      title: "Students",
+      icon: "students",
+      counter: saNavCount?.student || 0,
+      url: "/admin/students",
+    },
+    {
+      title: "Organization",
+      icon: "organization",
+      counter: saNavCount?.organization || 0,
+      url: "/admin/organization",
+    },
+    {
+      title: "Exam Calendar",
+      icon: "calendar",
+      // counter: 28,
+      url: "/admin/exam-calendar",
+    },
+    {
+      title: "Reports",
+      icon: "report2",
+      // counter: 20,
+      url: "/admin/reports",
+    },
+    {
+      title: "Billing & Plan",
+      icon: "bill",
+      counter: saNavCount?.plan || 0,
+      url: "/admin/billing-plan",
+    },
+    {
+      title: "Promotion",
+      icon: "campaign",
+      counter: saNavCount?.promotion || 0,
+      url: "/admin/promotion",
+    },
+    {
+      title: "Practice Question",
+      icon: "question",
+      counter: saNavCount?.practice || 0,
+      url: "/admin/practice-question",
+    },
+    {
+      title: "Mocktest",
+      icon: "help",
+      counter: saNavCount?.mocktest || 0,
+      url: "/admin/mocktest",
+    },
+    {
+      title: "Discussion",
+      icon: "discussion",
+      counter: saNavCount?.discussion || 0,
+      url: "/admin/discussion",
+    },
+    {
+      title: "Study Material",
+      icon: "book",
+      counter: saNavCount?.study_material || 0,
+      url: "/admin/study-material",
+    },
+    {
+      title: "Admin User",
+      icon: "person",
+      counter: saNavCount?.admin_user || 0,
+      url: "/admin/admin-user",
+    },
+    {
+      title: "Settings",
+      icon: "settings",
+      url: "/admin/settings",
+    },
+  ];
 
   return (
     <>
