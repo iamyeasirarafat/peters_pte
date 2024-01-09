@@ -10,14 +10,10 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const StudentRow = ({ item, setStatus }) => {
+const StudentRow = ({ item, setStatus, setIsOpen, isOpen }) => {
   const [value, setValue] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
   return (
     <tr className="">
       <td className="td-custom flex items-center gap-2">
@@ -49,38 +45,19 @@ const StudentRow = ({ item, setStatus }) => {
         <div className="flex justify-center bg-gray-100 ">
           <div
             className="relative inline-block text-left"
-            onClick={toggleDropdown}
-          // onBlur={closeDropdown}
+            onClick={() => setIsOpen(isOpen === item.id ? null : item.id)}
           >
             <button className="btn-transparent-dark btn-small btn-square">
               <Icon name="dots" />
             </button>
-            <div
-              style={{ backgroundColor: "#FAF4F0" }}
-              className={`${isOpen ? "block" : "hidden"
-                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-            >
-              <div role="none">
-                <button
-                  onClick={() => {
-                    setEditData(item);
-                    setVisible(true);
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="settings" /> Edit Organization
-                </button>
-                <button
-                  onClick={async () => {
-                    await axios.delete("/student/" + item.id);
-                    setStatus(Math.random());
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="cross" /> Remove
-                </button>
-              </div>
-            </div>
+            {isOpen === item.id && (
+              <OrgMore
+                setEditData={setEditData}
+                setVisible={setVisible}
+                setStatus={setStatus}
+                item={item}
+              />
+            )}
           </div>
         </div>
       </td>
@@ -106,7 +83,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
       setValue("address", editData?.profile?.address || "");
       setValue("country", editData?.profile?.country || "");
     }
-  }, [editData]);
+  }, [editData, setValue]);
   const onSubmit = async (data) => {
     const submitData = {
       email: data.email,
@@ -153,7 +130,12 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
           register={register}
           name="email"
         />
-        <PhoneNumberInput label="Phone Number" name="phone" control={control} errors={errors} />
+        <PhoneNumberInput
+          label="Phone Number"
+          name="phone"
+          control={control}
+          errors={errors}
+        />
         <Field
           errors={errors}
           className="mb-6"
@@ -173,5 +155,34 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
         <button className="btn-purple  w-full">Update Info</button>
       </form>
     </Modal>
+  );
+};
+
+const OrgMore = ({ setEditData, setVisible, setStatus, item }) => {
+  return (
+    <div
+      className={`bg-secondary dark:bg-black font-semibold absolute right-full dark:border-white border border-transparent top-0 z-3 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+    >
+      <div role="none">
+        <button
+          onClick={() => {
+            setEditData(item);
+            setVisible(true);
+          }}
+          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="settings" /> Edit Organization
+        </button>
+        <button
+          onClick={async () => {
+            await axios.delete("/student/" + item.id);
+            setStatus(Math.random());
+          }}
+          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="cross" /> Remove
+        </button>
+      </div>
+    </div>
   );
 };

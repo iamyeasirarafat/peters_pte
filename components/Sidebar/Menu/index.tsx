@@ -1,7 +1,6 @@
 import Icon from "@/components/Icon";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { navigation } from "@/constants/navigation";
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -11,13 +10,14 @@ type MenuProps = {
 };
 
 const Menu = ({ visible }: MenuProps) => {
-  const [saNavCount, setSaNavCount] = useState(0);
-  const [orgNavCount, setOrgNavCount] = useState(0);
+  const [saNavCount, setSaNavCount] = useState<any>(0);
+  const [orgNavCount, setOrgNavCount] = useState<any>(0);
   const router = useRouter();
   useEffect(() => {
     const getCount = async () => {
       const res = await axios.get("/sidebar/count");
-      router?.asPath?.includes("admin") && setSaNavCount(res.data);
+      router?.asPath?.startsWith("/admin") && setSaNavCount(res.data);
+      router?.asPath?.startsWith("/organization") && setOrgNavCount(res.data);
     };
     getCount();
   }, [router?.asPath]);
@@ -105,6 +105,56 @@ const Menu = ({ visible }: MenuProps) => {
       url: "/admin/settings",
     },
   ];
+  const orgNavigation: {
+    title: string;
+    icon: string;
+    counter?: number;
+    url: string;
+  }[] = [
+    {
+      title: "Dashboard",
+      icon: "dashboard",
+      // counter: 16,
+      url: "/organization",
+    },
+    {
+      title: "Students",
+      icon: "students",
+      url: "/organization/students",
+    },
+    {
+      title: "Exam Calendar",
+      icon: "calendar",
+      url: "/organization/calender",
+    },
+    {
+      title: "Reports",
+      icon: "report2",
+      // counter: 28,
+      url: "/organization/reports",
+    },
+    {
+      title: "Billing & Bluk Account",
+      icon: "bill",
+      // counter: 14,
+      url: "/organization/billing-payment",
+    },
+    {
+      title: "Prediction",
+      icon: "prediction",
+      url: "/organization/prediction",
+    },
+    {
+      title: "Template",
+      icon: "template",
+      url: "/organization/template",
+    },
+    {
+      title: "Study Material",
+      icon: "book",
+      url: "/organization/study-material",
+    },
+  ];
 
   return (
     <>
@@ -118,7 +168,9 @@ const Menu = ({ visible }: MenuProps) => {
       <SingleMenu
         router={router}
         visible
-        menu={router?.asPath?.includes("admin") ? adminNavigation : navigation}
+        menu={
+          router?.asPath?.includes("admin") ? adminNavigation : orgNavigation
+        }
       />
     </>
   );

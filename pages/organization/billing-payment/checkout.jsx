@@ -10,20 +10,16 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiFillPrinter } from "react-icons/ai";
-import { BsCheck2 } from "react-icons/bs";
 import { FaCheckCircle } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
 const paymentMethods = [{ id: 1, title: "SSL Commerce" }];
 function Checkout() {
   const [acceptPolicy, setAcceptPolicy] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { id, status } = router.query;
-  const [open, setOpen] = useState(false);
-  const [paymentModalOpen, setPaymentModalOpen] = useState({
-    state: false,
-    url: null,
-  });
+  const { id, status, pid } = router.query;
+  const [open, setOpen] = useState({ state: false, pid: null, status: null });
   const [accountsType, setAccountsType] = useState([]);
   const [accountType, setAccountType] = useState({});
   const [accountsCount, setAccountsCount] = useState([]);
@@ -75,18 +71,16 @@ function Checkout() {
       setIsLoading(false);
       router.push(res?.data?.redirect_url);
       window.open(res?.data?.redirect_url, "_blank", "noopener,noreferrer");
-      // setPaymentModalOpen({ state: true, url: res?.data?.redirect_url });
     } catch (error) {
       toast.error("Something went wrong");
       setIsLoading(false);
     }
   };
-  console.log(status);
   useEffect(() => {
-    if (router.isReady) {
-      setOpen(status);
+    if (router.isReady && pid && status) {
+      setOpen({ state: true, pid: pid, status: status });
     }
-  }, [router.isReady, status]);
+  }, [router.isReady, status, pid]);
 
   return (
     <Layout title="Checkout" back>
@@ -174,67 +168,109 @@ function Checkout() {
           Make Payment
         </button>
       </form>
-      <CheckoutModal open={open} setOpen={setOpen} />
-      <PaymentModal open={paymentModalOpen} setOpen={setPaymentModalOpen} />
+      {open?.state && <CheckoutModal open={open} setOpen={setOpen} />}
     </Layout>
   );
 }
 
 export default Checkout;
 
-const PaymentModal = ({ open, setOpen }) => {
+const CheckoutModal = ({ open, setOpen }) => {
+  // const modalContentRef = useRef(null);
+  const router = useRouter();
+  const [paymentData, setPaymentData] = useState({});
+  useEffect(() => {
+    const getPaymentData = async () => {
+      try {
+        const res = await axios.get(`/payment/${open?.pid}/details`);
+        setPaymentData(res?.data);
+      } catch (error) {
+        console.error("Error fetching payment data:", error);
+      }
+    };
+    open?.pid !== null &&
+      router?.isReady &&
+      open?.status === "success" &&
+      getPaymentData();
+  }, [open?.pid, router?.isReady, open?.status]);
+
+  // print function
+  // const handlePrintButtonClick = () => {
+  //   const content = modalContentRef.current;
+  //   if (content) {
+  //     const options = {
+  //       margin: 10,
+  //       filename: "payment_details.pdf",
+  //       image: { type: "jpeg", quality: 0.98 },
+  //       html2canvas: { scale: 2 },
+  //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+  //     };
+
+  //     html2pdf()
+  //       .from(content)
+  //       .set(options)
+  //       .outputPdf((pdf) => {
+  //         window.open(
+  //           URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }))
+  //         );
+  //       });
+  //   }
+  // };
+
   return (
     <CustomModal
       visible={open?.state}
-      onClose={() => setOpen({ state: false, url: null })}
+      onClose={() => setOpen({ state: false, pid: null, status: null })}
     >
-      <div className="h-[720px] bg-white">
-        <iframe
-          className="w-full h-full"
-          // src={open?.url}
-          src={open?.url}
-          allowFullScreen
-        ></iframe>
-        <div className="w-full bg-white p-3">
-          <button
-            onClick={() => setOpen({ state: false, url: null })}
-            className="py-2 px-3 bg-red text-white rounded-md"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </CustomModal>
-  );
-};
-
-const CheckoutModal = ({ open, setOpen }) => {
-  return (
-    <CustomModal visible={open ? true : false} onClose={() => setOpen(false)}>
-      <div className="bg-[#00AA01] h-[130px] relative">
+      <div
+        // ref={modalContentRef}
+        className={`${
+          open?.status === "success" ? "bg-[#00AA01]" : "bg-red"
+        }  h-[130px] relative`}
+      >
         <h1 className="text-lg font-extrabold text-white p-5">
           Payment details
         </h1>
-        <div className="bg-white text-[#00AA01] w-14 h-14 rounded-full absolute -bottom-7 left-1/2 -translate-x-1/2 flex items-center justify-center text-5xl">
-          <FaCheckCircle />
+        <div
+          className={`bg-white ${
+            open?.status === "success" ? "text-[#00AA01]" : "text-red"
+          }  w-14 h-14 rounded-full absolute -bottom-7 left-1/2 -translate-x-1/2 flex items-center justify-center text-5xl`}
+        >
+          {open?.status === "success" ? <FaCheckCircle /> : <IoClose />}
         </div>
       </div>
       {/* action */}
       <div className="text-center mt-10 flex flex-col items-center justify-center">
-        <p className="text-2xl font-extrabold">Payment Successful</p>
-        <p className="text-sm text-[#5F646D] font-medium">Order Id #45897</p>
-        <p className="bg-[#98e9ab] text-xs font-bold py-1 px-6 mt-1">Paid</p>
+        <p className="text-2xl font-extrabold">
+          Payment {open?.status === "success" ? "Successful" : "Failed"}
+        </p>
+        <p className="text-sm text-[#5F646D] font-medium">
+          Order Id #{paymentData?.order_details?.id}
+        </p>
+        <p
+          className={`${
+            open?.status === "success" ? "bg-[#98e9ab]" : "bg-[#e99898]"
+          }  text-xs font-bold py-1 px-6 mt-1`}
+        >
+          {open?.status === "success" ? "Paid" : "Unpaid"}
+        </p>
       </div>
       {/* order Details */}
       <div className="flex justify-between pt-5 px-5">
         <div>
           <p className="text-xs font-medium text-[#5F646D]">Order Details</p>
-          <p className="text-base font-medium ">Premium 30 Days Account</p>
-          <p className="text-base font-medium ">7 Days Pack</p>
+          <p className="text-base font-medium ">
+            {paymentData?.order_details?.title}
+          </p>
+          <p className="text-base font-medium ">
+            {paymentData?.order_details?.package}
+          </p>
         </div>
         <div>
           <p className="text-xs font-medium text-[#5F646D]">Amount</p>
-          <p className="text-base font-medium ">5904 BDT</p>
+          <p className="text-base font-medium ">
+            {paymentData?.order_details?.amount} BDT
+          </p>
         </div>
       </div>
       <hr className="border-b border-dashed border-black my-6 mx-5" />
@@ -243,22 +279,33 @@ const CheckoutModal = ({ open, setOpen }) => {
         <div>
           <p className="text-xs font-medium text-[#5F646D]">Billing Address</p>
           <p className="text-base font-medium ">
-            Tushar Ahmed | Score Gain PTE
+            {paymentData?.billing_address?.name}
           </p>
-          <p className="text-base font-medium ">tusha987@gmail.com</p>
-          <p className="text-base font-medium ">Dhaka Bangladesh</p>
+          <p className="text-base font-medium ">
+            {paymentData?.billing_address?.email}
+          </p>
+          <p className="text-base font-medium ">
+            {paymentData?.billing_address?.address}
+          </p>
         </div>
         <div>
           <p className="text-xs font-medium text-[#5F646D]">Payment Method</p>
-          <p className="text-base font-medium ">SSL Commerce</p>
+          <p className="text-base font-medium ">
+            {paymentData?.billing_address?.card_type}
+          </p>
         </div>
       </div>
       {/* button */}
-      <div className="flex justify-end px-5 pb-5">
-        <button className="flex items-center justify-between gap-x-2 py-3 px-10 text-base font-semibold border border-black dark:border-white rounded-md">
-          Print <AiFillPrinter />
-        </button>
-      </div>
+      {open?.status === "success" && (
+        <div className="flex justify-end px-5 pb-5">
+          <button
+            // onClick={handlePrintButtonClick}
+            className="flex items-center justify-between gap-x-2 py-3 px-10 text-base font-semibold border border-black dark:border-white rounded-md"
+          >
+            Print <AiFillPrinter />
+          </button>
+        </div>
+      )}
     </CustomModal>
   );
 };

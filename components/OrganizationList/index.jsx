@@ -3,8 +3,10 @@ import { useHydrated } from "@/hooks/useHydrated";
 import { useMediaQuery } from "react-responsive";
 import Item from "./Item";
 import StudentRow from "./Row";
+import { useState } from "react";
 
 const OrganizationList = ({ items, setStatus, admin }) => {
+  const [isOpen, setIsOpen] = useState(null);
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
@@ -46,9 +48,16 @@ const OrganizationList = ({ items, setStatus, admin }) => {
       </thead>
       <tbody>
         {items.map((product, i) => {
-
-          return <StudentRow admin={admin} setStatus={setStatus} item={product} key={i} />;
-
+          return (
+            <StudentRow
+              admin={admin}
+              setStatus={setStatus}
+              item={product}
+              key={i}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
+          );
         })}
       </tbody>
     </table>

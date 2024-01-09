@@ -43,7 +43,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
   const [editData, setEditData] = useState({});
   const handelImageChange = (e) => {
     const formData = new FormData();
-    formData.append("image", e.target.files[0]);
+    formData.append("picture", e.target.files[0]);
     try {
       const res = axios.post(`/user/picture/upload`, formData);
       console.log("res", res);
@@ -61,7 +61,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           className="group cursor-pointer relative w-21 h-21 inline-block"
         >
           <Image
-            className="w-21 h-w-21 rounded-full"
+            className="w-21 h-w-21 rounded-full overflow-hidden"
             src={data?.picture || "/images/img-2.jpg"}
             width={1000}
             height={1000}
