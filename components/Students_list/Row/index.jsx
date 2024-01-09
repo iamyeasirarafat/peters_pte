@@ -546,3 +546,42 @@ export const PhoneNumberInput = ({ name, control, errors, label }) => {
     </div>
   );
 };
+
+export const PhoneNumberInputJoin = ({ name, control, errors, label }) => {
+  const error = errors[name] || false;
+  return (
+    <div>
+      <div className="mb-3 text-xs font-bold">{label}</div>
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          validate: (value) => isValidPhoneNumber(value || ""),
+        }}
+        render={({ field: { onChange, value } }) => (
+          <div className="relative">
+            <PhoneInput
+              value={value}
+              onChange={onChange}
+              defaultCountry="BD"
+              id={name}
+              className={twMerge(
+                `bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-1 px-5 border ${
+                  error ? "border-red" : "border-[#B9B9B9]"
+                }  rounded-[16px] outline-none`
+              )}
+            />
+            {error && (
+              <Icon
+                className={`absolute top-1/2 cursor-pointer right-5 icon-20 -translate-y-1/2 pointer-events-none fill-pink-1
+                  }`}
+                name={"info-circle"}
+              />
+            )}
+          </div>
+        )}
+      />
+      {errors[name] && <p className="error-message">Invalid Phone</p>}
+    </div>
+  );
+};

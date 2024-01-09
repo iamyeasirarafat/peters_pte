@@ -47,7 +47,8 @@
     "components/Products/Row/index.jsx",
     "components/Products/index.jsx",
     "components/Header/Create/index.jsx",
-    "components/TablePagination/index.jsx"
+    "components/TablePagination/index.jsx",
+    "components/Sidebar/Menu/index.jsx"
   ],
   "exclude": ["node_modules"]
 }

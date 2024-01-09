@@ -1,9 +1,7 @@
 import Icon from "@/components/Icon";
-import { Logout } from "@/utils/Logout";
 import { useScrollPosition } from "@n8tb1t/use-scroll-position";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { MdLogout } from "react-icons/md";
 import Apps from "./Apps";
 import Create from "./Create";
 
@@ -22,8 +20,9 @@ const Header = ({ back, title }: HeaderProps) => {
 
   return (
     <header
-      className={`fixed top-0 right-0 left-[18.75rem] z-20  xl:left-20 md:left-0 md:relative  ${headerStyle ? "bg-background dark:bg-n-2 md:!bg-transparent" : ""
-        }`}
+      className={`fixed top-0 right-0 left-[18.75rem] z-20  xl:left-20 md:left-0 md:relative  ${
+        headerStyle ? "bg-background dark:bg-n-2 md:!bg-transparent" : ""
+      }`}
     >
       <div className="flex items-center max-w-[90rem] m-auto w-full h-18 px-16 2xl:px-8 lg:px-6 md:px-5">
         {back && (
@@ -49,13 +48,13 @@ const Header = ({ back, title }: HeaderProps) => {
           </button> */}
           <Apps />
           <Create />
-          <button
+          {/* <button
             onClick={() => Logout()}
             className="btn btn-medium
             "
           >
             Log Out <MdLogout className="text-xl" />
-          </button>
+          </button> */}
         </div>
       </div>
     </header>

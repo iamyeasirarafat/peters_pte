@@ -2,9 +2,13 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Image from "@/components/Image";
 import Sidebar from "@/components/Sidebar";
+import { getUser } from "@/redux/slice/userSlice";
 import Head from "next/head";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import Menu from "./Menu";
-
 type LayoutProps = {
   background?: boolean;
   back?: boolean;
@@ -13,6 +17,10 @@ type LayoutProps = {
 };
 
 const Layout = ({ background, back, title, children }: LayoutProps) => {
+  const dispatch: ThunkDispatch<any, void, AnyAction> = useDispatch();
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
   return (
     <>
       <Head>

@@ -78,15 +78,19 @@ const Create = ({ }) => {
           ))}
         </Menu.Items>
       </Transition>
-      {router?.asPath?.includes("admin") ? <AddStudentModalAdmin
+      {router?.asPath?.includes("admin") && visible ? <AddStudentModalAdmin
         visible={visible}
         setVisible={setVisible}
       /> : <AddStudentModal
         visible={visible}
         setVisible={setVisible}
       />}
-      <AddOrgModal visible={orgModal}
-        setVisible={setOrgModal} />
+      {
+        orgModal && <AddOrgModal
+          visible={orgModal}
+          setVisible={setOrgModal}
+        />
+      }
     </Menu>
   );
 };
