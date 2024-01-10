@@ -7,6 +7,7 @@ import { useHydrated } from "@/hooks/useHydrated";
 import { useEffect, useState } from "react";
 import { formatDateWithName } from "@/utils/formatDateWithName";
 import axios from "axios";
+import { formatAsBDT } from "@/utils/formatAsBDT";
 function TransactionsHistory() {
   const [transactions, setTransactions] = useState([]);
   useEffect(() => {
@@ -76,14 +77,14 @@ const TransactionsHistoryRow = ({ data }) => {
         </p>
       </td>
       <td className="td-custom text-sm font-bold">
-        {data?.purchase?.title} - {data?.purchase?.validate_title} Bluk Account
+        {data?.purchase?.title} - {data?.purchase?.validate_title}
       </td>
       <td className="td-custom">{data?.card_type}</td>
       <td className="td-custom text-[#5F646D] dark:text-white text-sm font-medium">
         #{data?.tran_id}
       </td>
       <td className="td-custom flex items-center justify-between">
-        <p className="text-sm font-bold">{data?.amount} BDT</p>
+        <p className="text-sm font-bold">{formatAsBDT(data?.amount)}</p>
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>
@@ -97,11 +98,11 @@ const MobileTRTable = ({ data }) => (
     <div className="space-y-1">
       <p className="text-sm font-bold">{data?.purchase?.title}</p>
       <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-        {data?.purchase?.validate_title} Bluk Account
+        {data?.purchase?.validate_title}
       </p>
     </div>
     <div className="text-right space-y-1">
-      <p className="text-sm font-bold">{data?.amount} BDT</p>
+      <p className="text-sm font-bold">{formatAsBDT(data?.amount)}</p>
       <p className="text-[#5F646D] dark:text-white text-sm font-medium">
         #{data?.tran_id}
       </p>

@@ -13,6 +13,8 @@ const Menu = ({ visible }: MenuProps) => {
   const [saNavCount, setSaNavCount] = useState<any>(0);
   const [orgNavCount, setOrgNavCount] = useState<any>(0);
   const router = useRouter();
+
+  console.log("orgNavCount", orgNavCount);
   useEffect(() => {
     const getCount = async () => {
       const res = await axios.get("/sidebar/count");
@@ -30,7 +32,6 @@ const Menu = ({ visible }: MenuProps) => {
     {
       title: "Dashboard",
       icon: "dashboard",
-      // counter: 16,
       url: "/admin",
     },
     {
@@ -54,7 +55,6 @@ const Menu = ({ visible }: MenuProps) => {
     {
       title: "Reports",
       icon: "report2",
-      // counter: 20,
       url: "/admin/reports",
     },
     {
@@ -99,11 +99,6 @@ const Menu = ({ visible }: MenuProps) => {
       counter: saNavCount?.admin_user || 0,
       url: "/admin/admin-user",
     },
-    {
-      title: "Settings",
-      icon: "settings",
-      url: "/admin/settings",
-    },
   ];
   const orgNavigation: {
     title: string;
@@ -114,12 +109,12 @@ const Menu = ({ visible }: MenuProps) => {
     {
       title: "Dashboard",
       icon: "dashboard",
-      // counter: 16,
       url: "/organization",
     },
     {
       title: "Students",
       icon: "students",
+      counter: orgNavCount?.student || 0,
       url: "/organization/students",
     },
     {
@@ -130,28 +125,30 @@ const Menu = ({ visible }: MenuProps) => {
     {
       title: "Reports",
       icon: "report2",
-      // counter: 28,
       url: "/organization/reports",
     },
     {
       title: "Billing & Bluk Account",
       icon: "bill",
-      // counter: 14,
+      counter: orgNavCount?.plan || 0,
       url: "/organization/billing-payment",
     },
     {
       title: "Prediction",
       icon: "prediction",
+      counter: orgNavCount?.prediction || 0,
       url: "/organization/prediction",
     },
     {
       title: "Template",
       icon: "template",
+      counter: orgNavCount?.template || 0,
       url: "/organization/template",
     },
     {
       title: "Study Material",
       icon: "book",
+      counter: orgNavCount?.study_material || 0,
       url: "/organization/study-material",
     },
   ];

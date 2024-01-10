@@ -73,7 +73,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
   });
   const handelImageChange = (e) => {
     const formData = new FormData();
-    formData.append("image", e.target.files[0]);
+    formData.append("picture", e.target.files[0]);
     try {
       const res = axios.post(`/user/picture/upload`, formData);
       setFetch((prev) => !prev);
@@ -90,7 +90,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           className="group cursor-pointer relative w-21 h-21 inline-block"
         >
           <Image
-            className="w-21 h-w-21 rounded-full"
+            className="w-21 h-w-21 rounded-full overflow-hidden"
             src={"/images/img-2.jpg"}
             width={1000}
             height={1000}
@@ -98,7 +98,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           />
           <input
             className="hidden"
-            // onChange={(e) => handelImageChange(e)}
+            onChange={(e) => handelImageChange(e)}
             type="file"
             name=""
             id="profile_image"
@@ -186,6 +186,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
 };
 
 const StudentDetailsRight = ({ data }) => {
+  const router = useRouter();
   const [openChangePassword, setOpenChangePassword] = useState({
     state: false,
     student: null,
@@ -194,30 +195,33 @@ const StudentDetailsRight = ({ data }) => {
     state: false,
     student: null,
   });
-  const [openExamCountDown, setOpenExamCountDown] = useState(false);
-  const [openTargetScore, setOpenTargetScore] = useState(false);
+  const [openExamCountDown, setOpenExamCountDown] = useState({
+    state: false,
+    uid: null,
+  });
+  const [openTargetScore, setOpenTargetScore] = useState({
+    state: false,
+    uid: null,
+  });
+  const [examDate, setExamDate] = useState("");
+  const [score, setScore] = useState(0);
+  const [reFetch, setRefetch] = useState(false);
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
-
-  const [examDate, setExamDate] = useState("");
-  const [score, setScore] = useState(0);
-  const [reFetch, setRefetch] = useState(false);
   useEffect(() => {
     const getExamDate = async () => {
-      const res = await axios.get(`/exam_countdown`);
+      const res = await axios.get(`/exam_countdown?uid=${data?.id}`);
       setExamDate(res?.data);
     };
     const getScore = async () => {
-      const res = await axios.get("/target_score");
+      const res = await axios.get(`/target_score?uid=${data?.id}`);
       setScore(res?.data);
     };
-    getExamDate();
-    getScore();
-  }, [reFetch]);
-
-  console.log("score", score);
+    router.isReady && data?.id && getExamDate();
+    router.isReady && data?.id && getScore();
+  }, [reFetch, data?.id, router.isReady]);
 
   return (
     <div>
@@ -239,7 +243,8 @@ const StudentDetailsRight = ({ data }) => {
       <div className="flex items-center justify-between mt-2.5">
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
           <button
-            onClick={() => setOpenExamCountDown(true)}
+            disabled={router?.asPath?.startsWith("/admin")}
+            onClick={() => setOpenExamCountDown({ state: true, uid: data?.id })}
             className="bg-gold text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]"
           >
             Exam Count Down
@@ -255,7 +260,8 @@ const StudentDetailsRight = ({ data }) => {
         </div>
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
           <button
-            onClick={() => setOpenTargetScore(true)}
+            disabled={router?.asPath?.startsWith("/admin")}
+            onClick={() => setOpenTargetScore({ state: true, uid: data?.id })}
             className="bg-cream text-white text-base leading-none py-2.5 px-3.5 rounded-[50px]"
           >
             Target Score
@@ -460,9 +466,6 @@ export const UpdateInformation = ({
       reset();
       setFetch((prev) => !prev);
       setLoading(false);
-      toast.success(
-        res?.data?.response?.message || "Student Data update success"
-      );
     } catch (error) {
       setLoading(false);
       toast.error(error?.data?.response?.message || "Something went wrong");
@@ -777,10 +780,14 @@ const ExamCountDown = ({
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
+    const examDate = {
+      exam_date: data?.exam_date,
+      student: openExamCountDown?.uid,
+    };
     try {
       setLoading(true);
-      const res = await axios.post("/exam_countdown", data);
-      setOpenExamCountDown(false);
+      const res = await axios.post("/exam_countdown", examDate);
+      setOpenExamCountDown({ state: false, uid: null });
       toast.success("Countdown added success");
       setRefetch((prev) => !prev);
       setLoading(false);
@@ -793,9 +800,9 @@ const ExamCountDown = ({
   return (
     <Modal
       title="Exam Countdown"
-      visible={openExamCountDown}
+      visible={openExamCountDown?.state}
       onClose={() => {
-        setOpenExamCountDown(false);
+        setOpenExamCountDown({ state: false, uid: null });
         reset();
       }}
     >
@@ -833,11 +840,12 @@ const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
   const onSubmit = () => {
     const scoreData = {
       score: score?.name,
+      student: openTargetScore?.uid,
     };
     try {
       setLoading(true);
       const res = axios.post("/target_score", scoreData);
-      setOpenTargetScore(false);
+      setOpenTargetScore({ state: false, uid: null });
       toast.success("Score added success");
       setRefetch((prev) => !prev);
       setLoading(false);
@@ -850,9 +858,9 @@ const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
   return (
     <Modal
       title="Target Score"
-      visible={openTargetScore}
+      visible={openTargetScore?.state}
       onClose={() => {
-        setOpenTargetScore(false);
+        setOpenTargetScore({ state: false, uid: null });
         reset();
       }}
     >

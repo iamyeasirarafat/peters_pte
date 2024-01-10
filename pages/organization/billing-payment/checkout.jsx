@@ -176,7 +176,6 @@ function Checkout() {
 export default Checkout;
 
 const CheckoutModal = ({ open, setOpen }) => {
-  // const modalContentRef = useRef(null);
   const router = useRouter();
   const [paymentData, setPaymentData] = useState({});
   useEffect(() => {
@@ -193,29 +192,6 @@ const CheckoutModal = ({ open, setOpen }) => {
       open?.status === "success" &&
       getPaymentData();
   }, [open?.pid, router?.isReady, open?.status]);
-
-  // print function
-  // const handlePrintButtonClick = () => {
-  //   const content = modalContentRef.current;
-  //   if (content) {
-  //     const options = {
-  //       margin: 10,
-  //       filename: "payment_details.pdf",
-  //       image: { type: "jpeg", quality: 0.98 },
-  //       html2canvas: { scale: 2 },
-  //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-  //     };
-
-  //     html2pdf()
-  //       .from(content)
-  //       .set(options)
-  //       .outputPdf((pdf) => {
-  //         window.open(
-  //           URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }))
-  //         );
-  //       });
-  //   }
-  // };
 
   return (
     <CustomModal
@@ -298,10 +274,7 @@ const CheckoutModal = ({ open, setOpen }) => {
       {/* button */}
       {open?.status === "success" && (
         <div className="flex justify-end px-5 pb-5">
-          <button
-            // onClick={handlePrintButtonClick}
-            className="flex items-center justify-between gap-x-2 py-3 px-10 text-base font-semibold border border-black dark:border-white rounded-md"
-          >
+          <button className="flex items-center justify-between gap-x-2 py-3 px-10 text-base font-semibold border border-black dark:border-white rounded-md">
             Print <AiFillPrinter />
           </button>
         </div>
