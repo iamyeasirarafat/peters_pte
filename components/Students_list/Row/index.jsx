@@ -15,15 +15,40 @@ import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { twMerge } from "tailwind-merge";
 
-const StudentRow = ({ admin, item, setStatus, setIsOpen, isOpen }) => {
+const StudentRow = ({
+  admin,
+  item,
+  setStatus,
+  setIsOpen,
+  isOpen,
+  setDeleteUserList,
+  deleteUserList,
+}) => {
   const [value, setValue] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
+  useEffect(() => {
+    if (deleteUserList && deleteUserList.includes(item.id)) {
+      setValue(true);
+    } else {
+      setValue(false);
+    }
+  }, [item, deleteUserList]);
 
   return (
     <tr className="">
       <td className="td-custom flex items-center gap-3">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+        <Checkbox
+          value={value}
+          onChange={() => {
+            setValue(!value);
+            if (!value) {
+              setDeleteUserList((prev) => [...prev, item.id]);
+            } else {
+              setDeleteUserList((prev) => prev.filter((i) => i !== item.id));
+            }
+          }}
+        />
         <Link
           className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
           href={`/${admin ? "admin" : "organization"}/student-details?id=${
@@ -379,8 +404,6 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
     handleSubmit,
     setValue,
     control,
-    setError,
-    watch,
     formState: { errors },
   } = useForm({});
   useEffect(() => {
@@ -394,7 +417,7 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
       setGroup(editData?.profile[0]?.group || {});
       setGender({ name: editData?.profile[0]?.gender } || {});
     }
-  }, [editData]);
+  }, [editData, setValue]);
   const onSubmit = async (data) => {
     const submitData = {
       full_name: data.full_name,
