@@ -11,7 +11,7 @@ const Index = () => {
   const [studentSCounts, setStudentsCounts] = useState({});
   const [status, setStatus] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
-  const pageLimit = 7;
+  const pageLimit = 5;
 
   useEffect(() => {
     // get students
