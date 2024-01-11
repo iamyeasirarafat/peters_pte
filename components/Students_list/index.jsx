@@ -22,12 +22,16 @@ const Students = ({ items, setStatus, admin }) => {
   // handel multi delete
   const handelMultiDelete = async () => {
     setLoadingDelate(true);
-    const res = await multiDeleteList("User", deleteUserList);
-    toast.success(res?.message);
-    setStatus((prev) => !prev);
-    setOpenMultiActions(false);
-    setDeleteUserList([]);
-    setLoadingDelate(false);
+    try {
+      const res = await multiDeleteList("User", deleteUserList);
+      toast.success(res?.message);
+      setStatus((prev) => !prev);
+      setOpenMultiActions(false);
+      setDeleteUserList([]);
+    } catch (error) {
+      toast.error("Something went wrong!");
+      setLoadingDelate(false);
+    }
   };
 
   return mounted && isTablet ? (
@@ -64,20 +68,22 @@ const Students = ({ items, setStatus, admin }) => {
             <Sorting title="Group" />
           </th>
           <th className="th-custom text-center">
-            <div className="relative">
-              <button
-                onClick={() => setOpenMultiActions(!openMultiActions)}
-                className="btn-transparent-dark btn-small btn-square"
-              >
-                <Icon name="dots" />
-              </button>
-              {openMultiActions && (
-                <MultiActions
-                  handelMultiDelete={handelMultiDelete}
-                  loadingDelate={loadingDelate}
-                />
-              )}
-            </div>
+            {deleteUserList?.length > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setOpenMultiActions(!openMultiActions)}
+                  className="btn-transparent-dark btn-small btn-square"
+                >
+                  <Icon name="dots" />
+                </button>
+                {openMultiActions && (
+                  <MultiActions
+                    handelMultiDelete={handelMultiDelete}
+                    loadingDelate={loadingDelate}
+                  />
+                )}
+              </div>
+            )}
           </th>
         </tr>
       </thead>
