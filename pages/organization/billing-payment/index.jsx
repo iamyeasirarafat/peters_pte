@@ -25,18 +25,19 @@ function BillingPayment() {
     <Layout title="Billing & Payment">
       <div className="grid grid-cols-12 gap-5">
         {/* left side content */}
-        <div className="col-span-8 md:col-span-12 p-5 bg-white dark:bg-black">
-          <p className="text-lg font-extrabold">Purchase Bluk Account</p>
-          <p className="text-xs font-bold my-5">Click to Purchase</p>
-          {/* Offer*/}
-          <div className="w-full">
-            <Pricing data={packages} />
+        <div className="col-span-8 md:col-span-12 p-5 bg-white dark:bg-black flex flex-col justify-between">
+          <div>
+            <p className="text-lg font-extrabold">Purchase Bluk Account</p>
+            <p className="text-xs font-bold my-5">Click to Purchase</p>
+            {/* Offer*/}
+            <div className="w-full">
+              <Pricing data={packages} />
+            </div>
           </div>
           {/* payment method */}
           <div className="mt-30 space-y-5">
             <p className="text-lg font-extrabold">Payment Method</p>
             {/* method */}
-            <PaymentMethod />
             <PaymentMethod />
           </div>
         </div>

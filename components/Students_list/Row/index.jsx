@@ -378,6 +378,7 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
     register,
     handleSubmit,
     setValue,
+    control,
     setError,
     watch,
     formState: { errors },
@@ -444,18 +445,15 @@ const EditStudentModal = ({ visible, setVisible, editData }) => {
           register={register}
           name="email"
         />
-        <Field
-          errors={errors}
-          className="mb-6"
+        <PhoneNumberInput
           label="Phone Number"
-          placeholder="Enter phone number"
-          type="tel"
-          register={register}
           name="phone"
+          control={control}
+          errors={errors}
         />
         <Field
           errors={errors}
-          className="mb-6"
+          className="my-6"
           label="Address"
           placeholder="Enter Address"
           register={register}

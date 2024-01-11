@@ -7,6 +7,7 @@ import Menu from "./Menu";
 import { useSelector } from "react-redux";
 import { MdLogout } from "react-icons/md";
 import { Logout } from "@/utils/Logout";
+import { useRouter } from "next/router";
 
 type SidebarProps = {};
 
@@ -70,11 +71,16 @@ const Sidebar = ({}: SidebarProps) => {
 export default Sidebar;
 
 const UserDialog = ({ setShowUserDialog }: any) => {
+  const router = useRouter();
   return (
     <div className=" bg-white dark:bg-black rounded-md py-2 px-7 absolute bottom-10 left-0 w-full">
       <Link
         onClick={() => setShowUserDialog(false)}
-        href="/admin/profile"
+        href={
+          router?.asPath?.startsWith("/admin")
+            ? "/admin/profile"
+            : "/organization/profile"
+        }
         className="flex items-center gap-x-3 py-2 hover:text-primary duration-200"
       >
         <Icon name="settings" />
