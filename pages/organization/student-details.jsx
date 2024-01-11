@@ -89,13 +89,15 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           htmlFor="profile_image"
           className="group cursor-pointer relative w-21 h-21 inline-block"
         >
-          <Image
-            className="w-21 h-w-21 rounded-full overflow-hidden"
-            src={"/images/img-2.jpg"}
-            width={1000}
-            height={1000}
-            alt=""
-          />
+          <div className="w-21 h-21 rounded-full overflow-hidden">
+            <Image
+              className="w-full h-full object-cover"
+              src={"/images/img-2.jpg"}
+              width={1000}
+              height={1000}
+              alt=""
+            />
+          </div>
           <input
             className="hidden"
             // onChange={(e) => handelImageChange(e)}

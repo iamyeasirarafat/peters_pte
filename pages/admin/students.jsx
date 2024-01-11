@@ -142,8 +142,6 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   const {
     register,
     handleSubmit,
-    setError,
-    watch,
     formState: { errors },
   } = useForm({});
 

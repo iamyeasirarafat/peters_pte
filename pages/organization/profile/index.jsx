@@ -68,13 +68,15 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           htmlFor="profile_image"
           className="group cursor-pointer relative w-21 h-21 inline-block"
         >
-          <Image
-            className="w-21 h-w-21 rounded-full overflow-hidden"
-            src={data?.picture || "/images/img-2.jpg"}
-            width={1000}
-            height={1000}
-            alt=""
-          />
+          <div className="w-21 h-21 rounded-full overflow-hidden">
+            <Image
+              className="w-full h-full rounded-full object-cover"
+              src={data?.picture || "/images/img-2.jpg"}
+              width={1000}
+              height={1000}
+              alt=""
+            />
+          </div>
           <input
             className="hidden"
             onChange={(e) => handelImageChange(e)}
@@ -110,18 +112,6 @@ const StudentProfileInfo = ({ data, setFetch }) => {
         >
           <BsFillPlusCircleFill /> Update Info
         </button>
-        {/* <Link
-          href={`mailto:${data?.email}`}
-          className="p-2.5 border border-black dark:border-white rounded-sm cursor-pointer hover:text-primary duration-200"
-        >
-          <IoMdMail />
-        </Link>
-        <Link
-          href={`callto:${data?.phone}`}
-          className="p-2.5 border border-black dark:border-white rounded-sm cursor-pointer hover:text-primary duration-200"
-        >
-          <IoIosCall />
-        </Link> */}
       </div>
       <EditProfile {...{ visible, setVisible, editData, setFetch }} />
     </div>
