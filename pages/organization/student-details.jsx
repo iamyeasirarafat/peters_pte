@@ -98,7 +98,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
           />
           <input
             className="hidden"
-            onChange={(e) => handelImageChange(e)}
+            // onChange={(e) => handelImageChange(e)}
             type="file"
             name=""
             id="profile_image"

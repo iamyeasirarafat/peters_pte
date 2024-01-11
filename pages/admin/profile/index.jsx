@@ -1,3 +1,4 @@
+
 import Layout from "@/components/Layout";
 import { useEffect, useState } from "react";
 import { getUser } from "@/redux/slice/userSlice";
@@ -17,5 +18,4 @@ function Index() {
     </Layout>
   );
 }
-
 export default Index;
