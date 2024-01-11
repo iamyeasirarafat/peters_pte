@@ -8,6 +8,7 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { UpdateInformation } from "pages/organization/student-details";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -27,6 +28,10 @@ const StudentRow = ({
   const [value, setValue] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
+  const [openUpdateInformation, setOpenUpdateInformation] = useState({
+    state: false,
+    data: null,
+  });
   useEffect(() => {
     if (deleteUserList && deleteUserList.includes(item.id)) {
       setValue(true);
@@ -118,6 +123,7 @@ const StudentRow = ({
                 setEditData={setEditData}
                 setVisible={setVisible}
                 setStatus={setStatus}
+                setOpenUpdateInformation={setOpenUpdateInformation}
               />
             )}
           </div>
@@ -126,7 +132,12 @@ const StudentRow = ({
           <EditStudentModalAdmin {...{ visible, setVisible, editData }} />
         )}
         {visible && !admin && (
-          <EditStudentModal {...{ visible, setVisible, editData }} />
+          // <EditStudentModal {...{ visible, setVisible, editData }} />
+          <UpdateInformation
+            openUpdateInformation={openUpdateInformation}
+            setOpenUpdateInformation={setOpenUpdateInformation}
+            setFetch={setStatus}
+          />
         )}
       </td>
     </tr>
@@ -134,7 +145,13 @@ const StudentRow = ({
 };
 export default StudentRow;
 
-const StudentMoreButton = ({ data, setEditData, setVisible, setStatus }) => {
+const StudentMoreButton = ({
+  data,
+  setEditData,
+  setVisible,
+  setStatus,
+  setOpenUpdateInformation,
+}) => {
   return (
     <div
       className={`origin-top-right font-semibold absolute right-8 top-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary dark:bg-black dark:border border-white`}
@@ -144,6 +161,7 @@ const StudentMoreButton = ({ data, setEditData, setVisible, setStatus }) => {
           onClick={() => {
             setEditData(data);
             setVisible(true);
+            setOpenUpdateInformation({ state: true, data: data });
           }}
           className="block px-4 py-2 hover:text-purple-1 duration-200 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
         >
@@ -336,158 +354,6 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
           items={orgs}
           value={org}
           onChange={setOrg}
-        />
-
-        <Select
-          label="Group *"
-          className="mb-6 w-full"
-          items={groups}
-          value={group}
-          onChange={setGroup}
-        />
-        <Field
-          errors={errors}
-          className="mb-6"
-          label="Country"
-          placeholder="Enter Country"
-          register={register}
-          name="country"
-        />
-        <Field
-          errors={errors}
-          className="mb-6"
-          label="Education"
-          placeholder="Enter Education"
-          register={register}
-          name="education"
-        />
-        <Field
-          errors={errors}
-          className="mb-6"
-          label="Date of birth"
-          type="date"
-          placeholder="Enter Birth Date"
-          register={register}
-          name="birth_date"
-        />
-
-        <button className="btn-purple  w-full">Update Information</button>
-      </form>
-    </Modal>
-  );
-};
-
-const EditStudentModal = ({ visible, setVisible, editData }) => {
-  const genders = [
-    {
-      name: "male",
-    },
-    {
-      name: "female",
-    },
-  ];
-  const [gender, setGender] = useState(genders[0]);
-  const [groups, setGroups] = useState([]);
-  const [group, setGroup] = useState({});
-  //get groups
-  useEffect(() => {
-    const fetchGroup = async () => {
-      const res = await axios("/groups");
-      setGroups(res.data);
-      setGroup(res.data[0]);
-    };
-    fetchGroup();
-  }, []);
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    control,
-    formState: { errors },
-  } = useForm({});
-  useEffect(() => {
-    if (editData) {
-      setValue("full_name", editData?.full_name);
-      setValue("email", editData?.email);
-      setValue("phone", editData?.phone);
-      setValue("address", editData?.profile[0]?.address || "");
-      setValue("education", editData?.profile[0]?.education || "");
-      setValue("birth_date", editData?.profile[0]?.birth_date || "");
-      setGroup(editData?.profile[0]?.group || {});
-      setGender({ name: editData?.profile[0]?.gender } || {});
-    }
-  }, [editData, setValue]);
-  const onSubmit = async (data) => {
-    const submitData = {
-      full_name: data.full_name,
-      email: data.email,
-      phone: data.phone,
-      group: group.id,
-      profile: {
-        gender: gender.name,
-        birth_date: data.birth_date,
-        education: data.education,
-        address: data.address,
-        country: data.country,
-      },
-    };
-    try {
-      await axios.put(`/student/${editData?.id}/update`, submitData);
-      toast.success("Successfully Updated");
-      setVisible(false);
-    } catch (err) {
-      const key = Object.keys(err?.response?.data)[0];
-      const value = err?.response?.data[key];
-      toast.error(`${key} - ${value}`);
-    }
-  };
-
-  return (
-    <Modal
-      title="Update Information"
-      visible={visible}
-      onClose={() => setVisible(false)}
-    >
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-4"
-          label="Student Name *"
-          placeholder="Enter full name"
-          register={register}
-          name="full_name"
-        />
-
-        <Field
-          errors={errors}
-          className="mb-6"
-          label="Email"
-          placeholder="Enter email"
-          type="email"
-          register={register}
-          name="email"
-        />
-        <PhoneNumberInput
-          label="Phone Number"
-          name="phone"
-          control={control}
-          errors={errors}
-        />
-        <Field
-          errors={errors}
-          className="my-6"
-          label="Address"
-          placeholder="Enter Address"
-          register={register}
-          name="address"
-        />
-        <Select
-          label="Gender"
-          className="mb-6"
-          items={genders}
-          value={gender}
-          onChange={setGender}
         />
 
         <Select
