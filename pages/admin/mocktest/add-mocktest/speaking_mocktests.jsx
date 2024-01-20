@@ -65,7 +65,7 @@ const SpeakingTestForm = () => {
     } catch (error) {
       setIsLoading(false);
       error?.response?.data?.title[0] &&
-        toast.error(error?.response?.data?.title[0]);
+        toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
   return (

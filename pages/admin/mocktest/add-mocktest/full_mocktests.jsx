@@ -141,9 +141,9 @@ const FullTestForm = () => {
       setIsLoading(false);
       router.back();
     } catch (error) {
-      error?.response?.data?.title[0] &&
-        toast.error(error?.response?.data?.title[0]);
       setIsLoading(false);
+      error?.response?.data?.title[0] &&
+        toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
 
