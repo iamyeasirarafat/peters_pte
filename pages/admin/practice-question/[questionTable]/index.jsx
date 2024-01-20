@@ -15,39 +15,39 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     let url;
-    if (questionTable === "Read Aloud") {
+    if (questionTable === "read-aloud") {
       url = "practice/read_alouds";
-    } else if (questionTable === "Summarize Written Text") {
+    } else if (questionTable === "summarize-written-text") {
       url = "summarizes";
-    } else if (questionTable === "Write Essay") {
+    } else if (questionTable === "write-essay") {
       url = "write_easies";
-    } else if (questionTable === "Highlight Correct Summary") {
+    } else if (questionTable === "highlight-correct-summary") {
       url = "highlight_summarys";
-    } else if (questionTable === "Select Missing Word") {
+    } else if (questionTable === "select-missing-word") {
       url = "missing_words";
-    } else if (questionTable === "Write From Dictation") {
+    } else if (questionTable === "write-from-dictation") {
       url = "dictations";
-    } else if (questionTable === "Repeat Sentence") {
+    } else if (questionTable === "repeat-sentence") {
       url = "repeat_sentences";
-    } else if (questionTable === "Answer Short Question") {
+    } else if (questionTable === "answer-short-question") {
       url = "short_questions";
-    } else if (questionTable === "Re-Tell Lecture") {
+    } else if (questionTable === "re-tell-lecture") {
       url = "retell_sentences";
-    } else if (questionTable === "Describe Image") {
+    } else if (questionTable === "describe-image") {
       url = "describe_images";
-    } else if (questionTable === "Re-order Paragraphs") {
+    } else if (questionTable === "re-order-paragraphs") {
       url = "reorder_paragraphs";
-    } else if (questionTable === "Reading: MCM") {
+    } else if (questionTable === "reading:-MCM") {
       url = "multi_choices/reading";
-    } else if (questionTable === "Reading: MCS") {
+    } else if (questionTable === "reading:-MCS") {
       url = "multi_choices/reading/single-answer";
-    } else if (questionTable === "Listening: MCM") {
+    } else if (questionTable === "listening:-MCM") {
       url = "multi_choices";
-    } else if (questionTable === "Listening: MCS") {
+    } else if (questionTable === "listening:-MCS") {
       url = "multi_choices/single-answer";
-    } else if (questionTable === "Summarize Spoken Text") {
+    } else if (questionTable === "summarize-spoken-text") {
       url = "spoken/summarizes";
-    } else if (questionTable === "Reading & Writing: FIB") {
+    } else if (questionTable === "reading-&-writing:-FIB") {
       url = "reading_blanks";
     } else if (questionTable === "spelling-bee") {
       url = "games/spelling_bees";

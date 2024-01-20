@@ -35,7 +35,7 @@ const Header = ({ back, title }: HeaderProps) => {
         )}
         {title && (
           <div className="mr-4 text-h3 truncate md:mr-2 md:text-h4 capitalize">
-            {title}
+            {title.replaceAll("-", " ")}
           </div>
         )}
         <div className="flex items-center shrink-0 ml-auto">
