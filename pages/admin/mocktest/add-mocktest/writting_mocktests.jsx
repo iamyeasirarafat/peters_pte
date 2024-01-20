@@ -44,7 +44,7 @@ const WritingTestForm = () => {
       write_essay: writeEasy?.map((item) => item.id),
     };
     try {
-      const res = await axios.post("/witting_mocktest", MockTestData);
+      const res = await axios.post("/writting_mocktest", MockTestData);
       toast.success("mocktest added successfully");
       reset();
       setIsLoading(false);
@@ -52,7 +52,7 @@ const WritingTestForm = () => {
     } catch (error) {
       setIsLoading(false);
       error?.response?.data?.title[0] &&
-        toast.error(error?.response?.data?.title[0]);
+        toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
   return (
