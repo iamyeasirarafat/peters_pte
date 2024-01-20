@@ -10,14 +10,38 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const StudentRow = ({ item, setStatus, setIsOpen, isOpen }) => {
+const StudentRow = ({
+  item,
+  setStatus,
+  setIsOpen,
+  isOpen,
+  setDeleteUserList,
+  deleteUserList,
+}) => {
   const [value, setValue] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
+  useEffect(() => {
+    if (deleteUserList && deleteUserList.includes(item.id)) {
+      setValue(true);
+    } else {
+      setValue(false);
+    }
+  }, [item, deleteUserList]);
   return (
     <tr className="">
       <td className="td-custom flex items-center gap-2">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+        <Checkbox
+          value={value}
+          onChange={() => {
+            setValue(!value);
+            if (!value) {
+              setDeleteUserList((prev) => [...prev, item.id]);
+            } else {
+              setDeleteUserList((prev) => prev.filter((i) => i !== item.id));
+            }
+          }}
+        />
         <Link
           className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
           href={`/admin/organization/${item.id}`}

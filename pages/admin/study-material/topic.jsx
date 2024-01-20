@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 
 // ============================================
 import TablePagination from "@/components/TablePagination";
@@ -11,13 +11,15 @@ import { useMediaQuery } from "react-responsive";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useState } from "react";
 import { useEffect } from "react";
-import { formatDateTime } from "../../../utils/formatDateTime";
+import { formatDateTime } from "@/utils/formatDateTime";
 import Loading from "@/components/Loading";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import { GoTrash } from "react-icons/go";
+import { MultiActions } from "../../../components/Students_list";
 
 function Topic() {
   const [isLoading, setIsLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const [reFetch, setRefetch] = useState(false);
   const [topic, setTopic] = useState([]);
   const { mounted } = useHydrated();
@@ -41,12 +43,15 @@ function Topic() {
 
   const onSubmit = async (data) => {
     try {
+      setUploading(true);
       const res = await axios.post("/topic", data);
       toast.success("Topic added successfully");
       reset();
       setRefetch(!reFetch);
+      setUploading(false);
     } catch (error) {
-      toast.error(error?.response?.data?.title[0]);
+      setUploading(false);
+      toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
   return (
@@ -62,6 +67,7 @@ function Topic() {
         <button
           className="bg-primary py-4 w-full text-center text-base font-bold"
           type="submit"
+          disabled={uploading}
         >
           Create Topic
         </button>
@@ -87,6 +93,8 @@ function Topic() {
 export default Topic;
 
 const TopicList = ({ data, setRefetch }) => {
+  const [deleteUserList, setDeleteUserList] = useState([]);
+  const [openMultiActions, setOpenMultiActions] = useState(false);
   const [value, setValue] = useState(false);
   const [openItemId, setOpenItemId] = useState(null);
   return (
@@ -103,8 +111,29 @@ const TopicList = ({ data, setRefetch }) => {
           <th className="th-custom text-center">
             <Sorting title="File Number" />
           </th>
-          <th className="th-custom text-end">
+          <th className="th-custom text-center">
             <Sorting title="Create Date" />
+          </th>
+          <th className="th-custom text-center">
+            {deleteUserList?.length > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setOpenMultiActions(!openMultiActions)}
+                  className="btn-transparent-dark btn-small btn-square"
+                >
+                  <Icon name="dots" />
+                </button>
+                {openMultiActions && (
+                  <MultiActions
+                    type="Topic"
+                    deleteUserList={deleteUserList}
+                    setDeleteUserList={setDeleteUserList}
+                    setOpenMultiActions={setOpenMultiActions}
+                    setStatus={setRefetch}
+                  />
+                )}
+              </div>
+            )}
           </th>
         </tr>
       </thead>
@@ -116,6 +145,8 @@ const TopicList = ({ data, setRefetch }) => {
             openItemId={openItemId}
             setOpenItemId={setOpenItemId}
             setRefetch={setRefetch}
+            deleteUserList={deleteUserList}
+            setDeleteUserList={setDeleteUserList}
           />
         ))}
       </tbody>
@@ -123,12 +154,36 @@ const TopicList = ({ data, setRefetch }) => {
   );
 };
 
-const TopicRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
+const TopicRow = ({
+  data,
+  openItemId,
+  setOpenItemId,
+  setRefetch,
+  deleteUserList,
+  setDeleteUserList,
+}) => {
   const [value, setValue] = useState(false);
+  useEffect(() => {
+    if (deleteUserList && deleteUserList.includes(data.id)) {
+      setValue(true);
+    } else {
+      setValue(false);
+    }
+  }, [data, deleteUserList]);
   return (
     <tr>
       <td className="td-custom flex items-center gap-x-4">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+        <Checkbox
+          value={value}
+          onChange={() => {
+            setValue(!value);
+            if (!value) {
+              setDeleteUserList((prev) => [...prev, data.id]);
+            } else {
+              setDeleteUserList((prev) => prev.filter((i) => i !== data.id));
+            }
+          }}
+        />
         <p className="text-sm font-bold">{data?.title}</p>
       </td>
       <td className="td-custom text-center">
@@ -137,8 +192,10 @@ const TopicRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
       <td className="td-custom text-center">
         <p className="text-sm">{data?.file}</p>
       </td>
-      <td className="td-custom flex items-center justify-end gap-x-3">
+      <td className="th-custom text-center">
         <p className="text-sm"> {formatDateTime(data?.created_at, "date")}</p>
+      </td>
+      <td className="td-custom text-center">
         <div className="relative">
           <button
             onClick={() =>
@@ -196,18 +253,27 @@ const TopicMobile = ({ data, setRefetch }) => {
 };
 
 const TopicMore = ({ id, setRefetch }) => {
+  const [loading, setLoading] = useState(false);
   const handelDelete = async () => {
-    const res = await axios.delete(`/topic/${id}`);
-    toast.success("Topic Deleted");
-    setRefetch && setRefetch((prev) => !prev);
+    try {
+      setLoading(true);
+      const res = await axios.delete(`/topic/${id}`);
+      toast.success("Deleted Successfully");
+      setRefetch && setRefetch((prev) => !prev);
+      setLoading(false);
+    } catch (error) {
+      toast.error(error?.response?.data?.title[0]);
+      setLoading(false);
+    }
   };
   return (
-    <div className="bg-white rounded shadow absolute top-1/2 p-2 right-full">
+    <div className="bg-secondary rounded shadow absolute top-1/2 p-2 right-[60%]">
       <button
-        className="flex items-center gap-x-2 border border-red rounded-md py-1 px-2"
+        className="flex items-center gap-x-2 hover:text-red duration-200 rounded-md py-1 px-2"
         onClick={handelDelete}
+        disabled={loading}
       >
-        <GoTrash /> Delete
+        {loading ? <LoaderIcon /> : <GoTrash />} Delete
       </button>
     </div>
   );

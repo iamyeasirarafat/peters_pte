@@ -164,7 +164,7 @@ const Menu = ({ visible }: MenuProps) => {
       </div>
       <SingleMenu
         router={router}
-        visible
+        visible={visible}
         menu={
           router?.asPath?.includes("admin") ? adminNavigation : orgNavigation
         }
@@ -176,7 +176,7 @@ const Menu = ({ visible }: MenuProps) => {
 export default Menu;
 type MenuType = {
   router: any;
-  visible: boolean;
+  visible?: boolean;
   menu: any;
 };
 const SingleMenu = ({ router, visible, menu }: MenuType) => {
@@ -199,7 +199,7 @@ const SingleMenu = ({ router, visible, menu }: MenuType) => {
             name={link.icon}
           />
           {link.title}
-          {link.counter && (
+          {link.counter > 0 && (
             <div
               className={`min-w-[1.625rem] ml-auto px-1 py-0.25 text-center text-xs font-bold text-n-1 ${
                 visible ? "block" : "xl:hidden"

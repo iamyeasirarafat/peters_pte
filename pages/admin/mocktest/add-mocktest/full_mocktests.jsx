@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Spinner from "../../../../components/Spinner/Spinner";
+import { useRouter } from "next/router";
 
 function FullMocktest() {
   return (
@@ -24,6 +25,7 @@ export const getQuestion = async (api, setData) => {
 };
 export default FullMocktest;
 const FullTestForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   // speaking
   const [selectedRa, setSelectedRa] = useState([]);
@@ -137,9 +139,11 @@ const FullTestForm = () => {
       toast.success("mocktest added successfully");
       reset();
       setIsLoading(false);
+      router.back();
     } catch (error) {
       error?.response?.data?.title[0] &&
         toast.error(error?.response?.data?.title[0]);
+      setIsLoading(false);
     }
   };
 

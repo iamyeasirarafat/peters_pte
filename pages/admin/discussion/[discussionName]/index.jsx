@@ -17,8 +17,8 @@ const discussionTab = [
 ];
 function DiscussionList() {
   const router = useRouter();
-  const [data, setData] = useState([])
-  console.log(data)
+  const [data, setData] = useState([]);
+  console.log(data);
   const { discussionName } = router?.query;
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
@@ -27,16 +27,20 @@ function DiscussionList() {
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await axios(`/${discussionName}/questions`)
-      setData(data)
-    }
-    router.isReady && fetch()
-  }, [router.isReady])
+      const { data } = await axios(`/${discussionName}/questions`);
+      setData(data);
+    };
+    router.isReady && fetch();
+  }, [router.isReady, discussionName]);
   return (
     <Layout title={discussionName?.replace(/_/g, " ")} back>
       {/* Tab */}
       <DiscussionTab data={discussionTab} />
-      {mounted && isTablet ? <DiscussionTableMobile /> : <DiscussionTable list={data} />}
+      {mounted && isTablet ? (
+        <DiscussionTableMobile />
+      ) : (
+        <DiscussionTable list={data} />
+      )}
     </Layout>
   );
 }
@@ -54,10 +58,11 @@ const DiscussionTab = ({ data }) => {
           className="flex items-center rounded-sm overflow-hidden"
         >
           <p
-            className={`py-2 px-8  text-xs font-bold capitalize hover:bg-black hover:text-white duration-200 ${tab?.name === activeTab
-              ? "bg-black text-white"
-              : "bg-white text-black"
-              }`}
+            className={`py-2 px-8  text-xs font-bold capitalize hover:bg-black hover:text-white duration-200 ${
+              tab?.name === activeTab
+                ? "bg-black text-white"
+                : "bg-white text-black"
+            }`}
           >
             {tab?.name?.replace("_", " ")}
           </p>
@@ -100,9 +105,9 @@ const DiscussionTable = ({ list }) => {
           </tr>
         </thead>
         <tbody>
-          {
-            list?.map(item => <DiscussionRow key={item?.id} data={item} />)
-          }
+          {list?.map((item) => (
+            <DiscussionRow key={item?.id} data={item} />
+          ))}
         </tbody>
       </table>
     </div>
@@ -117,7 +122,12 @@ const DiscussionRow = ({ data }) => {
     <tr>
       <td className="td-custom flex items-center gap-x-4">
         <Checkbox value={value} onChange={() => setValue(!value)} />
-        <Link href={`${discussionName}/${data?.id}`} className="text-sm hover:text-primary font-bold">{data?.title || "N/A"}</Link>
+        <Link
+          href={`${discussionName}/${data?.id}`}
+          className="text-sm hover:text-primary font-bold"
+        >
+          {data?.title || "N/A"}
+        </Link>
       </td>
       <td className="td-custom text-center">
         <p className="text-sm">#{data?.id || "N/A"}</p>
@@ -130,7 +140,9 @@ const DiscussionRow = ({ data }) => {
         <p className="text-sm">{data?.discussions_count || "0"}</p>
       </td>
       <td className="td-custom flex items-center justify-center gap-x-3">
-        <p className="text-sm">{dayjs(data?.last_discussion_date).format("DD/MM/YY")}</p>
+        <p className="text-sm">
+          {dayjs(data?.last_discussion_date).format("DD/MM/YY")}
+        </p>
         <button className="btn-transparent-dark btn-small btn-square">
           <Icon name="dots" />
         </button>

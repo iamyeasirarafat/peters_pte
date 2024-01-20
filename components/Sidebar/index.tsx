@@ -2,7 +2,7 @@ import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Logo from "@/components/Logo";
 import Link from "next/link";
-import { use, useState } from "react";
+import { useState } from "react";
 import Menu from "./Menu";
 import { useSelector } from "react-redux";
 import { MdLogout } from "react-icons/md";
@@ -24,7 +24,7 @@ const Sidebar = ({}: SidebarProps) => {
     >
       <div className="flex justify-between items-center h-[1.625rem] mb-11">
         <Logo className={visible ? "flex" : "xl:hidden"} light />
-        <button className="hidden xl:flex" onClick={() => setVisible(!visible)}>
+        <button onClick={() => setVisible(!visible)} className="hidden xl:flex">
           <Icon className="fill-white" name={visible ? "close" : "burger"} />
         </button>
       </div>
