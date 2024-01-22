@@ -16,6 +16,8 @@ const OrganizationList = ({ items, setStatus, admin }) => {
     query: "(max-width: 1023px)",
   });
 
+  console.log("ORg Data", items);
+
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black w-full">
       {items.map((product, i) => (
@@ -72,12 +74,12 @@ const OrganizationList = ({ items, setStatus, admin }) => {
         </tr>
       </thead>
       <tbody>
-        {items.map((product, i) => {
+        {items.map((item, i) => {
           return (
             <StudentRow
               admin={admin}
               setStatus={setStatus}
-              item={product}
+              item={item}
               key={i}
               isOpen={isOpen}
               setIsOpen={setIsOpen}

@@ -46,14 +46,13 @@ function BillingPayment() {
             <p className="text-lg font-extrabold">Plan & Package Creator</p>
             <p className="text-xs font-bold my-5">Click to Go</p>
             {/* Offer*/}
-
             <div className="w-full">
               <Pricing data={premiumAccounts} />
             </div>
           </div>
 
           {/* payment method */}
-          <div className=" space-y-5">
+          <div className="space-y-5 mt-3">
             <p className="text-lg font-extrabold">Payment Method</p>
             {/* method */}
             <PaymentMethod />
@@ -85,7 +84,7 @@ export default BillingPayment;
 
 const Pricing = ({ data }) => {
   return (
-    <div className="space-x-3 flex w-full">
+    <div className="flex flex-row md:flex-col gap-3 w-full">
       {data?.map((item, i) => {
         return (
           <Link key={item?.id || i} href={item.link} className="w-full">
