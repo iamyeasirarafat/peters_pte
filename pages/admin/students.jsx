@@ -2,16 +2,15 @@ import Select from "@/components/AddStudentSelect";
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
-import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
+import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import Students from "../../components/Students_list";
-import TablePagination from "@/components/TablePagination";
 
 const StudentList = () => {
   const [data, setData] = useState([]);
@@ -112,7 +111,7 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   useEffect(() => {
     const fetchGroup = async () => {
       const res = await axios(org.id + "/groups");
-      setGroups(res.data);
+      setGroups(res.data?.results);
     };
     org?.id && fetchGroup();
   }, [org]);
