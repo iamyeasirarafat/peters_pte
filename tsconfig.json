@@ -48,7 +48,8 @@
     "components/Products/index.jsx",
     "components/Header/Create/index.jsx",
     "components/TablePagination/index.jsx",
-    "components/Sidebar/Menu/index.jsx"
+    "components/Sidebar/Menu/index.jsx",
+    "components/CalendarPage/index.jsx"
   ],
   "exclude": ["node_modules"]
 }
