@@ -13,6 +13,7 @@ const Index = () => {
   const { questionTable } = router.query;
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
+  // console.log(tableData, "data table");
   useEffect(() => {
     let url;
     if (questionTable === "read-aloud") {
