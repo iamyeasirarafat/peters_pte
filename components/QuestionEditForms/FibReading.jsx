@@ -22,7 +22,6 @@ const FibReading = () => {
     answers: [],
     extra_answers: [],
   });
-  console.log(formData);
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -49,8 +48,10 @@ const FibReading = () => {
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
       buttonElement.innerHTML = `<b>${buttonText}</b>`;
-      buttonElement.className = "px-4 bg-orange-400 mb-3 mx-3";
+      buttonElement.className =
+        "px-4 bg-orange-400 mb-3 mx-3 disabled:cursor-not-allowed";
       buttonElement.contentEditable = false;
+      buttonElement.disabled = true;
 
       // Insert the button element at the current caret position
       range.deleteContents();
@@ -117,17 +118,56 @@ const FibReading = () => {
   };
 
   useEffect(() => {
-    if (itemObj) {
-      setFormData(itemObj);
-    }
-  }, [item]);
+    const getDetails = async (id) => {
+      try {
+        const response = await axios.get(`/reading_blank/${id}`);
+        if (response?.data) {
+          // Set button counter based on the last index in the answers array
+          const lastAnswerIndex = response?.data?.answers.length
+            ? response?.data?.answers[response?.data?.answers.length - 1].index
+            : "A"; // Default to 'A' if there are no answers
 
+          setButtonCounter(lastAnswerIndex.charCodeAt(0) + 1);
+          // text format
+          const formattedText = response?.data?.sentence.reduce(
+            (acc, sentence, index) => {
+              const answer = response?.data?.answers[index];
+              return (
+                acc +
+                sentence +
+                (answer
+                  ? `<button class="px-4 bg-orange-400 mb-3 mx-3 disabled:cursor-not-allowed" contenteditable="false" disabled=""><b>${answer.index}</b></button>`
+                  : "")
+              );
+            },
+            ""
+          );
+
+          setFormData(response?.data);
+          setText(formattedText);
+          setOptions(response?.data?.answers);
+          setExtraAnswers(response?.data?.extra_answers);
+          setExtraOption(response?.data?.extra_answers.length);
+        }
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }
+    };
+    getDetails(itemObj.id);
+  }, [item]);
+  console.log(formData, "from data");
+  console.log(text, "text");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post("/reading_blank", formData);
-      toast.success("Create question successfully");
+      console.log(formData, "submited");
+      const response = await axios.put(
+        `/reading_blank/${formData?.id}/update`,
+        formData
+      );
+      toast.success("Question Edit successfully");
       if (response?.data) {
         router.back();
       }
@@ -193,6 +233,7 @@ const FibReading = () => {
               className="group"
               onClick={(e) => {
                 e.preventDefault();
+
                 handleButtonClick();
               }}
             >
@@ -217,7 +258,7 @@ const FibReading = () => {
           />
         </div>
         <div className="grid grid-cols-4 gap-2 my-5 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
-          {options.map((option) => (
+          {options?.map((option) => (
             <div key={option.id}>
               <h3 className="text-sm font-bold mb-2">
                 Correct {option?.index}
@@ -268,7 +309,8 @@ const FibReading = () => {
             type="submit"
             className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
           >
-            Create Question
+            {/* Create Question */}
+            Update Question
           </button>
         ) : (
           <LoadingButton />
