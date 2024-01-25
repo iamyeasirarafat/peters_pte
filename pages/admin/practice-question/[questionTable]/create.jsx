@@ -60,7 +60,7 @@ const AllForms = () => {
     content = <HighlightSummary />;
   } else if (questionTable == "select-missing-word") {
     content = <SelectMissingWord />;
-  } else if (questionTable == "Fill in the Blanks") {
+  } else if (questionTable == "fill-in-the-blanks") {
     content = <FillTheBlanks />;
   } else if (questionTable == "Highlight Incorrect Words") {
     content = <FillTheBlanks />;

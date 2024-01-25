@@ -35,12 +35,24 @@ const SelectMissingWord = () => {
 
   useEffect(() => {
     if (item) {
-      setFormData(itemObj);
-      setOptions(itemObj?.options);
-      setOptionNumber(itemObj?.options.length);
-      setAudioSrc(itemObj?.audio);
+      const getDetails = async (id) => {
+        try {
+          const response = await axios.get(`/missing_word/${id}`);
+          if (response?.data) {
+            setFormData(response?.data);
+            setOptions(response?.data?.options);
+            setOptionNumber(response?.data?.options.length);
+            setAudioSrc(response?.data?.audio);
+          }
+        } catch (error) {
+          toast.error("something went wrong");
+          console.log(error);
+        }
+      };
+      getDetails(itemObj.id);
     }
   }, [item]);
+
   useEffect(() => {
     setOptions((prevOptions) => {
       return Array.from({ length: optionNumber }, (_, index) => {
