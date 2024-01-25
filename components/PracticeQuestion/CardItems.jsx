@@ -134,7 +134,7 @@ const CardItems = () => {
       title: "Fill in the Blanks",
       items: itemNumber?.blank_listening,
       bg: "#5F646D",
-      link: "Fill in the Blanks",
+      link: "fill-in-the-blanks",
       text: "FIB",
     },
     {
