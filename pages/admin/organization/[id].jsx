@@ -319,7 +319,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
         />
         <Field
           errors={errors}
-          className="mb-6"
+          className="my-4"
           label="Address"
           placeholder="Enter Address"
           register={register}

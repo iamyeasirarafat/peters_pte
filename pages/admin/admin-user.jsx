@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useMediaQuery } from "react-responsive";
+
 const AdminUser = () => {
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
@@ -68,8 +69,8 @@ const AdminUserList = ({ data, setStatus }) => {
     </div>
   );
 };
+
 const AdminUserRow = ({ data, setStatus }) => {
-  console.log(data, "yes");
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(false);
   const toggleDropdown = () => {

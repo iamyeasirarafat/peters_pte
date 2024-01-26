@@ -202,7 +202,7 @@ const EditProfile = ({ visible, setVisible, editData, setFetch }) => {
 
         <Field
           errors={errors}
-          className="mb-6"
+          className="mb-4"
           label="Email"
           placeholder="Enter email"
           type="email"

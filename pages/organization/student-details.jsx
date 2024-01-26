@@ -543,7 +543,7 @@ export const UpdateInformation = ({
         />
         <Field
           errors={errors}
-          className="mb-2"
+          className="my-2"
           label="Address"
           placeholder="Enter Address"
           required
