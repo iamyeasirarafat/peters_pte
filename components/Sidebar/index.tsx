@@ -15,6 +15,7 @@ const Sidebar = ({}: SidebarProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [showUserDialog, setShowUserDialog] = useState<boolean>(false);
   const user = useSelector((state: any) => state.user?.user);
+  const router = useRouter();
 
   return (
     <div
@@ -38,7 +39,11 @@ const Sidebar = ({}: SidebarProps) => {
           className={`inline-flex items-center font-bold text-white text-sm transition-colors hover:text-purple-1 ${
             visible ? "mx-0 text-sm" : "xl:mx-auto xl:text-0"
           }`}
-          href="#"
+          href={
+            router?.asPath?.startsWith("/admin")
+              ? "/admin/profile"
+              : "/organization/profile"
+          }
         >
           <div
             className={`relative w-5.5 h-5.5 mr-2.5 rounded-full overflow-hidden ${

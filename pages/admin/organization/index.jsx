@@ -1,6 +1,5 @@
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
-import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import { PhoneNumberInput } from "@/components/Students_list/Row";
@@ -39,7 +38,6 @@ const Organizations = () => {
         </div>
       ) : data?.results?.length > 0 ? (
         <>
-          <StudentFilter />
           <OrganizationList setStatus={setStatus} items={data?.results} />
           <TablePagination
             pageNumber={pageNumber}
