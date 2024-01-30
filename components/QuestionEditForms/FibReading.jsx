@@ -156,13 +156,10 @@ const FibReading = () => {
     };
     getDetails(itemObj.id);
   }, [item]);
-  console.log(formData, "from data");
-  console.log(text, "text");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      console.log(formData, "submited");
       const response = await axios.put(
         `/reading_blank/${formData?.id}/update`,
         formData

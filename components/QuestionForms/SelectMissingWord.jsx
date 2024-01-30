@@ -121,7 +121,7 @@ const SelectMissingWord = () => {
         newForm.append("right_options", formData?.right_options);
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
-        newForm.append("single", true);
+        // newForm.append("single", true);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
