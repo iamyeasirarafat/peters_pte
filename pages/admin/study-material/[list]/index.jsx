@@ -194,7 +194,10 @@ const PredictionListRow = ({
             onClick={() =>
               setOpenItemId(data?.id === openItemId ? null : data?.id)
             }
-            className="btn-transparent-dark btn-small btn-square"
+            disabled={deleteUserList?.length > 0}
+            className={`btn-transparent-dark btn-small btn-square ${
+              deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+            }`}
           >
             <Icon name="dots" />
           </button>

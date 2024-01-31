@@ -192,7 +192,12 @@ const DiscussionRow = ({
             className="relative inline-block text-left"
             onClick={toggleDropdown}
           >
-            <button className="btn-transparent-dark btn-small btn-square">
+            <button
+              disabled={deleteUserList?.length > 0}
+              className={`btn-transparent-dark btn-small btn-square ${
+                deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+              }`}
+            >
               <Icon name="dots" />
             </button>
             <div
