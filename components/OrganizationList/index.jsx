@@ -16,12 +16,16 @@ const OrganizationList = ({ items, setStatus, admin }) => {
     query: "(max-width: 1023px)",
   });
 
-  console.log("ORg Data", items);
-
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black w-full">
       {items.map((product, i) => (
-        <Item item={product} key={i} />
+        <Item
+          item={product}
+          key={i}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setStatus={setStatus}
+        />
       ))}
     </div>
   ) : (

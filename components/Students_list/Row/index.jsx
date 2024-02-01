@@ -112,7 +112,12 @@ const StudentRow = ({
             className="relative inline-block text-left"
             onClick={() => setIsOpen(isOpen === item.id ? null : item.id)}
           >
-            <button className="btn-transparent-dark btn-small btn-square">
+            <button
+              disabled={deleteUserList?.length > 0}
+              className={`btn-transparent-dark btn-small btn-square ${
+                deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+              }`}
+            >
               <Icon name="dots" />
             </button>
             {isOpen === item.id && (
@@ -344,7 +349,7 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
         />
         <Field
           errors={errors}
-          className="mb-6"
+          className="my-4"
           label="Address"
           placeholder="Enter Address"
           register={register}

@@ -43,7 +43,6 @@ const Organizations = () => {
         </div>
       ) : data?.results?.length > 0 ? (
         <>
-          <StudentFilter />
           <OrganizationList setStatus={setStatus} items={data?.results} />
           <TablePagination
             pageNumber={pageNumber}
@@ -168,7 +167,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
         />
         <Field
           errors={errors}
-          className="mb-6"
+          className="my-4"
           label="Owner Name"
           placeholder="Enter Owner Name"
           register={register}

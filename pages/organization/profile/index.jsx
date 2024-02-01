@@ -4,34 +4,32 @@ import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import { PhoneNumberInput } from "@/components/Students_list/Row";
 import axios from "axios";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { BiSolidEditAlt } from "react-icons/bi";
+import toast, { LoaderIcon } from "react-hot-toast";
+import { BiLoader, BiSolidEditAlt } from "react-icons/bi";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FiUpload } from "react-icons/fi";
-import { IoIosCall, IoMdMail } from "react-icons/io";
 import { getUser } from "@/redux/slice/userSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 function Index() {
-  const [fetch, setFetch] = useState(false);
-  const user = useSelector((state) => state?.user?.user);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch, fetch]);
   return (
     <Layout title="Profile Settings">
-      <ProfileMain user={user} setFetch={setFetch} />
+      <ProfileMain />
     </Layout>
   );
 }
 
 export default Index;
 
-export const ProfileMain = ({ user, setFetch }) => {
+export const ProfileMain = () => {
+  const [fetch, setFetch] = useState(false);
+  const user = useSelector((state) => state?.user?.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch, fetch]);
   return (
     <>
       <div className="grid grid-cols-12 gap-x-20">
@@ -47,18 +45,23 @@ export const ProfileMain = ({ user, setFetch }) => {
 };
 
 const StudentProfileInfo = ({ data, setFetch }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
-  const handelImageChange = (e) => {
+  const handelImageChange = async (e) => {
     const formData = new FormData();
     formData.append("picture", e.target.files[0]);
-    try {
-      const res = axios.post(`/user/picture/upload`, formData);
-      console.log("res", res);
-      toast.success("Profile image update success");
-      setFetch((prev) => !prev);
-    } catch (error) {
-      toast.error(error?.response?.data?.message || "Something went wrong");
+    if (e.target.files[0] !== undefined) {
+      try {
+        setIsLoading(true);
+        const res = await axios.post(`/user/picture/upload`, formData);
+        toast.success("Profile image update success");
+        setFetch((prev) => !prev);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        toast.error(error?.response?.data?.message || "Something went wrong");
+      }
     }
   };
   return (
@@ -81,12 +84,18 @@ const StudentProfileInfo = ({ data, setFetch }) => {
             className="hidden"
             onChange={(e) => handelImageChange(e)}
             type="file"
-            name=""
             id="profile_image"
           />
           <div className="group-hover:opacity-100 opacity-0 duration-200 absolute bottom-0 right-0 bg-[#f2b2777c] rounded-full w-full h-full">
             <FiUpload className="absolute top-1/2  left-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-xl" />
           </div>
+          {isLoading && (
+            <div className="absolute top-0 right-0 bg-[#f2b277af] rounded-full w-full h-full">
+              <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <BiLoader className="animate-spin text-white text-2xl" />
+              </p>
+            </div>
+          )}
         </label>
         <div>
           <h2 className="text-xl font-extrabold">{data?.full_name}</h2>
@@ -202,7 +211,7 @@ const EditProfile = ({ visible, setVisible, editData, setFetch }) => {
 
         <Field
           errors={errors}
-          className="mb-6"
+          className="mb-4"
           label="Email"
           placeholder="Enter email"
           type="email"

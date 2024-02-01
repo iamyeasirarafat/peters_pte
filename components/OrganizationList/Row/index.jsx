@@ -30,7 +30,7 @@ const StudentRow = ({
   }, [item, deleteUserList]);
   return (
     <tr className="">
-      <td className="td-custom flex items-center gap-2">
+      <td className="td-custom flex items-center gap-x-3">
         <Checkbox
           value={value}
           onChange={() => {
@@ -62,7 +62,7 @@ const StudentRow = ({
       <td className="td-custom">{item?.spent || "N/A"}</td>
       <td className="td-custom">{item?.students || "N/A"}</td>
       <td className="td-custom">{item.mocks || "N/A"}</td>
-      <td className="td-custom">{item.accounts || "N/A"}</td>
+      <td className="td-custom">{item.account_left || "N/A"}</td>
       <td className="td-custom font-bold">{item?.profile?.country || "N/A"}</td>
 
       <td className="td-custom text-right">
@@ -71,7 +71,12 @@ const StudentRow = ({
             className="relative inline-block text-left"
             onClick={() => setIsOpen(isOpen === item.id ? null : item.id)}
           >
-            <button className="btn-transparent-dark btn-small btn-square">
+            <button
+              disabled={deleteUserList?.length > 0}
+              className={`btn-transparent-dark btn-small btn-square ${
+                deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+              }`}
+            >
               <Icon name="dots" />
             </button>
             {isOpen === item.id && (
@@ -140,7 +145,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
           errors={errors}
           className="mb-4"
           label="Owner Name"
-          placeholder="Enter  name"
+          placeholder="Enter name"
           register={register}
           name="org_name"
         />
@@ -162,7 +167,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
         />
         <Field
           errors={errors}
-          className="mb-6"
+          className="my-4"
           label="Address"
           placeholder="Enter Address"
           register={register}

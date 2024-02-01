@@ -190,7 +190,10 @@ const MocktestListRow = ({
       <td className="td-custom text-center">
         <button
           onClick={() => setShowDot(showDot === item?.id ? null : item?.id)}
-          className="px-3 btn-transparent-dark btn-small btn-square relative"
+          disabled={deleteUserList?.length > 0}
+          className={`btn-transparent-dark btn-small btn-square relative ${
+            deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+          }`}
         >
           <Icon name="dots" />
           {showDot === item?.id && (
