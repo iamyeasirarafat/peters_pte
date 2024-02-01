@@ -1,15 +1,19 @@
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
+import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
+import OrganizationList from "@/components/OrganizationList";
 import { PhoneNumberInput } from "@/components/Students_list/Row";
+import TablePagination from "@/components/TablePagination";
+import { Listbox, Transition } from "@headlessui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
-import OrganizationList from "@/components/OrganizationList";
-import TablePagination from "@/components/TablePagination";
+import countryList from 'react-select-country-list';
+import { twMerge } from "tailwind-merge";
 const Organizations = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState(true);
@@ -92,17 +96,22 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
     control,
     formState: { errors },
   } = useForm({});
-
+  const [country, setCountry] = useState('')
+  const countries = useMemo(() => countryList().getData(), [])
   const onSubmit = async (data) => {
-    try {
-      await axios.post("/organization/add", data);
-      toast.success("Successfully added");
-      setVisible(false);
-      setStatus && setStatus(Math.random());
-    } catch (err) {
-      const key = Object.keys(err?.response?.data)[0];
-      const value = err?.response?.data[key];
-      toast.error(`${key} - ${value}`);
+    if (country !== "") {
+      try {
+        await axios.post("/organization/add", { ...data, country: country });
+        toast.success("Successfully added");
+        setVisible(false);
+        setStatus && setStatus(Math.random());
+      } catch (err) {
+        const key = Object.keys(err?.response?.data)[0];
+        const value = err?.response?.data[key];
+        toast.error(`${key} - ${value}`);
+      }
+    } else {
+      toast.error('Country is required');
     }
   };
 
@@ -165,16 +174,98 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
           register={register}
           name="org_name"
         />
-        <Field
+        {/* <Field
           errors={errors}
           className="mb-6"
           label="Country"
           placeholder="Enter Country"
           register={register}
           name="country"
+        /> */}
+        <Select
+          errors={errors}
+          className="mb-6"
+          label="Country"
+          placeholder="Enter Country"
+          items={countries}
+          value={country}
+          onChange={setCountry}
         />
         <button className="btn-purple  w-full">Add Organization</button>
       </form>
     </Modal>
   );
 };
+
+
+
+const Select = ({
+  label,
+  className,
+  classButton,
+  classArrow,
+  classOptions,
+  classOption,
+  placeholder,
+  items,
+  value,
+  onChange,
+  up,
+  small,
+}) => (
+  <div className={`relative ${className}`}>
+    {label && <div className="mb-3 text-xs font-bold">{label}</div>}
+    <Listbox value={value} onChange={onChange} >
+      {({ open }) => (
+        <>
+          <Listbox.Button
+            className={twMerge(
+              `flex items-center w-full h-16 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-n-1 dark:border-white dark:text-white ${small ? "h-6 px-4 text-xs" : ""
+              } ${open ? "border-purple-1 dark:border-purple-1" : ""
+              } ${classButton}`
+            )}
+          >
+            <span className="mr-auto truncate">
+              {value ? (
+                value
+              ) : (
+                <span className="text-n-2 dark:text-white/75">
+                  {placeholder}
+                </span>
+              )}
+            </span>
+            <Icon
+              className={`shrink-0 icon-20 ml-6 -mr-0.5 transition-transform dark:fill-white ${small ? "ml-2 -mr-2" : ""
+                } ${open ? "rotate-180" : ""} ${classArrow}`}
+              name="arrow-bottom"
+            />
+          </Listbox.Button>
+          <Transition
+            leave="transition duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options
+              className={twMerge(
+                `absolute left-0 right-0 w-full mt-1 p-2 bg-white h-40 overflow-y-auto  border-n-3 rounded-sm shadow-lg dark:bg-n-1 dark:border-white ${small ? "p-0" : ""
+                } ${up ? "top-auto bottom-full mt-0 mb-1" : ""} ${open ? "z-10" : ""
+                } ${classOptions}`
+              )}
+            >
+              {items?.map((item) => (
+                <Listbox.Option
+                  className={`flex items-start px-3 py-2 rounded-sm capitalize text-sm font-bold text-n-3 transition-colors cursor-pointer hover:text-n-1 ui-selected:!bg-n-3/20 ui-selected:!text-n-1 tap-highlight-color dark:text-white/50 dark:hover:text-white dark:ui-selected:!text-white ${small ? "!py-1 !pl-4 text-xs" : ""
+                    } ${classOption}`}
+                  key={item.value}
+                  value={item.label}
+                >
+                  {item.label}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Transition>
+        </>
+      )}
+    </Listbox>
+  </div>
+);
