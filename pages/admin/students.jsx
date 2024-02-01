@@ -110,8 +110,20 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios(org.id + "/groups");
-      setGroups(res.data?.results);
+      try {
+        const res = await axios(org.id + "/groups");
+        const fetchedGroups = res.data?.results || [];
+        const formattedGroup = [
+          {
+            id: null,
+            name: "None"
+          },
+          ...fetchedGroups
+        ];
+        setGroups(formattedGroup);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
     };
     org?.id && fetchGroup();
   }, [org]);
