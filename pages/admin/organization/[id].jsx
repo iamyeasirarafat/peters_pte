@@ -18,9 +18,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
 import { BsFillPlusCircleFill } from "react-icons/bs";
-import { CgRadioCheck } from "react-icons/cg";
 import { IoIosCall, IoMdMail } from "react-icons/io";
-import { RiRadioButtonFill } from "react-icons/ri";
 import { useMediaQuery } from "react-responsive";
 function OrgDetails() {
   const router = useRouter();
@@ -35,11 +33,11 @@ function OrgDetails() {
   }, [id, router.isReady]);
   return (
     <Layout title="Organizations Details" back>
-      <div className="grid grid-cols-12 gap-x-20">
-        <div className="col-span-4">
+      <div className={` grid grid-cols-12 gap-x-20 gap-y-5`}>
+        <div className={`md:col-span-12 col-span-4`}>
           <StudentProfileInfo data={orgData} />
         </div>
-        <div className="col-span-8">
+        <div className={`md:col-span-12 col-span-8  `}>
           <StudentDetailsRight data={orgData} />
         </div>
       </div>
@@ -53,7 +51,7 @@ const StudentProfileInfo = ({ data }) => {
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 w-full">
       <div className="space-y-2">
         <Image
           className="w-21 h-w-21 rounded-full"
@@ -152,7 +150,7 @@ const StudentDetailsRight = ({ data }) => {
   });
 
   return (
-    <div>
+    <div className="w-full">
       {/* Setup up your PTE Identity */}
       <div className="bg-[url('/images/Identity.png')] bg-cover bg-center bg-no-repeat p-5">
         <h2 className="text-lg font-extrabold text-white">
@@ -178,7 +176,7 @@ const StudentDetailsRight = ({ data }) => {
           </button>
         </div>
       </div>
-      {/* Account Plan History */}
+      {/* Group Settings */}
       <div className="bg-white dark:bg-black p-5 mt-9">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Group Settings</p>
@@ -524,112 +522,6 @@ const ChangeUserId = ({ openChangeUserId, setOpenChangeUserId }) => {
         />
         <button className="bg-primary py-3 text-base font-bold w-full">
           Update
-        </button>
-      </form>
-    </Modal>
-  );
-};
-
-const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
-  const [planActive, setPlanActive] = useState("immediate");
-  const [plansData, setPlansData] = useState([]);
-  const [plan, setPlan] = useState({});
-  const plans = plansData?.map((item) => ({
-    id: item?.id,
-    name: item?.plan?.title,
-    planId: item?.plan?.id,
-  }));
-
-  // get plans
-  useEffect(() => {
-    const getPlans = async () => {
-      const res = await axios.get("/student/plans");
-      setPlansData(res?.data);
-    };
-    getPlans();
-  }, [openAssignNewPlan]);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    const planData = {
-      student: openAssignNewPlan?.student,
-      plan: plan?.planId,
-      // Immediate: "",
-    };
-    const AssignPlan = async () => {
-      const res = await axios.post("/plan/assign", planData);
-      toast.success(res?.data?.message);
-      setOpenAssignNewPlan({
-        state: false,
-        student: null,
-      });
-      reset();
-    };
-    AssignPlan();
-  };
-  return (
-    <Modal
-      title="Assign New Plan"
-      visible={openAssignNewPlan?.state}
-      onClose={() => {
-        setOpenAssignNewPlan({
-          state: false,
-          student: null,
-        });
-        reset();
-      }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Current Plan"
-          placeholder="Free"
-          register={register}
-          name="plan"
-          isReadOnly
-        />
-        <Select
-          label="Choose Plan *"
-          className="mb-2"
-          items={plans}
-          value={plan}
-          onChange={setPlan}
-        />
-        <div className="flex items-center gap-x-4 my-4">
-          <button
-            onClick={() => setPlanActive("immediate")}
-            type="button"
-            className="flex items-center gap-x-2 text-xs font-bold"
-          >
-            {planActive === "immediate" ? (
-              <RiRadioButtonFill className="text-xl text-[#98E9AB]" />
-            ) : (
-              <CgRadioCheck className="text-xl text-black dark:text-white" />
-            )}
-            Immediate Assign
-          </button>
-          <button
-            onClick={() => setPlanActive("after")}
-            type="button"
-            className="flex items-center gap-x-2 text-xs font-bold"
-          >
-            {planActive === "after" ? (
-              <RiRadioButtonFill className="text-xl text-[#98E9AB]" />
-            ) : (
-              <CgRadioCheck className="text-xl text-black dark:text-white" />
-            )}
-            Start After Current Plan End
-          </button>
-        </div>
-        <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Plan
         </button>
       </form>
     </Modal>

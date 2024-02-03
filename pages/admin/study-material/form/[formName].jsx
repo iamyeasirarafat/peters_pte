@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import Select from "@/components/Select";
+import { getFileName } from "@/utils/getFileName";
 function AddStudyMaterial() {
   const [loading, setLoading] = useState(false);
   const [studyFile, setStudyFile] = useState(null);
@@ -17,12 +18,74 @@ function AddStudyMaterial() {
   const { formName } = router.query;
   const formPage = formName?.split("-")[1];
   const { register, handleSubmit, reset } = useForm();
+  const { id } = router.query;
+
+  const [dataDetails, setDataDetails] = useState({});
+  console.log("dataDetails", dataDetails);
+
+  // getDetails
+  useEffect(() => {
+    const getDetails = async () => {
+      if (id) {
+        const { data } = await axios.get(`/study_material/${id}`);
+        setDataDetails(data);
+      }
+    };
+    router?.isReady && id && getDetails();
+  }, [id, reset, router?.isReady]);
+
+  // getTopics
+  const [topics, setTopics] = useState({});
+  useEffect(() => {
+    const getTopic = async () => {
+      const { data } = await axios.get("/topic");
+      setTopics(data);
+      setTopic(data?.results?.[0]);
+    };
+    formName === "add-study_material" && getTopic();
+  }, [setTopic, formName]);
+
+  // set Default value
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(dataDetails?.file);
+          const pdfBlob = await response.blob();
+          console.log("pdfBlob", pdfBlob);
+          const fileName = getFileName(dataDetails?.file);
+
+          setStudyFile([{ file: pdfBlob, name: fileName }]);
+          reset({
+            title: dataDetails?.title,
+          });
+          setFiletype(dataDetails?.premium ? "premium" : "free");
+
+          if (formName === "add-study_material") {
+            const foundTopic = topics?.results?.find(
+              (item) => item.id === dataDetails?.topic
+            );
+            setTopic(foundTopic || {});
+          }
+        } catch (error) {
+          console.error("Error fetching file:", error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [dataDetails, id, reset, formName, topics]);
+
+  // Submit form
   const onSubmit = async (data) => {
     setLoading(true);
     const fileData = new FormData();
     fileData.append("title", data?.title);
     fileData.append("category", formPage);
-    fileData.append("file", studyFile[0]);
+    studyFile &&
+      studyFile.length > 0 &&
+      !id &&
+      fileData.append("file", studyFile[0]);
     fileData.append("premium", fileType === "premium" ? true : false);
     formName === "add-study_material" &&
       fileData.append(
@@ -30,14 +93,14 @@ function AddStudyMaterial() {
         formName === "add-study_material" ? topic?.id : ""
       );
     try {
-      const res = await axios.post("study_material/add", fileData);
-      if (res?.status === 201) {
-        reset();
-        toast.success("File uploaded successfully");
-        setLoading(false);
-        setStudyFile(null);
-        router.push(`/admin/study-material/${formPage}`);
-      }
+      const res = id
+        ? await axios.put(`/study_material/${id}/update`, fileData)
+        : await axios.post("study_material/add", fileData);
+      reset();
+      toast.success(`${res?.data?.title} has been ${id ? "updated" : "added"}`);
+      setLoading(false);
+      setStudyFile(null);
+      router.push(`/admin/study-material/${formPage}`);
     } catch (error) {
       toast.error(
         (error?.response?.data?.title && error?.response?.data?.title[0]) ||
@@ -49,7 +112,12 @@ function AddStudyMaterial() {
   };
 
   return (
-    <Layout title={`${formPage?.replace(/[-,._]/g, " ")} / New File`} back>
+    <Layout
+      title={`${formPage?.replace(/[-,._]/g, " ")} / ${
+        id ? `#${id}` : " New File"
+      }`}
+      back
+    >
       <Toaster />
       <FileForm
         register={register}
@@ -61,8 +129,10 @@ function AddStudyMaterial() {
         setStudyFile={setStudyFile}
         loading={loading}
         formName={formName}
+        topics={topics}
         topic={topic}
         setTopic={setTopic}
+        id={id}
       />
     </Layout>
   );
@@ -80,23 +150,16 @@ const FileForm = ({
   setStudyFile,
   loading,
   formName,
+  topics,
   topic,
   setTopic,
+  id,
 }) => {
-  const [topics, setTopics] = useState({});
-  useEffect(() => {
-    const getTopic = async () => {
-      const { data } = await axios.get("/topic");
-      setTopics(data);
-      setTopic(data?.results?.[0]);
-    };
-    getTopic();
-  }, [setTopic]);
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-xs font-bold">File Name</p>
-        <p className="text-xs font-bold">File Id #785263891</p>
+        {id && <p className="text-xs font-bold">File Id #{id}</p>}
       </div>
       <input
         {...register("title", { required: "File name is required" })}
@@ -121,9 +184,10 @@ const FileForm = ({
         >
           {studyFile && (
             <p className="text-base font-semibold text-center">
-              File: {studyFile[0]?.name}
+              File: {studyFile?.[0]?.name}
             </p>
           )}
+
           <BiSolidCloudUpload className="text-xl" />
           <p className="text-xs font-bold">Upload</p>
           <input
@@ -170,7 +234,7 @@ const FileForm = ({
         {loading && (
           <div className="animate-spin w-5 h-5 rounded-full border-r-2 border-t-2 border-white" />
         )}
-        Create File
+        {id ? "Update" : "Create"} File
       </button>
     </form>
   );
