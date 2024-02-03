@@ -251,6 +251,8 @@ export const PredictionListMobile = ({ data, setRefetch }) => {
 };
 
 const StudyMore = ({ id, setRefetch }) => {
+  const router = useRouter();
+  const { list } = router.query;
   const [loading, setLoading] = useState(false);
   const handelDelete = async () => {
     try {
@@ -266,7 +268,12 @@ const StudyMore = ({ id, setRefetch }) => {
   };
   return (
     <div className="bg-secondary rounded shadow absolute top-1/2 p-2 right-[60%] space-y-2">
-      <button className="flex items-center gap-x-2 hover:text-purple-1 duration-200 rounded-md py-1 px-2">
+      <button
+        onClick={() =>
+          router.push(`/admin/study-material/form/add-${list}?id=${id}`)
+        }
+        className="flex items-center gap-x-2 hover:text-purple-1 duration-200 rounded-md py-1 px-2"
+      >
         <FaEdit /> Edit
       </button>
       <button
