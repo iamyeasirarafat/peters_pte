@@ -54,11 +54,11 @@ export default function StudentDetails() {
 
 export const StudentsDetailsMain = ({ studentDetails, setFetch }) => {
   return (
-    <div className="grid grid-cols-12 gap-x-20">
-      <div className="col-span-4">
+    <div className="grid grid-cols-12 gap-x-20 gap-y-5">
+      <div className="col-span-4 md:col-span-12">
         <StudentProfileInfo data={studentDetails} setFetch={setFetch} />
       </div>
-      <div className="col-span-8">
+      <div className="col-span-8 md:col-span-12">
         <StudentDetailsRight data={studentDetails} />
       </div>
       {/* <ProgressModal /> */}

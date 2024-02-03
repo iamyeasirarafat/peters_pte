@@ -260,10 +260,13 @@ const ActionDialog = ({ setStatus, id }) => {
     }
   };
   return (
-    <div className="bg-secondary py-2 z-50 px-3 rounded-md shadow absolute right-8 top-1/2 space-y-2">
+    <div className="bg-secondary p-4 z-50  rounded-md shadow absolute right-8 top-1/2 space-y-2">
       <button
-        onClick={(e) => e.stopPropagation()}
-        className="text-black hover:text-green-500 duration-200"
+        onClick={(e) => {
+          e.stopPropagation();
+          router.push(`/admin/mocktest/add-mocktest/${mocktest_List}?id=${id}`);
+        }}
+        className="text-black hover:text-purple-1 test-base duration-200"
       >
         Edit
       </button>
@@ -272,7 +275,7 @@ const ActionDialog = ({ setStatus, id }) => {
           e.stopPropagation();
           handelDelete();
         }}
-        className="text-black flex items-center gap-x-3 hover:text-red duration-200"
+        className="text-black flex items-center gap-x-3 test-base hover:text-red duration-200"
       >
         {isLoading && <LoaderIcon />} Delete
       </button>

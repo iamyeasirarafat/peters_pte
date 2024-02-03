@@ -50,6 +50,7 @@
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.1",
     "react-responsive": "^9.0.2",
+    "react-select": "^5.8.0",
     "react-simple-maps": "^3.0.0",
     "react-textarea-autosize": "^8.4.1",
     "react-tooltip": "^5.13.1",
