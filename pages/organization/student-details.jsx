@@ -1,34 +1,34 @@
-import Layout from "@/components/Layout";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import Image from "@/components/Image";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-import { IoIosCall, IoMdMail } from "react-icons/io";
-import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
-import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
-import { CgRadioCheck } from "react-icons/cg";
-import Sorting from "@/components/Sorting";
-import Icon from "@/components/Icon";
-import ReusableModal from "@/components/global/ReusableModal";
-import TablePagination from "@/components/TablePagination";
-import { useMediaQuery } from "react-responsive";
-import { useHydrated } from "@/hooks/useHydrated";
-import Link from "next/link";
-import Modal from "@/components/Modal";
-import { useForm } from "react-hook-form";
-import Field from "@/components/Field";
-import toast from "react-hot-toast";
 import Select from "@/components/AddStudentSelect";
 import Countdown from "@/components/Countdown";
+import Field from "@/components/Field";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Layout from "@/components/Layout";
+import Modal from "@/components/Modal";
+import Sorting from "@/components/Sorting";
+import Spinner from "@/components/Spinner/Spinner";
+import { PhoneNumberInput } from "@/components/Students_list/Row";
+import TablePagination from "@/components/TablePagination";
+import LineProgressBar from "@/components/global/LineProgressBar";
+import ReusableModal from "@/components/global/ReusableModal";
+import { useHydrated } from "@/hooks/useHydrated";
+import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDateWithName } from "@/utils/formatDateWithName";
-import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
-import Spinner from "@/components/Spinner/Spinner";
-import LineProgressBar from "@/components/global/LineProgressBar";
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
+import { BsFillPlusCircleFill } from "react-icons/bs";
+import { CgRadioCheck } from "react-icons/cg";
 import { FiAward, FiTrendingUp, FiUpload } from "react-icons/fi";
+import { IoIosCall, IoMdMail } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
-import { PhoneNumberInput } from "@/components/Students_list/Row";
+import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
+import { useMediaQuery } from "react-responsive";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
@@ -432,8 +432,15 @@ export const UpdateInformation = ({
 
   useEffect(() => {
     const fetchGroup = async () => {
+      const formattedGroup = [
+        {
+          id: null,
+          name: "None"
+        }
+      ]
       const res = await axios("/groups");
-      setGroups(res.data);
+      formattedGroup.push(...res.data?.results);
+      setGroups(formattedGroup)
     };
     fetchGroup();
   }, []);
@@ -450,7 +457,7 @@ export const UpdateInformation = ({
   const onSubmit = async (data) => {
     const updateData = {
       ...data,
-      group: group?.id,
+      ...(group?.id && { group: group.id }),
       organization: openUpdateInformation?.data?.profile[0]?.organization?.id,
       profile: {
         gender: gender?.name,
@@ -831,6 +838,7 @@ const ExamCountDown = ({
 
 const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
   const scores = [
+    { id: null, name: "None" },
     { id: 1, name: "35" },
     { id: 2, name: "55" },
     { id: 3, name: "75" },
@@ -907,18 +915,16 @@ const ProgressModal = ({ data }) => {
             <div className="flex items-center gap-x-4 w-full">
               <button
                 onClick={() => setTab("performance")}
-                className={` ${
-                  tab === "performance" ? "bg-[#849C3E] text-white" : "bg-white"
-                } p-2.5 text-xl text-center rounded border border-[#849C3E]`}
+                className={` ${tab === "performance" ? "bg-[#849C3E] text-white" : "bg-white"
+                  } p-2.5 text-xl text-center rounded border border-[#849C3E]`}
               >
                 <p className="leading-none">Your Performance</p>
                 <FiAward className="text-2xl inline-block mt-2" />
               </button>
               <button
                 onClick={() => setTab("progress")}
-                className={`${
-                  tab === "progress" ? "bg-blue text-white" : "bg-white"
-                } p-2.5 text-xl text-center rounded border border-blue`}
+                className={`${tab === "progress" ? "bg-blue text-white" : "bg-white"
+                  } p-2.5 text-xl text-center rounded border border-blue`}
               >
                 <p className="leading-none">Practice Progress</p>
                 <FiTrendingUp className="text-2xl inline-block mt-2" />

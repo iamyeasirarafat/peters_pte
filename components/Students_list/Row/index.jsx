@@ -56,9 +56,8 @@ const StudentRow = ({
         />
         <Link
           className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
-          href={`/${admin ? "admin" : "organization"}/student-details?id=${
-            item.id
-          }`}
+          href={`/${admin ? "admin" : "organization"}/student-details?id=${item.id
+            }`}
         >
           <div className="w-11 h-11  mr-3 ">
             <Image
@@ -85,15 +84,14 @@ const StudentRow = ({
       </td>
       <td className="td-custom text-center">
         <div
-          className={`border min-w-[4rem] ${
-            item.avl === "Paid"
-              ? "label-stroke-green"
-              : item.avl === "Med"
+          className={`border min-w-[4rem] ${item.avl === "Paid"
+            ? "label-stroke-green"
+            : item.avl === "Med"
               ? "label-stroke-yellow"
               : item.avl === "Low"
-              ? "label-stroke-pink"
-              : "label-stroke"
-          }`}
+                ? "label-stroke-pink"
+                : "label-stroke"
+            }`}
         >
           {item.avg_score || "N/A"}
         </div>
@@ -219,11 +217,22 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
   const [orgs, setOrgs] = useState([]);
   const [org, setOrg] = useState();
   //get groups
-  //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios(org.id + "/groups");
-      setGroups(res.data);
+      try {
+        const res = await axios(org.id + "/groups");
+        const fetchedGroups = res.data?.results || [];
+        const formattedGroup = [
+          {
+            id: null,
+            name: "None"
+          },
+          ...fetchedGroups
+        ];
+        setGroups(formattedGroup);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
     };
     org?.id && fetchGroup();
   }, [org]);
@@ -285,7 +294,7 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       full_name: data.full_name,
       email: data.email,
       phone: data.phone,
-      ...(group && { group: group.id }),
+      ...(group.id && { group: group.id }),
       ...(org && { organization: org.id }),
       profile: {
         gender: gender.name,
@@ -419,8 +428,7 @@ export const PhoneNumberInput = ({ name, control, errors, label }) => {
               defaultCountry="BD"
               id={name}
               className={twMerge(
-                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${
-                  error ? "pr-15 !border-pink-1" : ""
+                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${error ? "pr-15 !border-pink-1" : ""
                 }`
               )}
             />
@@ -458,8 +466,7 @@ export const PhoneNumberInputJoin = ({ name, control, errors, label }) => {
               defaultCountry="BD"
               id={name}
               className={twMerge(
-                `bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-1 px-5 border ${
-                  error ? "border-red" : "border-[#B9B9B9]"
+                `bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-1 px-5 border ${error ? "border-red" : "border-[#B9B9B9]"
                 }  rounded-[16px] outline-none`
               )}
             />
