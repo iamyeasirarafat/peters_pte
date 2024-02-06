@@ -2,13 +2,22 @@ import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useEffect, useRef, useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
+
+import LoadingButton from "@/components/LoadingButton";
+import toast from "react-hot-toast";
+import axios from "axios";
+
+import { useRouter } from "next/router";
 const FillTheBlanks = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
-    paragraph: "",
+    sentence: [],
     appeared: 0,
     prediction: false,
-    options: [],
+    audio: null,
+    answers: [],
   });
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
@@ -18,11 +27,6 @@ const FillTheBlanks = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
   const [audioSrc, setAudioSrc] = useState(null);
   const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
@@ -30,9 +34,17 @@ const FillTheBlanks = () => {
     if (file) {
       setAudioSrc(URL.createObjectURL(file));
       setAudioName(file?.name);
+      setFormData((prev) => ({
+        ...prev,
+        audio: file,
+      }));
     } else {
       setAudioSrc(null);
       setAudioName(null);
+      setFormData((prev) => ({
+        ...prev,
+        audio: null,
+      }));
     }
   };
 
@@ -60,8 +72,10 @@ const FillTheBlanks = () => {
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
       buttonElement.innerHTML = `<b>${buttonText}</b>`;
-      buttonElement.className = "px-4 bg-orange-400 mb-3 mx-3";
+      buttonElement.className =
+        "px-4 bg-orange-400 mb-3 mx-3 disabled:cursor-not-allowed";
       buttonElement.contentEditable = false;
+      buttonElement.disabled = true;
 
       // Insert the button element at the current caret position
       range.deleteContents();
@@ -77,26 +91,79 @@ const FillTheBlanks = () => {
       // Initialize the option in the state as an object with an empty string
       setOptions((prevOptions) => [
         ...prevOptions,
-        { id: buttonText, text: "" },
+        { index: buttonText, value: "" },
       ]);
     }
   };
 
-  const handleTextAreaChange = (id, e) => {
+  const handleTextAreaChange = (index, e) => {
     // Update the state with the text from the textarea
     setOptions((prevOptions) =>
       prevOptions.map((option) =>
-        option.id === id ? { ...option, text: e.target.value } : option
+        option.index === index ? { ...option, value: e.target.value } : option
       )
     );
   };
+
+  /////////////////// sentence and options in form data ///////////////////////
   useEffect(() => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
+
+    // Extract text content from parsed document, excluding button text
+    const paragraphs = Array.from(doc.body.childNodes)
+      .map((node) => {
+        if (node.nodeName === "BUTTON") {
+          return ""; // Exclude button text
+        }
+        return node.textContent.trim();
+      })
+      .filter((sentence) => sentence !== ""); // Remove empty strings
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      paragraph: text,
-      options: options,
+      sentence: paragraphs,
+      answers: options,
     }));
   }, [options, text]);
+
+  console.log(formData, "submit");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData?.audio) {
+      const answersJson = JSON.stringify(formData?.answers);
+      try {
+        setLoading(true);
+        const newForm = new FormData();
+        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        newForm.append("title", formData?.title);
+
+        formData.sentence.forEach((item) => newForm.append("sentence", item));
+        newForm.append("answers", answersJson);
+        newForm.append("appeared", formData?.appeared);
+        newForm.append("prediction", formData?.prediction);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data", // Use lowercase for header keys
+          },
+        };
+        const { data } = await axios.post("/blank", newForm, config);
+        toast.success("Create question successfully");
+        if (data) {
+          router.back();
+        }
+      } catch (error) {
+        console.error("Error create question:", error);
+        toast.error("Something went wrong, try again later.");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      toast.error("You need provide data successfuly!");
+    }
+  };
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -169,11 +236,10 @@ const FillTheBlanks = () => {
             </div>
             <button
               className="group"
-              // onClick={(e) => {
-              //   e.preventDefault();
-              //   handleIncrement();
-              // }}
-              onClick={handleButtonClick}
+              onClick={(e) => {
+                e.preventDefault();
+                handleButtonClick();
+              }}
             >
               <Icon
                 className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
@@ -198,12 +264,14 @@ const FillTheBlanks = () => {
 
         <div className="grid grid-cols-4 gap-2 my-5 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
           {options.map((option) => (
-            <div key={option.id}>
-              <h3 className="text-sm font-bold mb-2">Correct {option?.id}</h3>
+            <div key={option.index}>
+              <h3 className="text-sm font-bold mb-2">
+                Correct {option?.index}
+              </h3>
               <input
                 type="text"
-                value={option.text}
-                onChange={(e) => handleTextAreaChange(option.id, e)}
+                value={option.value}
+                onChange={(e) => handleTextAreaChange(option.index, e)}
                 placeholder="write your text"
                 className="border-none py-4"
               />
@@ -231,12 +299,16 @@ const FillTheBlanks = () => {
             </label>
           </div>
         </div>
-        <button
-          type="submit"
-          className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-        >
-          Create Question
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
+          >
+            Create Question
+          </button>
+        ) : (
+          <LoadingButton />
+        )}
       </form>
     </div>
   );

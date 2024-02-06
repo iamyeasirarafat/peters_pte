@@ -15,7 +15,7 @@ const TablePagination = ({
     <button
       disabled={pageNumber === 1}
       onClick={() => prevNext((prev: any) => prev - 1)}
-      className="btn-stroke btn-small"
+      className="btn-stroke btn-small disabled:cursor-not-allowed"
     >
       <Icon name="arrow-prev" />
       <span>Prev</span>
@@ -26,7 +26,7 @@ const TablePagination = ({
     <button
       disabled={totalPage === pageNumber}
       onClick={() => prevNext((prev: any) => prev + 1)}
-      className="btn-stroke btn-small"
+      className="btn-stroke btn-small disabled:cursor-not-allowed"
     >
       <span>Next</span>
       <Icon name="arrow-next" />

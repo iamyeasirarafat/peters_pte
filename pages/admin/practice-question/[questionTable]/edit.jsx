@@ -69,7 +69,7 @@ const EditForms = () => {
     content = <MultipleSingleReading />;
   } else if (questionTable == "re-order-paragraphs") {
     content = <ReOrderParagraph />;
-  } else if (questionTable == "Reading: Fill in the Blanks") {
+  } else if (questionTable == "reading:-fill-in-the-blanks") {
     content = <ReadingFillTheBlanks />;
   } else if (questionTable == "reading-&-writing:-FIB") {
     content = <FibReading />;

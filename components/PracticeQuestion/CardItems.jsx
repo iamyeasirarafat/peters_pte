@@ -97,7 +97,7 @@ const CardItems = () => {
       title: "Reading: Fill in the Blanks",
       items: itemNumber?.blank_reading,
       bg: "#4399FF",
-      link: "Reading: Fill in the Blanks",
+      link: "reading:-fill-in-the-blanks",
       text: "FIB",
     },
     {
@@ -155,7 +155,7 @@ const CardItems = () => {
       title: "Highlight Incorrect Words",
       items: itemNumber?.highlight_incorrect_word,
       bg: "#5F646D",
-      link: "Highlight Incorrect Words",
+      link: "highlight-incorrect-words",
       text: "HIW",
     },
     {
