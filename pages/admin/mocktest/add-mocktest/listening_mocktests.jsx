@@ -55,8 +55,10 @@ const ListeningTestForm = ({ id }) => {
       blank: data?.blank || [],
     };
     try {
-      const res = await axios.post("/listening_mocktest", formData);
-      toast.success("mocktest added successfully");
+      const res = id
+        ? await axios.put(`listening_mocktest/${id}`, formData)
+        : await axios.post("/listening_mocktest", formData);
+      toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
       router.back();
@@ -69,6 +71,20 @@ const ListeningTestForm = ({ id }) => {
   const listeningMcqsOptions = optionFormatter(listeningMcqs);
   const reorderParagraphsOptions = optionFormatter(reorderParagraphs);
   const listeningMcqSinglesOptions = optionFormatter(listeningMcqSingles);
+  // set Default data
+  useEffect(() => {
+    if (id) {
+      const getMocktest = async () => {
+        try {
+          const { data } = await axios.get(`/listening_mocktest/${id}`);
+          reset(data);
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
+      router?.isReady && getMocktest();
+    }
+  }, [id, router?.isReady, reset]);
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
       <Field

@@ -24,7 +24,7 @@ function FullMocktest() {
 // handel question data get
 export const getQuestion = async (api, setData) => {
   const { data } = await axios.get(api);
-  setData(data);
+  setData(data?.results);
 };
 // mocktest data formate
 export const optionFormatter = (options) => {
@@ -128,8 +128,10 @@ const FullTestForm = ({ id }) => {
         data?.multi_choice_reading_single_answer || [],
     };
     try {
-      const res = await axios.post("/full_mocktest", fullMockTestData);
-      toast.success("mocktest added successfully");
+      const res = id
+        ? await axios.put(`/full_mocktest/${id}`, fullMockTestData)
+        : await axios.post("/full_mocktest", fullMockTestData);
+      toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
       router.back();
@@ -150,6 +152,21 @@ const FullTestForm = ({ id }) => {
   const spokenMcqSinglesOptions = optionFormatter(spokenMcqSingles);
   const missingWordsOptions = optionFormatter(missingWords);
   const inCorrectWordOptions = optionFormatter(incorrectWords);
+
+  // set Default data
+  useEffect(() => {
+    if (id) {
+      const getMocktest = async () => {
+        try {
+          const { data } = await axios.get(`/full_mocktest/${id}`);
+          reset(data);
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
+      router?.isReady && getMocktest();
+    }
+  }, [id, router?.isReady, reset]);
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
