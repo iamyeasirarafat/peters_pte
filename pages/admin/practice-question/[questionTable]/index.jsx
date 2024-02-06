@@ -1,19 +1,18 @@
-import { useRouter } from "next/router";
 import AdminLayout from "@/components/AdminLayout";
+import Icon from "@/components/Icon";
 import Table from "@/components/QuestionTable";
 import TablePagination from "@/components/TablePagination";
-import Icon from "@/components/Icon";
-import Link from "next/link";
-import { useState } from "react";
-import { useEffect } from "react";
 import axios from "axios";
-import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 const Index = () => {
   const router = useRouter();
   const { questionTable } = router.query;
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  // console.log(tableData, "data table");
+  const [loading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 9;
   useEffect(() => {
     let url;
     if (questionTable === "read-aloud") {
@@ -59,9 +58,10 @@ const Index = () => {
     }
 
     const fetchData = async () => {
-      setLoading(true);
       try {
-        const response = await axios.get(`/${url}`);
+        const response = await axios.get(
+          `/${url}?limit=${pageLimit}&page=${pageNumber}`
+        );
         setTableData(response.data);
       } catch (error) {
         console.log(error);
@@ -70,7 +70,7 @@ const Index = () => {
       }
     };
     fetchData();
-  }, [questionTable]);
+  }, [questionTable, pageNumber]);
   return (
     <AdminLayout title={questionTable} back={true}>
       <div className="flex justify-between mb-6">
@@ -103,10 +103,14 @@ const Index = () => {
                     border-x-8 border-solid border-orange-400 border-t-transparent"
           ></div>
         </div>
-      ) : tableData?.length ? (
+      ) : tableData?.results?.length ? (
         <>
-          <Table student={false} items={tableData} />
-          <TablePagination />
+          <Table student={false} items={tableData?.results} />
+          <TablePagination
+            pageNumber={pageNumber}
+            totalPage={Math.ceil(tableData?.total / pageLimit)}
+            prevNext={setPageNumber}
+          />
         </>
       ) : (
         <h3 className="text-center mt-30 font-bold text-3xl text-orange-300">
