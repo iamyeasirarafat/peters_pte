@@ -11,26 +11,31 @@ import axios from "axios";
 import { formatDateTime } from "@/utils/formatDateTime";
 import { MultiActions } from "@/components/Students_list";
 import toast, { LoaderIcon } from "react-hot-toast";
+import TablePagination from "@/components/TablePagination";
 
 function Index() {
   const [status, setStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 9;
   const router = useRouter();
   const { mocktest_List } = router.query || {};
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
-  const [mockTestList, setMockTestList] = useState({});
+  const [mockTestList, setMockTestList] = useState([]);
   useEffect(() => {
     const getMockTest = async () => {
       setIsLoading(true);
-      const res = await axios.get(`/${mocktest_List}`);
+      const res = await axios.get(
+        `/${mocktest_List}?limit=${pageLimit}&page=${pageNumber}`
+      );
       setMockTestList(res?.data);
       setIsLoading(false);
     };
     router.isReady && getMockTest();
-  }, [mocktest_List, router.isReady, status]);
+  }, [mocktest_List, router.isReady, status, pageNumber]);
 
   // formate test list name for delete many
   const convertToCamelCase = (inputString) => {
@@ -66,12 +71,19 @@ function Index() {
       ) : mounted && isTablet ? (
         <MocktestLisMobile data={mockTestList} />
       ) : (
-        <MocktestList
-          data={mockTestList?.results}
-          setStatus={setStatus}
-          convertToCamelCase={convertToCamelCase}
-          mocktest_List={mocktest_List}
-        />
+        <>
+          <MocktestList
+            data={mockTestList?.results}
+            setStatus={setStatus}
+            convertToCamelCase={convertToCamelCase}
+            mocktest_List={mocktest_List}
+          />
+          <TablePagination
+            pageNumber={pageNumber}
+            totalPage={Math.ceil(mockTestList?.total / pageLimit)}
+            prevNext={setPageNumber}
+          />
+        </>
       )}
     </Layout>
   );

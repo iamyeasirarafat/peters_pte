@@ -24,7 +24,7 @@ function FullMocktest() {
 // handel question data get
 export const getQuestion = async (api, setData) => {
   const { data } = await axios.get(api);
-  setData(data?.results);
+  setData(data);
 };
 // mocktest data formate
 export const optionFormatter = (options) => {
