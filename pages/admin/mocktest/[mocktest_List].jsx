@@ -21,7 +21,7 @@ function Index() {
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
-  const [mockTestList, setMockTestList] = useState([]);
+  const [mockTestList, setMockTestList] = useState({});
   useEffect(() => {
     const getMockTest = async () => {
       setIsLoading(true);
@@ -67,7 +67,7 @@ function Index() {
         <MocktestLisMobile data={mockTestList} />
       ) : (
         <MocktestList
-          data={mockTestList}
+          data={mockTestList?.results}
           setStatus={setStatus}
           convertToCamelCase={convertToCamelCase}
           mocktest_List={mocktest_List}
@@ -210,10 +210,10 @@ const MocktestLisMobile = ({ data }) => {
   return (
     <div
       className={`bg-white dark:bg-black p-4 mt-4 ${
-        data?.length > 0 && "space-y-3"
+        data?.results?.length > 0 && "space-y-3"
       }`}
     >
-      {data?.map((item, i) => {
+      {data?.results?.map((item, i) => {
         return (
           <div key={item?.id}>
             <div className="flex items-center justify-between">
