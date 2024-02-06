@@ -18,9 +18,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
 import { BsFillPlusCircleFill } from "react-icons/bs";
-import { CgRadioCheck } from "react-icons/cg";
 import { IoIosCall, IoMdMail } from "react-icons/io";
-import { RiRadioButtonFill } from "react-icons/ri";
 import { useMediaQuery } from "react-responsive";
 function OrgDetails() {
   const router = useRouter();
@@ -33,14 +31,13 @@ function OrgDetails() {
     };
     router.isReady && getOrgDetails();
   }, [id, router.isReady]);
-  console.log("orgDetails", orgData);
   return (
     <Layout title="Organizations Details" back>
-      <div className="grid grid-cols-12 gap-x-20">
-        <div className="col-span-4">
+      <div className={` grid grid-cols-12 gap-x-20 gap-y-5`}>
+        <div className={`md:col-span-12 col-span-4`}>
           <StudentProfileInfo data={orgData} />
         </div>
-        <div className="col-span-8">
+        <div className={`md:col-span-12 col-span-8  `}>
           <StudentDetailsRight data={orgData} />
         </div>
       </div>
@@ -54,11 +51,11 @@ const StudentProfileInfo = ({ data }) => {
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 w-full">
       <div className="space-y-2">
         <Image
           className="w-21 h-w-21 rounded-full"
-          src={"/images/img-2.jpg"}
+          src={data?.picture || "/images/img-2.jpg"}
           width={1000}
           height={1000}
           alt=""
@@ -87,7 +84,9 @@ const StudentProfileInfo = ({ data }) => {
       </div>
       <div>
         <p className="text-sm">Address</p>
-        <p className="text-sm font-bold">{data?.address || "Not Available"}</p>
+        <p className="text-sm font-bold">
+          {(data?.profile && data?.profile[0]?.address) || "Not Available"}
+        </p>
       </div>
       <hr className="border-dotted border-black" />
       <div className="flex items-center gap-x-2">
@@ -119,15 +118,20 @@ const StudentProfileInfo = ({ data }) => {
 };
 
 const StudentDetailsRight = ({ data }) => {
+  const [fetchGroup, setFetchGroup] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 3;
   const [groups, setGroups] = useState([]);
   const router = useRouter();
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios(`/${data?.id}/groups`);
+      const res = await axios(
+        `/${data?.id}/groups?limit=${pageLimit}&page=${pageNumber}`
+      );
       setGroups(res.data);
     };
     data?.id && router.isReady && fetchGroup();
-  }, [data, router.isReady]);
+  }, [data, router.isReady, pageNumber, fetchGroup]);
   const [openChangePassword, setOpenChangePassword] = useState({
     state: false,
     student: null,
@@ -146,7 +150,7 @@ const StudentDetailsRight = ({ data }) => {
   });
 
   return (
-    <div>
+    <div className="w-full">
       {/* Setup up your PTE Identity */}
       <div className="bg-[url('/images/Identity.png')] bg-cover bg-center bg-no-repeat p-5">
         <h2 className="text-lg font-extrabold text-white">
@@ -172,7 +176,7 @@ const StudentDetailsRight = ({ data }) => {
           </button>
         </div>
       </div>
-      {/* Account Plan History */}
+      {/* Group Settings */}
       <div className="bg-white dark:bg-black p-5 mt-9">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Group Settings</p>
@@ -190,12 +194,18 @@ const StudentDetailsRight = ({ data }) => {
         </div>
         {/* Plan */}
         {mounted && isTablet ? (
-          groups?.map((item, i) => <AccountPlanMobile key={i} data={item} />)
+          groups?.results?.map((item, i) => (
+            <AccountPlanMobile key={i} data={item} />
+          ))
         ) : (
-          <AccountPlan data={groups?.result} />
+          <AccountPlan data={groups?.results} />
         )}
       </div>
-      <TablePagination />
+      <TablePagination
+        pageNumber={pageNumber}
+        totalPage={Math.ceil(groups?.total / pageLimit)}
+        prevNext={setPageNumber}
+      />
 
       {/* Security */}
       <div className="bg-white dark:bg-black p-5 mt-4">
@@ -208,7 +218,7 @@ const StudentDetailsRight = ({ data }) => {
               }
               className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
             >
-              <BiSolidEditAlt /> Update Username
+              <BiSolidEditAlt /> Update ORG ID
             </button>
             <button
               onClick={() =>
@@ -241,6 +251,7 @@ const StudentDetailsRight = ({ data }) => {
         <CreateGroupModal
           openGroupModal={openGroupModal}
           setOpenGroupModal={setOpenGroupModal}
+          setFetchGroup={setFetchGroup}
         />
       </div>
     </div>
@@ -258,11 +269,11 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
   } = useForm({});
   useEffect(() => {
     if (editData) {
-      setValue("org_name", editData?.profile?.org_name);
+      setValue("org_name", editData?.profile?.[0]?.org_name);
       setValue("email", editData?.email);
       setValue("phone", editData?.phone);
-      setValue("address", editData?.profile?.address || "");
-      setValue("country", editData?.profile?.country || "");
+      setValue("address", editData?.profile?.[0]?.address || "");
+      setValue("country", editData?.profile?.[0]?.country || "");
     }
   }, [editData, setValue]);
   const onSubmit = async (data) => {
@@ -319,7 +330,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
         />
         <Field
           errors={errors}
-          className="mb-6"
+          className="my-4"
           label="Address"
           placeholder="Enter Address"
           register={register}
@@ -354,20 +365,20 @@ const AccountPlan = ({ data }) => {
             <th className="th-custom text-center">
               <Sorting title="Created In" />
             </th>
-            <th className="th-custom text-center">
+            <th className="th-custom text-right">
               <Sorting title="Average Score" />
             </th>
           </tr>
         </thead>
         <tbody>
-          {data?.map((plan, i) => (
+          {data?.map((group, i) => (
             <tr key={i}>
-              <td className="py-2 pr-3 font-bold">{plan?.name}</td>
-              <td className="py-2 px-3 text-center font-bold">N/A</td>
-              <td className="py-2 px-3 text-center font-bold">
-                {formatDateWithName(plan?.created_at, "custom")}
+              <td className="py-2 pr-3 text-sm font-bold">{group?.name}</td>
+              <td className="py-2 px-3 text-center text-sm font-bold">N/A</td>
+              <td className="py-2 px-3 text-center text-sm font-bold">
+                {formatDateWithName(group?.created_at, "custom")}
               </td>
-              <td className="py-2 px-3 flex items-center justify-center gap-x-5">
+              <td className="py-2 px-3 flex items-center text-sm justify-end gap-x-5">
                 N/A
                 <button className="btn-transparent-dark btn-small btn-square">
                   <Icon name="dots" />
@@ -386,14 +397,14 @@ const AccountPlanMobile = ({ data }) => {
     <div className="space-y-2 py-3">
       <div className="flex items-center justify-between">
         <p className="text-xs font-medium">
-          {formatDateWithName(data?.start_date, "custom")}
+          {formatDateWithName(data?.created_at, "custom")}
         </p>
         <p className="text-xs font-medium">
-          {formatDateWithName(data?.end_date, "custom")}
+          {formatDateWithName(data?.created_at, "custom")}
         </p>
       </div>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-bold">{data?.title}</p>
+        <p className="text-sm font-bold">{data?.name}</p>
         <p className="py-[2px] px-2 rounded-sm bg-green-300 text-xs font-bold inline-block text-black">
           {calculateDaysLeft(data?.end_date)} Days Left
         </p>
@@ -492,8 +503,8 @@ const ChangeUserId = ({ openChangeUserId, setOpenChangeUserId }) => {
         <Field
           errors={errors}
           className="mb-4"
-          label=" New Username *"
-          placeholder="Enter new username"
+          label="New ID *"
+          placeholder="Enter new ID"
           type="text"
           register={register}
           name="userid"
@@ -510,120 +521,18 @@ const ChangeUserId = ({ openChangeUserId, setOpenChangeUserId }) => {
           required
         />
         <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Username
+          Update
         </button>
       </form>
     </Modal>
   );
 };
 
-const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
-  const [planActive, setPlanActive] = useState("immediate");
-  const [plansData, setPlansData] = useState([]);
-  const [plan, setPlan] = useState({});
-  const plans = plansData?.map((item) => ({
-    id: item?.id,
-    name: item?.plan?.title,
-    planId: item?.plan?.id,
-  }));
-
-  // get plans
-  useEffect(() => {
-    const getPlans = async () => {
-      const res = await axios.get("/student/plans");
-      setPlansData(res?.data);
-    };
-    getPlans();
-  }, [openAssignNewPlan]);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    const planData = {
-      student: openAssignNewPlan?.student,
-      plan: plan?.planId,
-      // Immediate: "",
-    };
-    const AssignPlan = async () => {
-      const res = await axios.post("/plan/assign", planData);
-      toast.success(res?.data?.message);
-      setOpenAssignNewPlan({
-        state: false,
-        student: null,
-      });
-      reset();
-    };
-    AssignPlan();
-  };
-  return (
-    <Modal
-      title="Assign New Plan"
-      visible={openAssignNewPlan?.state}
-      onClose={() => {
-        setOpenAssignNewPlan({
-          state: false,
-          student: null,
-        });
-        reset();
-      }}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Field
-          errors={errors}
-          className="mb-2"
-          label="Current Plan"
-          placeholder="Free"
-          register={register}
-          name="plan"
-          isReadOnly
-        />
-        <Select
-          label="Choose Plan *"
-          className="mb-2"
-          items={plans}
-          value={plan}
-          onChange={setPlan}
-        />
-        <div className="flex items-center gap-x-4 my-4">
-          <button
-            onClick={() => setPlanActive("immediate")}
-            type="button"
-            className="flex items-center gap-x-2 text-xs font-bold"
-          >
-            {planActive === "immediate" ? (
-              <RiRadioButtonFill className="text-xl text-[#98E9AB]" />
-            ) : (
-              <CgRadioCheck className="text-xl text-black dark:text-white" />
-            )}
-            Immediate Assign
-          </button>
-          <button
-            onClick={() => setPlanActive("after")}
-            type="button"
-            className="flex items-center gap-x-2 text-xs font-bold"
-          >
-            {planActive === "after" ? (
-              <RiRadioButtonFill className="text-xl text-[#98E9AB]" />
-            ) : (
-              <CgRadioCheck className="text-xl text-black dark:text-white" />
-            )}
-            Start After Current Plan End
-          </button>
-        </div>
-        <button className="bg-primary py-3 text-base font-bold w-full">
-          Update Plan
-        </button>
-      </form>
-    </Modal>
-  );
-};
-
-const CreateGroupModal = ({ setOpenGroupModal, openGroupModal }) => {
+const CreateGroupModal = ({
+  setOpenGroupModal,
+  openGroupModal,
+  setFetchGroup,
+}) => {
   const {
     register,
     handleSubmit,
@@ -639,6 +548,7 @@ const CreateGroupModal = ({ setOpenGroupModal, openGroupModal }) => {
         state: false,
         student: null,
       });
+      setFetchGroup((prev) => !prev);
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");

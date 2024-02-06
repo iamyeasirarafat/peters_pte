@@ -10,7 +10,6 @@ import { multiDeleteList } from "@/utils/multiDeleteList";
 import toast, { LoaderIcon } from "react-hot-toast";
 
 const Students = ({ items, setStatus, admin }) => {
-  const [loadingDelate, setLoadingDelate] = useState(false);
   const [deleteUserList, setDeleteUserList] = useState([]);
   const [openMultiActions, setOpenMultiActions] = useState(false);
   const [isOpen, setIsOpen] = useState(null);
@@ -19,25 +18,16 @@ const Students = ({ items, setStatus, admin }) => {
     query: "(max-width: 1023px)",
   });
 
-  // handel multi delete
-  const handelMultiDelete = async () => {
-    setLoadingDelate(true);
-    try {
-      const res = await multiDeleteList("User", deleteUserList);
-      toast.success(res?.message);
-      setStatus((prev) => !prev);
-      setOpenMultiActions(false);
-      setDeleteUserList([]);
-    } catch (error) {
-      toast.error("Something went wrong!");
-      setLoadingDelate(false);
-    }
-  };
-
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black w-full">
       {items?.map((product, i) => (
-        <Item item={product} key={i} />
+        <Item
+          item={product}
+          key={i}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setStatus={setStatus}
+        />
       ))}
     </div>
   ) : (
@@ -78,8 +68,11 @@ const Students = ({ items, setStatus, admin }) => {
                 </button>
                 {openMultiActions && (
                   <MultiActions
-                    handelMultiDelete={handelMultiDelete}
-                    loadingDelate={loadingDelate}
+                    type="User"
+                    deleteUserList={deleteUserList}
+                    setDeleteUserList={setDeleteUserList}
+                    setOpenMultiActions={setOpenMultiActions}
+                    setStatus={setStatus}
                   />
                 )}
               </div>
@@ -109,17 +102,41 @@ const Students = ({ items, setStatus, admin }) => {
 
 export default Students;
 
-const MultiActions = ({ handelMultiDelete, loadingDelate }) => {
+export const MultiActions = ({
+  type,
+  deleteUserList,
+  setDeleteUserList,
+  setOpenMultiActions,
+  setStatus,
+}) => {
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
+  // handle multi delete
+  const handleMultiDelete = async () => {
+    try {
+      setLoadingDelete(true);
+      const res = await multiDeleteList(type, deleteUserList);
+      toast.success(res?.message);
+      setDeleteUserList([]);
+      setOpenMultiActions(false);
+      setStatus((prev) => !prev);
+    } catch (error) {
+      toast.error("Something went wrong!");
+      setLoadingDelete(false);
+    }
+  };
+
   return (
-    <div className="absolute top-0 right-full bg-secondary p-1 rounded-md">
+    <div className="absolute top-0 right-[60%] bg-secondary p-1 rounded-md">
       <button
         onClick={(e) => {
           e.preventDefault();
-          handelMultiDelete();
+          handleMultiDelete();
         }}
+        disabled={loadingDelete}
         className="flex items-center gap-x-2 px-4 py-2 hover:text-red duration-200 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
       >
-        {loadingDelate ? <LoaderIcon /> : <BsTrash3 />}
+        {loadingDelete ? <LoaderIcon /> : <BsTrash3 />}
         Delete
       </button>
     </div>

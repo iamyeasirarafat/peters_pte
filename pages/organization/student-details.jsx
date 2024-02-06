@@ -1,34 +1,34 @@
-import Layout from "@/components/Layout";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import Image from "@/components/Image";
-import { BsFillPlusCircleFill } from "react-icons/bs";
-import { IoIosCall, IoMdMail } from "react-icons/io";
-import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
-import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
-import { CgRadioCheck } from "react-icons/cg";
-import Sorting from "@/components/Sorting";
-import Icon from "@/components/Icon";
-import ReusableModal from "@/components/global/ReusableModal";
-import TablePagination from "@/components/TablePagination";
-import { useMediaQuery } from "react-responsive";
-import { useHydrated } from "@/hooks/useHydrated";
-import Link from "next/link";
-import Modal from "@/components/Modal";
-import { useForm } from "react-hook-form";
-import Field from "@/components/Field";
-import toast from "react-hot-toast";
 import Select from "@/components/AddStudentSelect";
 import Countdown from "@/components/Countdown";
+import Field from "@/components/Field";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Layout from "@/components/Layout";
+import Modal from "@/components/Modal";
+import Sorting from "@/components/Sorting";
+import Spinner from "@/components/Spinner/Spinner";
+import { PhoneNumberInput } from "@/components/Students_list/Row";
+import TablePagination from "@/components/TablePagination";
+import LineProgressBar from "@/components/global/LineProgressBar";
+import ReusableModal from "@/components/global/ReusableModal";
+import { useHydrated } from "@/hooks/useHydrated";
+import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import { formatDateTime } from "@/utils/formatDateTime";
 import { formatDateWithName } from "@/utils/formatDateWithName";
-import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
-import Spinner from "@/components/Spinner/Spinner";
-import LineProgressBar from "@/components/global/LineProgressBar";
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
+import { BsFillPlusCircleFill } from "react-icons/bs";
+import { CgRadioCheck } from "react-icons/cg";
 import { FiAward, FiTrendingUp, FiUpload } from "react-icons/fi";
+import { IoIosCall, IoMdMail } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
-import { PhoneNumberInput } from "@/components/Students_list/Row";
+import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
+import { useMediaQuery } from "react-responsive";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
@@ -54,11 +54,11 @@ export default function StudentDetails() {
 
 export const StudentsDetailsMain = ({ studentDetails, setFetch }) => {
   return (
-    <div className="grid grid-cols-12 gap-x-20">
-      <div className="col-span-4">
+    <div className="grid grid-cols-12 gap-x-20 gap-y-5">
+      <div className="col-span-4 md:col-span-12">
         <StudentProfileInfo data={studentDetails} setFetch={setFetch} />
       </div>
-      <div className="col-span-8">
+      <div className="col-span-8 md:col-span-12">
         <StudentDetailsRight data={studentDetails} />
       </div>
       {/* <ProgressModal /> */}
@@ -251,13 +251,13 @@ const StudentDetailsRight = ({ data }) => {
           >
             Exam Count Down
           </button>
-          <p className="text-xl font-medium text-gray dark:text-white">
+          <div className="text-xl font-medium text-gray dark:text-white">
             {examDate?.exam_date ? (
               <Countdown targetDate={examDate?.exam_date} />
             ) : (
               <p>Not set Exam date</p>
             )}
-          </p>
+          </div>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
         <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
@@ -432,8 +432,15 @@ export const UpdateInformation = ({
 
   useEffect(() => {
     const fetchGroup = async () => {
+      const formattedGroup = [
+        {
+          id: null,
+          name: "None",
+        },
+      ];
       const res = await axios("/groups");
-      setGroups(res.data);
+      formattedGroup.push(...res.data?.results);
+      setGroups(formattedGroup);
     };
     fetchGroup();
   }, []);
@@ -450,7 +457,7 @@ export const UpdateInformation = ({
   const onSubmit = async (data) => {
     const updateData = {
       ...data,
-      group: group?.id,
+      ...(group?.id && { group: group.id }),
       organization: openUpdateInformation?.data?.profile[0]?.organization?.id,
       profile: {
         gender: gender?.name,
@@ -543,7 +550,7 @@ export const UpdateInformation = ({
         />
         <Field
           errors={errors}
-          className="mb-2"
+          className="my-2"
           label="Address"
           placeholder="Enter Address"
           required
@@ -677,7 +684,7 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
   useEffect(() => {
     const getPlans = async () => {
       const res = await axios.get("/packages/student");
-      setPlansData(res?.data);
+      setPlansData(res?.data?.results);
     };
     getPlans();
   }, [openAssignNewPlan]);
@@ -831,6 +838,7 @@ const ExamCountDown = ({
 
 const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
   const scores = [
+    { id: null, name: "None" },
     { id: 1, name: "35" },
     { id: 2, name: "55" },
     { id: 3, name: "75" },

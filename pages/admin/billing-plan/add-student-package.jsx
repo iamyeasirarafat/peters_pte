@@ -190,6 +190,7 @@ const StudentPackForm = ({ packData }) => {
             label="Cost"
             placeholder="1500 BDT"
             required
+            type="number"
             register={register}
             name="cost"
           />

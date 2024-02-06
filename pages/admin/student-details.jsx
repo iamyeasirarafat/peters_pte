@@ -16,6 +16,7 @@ export default function StudentDetails() {
     };
     router.isReady && fetchData();
   }, [id, router, fetch]);
+  console.log("studentDetails", studentDetails);
   return (
     <Layout title="Student Details" back>
       <StudentsDetailsMain

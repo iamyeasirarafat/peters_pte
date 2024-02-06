@@ -12,9 +12,10 @@ import { useEffect } from "react";
 import axios from "axios";
 import { formatDateTime } from "@/utils/formatDateTime";
 import Loading from "@/components/Loading";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import { GoTrash } from "react-icons/go";
 import { FaEdit } from "react-icons/fa";
+import { MultiActions } from "../../../../components/Students_list";
 
 const Index = () => {
   const [reFetch, setRefetch] = useState(false);
@@ -29,7 +30,6 @@ const Index = () => {
   const pageLimit = 8;
 
   const { list } = router.query;
-  console.log("list", list);
   // get prediction data
   useEffect(() => {
     const getStudyPrediction = async () => {
@@ -39,12 +39,12 @@ const Index = () => {
       setPrediction(res?.data);
       setIsLoading(false);
     };
-    getStudyPrediction();
-  }, [reFetch, pageNumber, list]);
+    router?.isReady && getStudyPrediction();
+  }, [reFetch, pageNumber, list, router?.isReady]);
 
   return (
     <Layout title={list?.replace("_", " ")} back>
-      <div className="mb-5">
+      <div className="mb-5 flex items-center gap-x-3">
         <button
           onClick={() => router.push(`/admin/study-material/form/add-${list}`)}
           className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary"
@@ -52,6 +52,15 @@ const Index = () => {
           <AiFillPlusCircle />
           Create New {list?.replace("_", " ")}
         </button>
+        {list === "study_material" && (
+          <button
+            onClick={() => router.push(`/admin/study-material/topic`)}
+            className="flex items-center gap-x-2 text-sm font-bold py-2 px-3 bg-primary"
+          >
+            <AiFillPlusCircle />
+            Create New topic
+          </button>
+        )}
       </div>
       {isLoading ? (
         <Loading />
@@ -75,6 +84,8 @@ const Index = () => {
 export default Index;
 
 export const PredictionList = ({ data, setRefetch }) => {
+  const [deleteUserList, setDeleteUserList] = useState([]);
+  const [openMultiActions, setOpenMultiActions] = useState(false);
   const [value, setValue] = useState(false);
   const [openItemId, setOpenItemId] = useState(null);
   return (
@@ -91,8 +102,29 @@ export const PredictionList = ({ data, setRefetch }) => {
           <th className="th-custom text-center">
             <Sorting title="Category" />
           </th>
-          <th className="th-custom text-end">
+          <th className="th-custom text-center">
             <Sorting title="Upload Date" />
+          </th>
+          <th className="th-custom text-center">
+            {deleteUserList?.length > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setOpenMultiActions(!openMultiActions)}
+                  className="btn-transparent-dark btn-small btn-square"
+                >
+                  <Icon name="dots" />
+                </button>
+                {openMultiActions && (
+                  <MultiActions
+                    type="StudyMaterial"
+                    deleteUserList={deleteUserList}
+                    setDeleteUserList={setDeleteUserList}
+                    setOpenMultiActions={setOpenMultiActions}
+                    setStatus={setRefetch}
+                  />
+                )}
+              </div>
+            )}
           </th>
         </tr>
       </thead>
@@ -104,6 +136,8 @@ export const PredictionList = ({ data, setRefetch }) => {
             openItemId={openItemId}
             setOpenItemId={setOpenItemId}
             setRefetch={setRefetch}
+            deleteUserList={deleteUserList}
+            setDeleteUserList={setDeleteUserList}
           />
         ))}
       </tbody>
@@ -111,12 +145,36 @@ export const PredictionList = ({ data, setRefetch }) => {
   );
 };
 
-const PredictionListRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
+const PredictionListRow = ({
+  data,
+  openItemId,
+  setOpenItemId,
+  setRefetch,
+  deleteUserList,
+  setDeleteUserList,
+}) => {
   const [value, setValue] = useState(false);
+  useEffect(() => {
+    if (deleteUserList && deleteUserList.includes(data.id)) {
+      setValue(true);
+    } else {
+      setValue(false);
+    }
+  }, [data, deleteUserList]);
   return (
     <tr>
       <td className="td-custom flex items-center gap-x-4">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+        <Checkbox
+          value={value}
+          onChange={() => {
+            setValue(!value);
+            if (!value) {
+              setDeleteUserList((prev) => [...prev, data.id]);
+            } else {
+              setDeleteUserList((prev) => prev.filter((i) => i !== data.id));
+            }
+          }}
+        />
         <p className="text-sm font-bold">{data?.title}</p>
       </td>
       <td className="td-custom text-center">
@@ -127,14 +185,19 @@ const PredictionListRow = ({ data, openItemId, setOpenItemId, setRefetch }) => {
           {data?.premium ? "Premium" : "Free"}
         </p>
       </td>
-      <td className="td-custom flex items-center justify-end gap-x-3">
+      <td className="td-custom text-center">
         <p className="text-sm">{formatDateTime(data?.uploaded_at, "date")}</p>
+      </td>
+      <td className="td-custom text-center">
         <div className="relative">
           <button
             onClick={() =>
               setOpenItemId(data?.id === openItemId ? null : data?.id)
             }
-            className="btn-transparent-dark btn-small btn-square"
+            disabled={deleteUserList?.length > 0}
+            className={`btn-transparent-dark btn-small btn-square ${
+              deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+            }`}
           >
             <Icon name="dots" />
           </button>
@@ -188,21 +251,36 @@ export const PredictionListMobile = ({ data, setRefetch }) => {
 };
 
 const StudyMore = ({ id, setRefetch }) => {
+  const router = useRouter();
+  const { list } = router.query;
+  const [loading, setLoading] = useState(false);
   const handelDelete = async () => {
-    const res = await axios.delete(`/study_material/${id}`);
-    toast.success("File Deleted");
-    setRefetch && setRefetch((prev) => !prev);
+    try {
+      setLoading(true);
+      const res = await axios.delete(`/study_material/${id}`);
+      toast.success("Deleted Successfully");
+      setRefetch && setRefetch((prev) => !prev);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error("Something went wrong");
+    }
   };
   return (
-    <div className="bg-secondary rounded shadow absolute top-1/2 p-2 right-full space-y-2">
-      <button className="flex items-center gap-x-2 border border-green-500 hover:text-green-500 duration-200 rounded-md py-1 px-2">
+    <div className="bg-secondary rounded shadow absolute top-1/2 p-2 right-[60%] space-y-2">
+      <button
+        onClick={() =>
+          router.push(`/admin/study-material/form/add-${list}?id=${id}`)
+        }
+        className="flex items-center gap-x-2 hover:text-purple-1 duration-200 rounded-md py-1 px-2"
+      >
         <FaEdit /> Edit
       </button>
       <button
-        className="flex items-center gap-x-2 border border-red hover:text-red duration-200 rounded-md py-1 px-2"
+        className="flex items-center gap-x-2  hover:text-red duration-200 rounded-md py-1 px-2"
         onClick={handelDelete}
       >
-        <GoTrash /> Delete
+        {loading ? <LoaderIcon /> : <GoTrash />} Delete
       </button>
     </div>
   );

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Icon from "../Icon";
 import Search from "../Search";
@@ -12,7 +11,7 @@ const FilterTab = [
   { name: "Low Scorer" },
 ];
 
-const Filters = ({ }: FiltersProps) => {
+const Filters = ({}: FiltersProps) => {
   const [activeTab, setActiveTab] = useState("Most Active Student");
   return (
     <div className="flex md:flex-wrap gap-x-[2px] mb-[2px]">
@@ -20,24 +19,23 @@ const Filters = ({ }: FiltersProps) => {
         <button
           key={i}
           onClick={() => setActiveTab(tab?.name)}
-          className={`${tab?.name === activeTab
-            ? "bg-primary text-white dark:bg-[#2c2620]"
-            : "bg-white text-black dark:bg-black dark:text-white"
-            } py-3 px-5 text-xs font-bold`}
+          className={`${
+            tab?.name === activeTab
+              ? "bg-primary text-white dark:bg-[#2c2620]"
+              : "bg-white text-black dark:bg-black dark:text-white"
+          } py-3 px-5 text-xs font-bold`}
         >
           {tab?.name}
         </button>
       ))}
-
     </div>
   );
 };
 
 export default Filters;
 
-
 export const StudentFilter = () => {
-  const filtersChoice = ["All Groups"];
+  const filtersChoice = ["All Groups", "All Students"];
 
   type FiltersProps = {};
 
@@ -70,5 +68,5 @@ export const StudentFilter = () => {
         onSubmit={() => console.log("Submit")}
       />
     </div>
-  )
-}
+  );
+};

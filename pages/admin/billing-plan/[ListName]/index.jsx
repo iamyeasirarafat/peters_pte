@@ -43,9 +43,7 @@ const Index = () => {
         {/* Package list */}
         <div className="mt-4">
           {data ? (
-            <>
-              <ListTable data={data} />
-            </>
+            <ListTable data={data} />
           ) : (
             <p>{ListName?.replace("_", " ")} Package not available</p>
           )}
@@ -67,7 +65,9 @@ const ListTable = ({ data }) => {
   });
   return mounted && isTablet ? (
     <div className="bg-white dark:bg-black">
-      <MobileTRTable />
+      {data?.map((item, index) => (
+        <MobileTRTable key={index} data={item} ListName={ListName} />
+      ))}
     </div>
   ) : (
     <table className="bg-white dark:bg-black w-full">
@@ -92,7 +92,7 @@ const ListTable = ({ data }) => {
       </thead>
       <tbody>
         {data?.map((item) => (
-          <TransactionsHistoryRow
+          <TransactionsRow
             data={item}
             listName={ListName}
             key={item.id}
@@ -105,7 +105,7 @@ const ListTable = ({ data }) => {
   );
 };
 
-const TransactionsHistoryRow = ({ data, listName, moreShow, setMoreShow }) => {
+const TransactionsRow = ({ data, listName, moreShow, setMoreShow }) => {
   return (
     <tr>
       <td className="td-custom">
@@ -150,28 +150,37 @@ const TransactionsHistoryRow = ({ data, listName, moreShow, setMoreShow }) => {
   );
 };
 
-const MobileTRTable = () => (
+const MobileTRTable = ({ data, ListName }) => (
   <div className="flex items-center justify-between p-4">
     <div className="flex items-center gap-x-3 ">
       <Image
-        className="w-10 h-10 rounded-full"
-        src={"/images/payment/stripe.png"}
+        className="w-9 h-9 rounded-full"
+        src={data.thumbnail}
         width={50}
         height={50}
         alt=""
       />
       <div className="space-y-1">
-        <p className="text-sm font-bold">Premium 30 Days</p>
-        <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-          Stripe
-        </p>
+        <p className="text-sm font-bold">{data?.title || "N/A"}</p>
+        <div>
+          {ListName === "students_package" ? (
+            `${data?.cost} BDT`
+          ) : (
+            <p className="text-sm font-bold">
+              {data?.validation?.[0]?.cost} -{" "}
+              {data?.validation?.[data?.validation.length - 1]?.cost} BDT
+            </p>
+          )}
+        </div>
       </div>
     </div>
     <div className="text-right space-y-1">
-      <p className="text-sm font-bold">5940 BDT</p>
-      <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-        #PPTE - 548602
+      <p>
+        {ListName === "students_package"
+          ? `Validity ${data?.validity} Days`
+          : `Variation ${data?.validation?.length}`}
       </p>
+      <td className="td-custom text-sm font-bold text-center">N/a</td>
     </div>
   </div>
 );

@@ -47,7 +47,7 @@ const Glance = ({ studentSCounts }) => {
     },
   ];
   return (
-    <div className="grid grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
+    <div className="grid grid-cols-4 lg:grid-cols-1 gap-x-5 gap-y-4">
       {data?.map((item, i) => (
         <div
           key={i}

@@ -8,28 +8,28 @@ import { useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Spinner from "../../../../components/Spinner/Spinner";
+import { useRouter } from "next/router";
+import MockTestMultiSelector from "./MockTestMultiSelector";
 
 function FullMocktest() {
+  const router = useRouter();
+  const { id } = router.query;
   return (
-    <Layout title="SMT / New Mocktest" back>
-      <SpeakingTestForm />
+    <Layout title={`SMT / ${id ? `#${id}` : "New Mocktest"}`} back>
+      <SpeakingTestForm id={id} />
     </Layout>
   );
 }
 
 export default FullMocktest;
 
-const SpeakingTestForm = () => {
+const SpeakingTestForm = ({ id }) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedRa, setSelectedRa] = useState([]);
   const [readAlouds, setReadAlouds] = useState([]);
-  const [repeatSentence, setRepeatSentence] = useState([]);
   const [repeatSentences, setRepeatSentences] = useState([]);
-  const [describeImage, setDescribeImage] = useState([]);
   const [describeImages, setDescribeImages] = useState([]);
-  const [retellSentence, setRetellSentence] = useState([]);
   const [retellSentences, setRetellSentences] = useState([]);
-  const [shortQuestion, setShortQuestion] = useState([]);
   const [shortQuestions, setShortQuestions] = useState([]);
   useEffect(() => {
     getQuestion("/practice/read_alouds", setReadAlouds);
@@ -41,6 +41,7 @@ const SpeakingTestForm = () => {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
   } = useForm();
@@ -48,22 +49,40 @@ const SpeakingTestForm = () => {
     setIsLoading(true);
     const MockTestData = {
       title: data?.title,
-      read_aloud: selectedRa?.map((item) => item.id),
-      repeat_sentence: repeatSentence?.map((item) => item.id),
-      describe_image: describeImage?.map((item) => item.id),
-      retell_sentence: retellSentence?.map((item) => item.id),
-      short_question: shortQuestion?.map((item) => item.id),
+      read_aloud: data?.read_aloud || [],
+      repeat_sentence: data?.repeat_sentence || [],
+      describe_image: data?.describe_image || [],
+      retell_sentence: data?.retell_sentence || [],
+      short_question: data?.short_question || [],
     };
     try {
-      const res = await axios.post("/speaking_mocktest", MockTestData);
-      toast.success("mocktest added successfully");
+      const res = id
+        ? await axios.put(`speaking_mocktest/${id}`, MockTestData)
+        : await axios.post("/speaking_mocktest", MockTestData);
+      toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
+      router.back();
     } catch (error) {
+      setIsLoading(false);
       error?.response?.data?.title[0] &&
-        toast.error(error?.response?.data?.title[0]);
+        toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
+  // set Default data
+  useEffect(() => {
+    if (id) {
+      const getMocktest = async () => {
+        try {
+          const { data } = await axios.get(`/speaking_mocktest/${id}`);
+          reset(data);
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
+      router?.isReady && getMocktest();
+    }
+  }, [id, router?.isReady, reset]);
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
       <Field
@@ -75,36 +94,41 @@ const SpeakingTestForm = () => {
         name="title"
       />
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={readAlouds}
-          selectedValue={selectedRa}
-          setSelectedValue={setSelectedRa}
+        <MockTestMultiSelector
+          options={readAlouds}
+          control={control}
+          name="read_aloud"
+          placeholder="Select Read Aloud"
           label="Read Aloud"
         />
-        <MockTestSelectMulti
-          dataArray={repeatSentences}
-          selectedValue={repeatSentence}
-          setSelectedValue={setRepeatSentence}
+        <MockTestMultiSelector
+          options={repeatSentences}
+          control={control}
+          name="repeat_sentence"
+          placeholder="Select Repeat Sentence"
           label="Repeat Sentence"
         />
-        <MockTestSelectMulti
-          dataArray={describeImages}
-          selectedValue={describeImage}
-          setSelectedValue={setDescribeImage}
+        <MockTestMultiSelector
+          options={describeImages}
+          control={control}
+          name="describe_image"
+          placeholder="Select Describe Image"
           label="Describe Image"
         />
       </div>
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={shortQuestions}
-          selectedValue={shortQuestion}
-          setSelectedValue={setShortQuestion}
+        <MockTestMultiSelector
+          options={shortQuestions}
+          control={control}
+          name="short_question"
+          placeholder="Select Answer Short Question"
           label="Answer Short Question"
         />
-        <MockTestSelectMulti
-          dataArray={retellSentences}
-          selectedValue={retellSentence}
-          setSelectedValue={setRetellSentence}
+        <MockTestMultiSelector
+          options={retellSentences}
+          control={control}
+          name="retell_sentence"
+          placeholder="Select Re-Tell Lecture"
           label="Re-Tell Lecture"
         />
       </div>
@@ -113,7 +137,8 @@ const SpeakingTestForm = () => {
         type="submit"
         className="p-4 rounded-sm bg-primary w-full  font-extrabold flex items-center justify-center gap-x-2"
       >
-        {isLoading && <Spinner className="w-5 h-5" />}Create Mocktest
+        {isLoading && <Spinner className="w-5 h-5" />}{" "}
+        {id ? "Update" : "Create"} Mocktest
       </button>
     </form>
   );

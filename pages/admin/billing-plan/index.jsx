@@ -46,14 +46,13 @@ function BillingPayment() {
             <p className="text-lg font-extrabold">Plan & Package Creator</p>
             <p className="text-xs font-bold my-5">Click to Go</p>
             {/* Offer*/}
-
             <div className="w-full">
               <Pricing data={premiumAccounts} />
             </div>
           </div>
 
           {/* payment method */}
-          <div className=" space-y-5">
+          <div className="space-y-5 mt-3">
             <p className="text-lg font-extrabold">Payment Method</p>
             {/* method */}
             <PaymentMethod />
@@ -85,7 +84,7 @@ export default BillingPayment;
 
 const Pricing = ({ data }) => {
   return (
-    <div className="space-x-3 flex w-full">
+    <div className="flex flex-row md:flex-col gap-3 w-full">
       {data?.map((item, i) => {
         return (
           <Link key={item?.id || i} href={item.link} className="w-full">
@@ -112,6 +111,7 @@ const Pricing = ({ data }) => {
 };
 
 const PaymentMethod = () => {
+  const [payment, setPayment] = useState(true);
   return (
     <div>
       <div className="flex items-center gap-x-3">
@@ -131,7 +131,7 @@ const PaymentMethod = () => {
           </div>
           <div className="flex items-center gap-x-4">
             <div className="text-right">
-              <Switch />
+              <Switch value={payment} setValue={setPayment} />
             </div>
             <button className="btn-transparent-dark btn-small btn-square md:hidden">
               <Icon name="dots" />
@@ -145,16 +145,16 @@ const PaymentMethod = () => {
 
 const CountCart = () => {
   const data = [
-    { name: "Remaining Account", count: "45", icon: <FaUsers /> },
-    { name: "Currently Used Account", count: "565", icon: <IoDiamondSharp /> },
+    { name: "Remaining Account", count: "0", icon: <FaUsers /> },
+    { name: "Currently Used Account", count: "0", icon: <IoDiamondSharp /> },
     {
       name: "Remaining Mocktest",
-      count: "38",
+      count: "0",
       icon: <MdQuiz />,
     },
     {
       name: "Currently Used Mocktest",
-      count: "38",
+      count: "0",
       icon: <MdAccountBalanceWallet />,
     },
   ];
@@ -182,16 +182,14 @@ const Switch = ({ className, value, setValue }) => (
   <div className={`inline-flex bg-secondary shrink-0 ${className}`}>
     <SwitchReact
       checked={value}
-      onChange={setValue}
-      className={`relative inline-flex items-center w-10 h-6 pl-0.75 cursor-pointer rounded-sm transition-colors outline-none  ${
-        value ? "bg-primary" : "bg-primary-3"
-      }`}
+      // onChange={setValue}
+      className={`relative inline-flex items-center w-10 h-6 pl-0.75 cursor-pointer rounded-sm transition-colors outline-none bg-secondary`}
     >
       <span
         aria-hidden="true"
         className={twMerge(
           `pointer-events-none inline-block w-4 h-4 transition-all ${
-            value ? "translate-x-4 bg-n-1" : "translate-x-0 bg-primary"
+            value ? "translate-x-4 bg-primary" : "translate-x-0 bg-n-1"
           }`
         )}
       />

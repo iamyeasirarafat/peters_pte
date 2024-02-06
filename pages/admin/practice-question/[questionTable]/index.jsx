@@ -12,8 +12,9 @@ const Index = () => {
   const router = useRouter();
   const { questionTable } = router.query;
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  // console.log(tableData, "data table");
+  const [loading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 9;
   useEffect(() => {
     let url;
     if (questionTable === "read-aloud") {
@@ -59,9 +60,10 @@ const Index = () => {
     }
 
     const fetchData = async () => {
-      setLoading(true);
       try {
-        const response = await axios.get(`/${url}`);
+        const response = await axios.get(
+          `/${url}?limit=${pageLimit}&page=${pageNumber}`
+        );
         setTableData(response.data);
       } catch (error) {
         console.log(error);
@@ -70,7 +72,7 @@ const Index = () => {
       }
     };
     fetchData();
-  }, [questionTable]);
+  }, [questionTable, pageNumber]);
   return (
     <AdminLayout title={questionTable} back={true}>
       <div className="flex justify-between mb-6">
@@ -103,10 +105,14 @@ const Index = () => {
                     border-x-8 border-solid border-orange-400 border-t-transparent"
           ></div>
         </div>
-      ) : tableData?.length ? (
+      ) : tableData?.results?.length ? (
         <>
-          <Table student={false} items={tableData} />
-          <TablePagination />
+          <Table student={false} items={tableData?.results} />
+          <TablePagination
+            pageNumber={pageNumber}
+            totalPage={Math.ceil(tableData?.total / pageLimit)}
+            prevNext={setPageNumber}
+          />
         </>
       ) : (
         <h3 className="text-center mt-30 font-bold text-3xl text-orange-300">

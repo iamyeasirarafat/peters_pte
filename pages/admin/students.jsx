@@ -2,16 +2,18 @@ import Select from "@/components/AddStudentSelect";
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
 import { StudentFilter } from "@/components/Filters";
-import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
+import TablePagination from "@/components/TablePagination";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import Students from "../../components/Students_list";
-import TablePagination from "@/components/TablePagination";
+import { IoFilterSharp } from "react-icons/io5";
+import { RiGraduationCapFill } from "react-icons/ri";
+import { FaPeopleGroup } from "react-icons/fa6";
 
 const StudentList = () => {
   const [data, setData] = useState([]);
@@ -44,7 +46,10 @@ const StudentList = () => {
         </div>
       ) : data?.results?.length > 0 ? (
         <>
-          <StudentFilter />
+          {/* <StudentFilter /> */}
+          <div className="mb-3">
+            <Filter />
+          </div>
           <Students admin={true} setStatus={setStatus} items={data?.results} />
           <TablePagination
             pageNumber={pageNumber}
@@ -111,8 +116,20 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios(org.id + "/groups");
-      setGroups(res.data);
+      try {
+        const res = await axios(org.id + "/groups");
+        const fetchedGroups = res.data?.results || [];
+        const formattedGroup = [
+          {
+            id: null,
+            name: "None",
+          },
+          ...fetchedGroups,
+        ];
+        setGroups(formattedGroup);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
     };
     org?.id && fetchGroup();
   }, [org]);
@@ -235,5 +252,37 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
         <button className="btn-purple  w-full">Add Student</button>
       </form>
     </Modal>
+  );
+};
+
+const Filter = () => {
+  const filterTab = [
+    {
+      id: 1,
+      name: "Filter",
+      icon: <IoFilterSharp />,
+    },
+    {
+      id: 2,
+      name: "Group",
+      icon: <FaPeopleGroup />,
+    },
+    {
+      id: 3,
+      name: "Organization",
+      icon: <RiGraduationCapFill />,
+    },
+  ];
+  return (
+    <div className="flex items-center gap-x-2">
+      {filterTab?.map((item, index) => (
+        <button
+          key={index}
+          className="bg-white font-semibold text-sm py-1 px-6 flex items-center gap-x-2"
+        >
+          {item?.icon} {item.name}
+        </button>
+      ))}
+    </div>
   );
 };

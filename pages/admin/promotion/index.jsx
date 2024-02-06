@@ -8,8 +8,10 @@ import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import { MultiActions } from "@/components/Students_list";
 
 function DiscussionList() {
+  const [status, setStatus] = useState(false);
   const [data, setData] = useState([]);
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
@@ -24,7 +26,7 @@ function DiscussionList() {
       setData(data || []);
     };
     getData();
-  }, []);
+  }, [status]);
   return (
     <Layout title="Promotion" back>
       {/* Tab */}
@@ -32,7 +34,7 @@ function DiscussionList() {
       {mounted && isTablet ? (
         <DiscussionTableMobile data={data} />
       ) : (
-        <DiscussionTable data={data} />
+        <DiscussionTable data={data} setStatus={setStatus} />
       )}
     </Layout>
   );
@@ -69,8 +71,10 @@ const DiscussionTab = ({}) => {
   );
 };
 
-const DiscussionTable = ({ data }) => {
+const DiscussionTable = ({ data, setStatus }) => {
   const [value, setValue] = useState(false);
+  const [deleteUserList, setDeleteUserList] = useState([]);
+  const [openMultiActions, setOpenMultiActions] = useState(false);
   return (
     <div className="mt-4">
       <table className="bg-white dark:bg-black w-full">
@@ -80,28 +84,50 @@ const DiscussionTable = ({ data }) => {
               <Checkbox value={value} onChange={() => setValue(!value)} />
               <Sorting title="Coupon Name" />
             </th>
-            <th className="th-custom text-right">
+            <th className="th-custom text-center">
               <Sorting title="Starting Date" />
             </th>
-            <th className="th-custom text-right">
+            <th className="th-custom text-center">
               <Sorting title="Ending Date" />
             </th>
-            <th className="th-custom text-right">
+            <th className="th-custom text-center">
               <Sorting title="Coupon Code" />
             </th>
-            <th className="th-custom text-right ">
+            <th className="th-custom text-center ">
               <Sorting title="Created In" />
             </th>
-            <th className="th-custom text-right ">
-              <button className="btn-transparent-dark btn-small btn-square">
-                <Icon name="dots" />
-              </button>
+            <th className="th-custom text-center">
+              {deleteUserList?.length > 0 && (
+                <div className="relative">
+                  <button
+                    onClick={() => setOpenMultiActions(!openMultiActions)}
+                    className="btn-transparent-dark btn-small btn-square"
+                  >
+                    <Icon name="dots" />
+                  </button>
+                  {openMultiActions && (
+                    <MultiActions
+                      type="Coupon"
+                      deleteUserList={deleteUserList}
+                      setDeleteUserList={setDeleteUserList}
+                      setOpenMultiActions={setOpenMultiActions}
+                      setStatus={setStatus}
+                    />
+                  )}
+                </div>
+              )}
             </th>
           </tr>
         </thead>
         <tbody>
           {data?.map((item) => (
-            <DiscussionRow data={item} key={item.id} />
+            <DiscussionRow
+              data={item}
+              key={item.id}
+              deleteUserList={deleteUserList}
+              setDeleteUserList={setDeleteUserList}
+              setStatus={setStatus}
+            />
           ))}
         </tbody>
       </table>
@@ -109,52 +135,76 @@ const DiscussionTable = ({ data }) => {
   );
 };
 
-const DiscussionRow = ({ data }) => {
+const DiscussionRow = ({
+  data,
+  setDeleteUserList,
+  deleteUserList,
+  setStatus,
+}) => {
   const [value, setValue] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [editData, setEditData] = useState({});
   const router = useRouter();
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+  useEffect(() => {
+    if (deleteUserList && deleteUserList.includes(data.id)) {
+      setValue(true);
+    } else {
+      setValue(false);
+    }
+  }, [data, deleteUserList]);
 
   return (
     <tr>
       <td className="td-custom flex items-center gap-x-4">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+        <Checkbox
+          value={value}
+          onChange={() => {
+            setValue(!value);
+            if (!value) {
+              setDeleteUserList((prev) => [...prev, data.id]);
+            } else {
+              setDeleteUserList((prev) => prev.filter((i) => i !== data.id));
+            }
+          }}
+        />
         <p className="text-sm font-bold">{data.title || "N/A"}</p>
       </td>
-      <td className="td-custom text-right">
+      <td className="td-custom text-center">
         <p className="text-sm">{data.start_date || "N/A"}</p>
       </td>
-      <td className="td-custom text-right">
+      <td className="td-custom text-center">
         <p className="text-sm">{data.end_date || "N/A"}</p>
       </td>
-      <td className="td-custom text-right">
+      <td className="td-custom text-center">
         <p className="text-sm">{data.code || "N/A"}</p>
       </td>
-      <td className="td-custom text-right">
+      <td className="td-custom text-center">
         <p className="text-sm">
           {dayjs(data.created_at).format("YYYY-MM-DD") || "N/A"}
         </p>
       </td>
 
-      <td className="td-custom  text-right ">
-        <div className="flex justify-end bg-gray-100 ">
+      <td className="td-custom  text-center ">
+        <div className="flex justify-center bg-gray-100 ">
           <div
             className="relative inline-block text-left"
             onClick={toggleDropdown}
-            // onBlur={closeDropdown}
           >
-            <button className="btn-transparent-dark btn-small btn-square">
+            <button
+              disabled={deleteUserList?.length > 0}
+              className={`btn-transparent-dark btn-small btn-square ${
+                deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+              }`}
+            >
               <Icon name="dots" />
             </button>
             <div
               style={{ backgroundColor: "#FAF4F0" }}
               className={`${
                 isOpen ? "block" : "hidden"
-              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              } origin-top-right font-semibold absolute right-full top-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
             >
               <div role="none">
                 <button

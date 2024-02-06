@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useMediaQuery } from "react-responsive";
+
 const AdminUser = () => {
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({
@@ -68,8 +69,8 @@ const AdminUserList = ({ data, setStatus }) => {
     </div>
   );
 };
+
 const AdminUserRow = ({ data, setStatus }) => {
-  console.log(data, "yes");
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(false);
   const toggleDropdown = () => {
@@ -127,33 +128,41 @@ const AdminUserRow = ({ data, setStatus }) => {
   );
 };
 
-const AdminUserMobile = () => (
-  <div className="flex items-center justify-between p-4">
-    <div className="flex items-center gap-x-3 ">
-      <Image
-        className="w-10 h-10 rounded-full"
-        src={"/images/payment/stripe.png"}
-        width={50}
-        height={50}
-        alt=""
-      />
-      <div className="space-y-1">
-        <p className="text-sm font-bold">Dhaka PTE</p>
-        <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-          tusha987
-        </p>
-      </div>
-    </div>
-    <div className="text-right space-y-1">
-      <button className="btn-transparent-dark btn-small btn-square">
-        <Icon name="dots" />
-      </button>
-      <p className="text-[#5F646D] dark:text-white text-sm font-medium">
-        tushar@gmail.com
-      </p>
-    </div>
-  </div>
-);
+const AdminUserMobile = ({ data }) => {
+  return (
+    <>
+      {data?.map((item, index) => (
+        <div key={index} className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-x-3 ">
+            <Image
+              className="w-9 h-9 rounded-full"
+              src={item.picture || "/images/img-2.jpg"}
+              width={50}
+              height={50}
+              alt=""
+            />
+            <div className="space-y-1">
+              <p className="text-sm font-bold">
+                {item?.profile.userid || "N/A"}
+              </p>
+              <p className="text-[#5F646D] dark:text-white text-sm font-medium">
+                {item?.full_name}
+              </p>
+            </div>
+          </div>
+          <div className="text-right space-y-1">
+            <button className="btn-transparent-dark btn-small btn-square">
+              <Icon name="dots" />
+            </button>
+            <p className="text-[#5F646D] dark:text-white text-sm font-medium">
+              {item?.email}
+            </p>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
 
 export const AddAdminUser = ({ visible, setVisible, setStatus }) => {
   const {

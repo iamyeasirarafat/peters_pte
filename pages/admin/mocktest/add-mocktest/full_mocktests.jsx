@@ -9,11 +9,15 @@ import { useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Spinner from "../../../../components/Spinner/Spinner";
+import { useRouter } from "next/router";
+import MockTestMultiSelector from "./MockTestMultiSelector";
 
 function FullMocktest() {
+  const router = useRouter();
+  const { id } = router.query;
   return (
-    <Layout title="Full Mocktest / New Mocktest" back>
-      <FullTestForm />
+    <Layout title={`Full Mocktest / ${id ? `#${id}` : "New Mocktest"}`} back>
+      <FullTestForm id={id} />
     </Layout>
   );
 }
@@ -22,52 +26,42 @@ export const getQuestion = async (api, setData) => {
   const { data } = await axios.get(api);
   setData(data);
 };
+// mocktest data formate
+export const optionFormatter = (options) => {
+  return options?.map((item) => {
+    return {
+      title: item?.title,
+      id: item?.id,
+    };
+  });
+};
 export default FullMocktest;
-const FullTestForm = () => {
+const FullTestForm = ({ id }) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   // speaking
-  const [selectedRa, setSelectedRa] = useState([]);
   const [readAlouds, setReadAlouds] = useState([]);
-  const [repeatSentence, setRepeatSentence] = useState([]);
   const [repeatSentences, setRepeatSentences] = useState([]);
-  const [describeImage, setDescribeImage] = useState([]);
   const [describeImages, setDescribeImages] = useState([]);
-  const [retellSentence, setRetellSentence] = useState([]);
   const [retellSentences, setRetellSentences] = useState([]);
-  const [shortQuestion, setShortQuestion] = useState([]);
   const [shortQuestions, setShortQuestions] = useState([]);
   // witting
-  const [summarize, setSummarize] = useState([]);
   const [summarizes, setSummarizes] = useState([]);
-  const [writeEasy, setWriteEasy] = useState([]);
   const [writeEasys, setWriteEasys] = useState([]);
   // listening
-  const [rwblank, setRwblank] = useState([]);
   const [rwblanks, setRwblanks] = useState([]);
-  const [listeningMcq, setListeningMcq] = useState([]);
   const [listeningMcqs, setListeningMcqs] = useState([]);
-  const [reorderParagraph, setReorderParagraph] = useState([]);
   const [reorderParagraphs, setReorderParagraphs] = useState([]);
-  const [listeningBlanck, setListeningBlanck] = useState([]);
   const [listeningBlancks, setListeningBlancks] = useState([]);
-  const [listeningMcqSingle, setListeningMcqSingle] = useState([]);
   const [listeningMcqSingles, setListeningMcqSingles] = useState([]);
   // reading
-  const [spokenSummarize, setSpokenSummarize] = useState([]);
   const [spokenSummarizes, setSpokenSummarizes] = useState([]);
-  const [spokenMcq, setSpokenMcq] = useState([]);
   const [spokenMcqs, setSpokenMcqs] = useState([]);
-  const [highlightSummary, setHighlightSummary] = useState([]);
   const [highlightSummarys, setHighlightSummarys] = useState([]);
-  const [readingBlanck, setReadingBlanck] = useState([]);
   const [readingBlancks, setReadingBlancks] = useState([]);
-  const [spokenMcqSingle, setSpokenMcqSingle] = useState([]);
   const [spokenMcqSingles, setSpokenMcqSingles] = useState([]);
-  const [missingWord, setMissingWord] = useState([]);
   const [missingWords, setMissingWords] = useState([]);
-  const [incorrectWord, setIncorrectWord] = useState([]);
   const [incorrectWords, setIncorrectWords] = useState([]);
-  const [dictation, setDictation] = useState([]);
   const [dictations, setDictations] = useState([]);
   useEffect(() => {
     // speaking
@@ -98,6 +92,7 @@ const FullTestForm = () => {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
   } = useForm();
@@ -106,42 +101,72 @@ const FullTestForm = () => {
     setIsLoading(true);
     const fullMockTestData = {
       title: data?.title,
-      read_aloud: selectedRa?.map((item) => item.id),
-      repeat_sentence: repeatSentence?.map((item) => item.id),
-      describe_image: describeImage?.map((item) => item.id),
-      retell_sentence: retellSentence?.map((item) => item.id),
-      short_question: shortQuestion?.map((item) => item.id),
+      read_aloud: data?.read_aloud || [],
+      repeat_sentence: data?.repeat_sentence || [],
+      describe_image: data?.describe_image || [],
+      retell_sentence: data?.retell_sentence || [],
+      short_question: data?.short_question || [],
       //
-      summarize: summarize?.map((item) => item.id),
-      write_essay: writeEasy?.map((item) => item.id),
+      summarize: data?.summarize || [],
+      write_essay: data?.write_essay || [],
       //
-      summarize_spoken: spokenSummarize?.map((item) => item.id),
-      highlight_summary: highlightSummary?.map((item) => item.id),
-      multi_choice_reading_multi_answer: spokenMcq?.map((item) => item.id),
-      missing_word: missingWord?.map((item) => item.id),
-      highlight_incorrect_word: incorrectWord?.map((item) => item.id),
-      dictation: dictation?.map((item) => item.id),
-      reading_balnk: readingBlanck?.map((item) => item.id),
-      multi_choice_reading_single_answer: spokenMcqSingle?.map(
-        (item) => item.id
-      ),
+      reading_writting_blank: data?.reading_writting_blank || [],
+      multi_choice_multi_answer: data?.multi_choice_multi_answer || [],
+      multi_choice_single_answer: data?.multi_choice_single_answer || [],
+      reorder_paragraph: data?.reorder_paragraph || [],
+      blank: data?.blank || [],
       //
-      reading_writting_blank: rwblank?.map((item) => item.id),
-      multi_choice_multi_answer: listeningMcq?.map((item) => item.id),
-      multi_choice_single_answer: listeningMcqSingle?.map((item) => item.id),
-      reorder_paragraph: reorderParagraph?.map((item) => item.id),
-      blank: listeningBlanck?.map((item) => item.id),
+      summarize_spoken: data?.summarize_spoken || [],
+      highlight_summary: data?.highlight_summary || [],
+      multi_choice_reading_multi_answer:
+        data?.multi_choice_reading_multi_answer || [],
+      missing_word: data?.missing_word || [],
+      highlight_incorrect_word: data?.highlight_incorrect_word || [],
+      dictation: data?.dictation || [],
+      reading_balnk: data?.reading_balnk || [],
+      multi_choice_reading_single_answer:
+        data?.multi_choice_reading_single_answer || [],
     };
     try {
-      const res = await axios.post("/full_mocktest", fullMockTestData);
-      toast.success("mocktest added successfully");
+      const res = id
+        ? await axios.put(`/full_mocktest/${id}`, fullMockTestData)
+        : await axios.post("/full_mocktest", fullMockTestData);
+      toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
+      router.back();
     } catch (error) {
+      setIsLoading(false);
       error?.response?.data?.title[0] &&
-        toast.error(error?.response?.data?.title[0]);
+        toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
+
+  // data formate
+  const listeningMcqsOptions = optionFormatter(listeningMcqs);
+  const reorderParagraphsOptions = optionFormatter(reorderParagraphs);
+  const listeningMcqSinglesOptions = optionFormatter(listeningMcqSingles);
+  //
+  const spokenMcqOptions = optionFormatter(spokenMcqs);
+  const highlightSummarysOptions = optionFormatter(highlightSummarys);
+  const spokenMcqSinglesOptions = optionFormatter(spokenMcqSingles);
+  const missingWordsOptions = optionFormatter(missingWords);
+  const inCorrectWordOptions = optionFormatter(incorrectWords);
+
+  // set Default data
+  useEffect(() => {
+    if (id) {
+      const getMocktest = async () => {
+        try {
+          const { data } = await axios.get(`/full_mocktest/${id}`);
+          reset(data);
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
+      router?.isReady && getMocktest();
+    }
+  }, [id, router?.isReady, reset]);
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
@@ -154,142 +179,162 @@ const FullTestForm = () => {
         name="title"
       />
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={readAlouds}
-          selectedValue={selectedRa}
-          setSelectedValue={setSelectedRa}
+        <MockTestMultiSelector
+          options={readAlouds}
+          control={control}
+          name="read_aloud"
+          placeholder="Select Read Aloud"
           label="Read Aloud"
         />
-        <MockTestSelectMulti
-          dataArray={repeatSentences}
-          selectedValue={repeatSentence}
-          setSelectedValue={setRepeatSentence}
+        <MockTestMultiSelector
+          options={repeatSentences}
+          control={control}
+          name="repeat_sentence"
+          placeholder="Select Repeat Sentence"
           label="Repeat Sentence"
         />
-        <MockTestSelectMulti
-          dataArray={describeImages}
-          selectedValue={describeImage}
-          setSelectedValue={setDescribeImage}
+        <MockTestMultiSelector
+          options={describeImages}
+          control={control}
+          name="describe_image"
+          placeholder="Select Describe Image"
           label="Describe Image"
         />
       </div>
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={shortQuestions}
-          selectedValue={shortQuestion}
-          setSelectedValue={setShortQuestion}
+        <MockTestMultiSelector
+          options={shortQuestions}
+          control={control}
+          name="short_question"
+          placeholder="Select Answer Short Question"
           label="Answer Short Question"
         />
-        <MockTestSelectMulti
-          dataArray={retellSentences}
-          selectedValue={retellSentence}
-          setSelectedValue={setRetellSentence}
+        <MockTestMultiSelector
+          options={retellSentences}
+          control={control}
+          name="retell_sentence"
+          placeholder="Select Re-Tell Lecture"
           label="Re-Tell Lecture"
         />
       </div>
       <hr className="my-5 border border-black" />
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={summarizes}
-          selectedValue={summarize}
-          setSelectedValue={setSummarize}
+        <MockTestMultiSelector
+          options={summarizes}
+          control={control}
+          name="summarize"
+          placeholder="Select Summarize Written Text"
           label="Summarize Written Text"
         />
-        <MockTestSelectMulti
-          dataArray={writeEasys}
-          selectedValue={writeEasy}
-          setSelectedValue={setWriteEasy}
+        <MockTestMultiSelector
+          options={writeEasys}
+          control={control}
+          name="write_essay"
+          placeholder="Select Write Essay"
           label="Write Essay"
         />
       </div>
       <hr className="my-5 border border-black" />
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={rwblanks}
-          selectedValue={rwblank}
-          setSelectedValue={setRwblank}
+        <MockTestMultiSelector
+          options={rwblanks}
+          control={control}
+          name="reading_writting_blank"
+          placeholder="Select Reading & Writing: FIB"
           label="Reading & Writing: FIB"
         />
-        <MockTestSelectMulti
-          dataArray={listeningMcqs}
-          selectedValue={listeningMcq}
-          setSelectedValue={setListeningMcq}
+        <MockTestMultiSelector
+          options={listeningMcqsOptions}
+          control={control}
+          name="multi_choice_multi_answer"
+          placeholder="Select Multiple Choice (Multiple)"
           label="Multiple Choice (Multiple)"
         />
-        <MockTestSelectMulti
-          dataArray={reorderParagraphs}
-          selectedValue={reorderParagraph}
-          setSelectedValue={setReorderParagraph}
+        <MockTestMultiSelector
+          options={reorderParagraphsOptions}
+          control={control}
+          name="reorder_paragraph"
+          placeholder="Select Re-order Paragraphs"
           label="Re-order Paragraphs"
         />
       </div>
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={listeningBlancks}
-          selectedValue={listeningBlanck}
-          setSelectedValue={setListeningBlanck}
+        <MockTestMultiSelector
+          options={listeningBlancks}
+          control={control}
+          name="blank"
+          placeholder="Select Reading: Fill in the Blanks"
           label="Reading: Fill in the Blanks"
         />
-        <MockTestSelectMulti
-          dataArray={listeningMcqSingles}
-          selectedValue={listeningMcqSingle}
-          setSelectedValue={setListeningMcqSingle}
-          label="Reading: Fill in the Blanks"
+        <MockTestMultiSelector
+          options={listeningMcqSinglesOptions}
+          control={control}
+          name="multi_choice_single_answer"
+          placeholder="Select Multiple Choice (Single)"
+          label="Multiple Choice (Single)"
         />
       </div>
       <hr className="my-5 border border-black" />
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={spokenSummarizes}
-          selectedValue={spokenSummarize}
-          setSelectedValue={setSpokenSummarize}
+        <MockTestMultiSelector
+          options={spokenSummarizes}
+          control={control}
+          name="summarize_spoken"
+          placeholder="Select Summarize Spoken Text"
           label="Summarize Spoken Text"
         />
-        <MockTestSelectMulti
-          dataArray={spokenMcqs}
-          selectedValue={spokenMcq}
-          setSelectedValue={setSpokenMcq}
+        <MockTestMultiSelector
+          options={spokenMcqOptions}
+          control={control}
+          name="multi_choice_reading_multi_answer"
+          placeholder="Select Multiple Choice (Multiple)"
           label="Multiple Choice (Multiple)"
         />
-        <MockTestSelectMulti
-          dataArray={highlightSummarys}
-          selectedValue={highlightSummary}
-          setSelectedValue={setHighlightSummary}
+        <MockTestMultiSelector
+          options={highlightSummarysOptions}
+          control={control}
+          name="highlight_summary"
+          placeholder="Select Highlight Correct Summary"
           label="Highlight Correct Summary"
         />
       </div>
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={readingBlancks}
-          selectedValue={readingBlanck}
-          setSelectedValue={setReadingBlanck}
+        <MockTestMultiSelector
+          options={readingBlancks}
+          control={control}
+          name="reading_balnk"
+          placeholder="Select Fill in the Blanks"
           label="Fill in the Blanks"
         />
-        <MockTestSelectMulti
-          dataArray={spokenMcqSingles}
-          selectedValue={spokenMcqSingle}
-          setSelectedValue={setSpokenMcqSingle}
+        <MockTestMultiSelector
+          options={spokenMcqSinglesOptions}
+          control={control}
+          name="multi_choice_reading_single_answer"
+          placeholder="Select Multiple Choice (Single)"
           label="Multiple Choice (Single)"
         />
-        <MockTestSelectMulti
-          dataArray={missingWords}
-          selectedValue={missingWord}
-          setSelectedValue={setMissingWord}
+        <MockTestMultiSelector
+          options={missingWordsOptions}
+          control={control}
+          name="missing_word"
+          placeholder="Select Select Missing Word"
           label="Select Missing Word"
         />
       </div>
       <div className="grid grid-cols-3 gap-x-5">
-        <MockTestSelectMulti
-          dataArray={incorrectWords}
-          selectedValue={incorrectWord}
-          setSelectedValue={setIncorrectWord}
+        <MockTestMultiSelector
+          options={inCorrectWordOptions}
+          control={control}
+          name="highlight_incorrect_word"
+          placeholder="Select Highlight Incorrect Words"
           label="Highlight Incorrect Words"
         />
-        <MockTestSelectMulti
-          dataArray={dictations}
-          selectedValue={dictation}
-          setSelectedValue={setDictation}
-          label="Write From Dictation"
+        <MockTestMultiSelector
+          options={dictations}
+          control={control}
+          name="dictation"
+          placeholder="Select Write From Dictations"
+          label="Write From Dictations"
         />
       </div>
       <button
@@ -297,7 +342,8 @@ const FullTestForm = () => {
         type="submit"
         className="p-4 rounded-sm bg-primary w-full  font-extrabold flex items-center justify-center gap-x-2"
       >
-        {isLoading && <Spinner className="w-5 h-5" />}Create Mocktest
+        {isLoading && <Spinner className="w-5 h-5" />}
+        {id ? "Update" : "Create"} Mocktest
       </button>
     </form>
   );

@@ -102,10 +102,22 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const res = await axios("/groups");
-      setGroups(res.data);
-      setGroup(res.data[0]);
+      try {
+        const res = await axios("/groups");
+        const fetchedGroups = res.data?.results || [];
+        const formattedGroup = [
+          {
+            id: null,
+            name: "None"
+          },
+          ...fetchedGroups
+        ];
+        setGroups(formattedGroup);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
     };
+
     fetchGroup();
   }, [refetchGroup]);
   const {
@@ -119,7 +131,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
-      group: group.id,
+      ...(group?.id && { group: group.id }),
       plan: plan.id,
     };
     try {

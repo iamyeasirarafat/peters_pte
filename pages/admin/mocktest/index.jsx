@@ -39,7 +39,7 @@ const Index = () => {
       name: "Writing Mocktest",
       icon: "WMT",
       Items: testCount?.writting || 0,
-      url: "/admin/mocktest/witting_mocktests",
+      url: "/admin/mocktest/writting_mocktests",
     },
     {
       id: 5,
