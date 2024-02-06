@@ -56,8 +56,10 @@ const SpeakingTestForm = ({ id }) => {
       short_question: data?.short_question || [],
     };
     try {
-      const res = await axios.post("/speaking_mocktest", MockTestData);
-      toast.success("mocktest added successfully");
+      const res = id
+        ? await axios.put(`speaking_mocktest/${id}`, MockTestData)
+        : await axios.post("/speaking_mocktest", MockTestData);
+      toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
       router.back();
@@ -67,6 +69,20 @@ const SpeakingTestForm = ({ id }) => {
         toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
+  // set Default data
+  useEffect(() => {
+    if (id) {
+      const getMocktest = async () => {
+        try {
+          const { data } = await axios.get(`/speaking_mocktest/${id}`);
+          reset(data);
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
+      router?.isReady && getMocktest();
+    }
+  }, [id, router?.isReady, reset]);
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
       <Field

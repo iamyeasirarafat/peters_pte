@@ -39,15 +39,6 @@ const WritingTestForm = ({ id }) => {
     formState: { errors },
   } = useForm();
 
-  // set default value
-  // const FeckData = [3, 4, 1, 5, 6];
-  // useEffect(() => {
-  //   if (id) {
-  //     setValue("summarize", FeckData);
-  //     setValue("write_essay", FeckData);
-  //   }
-  // }, [setValue, id]);
-
   const onSubmit = async (data) => {
     setIsLoading(true);
     const MockTestData = {
@@ -56,8 +47,10 @@ const WritingTestForm = ({ id }) => {
       write_essay: data?.write_essay || [],
     };
     try {
-      const res = await axios.post("/writting_mocktest", MockTestData);
-      toast.success("mocktest added successfully");
+      const res = id
+        ? await axios.put(`writting_mocktest/${id}`, MockTestData)
+        : await axios.post("/writting_mocktest", MockTestData);
+      toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
       router.back();
@@ -67,6 +60,20 @@ const WritingTestForm = ({ id }) => {
         toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
+  // set Default data
+  useEffect(() => {
+    if (id) {
+      const getMocktest = async () => {
+        try {
+          const { data } = await axios.get(`/writting_mocktest/${id}`);
+          reset(data);
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
+      router?.isReady && getMocktest();
+    }
+  }, [id, router?.isReady, reset]);
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
       <Field

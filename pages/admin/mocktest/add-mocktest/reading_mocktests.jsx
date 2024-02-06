@@ -66,8 +66,10 @@ const ReadingTestForm = ({ id }) => {
         data?.multi_choice_reading_single_answer || [],
     };
     try {
-      const res = await axios.post("/reading_mocktest", formData);
-      toast.success("mocktest added successfully");
+      const res = id
+        ? await axios.put(`reading_mocktest/${id}`, formData)
+        : await axios.post("/reading_mocktest", formData);
+      toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
       router.back();
@@ -82,6 +84,20 @@ const ReadingTestForm = ({ id }) => {
   const spokenMcqSinglesOptions = optionFormatter(spokenMcqSingles);
   const missingWordsOptions = optionFormatter(missingWords);
   const inCorrectWordOptions = optionFormatter(incorrectWords);
+  // set Default data
+  useEffect(() => {
+    if (id) {
+      const getMocktest = async () => {
+        try {
+          const { data } = await axios.get(`/reading_mocktest/${id}`);
+          reset(data);
+        } catch (error) {
+          toast.error(error?.response?.data?.message || "Something went wrong");
+        }
+      };
+      router?.isReady && getMocktest();
+    }
+  }, [id, router?.isReady, reset]);
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
       <Field
