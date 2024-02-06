@@ -52,6 +52,10 @@ const Index = () => {
       url = "reading_blanks";
     } else if (questionTable === "spelling-bee") {
       url = "games/spelling_bees";
+    } else if (questionTable == "fill-in-the-blanks") {
+      url = "blanks";
+    } else if (questionTable == "reading:-fill-in-the-blanks") {
+      url = "reading_blanks";
     }
 
     const fetchData = async () => {

@@ -59,8 +59,6 @@ const SelectMissingWord = () => {
   useEffect(() => {
     const rightOption =
       options.find((opt) => opt.index === selectedOptions)?.value || "";
-    console.log(rightOption, "right opt");
-    console.log(selectedOptions, "sele opt");
     setFormData((prevFormData) => ({
       ...prevFormData,
       options: options,
