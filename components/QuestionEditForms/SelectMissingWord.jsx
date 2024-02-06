@@ -10,7 +10,6 @@ const SelectMissingWord = () => {
   const router = useRouter();
   const { item } = router.query;
   const itemObj = JSON.parse(item);
-  console.log(122, itemObj);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -34,13 +33,38 @@ const SelectMissingWord = () => {
   );
 
   useEffect(() => {
+    function getIndexByValue(arr, targetValue) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].value === targetValue) {
+          return arr[i].index;
+        }
+      }
+      return null;
+    }
     if (item) {
-      setFormData(itemObj);
-      setOptions(itemObj?.options);
-      setOptionNumber(itemObj?.options.length);
-      setAudioSrc(itemObj?.audio);
+      const getDetails = async (id) => {
+        try {
+          const response = await axios.get(`/missing_word/${id}`);
+          if (response?.data) {
+            setFormData(response?.data);
+            setOptions(response?.data?.options);
+            setOptionNumber(response?.data?.options.length);
+            setAudioSrc(response?.data?.audio);
+            const index = getIndexByValue(
+              response?.data?.options,
+              response?.data?.right_options[0]
+            );
+            setSelectedOptions(index);
+          }
+        } catch (error) {
+          toast.error("something went wrong");
+          console.log(error);
+        }
+      };
+      getDetails(itemObj.id);
     }
   }, [item]);
+
   useEffect(() => {
     setOptions((prevOptions) => {
       return Array.from({ length: optionNumber }, (_, index) => {
@@ -67,7 +91,6 @@ const SelectMissingWord = () => {
       setSelectedOptions([...selectedOptions, optionIndex]);
     }
   };
-
   // update right_options and options
   useEffect(() => {
     const rightOption =
@@ -121,26 +144,32 @@ const SelectMissingWord = () => {
     if (formData?.audio) {
       const optionsJson = JSON.stringify(formData?.options);
       const rightOptionsJson = JSON.stringify(formData?.right_options);
+
       try {
         const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+
+        if (formData.audio instanceof Blob || formData.audio instanceof File) {
+          newForm.append("audio", formData.audio, "recorded.wav");
+        }
         newForm.append("title", formData?.title);
         newForm.append("options", optionsJson);
-        newForm.append("right_options", rightOptionsJson);
+        newForm.append("right_options", formData?.right_options);
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
-        newForm.append("single", true);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        console.log(formData);
-        // const { data } = await axios.post("/multi_choice", newForm, config);
-        // toast.success("Create question successfully");
-        // if (data) {
-        //   router.back();
-        // }
+        const { data } = await axios.put(
+          `/missing_word/${itemObj.id}/update`,
+          newForm,
+          config
+        );
+        toast.success("Create question successfully");
+        if (data) {
+          router.back();
+        }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -232,7 +261,7 @@ const SelectMissingWord = () => {
                       type="checkbox"
                       value={option.index}
                       onChange={() => setSelectedOptions(option?.index)}
-                      checked={selectedOptions == option.index}
+                      checked={selectedOptions == option.value}
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${

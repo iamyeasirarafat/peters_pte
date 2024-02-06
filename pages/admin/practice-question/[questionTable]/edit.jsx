@@ -27,23 +27,23 @@ const EditForms = () => {
   const { questionTable, item } = router.query;
   const itemObj = item ? JSON.parse(item) : null;
   let content;
-  if (questionTable == "Read Aloud") {
+  if (questionTable == "read-aloud") {
     content = <ReadAloud />;
-  } else if (questionTable == "Repeat Sentence") {
+  } else if (questionTable == "repeat-sentence") {
     content = <RepeatSentence />;
-  } else if (questionTable == "Re-Tell Lecture") {
+  } else if (questionTable == "re-tell-lecture") {
     content = <ReTelLecture />;
-  } else if (questionTable == "Answer Short Question") {
+  } else if (questionTable == "answer-short-question") {
     content = <AnswerShotQues />;
-  } else if (questionTable == "Describe Image") {
+  } else if (questionTable == "describe-image") {
     content = <DescribeImage />;
-  } else if (questionTable == "Summarize Spoken Text") {
+  } else if (questionTable == "summarize-spoken-text") {
     content = <ReTelLecture />;
-  } else if (questionTable == "Write From Dictation") {
+  } else if (questionTable == "write-from-dictation") {
     content = <Dictation />;
-  } else if (questionTable == "Summarize Written Text") {
+  } else if (questionTable == "summarize-written-text") {
     content = <SummerizeWritten />;
-  } else if (questionTable == "Write Essay") {
+  } else if (questionTable == "write-essay") {
     content = <EssayQuestion />;
   } else if (questionTable == "Speaking Spell") {
     content = <SpeakingSpell />;
@@ -51,27 +51,27 @@ const EditForms = () => {
     content = <ListeningFrenzy />;
   } else if (questionTable == "spelling-bee") {
     content = <SpellingBee />;
-  } else if (questionTable == "Listening: MCM") {
+  } else if (questionTable == "listening:-MCM") {
     content = <MultipleChoiceListing />;
-  } else if (questionTable == "Listening: MCS") {
+  } else if (questionTable == "listening:-MCS") {
     content = <SingleChoiceListing />;
-  } else if (questionTable == "Highlight Correct Summary") {
+  } else if (questionTable == "highlight-correct-summary") {
     content = <HighlightSummary />;
-  } else if (questionTable == "Select Missing Word") {
+  } else if (questionTable == "select-missing-word") {
     content = <SelectMissingWord />;
-  } else if (questionTable == "Fill in the Blanks") {
+  } else if (questionTable == "fill-in-the-blanks") {
     content = <FillTheBlanks />;
   } else if (questionTable == "Highlight Incorrect Words") {
     content = <FillTheBlanks />;
-  } else if (questionTable == "Reading: MCM") {
+  } else if (questionTable == "reading:-MCM") {
     content = <MultipleChoiceReading />;
-  } else if (questionTable == "Reading: MCS") {
+  } else if (questionTable == "reading:-MCS") {
     content = <MultipleSingleReading />;
-  } else if (questionTable == "Re-order Paragraphs") {
+  } else if (questionTable == "re-order-paragraphs") {
     content = <ReOrderParagraph />;
-  } else if (questionTable == "Reading: Fill in the Blanks") {
+  } else if (questionTable == "reading:-fill-in-the-blanks") {
     content = <ReadingFillTheBlanks />;
-  } else if (questionTable == "Reading & Writing: FIB") {
+  } else if (questionTable == "reading-&-writing:-FIB") {
     content = <FibReading />;
   } else {
     content = <h2>this is new question from</h2>;

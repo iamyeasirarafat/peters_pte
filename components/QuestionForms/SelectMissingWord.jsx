@@ -107,7 +107,6 @@ const SelectMissingWord = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData?.right_options);
     if (formData?.audio) {
       const optionsJson = JSON.stringify(formData?.options);
       const rightOptionsJson = JSON.stringify(formData?.right_options);
@@ -117,16 +116,15 @@ const SelectMissingWord = () => {
         newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
         newForm.append("options", optionsJson);
-        newForm.append("right_options", rightOptionsJson);
+        newForm.append("right_options", formData?.right_options);
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
-        newForm.append("single", true);
+        // newForm.append("single", true);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        console.log(formData);
         const { data } = await axios.post("/missing_word", newForm, config);
         toast.success("Create question successfully");
         if (data) {
