@@ -26,10 +26,41 @@ const MultipleSingleReading = () => {
     }))
   );
 
+  // useEffect(() => {
+  //   setFormData(itemObj);
+  //   setOptions(itemObj?.options);
+  //   setOptionNumber(itemObj?.options.length);
+  // }, [item]);
   useEffect(() => {
-    setFormData(itemObj);
-    setOptions(itemObj?.options);
-    setOptionNumber(itemObj?.options.length);
+    function getIndexByValue(arr, targetValue) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].value === targetValue) {
+          return arr[i].index;
+        }
+      }
+      return null;
+    }
+    const getDetails = async (id) => {
+      try {
+        const response = await axios.get(`/multi_choice/reading/${id}`);
+        if (response?.data) {
+          console.log(response.data);
+          setFormData(response.data);
+          setOptions(response.data?.options);
+          setOptionNumber(response.data?.options.length);
+          const index = getIndexByValue(
+            response?.data?.options,
+            response?.data?.right_options[0]
+          );
+          setSelectedOptions(index);
+          // setSelectedOptions(response?.data?.right_options);
+        }
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }
+    };
+    getDetails(itemObj.id);
   }, [item]);
   useEffect(() => {
     setOptions((prevOptions) => {
@@ -70,8 +101,11 @@ const MultipleSingleReading = () => {
     e.preventDefault();
     console.log("reading62", formData);
     try {
-      const response = await axios.post("/multi_choice/reading", formData);
-      toast.success("Create question successfully");
+      const response = await axios.put(
+        `/multi_choice/reading/${itemObj.id}/update`,
+        formData
+      );
+      toast.success("update question successfully");
       if (response?.data) {
         router.back();
       }

@@ -127,8 +127,6 @@ const FillTheBlanks = () => {
     }));
   }, [options, text]);
 
-  console.log(formData, "submit");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
