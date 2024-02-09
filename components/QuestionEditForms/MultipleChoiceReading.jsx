@@ -17,39 +17,39 @@ const MultipleChoiceReading = () => {
   );
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const handleCheckboxChange = (optionIndex) => {
-    if (selectedOptions.includes(optionIndex)) {
-      setSelectedOptions(
-        selectedOptions.filter((item) => item !== optionIndex)
-      );
-    } else {
-      setSelectedOptions([...selectedOptions, optionIndex]);
-    }
-  };
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     options: options,
-    right_options: selectedOptions.map((index) => {
-      const option = options.find((opt) => opt.index === index);
-      return option ? option.value : ""; // If an option is found, return its value, otherwise return an empty string.
-    }),
+    right_options: [],
     appeared: 0,
     prediction: false,
   });
 
   useEffect(() => {
-    setFormData(itemObj);
-    setOptions(itemObj?.options);
-    setOptionNumber(itemObj?.options.length);
+    const getDetails = async (id) => {
+      try {
+        const response = await axios.get(`/multi_choice/reading/${id}`);
+        if (response?.data) {
+          console.log(response.data);
+          setFormData(response.data);
+          setOptions(response.data?.options);
+          setOptionNumber(response.data?.options.length);
+          setSelectedOptions(response?.data?.right_options);
+        }
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }
+    };
+    getDetails(itemObj.id);
   }, [item]);
-
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       options: options,
-      right_options: selectedOptions.map((index) => {
-        const option = options.find((opt) => opt.index === index);
+      right_options: selectedOptions?.map((index) => {
+        const option = options.find((opt) => opt.value === index);
         return option ? option.value : "";
       }),
     }));
@@ -60,6 +60,15 @@ const MultipleChoiceReading = () => {
       ...prevData,
       [id]: type === "checkbox" ? checked : value,
     }));
+  };
+  const handleCheckboxChange = (optionIndex) => {
+    if (selectedOptions.includes(optionIndex)) {
+      setSelectedOptions(
+        selectedOptions.filter((item) => item !== optionIndex)
+      );
+    } else {
+      setSelectedOptions([...selectedOptions, optionIndex]);
+    }
   };
   useEffect(() => {
     setOptions((prevOptions) => {
@@ -83,13 +92,32 @@ const MultipleChoiceReading = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("reading", formData);
+    const optionsJson = JSON.stringify(formData?.options);
+
     try {
-      // const response = await axios.post("/multi_choice/reading", formData);
-      // toast.success("Create question successfully");
-      // if (response?.data) {
-      //   router.back();
-      // }
+      const newForm = new FormData();
+      newForm.append("title", formData?.title);
+      newForm.append("content", formData?.content);
+      newForm.append("options", optionsJson);
+      formData.right_options.forEach((item) =>
+        newForm.append("right_options", item)
+      );
+      newForm.append("appeared", formData?.appeared);
+      newForm.append("prediction", formData?.prediction);
+      newForm.append("single", false);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data", // Use lowercase for header keys
+        },
+      };
+      const response = await axios.put(
+        `/multi_choice/reading/${itemObj.id}/update`,
+        newForm,
+        config
+      );
+      if (response?.data) {
+        router.back();
+      }
     } catch (error) {
       toast.error("something went wrong");
       console.log(error);
@@ -149,19 +177,19 @@ const MultipleChoiceReading = () => {
                       className="absolute top-0 left-0 opacity-0 invisible"
                       type="checkbox"
                       value={option.index}
-                      onChange={() => handleCheckboxChange(option.index)}
-                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
+                      onChange={() => handleCheckboxChange(option.value)}
+                      checked={selectedOptions.includes(option.value)} // Use 'in' operator to check if the key exists
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.index)
+                        selectedOptions.includes(option.value)
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
                       }`}
                     >
                       <Icon
                         className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.index)
+                          selectedOptions.includes(option.value)
                             ? "opacity-100"
                             : "opacity-0"
                         }`}
