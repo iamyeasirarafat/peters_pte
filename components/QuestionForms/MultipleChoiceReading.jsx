@@ -76,10 +76,33 @@ const MultipleChoiceReading = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("reading", formData);
+    // console.log("reading", formData);
+    const optionsJson = JSON.stringify(formData?.options);
+    // const rightOptionsJson = JSON.stringify(formData?.right_options);
     try {
       setLoading(true);
-      const response = await axios.post("/multi_choice/reading", formData);
+      const newForm = new FormData();
+      newForm.append("title", formData?.title);
+      newForm.append("content", formData?.content);
+      newForm.append("options", optionsJson);
+      formData.right_options.forEach((item) =>
+        newForm.append("right_options", item)
+      );
+      // newForm.append("right_options", rightOptionsJson);
+      newForm.append("appeared", formData?.appeared);
+      newForm.append("prediction", formData?.prediction);
+      newForm.append("single", false);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data", // Use lowercase for header keys
+        },
+      };
+      const response = await axios.post(
+        "/multi_choice/reading",
+        newForm,
+        config
+      );
+      // const response = await axios.post("/multi_choice/reading", formData);
       toast.success("Create question successfully");
       if (response?.data) {
         router.back();

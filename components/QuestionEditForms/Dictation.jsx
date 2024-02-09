@@ -14,7 +14,8 @@ const Dictation = () => {
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
 
-  const { register, handleSubmit, setValue, setError, formState } = useForm();
+  const { register, handleSubmit, setValue, setError, formState, watch } =
+    useForm();
   useEffect(() => {
     // Set initial form values based on itemObj
     if (itemObj) {
@@ -64,6 +65,18 @@ const Dictation = () => {
   const handleDeleteAudio = () => {
     setAudioSrc(null);
     setAudio(null);
+  };
+  const regenerateTextToAudio = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        "/text_to_audio",
+        watch("reference_text")
+      );
+      console.log(data);
+    } catch {
+      (err) => console.log(err);
+    }
   };
 
   return (
@@ -123,7 +136,10 @@ const Dictation = () => {
               </div>
               <div className="w-full">
                 <AudioVisualizer selectedFile={audioSrc} />
-                <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
+                <button
+                  onClick={regenerateTextToAudio}
+                  className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20"
+                >
                   <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
                   Generate Reference Text
                 </button>
