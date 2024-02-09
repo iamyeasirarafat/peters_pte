@@ -1,13 +1,11 @@
-import { useRouter } from "next/router";
 import AdminLayout from "@/components/AdminLayout";
+import Icon from "@/components/Icon";
 import Table from "@/components/QuestionTable";
 import TablePagination from "@/components/TablePagination";
-import Icon from "@/components/Icon";
-import Link from "next/link";
-import { useState } from "react";
-import { useEffect } from "react";
 import axios from "axios";
-import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 const Index = () => {
   const router = useRouter();
   const { questionTable } = router.query;
