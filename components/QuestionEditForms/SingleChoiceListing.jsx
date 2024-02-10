@@ -28,13 +28,38 @@ const SingleChoiceListing = () => {
       value: "",
     }))
   );
+
   useEffect(() => {
-    if (item) {
-      setFormData(itemObj);
-      setOptions(itemObj?.options);
-      setOptionNumber(itemObj?.options.length);
-      setAudioSrc(itemObj?.audio);
+    function getIndexByValue(arr, targetValue) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].value === targetValue) {
+          return arr[i].index;
+        }
+      }
+      return null;
     }
+    const getDetails = async (id) => {
+      try {
+        const response = await axios.get(`/multi_choice/${id}`);
+        if (response?.data) {
+          console.log(response.data);
+          setFormData(response.data);
+          setOptions(response.data?.options);
+          setAudioSrc(itemObj?.audio);
+          setOptionNumber(response.data?.options.length);
+          const index = getIndexByValue(
+            response?.data?.options,
+            response?.data?.right_options[0]
+          );
+          setSelectedOptions(index);
+          // setSelectedOptions(response?.data?.right_options);
+        }
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }
+    };
+    getDetails(itemObj.id);
   }, [item]);
 
   useEffect(() => {
@@ -122,7 +147,9 @@ const SingleChoiceListing = () => {
       const rightOptionsJson = JSON.stringify(formData?.right_options);
       try {
         const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        if (formData.audio instanceof Blob || formData.audio instanceof File) {
+          newForm.append("audio", formData.audio, "recorded.wav");
+        }
         newForm.append("title", formData?.title);
         newForm.append("options", optionsJson);
         newForm.append("right_options", rightOptionsJson);
@@ -134,9 +161,12 @@ const SingleChoiceListing = () => {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post("/multi_choice", newForm, config);
-        toast.success("Create question successfully");
-        if (data) {
+        const response = await axios.put(
+          `/multi_choice/${itemObj.id}/update`,
+          newForm,
+          config
+        );
+        if (response?.data) {
           router.back();
         }
       } catch (error) {

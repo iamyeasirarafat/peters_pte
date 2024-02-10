@@ -116,7 +116,11 @@ const SingleChoiceListing = () => {
         newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
         newForm.append("options", optionsJson);
-        newForm.append("right_options", rightOptionsJson);
+        // newForm.append("right_options", rightOptionsJson);
+        formData.right_options.forEach((item) =>
+          newForm.append("right_options", item)
+        );
+
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
         newForm.append("single", true);

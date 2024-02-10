@@ -69,11 +69,11 @@ const Dictation = () => {
   const regenerateTextToAudio = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        "/text_to_audio",
-        watch("reference_text")
-      );
-      console.log(data);
+      const { data } = await axios.post("/text_to_audio", {
+        text: watch("reference_text"),
+      });
+      setAudio(data);
+      setAudioSrc(URL.createObjectURL(data));
     } catch {
       (err) => console.log(err);
     }

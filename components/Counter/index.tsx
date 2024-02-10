@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon";
-import { useState } from "react"; // Import useState from 'react'
+import { useState,useEffect } from "react"; // Import useState from 'react'
 
 type CounterProps = {
   className?: string;
@@ -19,6 +19,7 @@ const Counter = ({
   // Create local state for the value
   const [localValue, setLocalValue] = useState(value);
 
+useEffect(()=>{setLocalValue(value)},[value])
   const handleIncrement = () => {
     // Update the local value
     const newValue = localValue + 1;
