@@ -57,6 +57,9 @@ const MockTestMultiSelector = ({
       index: i,
     };
   });
+  if (!control) {
+    return null;
+  }
   return (
     <div className="w-full">
       {label && (

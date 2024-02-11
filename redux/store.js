@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import globalModalSlice from "./slice/globalModalSlice";
 import layoutSlice from "./slice/layoutSlice";
+import refetchSlice from "./slice/refetchSlice";
 import userSlice from "./slice/userSlice";
 
 export const store = configureStore({
@@ -8,5 +9,6 @@ export const store = configureStore({
     layout: layoutSlice,
     globalModal: globalModalSlice,
     user: userSlice,
+    refetch:refetchSlice
   },
 });

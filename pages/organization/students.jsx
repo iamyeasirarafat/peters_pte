@@ -6,11 +6,13 @@ import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import Students from "@/components/Students_list";
 import TablePagination from "@/components/TablePagination";
+import { toggle } from "@/redux/slice/refetchSlice";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import { AnimatedLoading } from ".";
 
 const StudentList = () => {
@@ -19,6 +21,7 @@ const StudentList = () => {
   const [status, setStatus] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
+  const { state } = useSelector((state) => state.refetch);
 
   useEffect(() => {
     const getData = async () => {
@@ -29,7 +32,7 @@ const StudentList = () => {
       setLoading(false);
     };
     getData();
-  }, [status, pageNumber]);
+  }, [status, pageNumber, state]);
 
   return (
     <Layout title="Students" background>
@@ -127,7 +130,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
     watch,
     formState: { errors },
   } = useForm({});
-
+  const dispatch = useDispatch()
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
@@ -139,6 +142,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
       toast.success("Successfully added");
       setVisible(false);
       setStatus && setStatus((state) => !state);
+      dispatch(toggle());
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
