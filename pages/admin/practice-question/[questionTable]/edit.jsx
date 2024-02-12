@@ -32,19 +32,19 @@ const EditForms = () => {
     content = <ReadAloud />;
   } else if (questionTable == "repeat-sentence") {
     content = <RepeatSentence />;
-  } else if (questionTable == "re-tell-lecture") {
+  } else if (questionTable == "retell-sentence") {
     content = <ReTelLecture />;
-  } else if (questionTable == "answer-short-question") {
+  } else if (questionTable == "short-question") {
     content = <AnswerShotQues />;
   } else if (questionTable == "describe-image") {
     content = <DescribeImage />;
-  } else if (questionTable == "summarize-spoken-text") {
+  } else if (questionTable == "summarize-spoken") {
     content = <ReTelLecture />;
-  } else if (questionTable == "write-from-dictation") {
+  } else if (questionTable == "dictation") {
     content = <Dictation />;
-  } else if (questionTable == "summarize-written-text") {
+  } else if (questionTable == "summarize") {
     content = <SummerizeWritten />;
-  } else if (questionTable == "write-essay") {
+  } else if (questionTable == "write-easy") {
     content = <EssayQuestion />;
   } else if (questionTable == "Speaking Spell") {
     content = <SpeakingSpell />;
@@ -52,27 +52,27 @@ const EditForms = () => {
     content = <ListeningFrenzy />;
   } else if (questionTable == "spelling-bee") {
     content = <SpellingBee />;
-  } else if (questionTable == "listening:-MCM") {
+  } else if (questionTable == "multi-choice") {
     content = <MultipleChoiceListing />;
-  } else if (questionTable == "listening:-MCS") {
+  } else if (questionTable == "multi-choice-single") {
     content = <SingleChoiceListing />;
-  } else if (questionTable == "highlight-correct-summary") {
+  } else if (questionTable == "highlight-summary") {
     content = <HighlightSummary />;
-  } else if (questionTable == "select-missing-word") {
+  } else if (questionTable == "missing-word") {
     content = <SelectMissingWord />;
-  } else if (questionTable == "fill-in-the-blanks") {
+  } else if (questionTable == "blank") {
     content = <FillTheBlanks />;
+  } else if (questionTable == "multi-choice-reading") {
+    content = <MultipleChoiceReading />;
   } else if (questionTable == "highlight-incorrect-words") {
     content = <HighlightIncorrectWord />;
-  } else if (questionTable == "reading:-MCM") {
-    content = <MultipleChoiceReading />;
-  } else if (questionTable == "reading:-MCS") {
+  }  else if (questionTable == "multi-choice-reading-single") {
     content = <MultipleSingleReading />;
-  } else if (questionTable == "re-order-paragraphs") {
+  } else if (questionTable == "reorder-paragraph") {
     content = <ReOrderParagraph />;
-  } else if (questionTable == "reading:-fill-in-the-blanks") {
+  } else if (questionTable == "reading-blank") {
     content = <ReadingFillTheBlanks />;
-  } else if (questionTable == "reading-&-writing:-FIB") {
+  } else if (questionTable == "r-w-blank") {
     content = <FibReading />;
   } else {
     content = <h2>this is new question from</h2>;
