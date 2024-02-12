@@ -120,7 +120,7 @@ const MultipleChoiceListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const optionsJson = JSON.stringify(formData?.options);
-
+    const rightOptionsJson = JSON.stringify(formData?.right_options);
     try {
       const newForm = new FormData();
       if (formData.audio instanceof Blob || formData.audio instanceof File) {

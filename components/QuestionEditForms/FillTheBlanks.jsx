@@ -42,7 +42,6 @@ const FillTheBlanks = () => {
           const lastAnswerIndex = response?.data?.answers.length
             ? response?.data?.answers[response?.data?.answers.length - 1].index
             : "A"; // Default to 'A' if there are no answers
-          console.log(response?.data, "text");
           setButtonCounter(lastAnswerIndex.charCodeAt(0) + 1);
           // text format
           const formattedText = response?.data?.sentence.reduce(
