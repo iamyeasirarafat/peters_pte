@@ -22,6 +22,7 @@ import AnswerShotQues from "@/components/QuestionEditForms/AnswerShotQues";
 import MultipleSingleReading from "@/components/QuestionEditForms/MultipleSingleReading";
 import SelectMissingWord from "@/components/QuestionEditForms/SelectMissingWord";
 import Dictation from "@/components/QuestionEditForms/Dictation";
+import HighlightIncorrectWord from "../../../../components/QuestionEditForms/HighlightIncorrectWord";
 const EditForms = () => {
   const router = useRouter();
   const { questionTable, item } = router.query;
@@ -61,11 +62,11 @@ const EditForms = () => {
     content = <SelectMissingWord />;
   } else if (questionTable == "blank") {
     content = <FillTheBlanks />;
-  } else if (questionTable == "Highlight Incorrect Words") {
-    content = <FillTheBlanks />;
   } else if (questionTable == "multi-choice-reading") {
     content = <MultipleChoiceReading />;
-  } else if (questionTable == "multi-choice-reading-single") {
+  } else if (questionTable == "highlight-incorrect-words") {
+    content = <HighlightIncorrectWord />;
+  }  else if (questionTable == "multi-choice-reading-single") {
     content = <MultipleSingleReading />;
   } else if (questionTable == "reorder-paragraph") {
     content = <ReOrderParagraph />;

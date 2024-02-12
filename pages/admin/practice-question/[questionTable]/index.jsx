@@ -56,6 +56,8 @@ const Index = () => {
       url = "blanks";
     } else if (questionTable === "reading-blank") {
       url = "reading_blanks";
+    }  else if (questionTable == "highlight-incorrect-words") {
+      url = "highlight_incorrect_words";
     }
 
     const fetchData = async () => {

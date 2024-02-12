@@ -23,6 +23,7 @@ import MultipleSingleReading from "@/components/QuestionForms/MultipleSingleRead
 import SelectMissingWord from "@/components/QuestionForms/SelectMissingWord";
 import Dictation from "@/components/QuestionForms/Dictation";
 import SummerizeSpoken from "@/components/QuestionForms/SummerizeSpoken";
+import HighlightIncorrectWord from "../../../../components/QuestionForms/HighlightIncorrectWord";
 const AllForms = () => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -62,10 +63,10 @@ const AllForms = () => {
     content = <SelectMissingWord />;
   } else if (questionTable == "blank") {
     content = <FillTheBlanks />;
-  } else if (questionTable == "Highlight Incorrect Words") {
-    content = <FillTheBlanks />;
-  } else if (questionTable == "multi-choice-reading") {
-    content = <MultipleChoiceReading />;
+  }  else if (questionTable == "multi-choice-reading") {
+     content = <MultipleChoiceReading />;
+  } else if (questionTable == "highlight-incorrect-words") {
+    content = <HighlightIncorrectWord />;
   } else if (questionTable == "multi-choice-reading-single") {
     content = <MultipleSingleReading />;
   } else if (questionTable == "reorder-paragraph") {

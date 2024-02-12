@@ -1,82 +1,30 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
-import LoadingButton from "@/components/LoadingButton";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useRef, useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
-const MultipleChoiceReading = () => {
+
+import LoadingButton from "@/components/LoadingButton";
+import toast from "react-hot-toast";
+import axios from "axios";
+
+import { useRouter } from "next/router";
+const HighlightIncorrectWord = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
-    content: "",
-    options: [],
-    right_options: [],
+    sentence: [],
     appeared: 0,
     prediction: false,
     audio: null,
+    answers: [],
   });
-
-  // array based on counter number
-  const [optionNumber, setOptionNumber] = useState(4);
-  const [options, setOptions] = useState(
-    Array.from({ length: optionNumber }, (_, index) => ({
-      index: String.fromCharCode(65 + index),
-      value: "",
-    }))
-  );
-  useEffect(() => {
-    setOptions((prevOptions) => {
-      return Array.from({ length: optionNumber }, (_, index) => {
-        if (index < prevOptions.length) {
-          return prevOptions[index];
-        } else {
-          return {
-            index: String.fromCharCode(65 + index),
-            value: "",
-          };
-        }
-      });
-    });
-  }, [optionNumber]);
-
-  // checkbox for selected option
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const handleCheckboxChange = (optionIndex) => {
-    if (selectedOptions.includes(optionIndex)) {
-      setSelectedOptions(
-        selectedOptions.filter((item) => item !== optionIndex)
-      );
-    } else {
-      setSelectedOptions([...selectedOptions, optionIndex]);
-    }
-  };
-
-  // update right_options and options
-  useEffect(() => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      options: options,
-      right_options: selectedOptions.map((index) => {
-        const option = options.find((opt) => opt.index === index);
-        return option ? option.value : "";
-      }),
-    }));
-  }, [options, selectedOptions]);
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [id]: type === "checkbox" ? checked : value,
     }));
-  };
-
-  const handleTextAreaChange = (index, value) => {
-    const updatedData = [...options];
-    updatedData[index] = { ...updatedData[index], value };
-    setOptions(updatedData);
   };
 
   const [audioSrc, setAudioSrc] = useState(null);
@@ -105,21 +53,94 @@ const MultipleChoiceReading = () => {
     setAudioName(null);
   };
 
+  // handle fill the blanks
+  const [text, setText] = useState("");
+  const [options, setOptions] = useState([]);
+  const contentEditableRef = useRef(null);
+  const [buttonCounter, setButtonCounter] = useState(65); // ASCII code for 'A'
+
+  const handleButtonClick = () => {
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+
+    // Check if the range is within the contentEditable div
+    if (
+      contentEditableRef.current &&
+      contentEditableRef.current.contains(range.commonAncestorContainer)
+    ) {
+      const buttonText = String.fromCharCode(buttonCounter);
+      setButtonCounter(buttonCounter + 1);
+      const buttonElement = document.createElement("button");
+      buttonElement.innerHTML = `<b>${buttonText}</b>`;
+      buttonElement.className =
+        "px-4 bg-orange-400 mb-3 mx-3 disabled:cursor-not-allowed";
+      buttonElement.contentEditable = false;
+      buttonElement.disabled = true;
+
+      // Insert the button element at the current caret position
+      range.deleteContents();
+      range.insertNode(buttonElement);
+
+      // Move the caret after the inserted button
+      range.setStartAfter(buttonElement);
+      range.setEndAfter(buttonElement);
+
+      // Update the state with the new HTML content
+      setText(contentEditableRef.current.innerHTML);
+
+      // Initialize the option in the state as an object with an empty string
+      setOptions((prevOptions) => [
+        ...prevOptions,
+        { index: buttonText, value: "" },
+      ]);
+    }
+  };
+
+  const handleTextAreaChange = (index, e) => {
+    // Update the state with the text from the textarea
+    setOptions((prevOptions) =>
+      prevOptions.map((option) =>
+        option.index === index ? { ...option, value: e.target.value } : option
+      )
+    );
+  };
+
+  /////////////////// sentence and options in form data ///////////////////////
+  useEffect(() => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
+
+    // Extract text content from parsed document, excluding button text
+    const paragraphs = Array.from(doc.body.childNodes)
+      .map((node) => {
+        if (node.nodeName === "BUTTON") {
+          return ""; // Exclude button text
+        }
+        return node.textContent.trim();
+      })
+      .filter((sentence) => sentence !== ""); // Remove empty strings
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      sentence: paragraphs,
+      answers: options,
+    }));
+  }, [options, text]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData?.right_options);
+
     if (formData?.audio) {
-      const optionsJson = JSON.stringify(formData?.options);
-      const rightOptionsJson = JSON.stringify(formData?.right_options);
+      const answersJson = JSON.stringify(formData?.answers);
       try {
         setLoading(true);
         const newForm = new FormData();
         newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
-        newForm.append("options", optionsJson);
-        // newForm.append("right_options", rightOptionsJson);
-        formData.right_options.forEach((item) => newForm.append("right_options", item));
-        
+
+        formData.sentence.forEach((item) => newForm.append("sentence", item));
+        newForm.append("answers", answersJson);
+
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
         const config = {
@@ -127,7 +148,11 @@ const MultipleChoiceReading = () => {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        const { data } = await axios.post("/multi_choice", newForm, config);
+        const { data } = await axios.post(
+          "/highlight_incorrect_word",
+          newForm,
+          config
+        );
         toast.success("Create question successfully");
         if (data) {
           router.back();
@@ -139,10 +164,9 @@ const MultipleChoiceReading = () => {
         setLoading(false);
       }
     } else {
-      toast.error("You need provide dat successfuly!");
+      toast.error("You need provide data successfuly!");
     }
   };
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -162,6 +186,7 @@ const MultipleChoiceReading = () => {
             onChange={handleInputChange}
           />
         </div>
+
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audioName && !audioSrc ? (
@@ -205,68 +230,53 @@ const MultipleChoiceReading = () => {
           )}
         </div>
 
-        {/* more field */}
-        <div className="flex justify-between gap-6 mt-5">
-          <Counter
-            className="bg-white w-1/2"
-            title="Option Number"
-            value={optionNumber}
-            setValue={(value) => setOptionNumber(value)}
-          />
-          <div className="w-1/2  bg-white flex items-center pl-4">
-            <div className="grid grid-cols-4">
-              {options?.map((option, i) => (
-                <div key={i}>
-                  <label
-                    className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
-                  >
-                    <input
-                      className="absolute top-0 left-0 opacity-0 invisible"
-                      type="checkbox"
-                      value={option.index}
-                      onChange={() => handleCheckboxChange(option.index)}
-                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
-                    />
-                    <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.index)
-                          ? "bg-green-1 border-green-1 dark:!border-green-1"
-                          : "bg-transparent border-n-1 dark:border-white"
-                      }`}
-                    >
-                      <Icon
-                        className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.index)
-                            ? "opacity-100"
-                            : "opacity-0"
-                        }`}
-                        name="check"
-                      />
-                    </span>
-                    <span className="ml-2.5 pt-0.75 text-xs font-bold text-n-1 dark:text-white">
-                      {option?.index}
-                    </span>
-                  </label>
-                </div>
-              ))}
+        {/* counter */}
+        <div className="flex items-center h-16 p-5 bg-white my-3 border-n-1 rounded-sm dark:border-white">
+          <div className="mr-auto text-sm font-bold">Incorrect word Number</div>
+          <div className="flex items-center shrink-0 ml-4">
+            <div className="min-w-[2.5rem] text-center text-xs font-bold">
+              {options?.length}
             </div>
+            <button
+              className="group"
+              onClick={(e) => {
+                e.preventDefault();
+                handleButtonClick();
+              }}
+            >
+              <Icon
+                className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
+                name="plus-circle"
+              />
+            </button>
           </div>
         </div>
+        <div className="flex flex-col gap-2 my-5">
+          <label for="paragraph" className="font-bold text-sm">
+            Question Paragraph
+          </label>
+          <div
+            className="w-full h-32 border p-5 overflow-y-scroll overflow-x-hidden"
+            ref={contentEditableRef}
+            contentEditable="true"
+            dangerouslySetInnerHTML={{ __html: text }}
+            placeholder="Type your text here..."
+            id="paragraph"
+          />
+        </div>
 
-        <div className="grid grid-cols-3 my-6 gap-3">
-          {options?.map((option, i) => (
-            <div key={i}>
-              <h3 className="font-semibold text-sm mb-2">
-                Option {option.index}
+        <div className="grid grid-cols-4 gap-2 my-5 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
+          {options.map((option) => (
+            <div key={option.index}>
+              <h3 className="text-sm font-bold mb-2">
+                Correct {option?.index}
               </h3>
-              <textarea
-                rows={5}
-                placeholder="Start Typing..."
-                className="w-full border-none py-4 px-5 text-sm "
-                id="paragraph"
+              <input
                 type="text"
-                value={option?.value}
-                onChange={(e) => handleTextAreaChange(i, e.target.value)}
+                value={option.value}
+                onChange={(e) => handleTextAreaChange(option.index, e)}
+                placeholder="write your text"
+                className="border-none py-4"
               />
             </div>
           ))}
@@ -307,4 +317,4 @@ const MultipleChoiceReading = () => {
   );
 };
 
-export default MultipleChoiceReading;
+export default HighlightIncorrectWord;

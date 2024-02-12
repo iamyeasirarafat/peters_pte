@@ -13,8 +13,12 @@ const Dictation = () => {
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, setError, formState } = useForm();
+  const [refText, setRefText] = useState("");
+  const { register, handleSubmit, setError, formState, watch } = useForm();
+  console.log(audioSrc);
   const onsubmit = async (data) => {
+    console.log(watch("reference_text"));
+    console.log(data);
     if (audio) {
       try {
         setLoading(true);
@@ -26,12 +30,11 @@ const Dictation = () => {
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
 
-        console.log(formData);
-        const response = await axios.post("/dictation ", formData, config);
-        toast.success("Create question successfully");
-        if (response?.data) {
-          router.back();
-        }
+        // const response = await axios.post("/dictation ", formData, config);
+        // toast.success("Create question successfully");
+        // if (response?.data) {
+        //   router.back();
+        // }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -55,6 +58,19 @@ const Dictation = () => {
   const handleDeleteAudio = () => {
     setAudioSrc(null);
     setAudio(null);
+  };
+
+  const regenerateTextToAudio = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post("/text_to_audio", {
+        text: watch("reference_text"),
+      });
+      // setAudio(data);
+      // setAudioSrc(data);
+    } catch {
+      (err) => console.log(err);
+    }
   };
 
   return (
@@ -114,10 +130,6 @@ const Dictation = () => {
               </div>
               <div className="w-full">
                 <AudioVisualizer selectedFile={audioSrc} />
-                <button className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20">
-                  <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
-                  Generate Reference Text
-                </button>
               </div>
             </div>
           )}
@@ -136,8 +148,18 @@ const Dictation = () => {
             {...register("reference_text", {
               required: "reference text is required",
             })}
+            onChange={(e) => setRefText(e.target.value)}
           />
         </div>
+        {refText && (
+          <button
+            onClick={regenerateTextToAudio}
+            className="mr-3 text-white  mb-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20"
+          >
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            Generate Reference Text
+          </button>
+        )}
         <div className="flex justify-between gap-6">
           <Counter
             className="bg-white w-1/2"
