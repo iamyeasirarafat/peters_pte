@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 import { useRouter } from "next/router";
-const FillTheBlanks = () => {
+const HighlightIncorrectWord = () => {
   const router = useRouter();
   const { item } = router.query;
   const itemObj = JSON.parse(item);
@@ -21,55 +21,6 @@ const FillTheBlanks = () => {
     audio: null,
     answers: [],
   });
-
-  // handle fill the blanks
-  const [text, setText] = useState("");
-  const [options, setOptions] = useState([]);
-  const contentEditableRef = useRef(null);
-  const [buttonCounter, setButtonCounter] = useState(65); // ASCII code for 'A'
-
-  const [audioSrc, setAudioSrc] = useState(null);
-  const [audioName, setAudioName] = useState(null);
-
-  //fetch qus details
-  useEffect(() => {
-    const getDetails = async (id) => {
-      try {
-        const response = await axios.get(`/blank/${id}`);
-
-        if (response?.data) {
-          // Set button counter based on the last index in the answers array
-          const lastAnswerIndex = response?.data?.answers.length
-            ? response?.data?.answers[response?.data?.answers.length - 1].index
-            : "A"; // Default to 'A' if there are no answers
-          setButtonCounter(lastAnswerIndex.charCodeAt(0) + 1);
-          // text format
-          const formattedText = response?.data?.sentence.reduce(
-            (acc, sentence, index) => {
-              const answer = response?.data?.answers[index];
-              return (
-                acc +
-                sentence +
-                (answer
-                  ? `<button class="px-4 bg-orange-400 mb-3 mx-3 disabled:cursor-not-allowed" contenteditable="false" disabled=""><b>${answer.index}</b></button>`
-                  : "")
-              );
-            },
-            ""
-          );
-          setAudioSrc(response?.data?.audio);
-          setFormData(response?.data);
-          setText(formattedText);
-          setOptions(response?.data?.answers);
-        }
-      } catch (error) {
-        toast.error("something went wrong");
-        console.log(error);
-      }
-    };
-    getDetails(itemObj.id);
-  }, [item]);
-
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -78,6 +29,8 @@ const FillTheBlanks = () => {
     }));
   };
 
+  const [audioSrc, setAudioSrc] = useState(null);
+  const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -101,6 +54,12 @@ const FillTheBlanks = () => {
     setAudioSrc(null);
     setAudioName(null);
   };
+
+  // handle fill the blanks
+  const [text, setText] = useState("");
+  const [options, setOptions] = useState([]);
+  const contentEditableRef = useRef(null);
+  const [buttonCounter, setButtonCounter] = useState(65); // ASCII code for 'A'
 
   const handleButtonClick = () => {
     const selection = window.getSelection();
@@ -147,6 +106,45 @@ const FillTheBlanks = () => {
       )
     );
   };
+  //fetch qus details
+  useEffect(() => {
+    const getDetails = async (id) => {
+      try {
+        const response = await axios.get(`/highlight_incorrect_word/${id}`);
+
+        if (response?.data) {
+          // Set button counter based on the last index in the answers array
+          const lastAnswerIndex = response?.data?.answers.length
+            ? response?.data?.answers[response?.data?.answers.length - 1].index
+            : "A"; // Default to 'A' if there are no answers
+
+          setButtonCounter(lastAnswerIndex.charCodeAt(0) + 1);
+          // text format
+          const formattedText = response?.data?.sentence.reduce(
+            (acc, sentence, index) => {
+              const answer = response?.data?.answers[index];
+              return (
+                acc +
+                sentence +
+                (answer
+                  ? `<button class="px-4 bg-orange-400 mb-3 mx-3 disabled:cursor-not-allowed" contenteditable="false" disabled=""><b>${answer.index}</b></button>`
+                  : "")
+              );
+            },
+            ""
+          );
+          setAudioSrc(response?.data?.audio);
+          setFormData(response?.data);
+          setText(formattedText);
+          setOptions(response?.data?.answers);
+        }
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }
+    };
+    getDetails(itemObj.id);
+  }, [item]);
 
   /////////////////// sentence and options in form data ///////////////////////
   useEffect(() => {
@@ -169,7 +167,6 @@ const FillTheBlanks = () => {
       answers: options,
     }));
   }, [options, text]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -178,9 +175,11 @@ const FillTheBlanks = () => {
       try {
         setLoading(true);
         const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        if (formData.audio instanceof Blob || formData.audio instanceof File) {
+          newForm.append("audio", formData.audio, "recorded.wav");
+        }
         newForm.append("title", formData?.title);
-        // newForm.append("sentence", formData?.sentence);
+
         formData.sentence.forEach((item) => newForm.append("sentence", item));
         newForm.append("answers", answersJson);
         newForm.append("appeared", formData?.appeared);
@@ -190,9 +189,12 @@ const FillTheBlanks = () => {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        console.log(formData, "updat");
-        const { data } = await axios.post("/blank", newForm, config);
-        toast.success("Create question successfully");
+        const { data } = await axios.put(
+          `/highlight_incorrect_word/${itemObj.id}/update`,
+          newForm,
+          config
+        );
+        toast.success("update question successfully");
         if (data) {
           router.back();
         }
@@ -357,4 +359,4 @@ const FillTheBlanks = () => {
   );
 };
 
-export default FillTheBlanks;
+export default HighlightIncorrectWord;

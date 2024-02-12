@@ -22,6 +22,7 @@ import AnswerShotQues from "@/components/QuestionEditForms/AnswerShotQues";
 import MultipleSingleReading from "@/components/QuestionEditForms/MultipleSingleReading";
 import SelectMissingWord from "@/components/QuestionEditForms/SelectMissingWord";
 import Dictation from "@/components/QuestionEditForms/Dictation";
+import HighlightIncorrectWord from "../../../../components/QuestionEditForms/HighlightIncorrectWord";
 const EditForms = () => {
   const router = useRouter();
   const { questionTable, item } = router.query;
@@ -61,8 +62,8 @@ const EditForms = () => {
     content = <SelectMissingWord />;
   } else if (questionTable == "fill-in-the-blanks") {
     content = <FillTheBlanks />;
-  } else if (questionTable == "Highlight Incorrect Words") {
-    content = <FillTheBlanks />;
+  } else if (questionTable == "highlight-incorrect-words") {
+    content = <HighlightIncorrectWord />;
   } else if (questionTable == "reading:-MCM") {
     content = <MultipleChoiceReading />;
   } else if (questionTable == "reading:-MCS") {

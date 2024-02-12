@@ -5,91 +5,27 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
-const MultipleChoiceReading = () => {
+const MultipleChoiceListing = () => {
   const router = useRouter();
   const { item } = router.query;
   const itemObj = JSON.parse(item);
-  console.log("edit", itemObj);
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    options: [],
-    right_options: [],
-    appeared: 0,
-    prediction: false,
-    audio: null,
-  });
-
-  // array based on counter number
-  const [optionNumber, setOptionNumber] = useState(0);
+  const [optionNumber, setOptionNumber] = useState(4);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
       value: "",
     }))
   );
-  useEffect(() => {
-    setOptions((prevOptions) => {
-      return Array.from({ length: optionNumber }, (_, index) => {
-        if (index < prevOptions.length) {
-          return prevOptions[index];
-        } else {
-          return {
-            index: String.fromCharCode(65 + index),
-            value: "",
-          };
-        }
-      });
-    });
-  }, [optionNumber]);
-
-  // checkbox for selected option
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const handleCheckboxChange = (optionIndex) => {
-    if (selectedOptions.includes(optionIndex)) {
-      setSelectedOptions(
-        selectedOptions.filter((item) => item !== optionIndex)
-      );
-    } else {
-      setSelectedOptions([...selectedOptions, optionIndex]);
-    }
-  };
 
-  // initial data based on editable
-  useEffect(() => {
-    if (item) {
-      setFormData(itemObj);
-      setOptions(itemObj?.options);
-      setOptionNumber(itemObj?.options?.length);
-      setAudioSrc(itemObj?.audio);
-    }
-  }, [item]);
-
-  // update right_options and options
-  useEffect(() => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      options: options,
-      right_options: selectedOptions.map((index) => {
-        const option = options.find((opt) => opt.index === index);
-        return option ? option.value : "";
-      }),
-    }));
-  }, [options, selectedOptions]);
-  const handleInputChange = (e) => {
-    const { id, type, value, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleTextAreaChange = (index, value) => {
-    const updatedData = [...options];
-    updatedData[index] = { ...updatedData[index], value };
-    setOptions(updatedData);
-  };
-
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    options: options,
+    right_options: [],
+    appeared: 0,
+    prediction: false,
+  });
   const [audioSrc, setAudioSrc] = useState(null);
   const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
@@ -116,36 +52,106 @@ const MultipleChoiceReading = () => {
     setAudioName(null);
   };
 
+  useEffect(() => {
+    const getDetails = async (id) => {
+      try {
+        const response = await axios.get(`/multi_choice/${id}`);
+        if (response?.data) {
+          console.log(response.data);
+          setFormData(response.data);
+          setAudioSrc(response?.data?.audio);
+          setOptions(response.data?.options);
+          setOptionNumber(response.data?.options.length);
+          setSelectedOptions(response?.data?.right_options);
+        }
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }
+    };
+    getDetails(itemObj.id);
+  }, [item]);
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      options: options,
+      right_options: selectedOptions?.map((index) => {
+        const option = options.find((opt) => opt.value === index);
+        return option ? option.value : "";
+      }),
+    }));
+  }, [options, selectedOptions]);
+  const handleInputChange = (e) => {
+    const { id, type, value, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: type === "checkbox" ? checked : value,
+    }));
+  };
+  const handleCheckboxChange = (optionIndex) => {
+    if (selectedOptions.includes(optionIndex)) {
+      setSelectedOptions(
+        selectedOptions.filter((item) => item !== optionIndex)
+      );
+    } else {
+      setSelectedOptions([...selectedOptions, optionIndex]);
+    }
+  };
+  useEffect(() => {
+    setOptions((prevOptions) => {
+      return Array.from({ length: optionNumber }, (_, index) => {
+        if (index < prevOptions.length) {
+          return prevOptions[index];
+        } else {
+          return {
+            index: String.fromCharCode(65 + index),
+            value: "",
+          };
+        }
+      });
+    });
+  }, [optionNumber]);
+  const handleTextAreaChange = (index, value) => {
+    const updatedData = [...options];
+    updatedData[index] = { ...updatedData[index], value };
+    setOptions(updatedData);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData?.right_options);
-    if (formData?.audio) {
-      const optionsJson = JSON.stringify(formData?.options);
-      const rightOptionsJson = JSON.stringify(formData?.right_options);
-      try {
-        const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
-        newForm.append("title", formData?.title);
-        newForm.append("options", optionsJson);
-        newForm.append("right_options", rightOptionsJson);
-        newForm.append("appeared", formData?.appeared);
-        newForm.append("prediction", formData?.prediction);
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data", // Use lowercase for header keys
-          },
-        };
-        // const { data } = await axios.post("/multi_choice", newForm, config);
-        // toast.success("Create question successfully");
-        // if (data) {
-        //   router.back();
-        // }
-      } catch (error) {
-        console.error("Error create question:", error);
-        toast.error("Something went wrong, try again later.");
+    const optionsJson = JSON.stringify(formData?.options);
+    const rightOptionsJson = JSON.stringify(formData?.right_options);
+    try {
+      const newForm = new FormData();
+      if (formData.audio instanceof Blob || formData.audio instanceof File) {
+        newForm.append("audio", formData.audio, "recorded.wav");
       }
-    } else {
-      toast.error("You need provide dat successfuly!");
+      newForm.append("title", formData?.title);
+      newForm.append("options", optionsJson);
+      // newForm.append("right_options", rightOptionsJson);
+      formData.right_options.forEach((item) =>
+        newForm.append("right_options", item)
+      );
+
+      newForm.append("appeared", formData?.appeared);
+      newForm.append("prediction", formData?.prediction);
+      newForm.append("single", false);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data", // Use lowercase for header keys
+        },
+      };
+      const response = await axios.put(
+        `/multi_choice/${itemObj.id}/update`,
+        newForm,
+        config
+      );
+      if (response?.data) {
+        router.back();
+      }
+    } catch (error) {
+      toast.error("something went wrong");
+      console.log(error);
     }
   };
 
@@ -170,7 +176,7 @@ const MultipleChoiceReading = () => {
         </div>
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
-          {!audioSrc ? (
+          {!audioName && !audioSrc ? (
             <label className=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
               <Icon
                 className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
@@ -230,19 +236,19 @@ const MultipleChoiceReading = () => {
                       className="absolute top-0 left-0 opacity-0 invisible"
                       type="checkbox"
                       value={option.index}
-                      onChange={() => handleCheckboxChange(option.index)}
-                      checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
+                      onChange={() => handleCheckboxChange(option.value)}
+                      checked={selectedOptions.includes(option.value)} // Use 'in' operator to check if the key exists
                     />
                     <span
                       className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.index)
+                        selectedOptions.includes(option.value)
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
                       }`}
                     >
                       <Icon
                         className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.index)
+                          selectedOptions.includes(option.value)
                             ? "opacity-100"
                             : "opacity-0"
                         }`}
@@ -302,11 +308,11 @@ const MultipleChoiceReading = () => {
           type="submit"
           className="h-10 w-full mt-5 text-sm font-bold last:mb-0 bg-orange-300 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
         >
-          Create Question
+          Update Questions
         </button>
       </form>
     </div>
   );
 };
 
-export default MultipleChoiceReading;
+export default MultipleChoiceListing;
