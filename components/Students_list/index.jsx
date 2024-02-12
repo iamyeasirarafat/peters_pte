@@ -127,18 +127,27 @@ export const MultiActions = ({
   };
 
   return (
-    <div className="absolute top-0 right-[60%] bg-secondary p-1 rounded-md">
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          handleMultiDelete();
-        }}
-        disabled={loadingDelete}
-        className="flex items-center gap-x-2 px-4 py-2 hover:text-red duration-200 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-      >
-        {loadingDelete ? <LoaderIcon /> : <BsTrash3 />}
-        Delete
-      </button>
+    <div className="absolute top-1/2 right-[70%] bg-secondary p-1 rounded-md w-[230px]">
+      <div role="none">
+        <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+          <Icon name="plus" /> Increase Appeared by 1
+        </button>
+        <button className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900">
+          <Icon name="prediction" /> Prediction On
+        </button>
+        <button className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900">
+          <Icon name="predictionOff" /> Prediction Off
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            handleMultiDelete();
+          }}
+          className="flex items-center gap-x-2 px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-red"
+        >
+          <Icon name="cross" /> {loadingDelete && <LoaderIcon />} Remove
+        </button>
+      </div>
     </div>
   );
 };

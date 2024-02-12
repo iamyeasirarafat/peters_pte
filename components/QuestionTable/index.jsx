@@ -1,18 +1,28 @@
 import Checkbox from "@/components/Checkbox";
 import Sorting from "@/components/Sorting";
 import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
-import Item from "./Item";
 import Row, { StudentRow } from "./Row";
 import Icon from "@/components/Icon";
+import { MultiActions } from "../../components/Students_list/index";
+import { useRouter } from "next/router";
 
-const Students = ({ items, student }) => {
+const Students = ({ items, student, setReFetch }) => {
   const [valueAll, setValueAll] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [deleteUserList, setDeleteUserList] = useState([]);
+  const [openMultiActions, setOpenMultiActions] = useState(false);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+  const router = useRouter();
+  const { questionTable } = router.query;
+
+  const convertToCamelCase = (inputString) => {
+    const words = inputString.split("-");
+    let capitalizedWords = words.map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    let camelCaseString = capitalizedWords.join("");
+    return camelCaseString;
   };
+  const pageName = convertToCamelCase(questionTable);
   return (
     <table className="bg-white dark:bg-black w-full">
       <thead className="overflow-x-scroll">
@@ -41,45 +51,26 @@ const Students = ({ items, student }) => {
           <th className="td-custom text-right">
             <div
               className="relative inline-block text-left"
-              onClick={toggleDropdown}
-              // onBlur={closeDropdown}
+              onClick={() => setOpenMultiActions(!openMultiActions)}
             >
               <button className="btn-transparent-dark btn-small btn-square">
                 <Icon name="dots" />
               </button>
-              <div
-                style={{ backgroundColor: "#FAF4F0" }}
-                className={`${
-                  isOpen ? "block" : "hidden"
-                } origin-top-right absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-              >
-                <div role="none">
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  >
-                    <Icon name="plus" /> Increase Appeared by 1
-                  </a>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                  >
-                    <Icon name="prediction" /> Prediction On
-                  </a>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                  >
-                    <Icon name="predictionOff" /> Prediction Off
-                  </a>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                  >
-                    <Icon name="cross" /> Remove
-                  </a>
-                </div>
-              </div>
+              {openMultiActions && (
+                <MultiActions
+                  type={
+                    pageName === "MultiChoiceReadingSingle"
+                      ? "MultiChoiceReading"
+                      : pageName === "MultiChoiceSingle"
+                      ? "MultiChoice"
+                      : pageName
+                  }
+                  deleteUserList={deleteUserList}
+                  setDeleteUserList={setDeleteUserList}
+                  setOpenMultiActions={setOpenMultiActions}
+                  setStatus={setReFetch}
+                />
+              )}
             </div>
           </th>
           {/* <th className="th-custom text-right">
@@ -90,9 +81,23 @@ const Students = ({ items, student }) => {
       <tbody className="overflow-x-scroll">
         {items.map((product, i) => {
           if (student) {
-            return <StudentRow item={product} key={i} />;
+            return (
+              <StudentRow
+                item={product}
+                key={i}
+                setDeleteUserList={setDeleteUserList}
+                deleteUserList={deleteUserList}
+              />
+            );
           } else {
-            return <Row item={product} key={i} />;
+            return (
+              <Row
+                item={product}
+                key={i}
+                setDeleteUserList={setDeleteUserList}
+                deleteUserList={deleteUserList}
+              />
+            );
           }
         })}
       </tbody>

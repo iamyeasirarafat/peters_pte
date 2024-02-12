@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const Index = () => {
+  const [reFetch, setReFetch] = useState(false);
   const router = useRouter();
   const { questionTable } = router.query;
   const [tableData, setTableData] = useState([]);
@@ -17,43 +18,43 @@ const Index = () => {
     let url;
     if (questionTable === "read-aloud") {
       url = "practice/read_alouds";
-    } else if (questionTable === "summarize-written-text") {
+    } else if (questionTable === "summarize") {
       url = "summarizes";
-    } else if (questionTable === "write-essay") {
+    } else if (questionTable === "write-easy") {
       url = "write_easies";
-    } else if (questionTable === "highlight-correct-summary") {
+    } else if (questionTable === "highlight-summary") {
       url = "highlight_summarys";
-    } else if (questionTable === "select-missing-word") {
+    } else if (questionTable === "missing-word") {
       url = "missing_words";
-    } else if (questionTable === "write-from-dictation") {
+    } else if (questionTable === "dictation") {
       url = "dictations";
     } else if (questionTable === "repeat-sentence") {
       url = "repeat_sentences";
-    } else if (questionTable === "answer-short-question") {
+    } else if (questionTable === "short-question") {
       url = "short_questions";
-    } else if (questionTable === "re-tell-lecture") {
+    } else if (questionTable === "retell-sentence") {
       url = "retell_sentences";
     } else if (questionTable === "describe-image") {
       url = "describe_images";
-    } else if (questionTable === "re-order-paragraphs") {
+    } else if (questionTable === "reorder-paragraph") {
       url = "reorder_paragraphs";
-    } else if (questionTable === "reading:-MCM") {
+    } else if (questionTable === "multi-choice-reading") {
       url = "multi_choices/reading";
-    } else if (questionTable === "reading:-MCS") {
+    } else if (questionTable === "multi-choice-reading-single") {
       url = "multi_choices/reading/single-answer";
-    } else if (questionTable === "listening:-MCM") {
+    } else if (questionTable === "multi-choice") {
       url = "multi_choices";
-    } else if (questionTable === "listening:-MCS") {
+    } else if (questionTable === "multi-choice-single") {
       url = "multi_choices/single-answer";
-    } else if (questionTable === "summarize-spoken-text") {
+    } else if (questionTable === "summarize-spoken") {
       url = "spoken/summarizes";
-    } else if (questionTable === "reading-&-writing:-FIB") {
-      url = "reading_blanks";
+    } else if (questionTable === "r-w-blank") {
+      url = "read-write/blanks";
     } else if (questionTable === "spelling-bee") {
       url = "games/spelling_bees";
-    } else if (questionTable == "fill-in-the-blanks") {
+    } else if (questionTable === "blank") {
       url = "blanks";
-    } else if (questionTable == "reading:-fill-in-the-blanks") {
+    } else if (questionTable === "reading-blank") {
       url = "reading_blanks";
     }
 
@@ -70,7 +71,7 @@ const Index = () => {
       }
     };
     fetchData();
-  }, [questionTable, pageNumber]);
+  }, [questionTable, pageNumber, reFetch]);
   return (
     <AdminLayout title={questionTable} back={true}>
       <div className="flex justify-between mb-6">
@@ -105,7 +106,11 @@ const Index = () => {
         </div>
       ) : tableData?.results?.length ? (
         <>
-          <Table student={false} items={tableData?.results} />
+          <Table
+            student={false}
+            items={tableData?.results}
+            setReFetch={setReFetch}
+          />
           <TablePagination
             pageNumber={pageNumber}
             totalPage={Math.ceil(tableData?.total / pageLimit)}
