@@ -42,6 +42,7 @@ export default function StudentDetails() {
     };
     router.isReady && fetchData();
   }, [id, router, fetch]);
+  console.log("studentDetails", studentDetails);
   return (
     <Layout title="Student Details" back>
       <StudentsDetailsMain
@@ -439,7 +440,7 @@ export const UpdateInformation = ({
         },
       ];
       const res = await axios("/groups");
-      formattedGroup.push(...res.data?.results);
+      formattedGroup.push(res.data?.results);
       setGroups(formattedGroup);
     };
     fetchGroup();

@@ -23,7 +23,7 @@ const StudentList = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
   const { state } = useSelector((state) => state.refetch);
-  console.log(state, "dddd")
+  console.log(state, "dddd");
   useEffect(() => {
     const getData = async () => {
       const res = await axios(
@@ -34,7 +34,6 @@ const StudentList = () => {
     };
     getData();
   }, [status, pageNumber, state]);
-  console.log(data);
   return (
     <Layout title="Students" background>
       {loading ? (
@@ -46,10 +45,6 @@ const StudentList = () => {
         </div>
       ) : data?.results?.length > 0 ? (
         <>
-          {/* <StudentFilter /> */}
-          <div className="mb-3">
-            <Filter />
-          </div>
           <Students admin={true} setStatus={setStatus} items={data?.results} />
           <TablePagination
             pageNumber={pageNumber}
@@ -254,37 +249,5 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
         <button className="btn-purple  w-full">Add Student</button>
       </form>
     </Modal>
-  );
-};
-
-const Filter = () => {
-  const filterTab = [
-    {
-      id: 1,
-      name: "Filter",
-      icon: <IoFilterSharp />,
-    },
-    {
-      id: 2,
-      name: "Group",
-      icon: <FaPeopleGroup />,
-    },
-    {
-      id: 3,
-      name: "Organization",
-      icon: <RiGraduationCapFill />,
-    },
-  ];
-  return (
-    <div className="flex items-center gap-x-2">
-      {filterTab?.map((item, index) => (
-        <button
-          key={index}
-          className="bg-white font-semibold text-sm py-1 px-6 flex items-center gap-x-2"
-        >
-          {item?.icon} {item.name}
-        </button>
-      ))}
-    </div>
   );
 };

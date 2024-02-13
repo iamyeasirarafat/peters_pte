@@ -4,7 +4,9 @@ import AudioVisualizer from "../AudioVisualizer";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useRouter } from "next/router";
 const ListeningFrenzy = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formDataState, setFormDataState] = useState({
     title: "",
@@ -43,8 +45,8 @@ const ListeningFrenzy = () => {
     try {
       setLoading(true);
       const res = await axios.post("/games/listening_frenzy", formData);
-      console.log(res);
       toast.success("Question created successfully");
+      router?.back();
       setLoading(false);
       setAudioSrc(null);
       setAudioName(null);

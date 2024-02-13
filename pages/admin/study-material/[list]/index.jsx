@@ -70,7 +70,11 @@ const Index = () => {
           setRefetch={setRefetch}
         />
       ) : (
-        <PredictionList data={prediction?.results} setRefetch={setRefetch} />
+        <PredictionList
+          data={prediction?.results}
+          setRefetch={setRefetch}
+          list={list}
+        />
       )}
       <TablePagination
         pageNumber={pageNumber}
@@ -83,7 +87,7 @@ const Index = () => {
 
 export default Index;
 
-export const PredictionList = ({ data, setRefetch }) => {
+export const PredictionList = ({ data, setRefetch, list }) => {
   const [deleteUserList, setDeleteUserList] = useState([]);
   const [openMultiActions, setOpenMultiActions] = useState(false);
   const [value, setValue] = useState(false);
@@ -96,6 +100,11 @@ export const PredictionList = ({ data, setRefetch }) => {
             <Checkbox value={value} onChange={() => setValue(!value)} />
             <Sorting title="File Name" />
           </th>
+          {list === "study_material" && (
+            <th className="th-custom text-center">
+              <Sorting title="Topic" />
+            </th>
+          )}
           <th className="th-custom text-center">
             <Sorting title="File Id" />
           </th>
@@ -138,6 +147,7 @@ export const PredictionList = ({ data, setRefetch }) => {
             setRefetch={setRefetch}
             deleteUserList={deleteUserList}
             setDeleteUserList={setDeleteUserList}
+            list={list}
           />
         ))}
       </tbody>
@@ -152,6 +162,7 @@ const PredictionListRow = ({
   setRefetch,
   deleteUserList,
   setDeleteUserList,
+  list,
 }) => {
   const [value, setValue] = useState(false);
   useEffect(() => {
@@ -177,6 +188,11 @@ const PredictionListRow = ({
         />
         <p className="text-sm font-bold">{data?.title}</p>
       </td>
+      {list === "study_material" && (
+        <td className="td-custom text-center">
+          <p className="text-sm">{data?.topic?.title}</p>
+        </td>
+      )}
       <td className="td-custom text-center">
         <p className="text-sm">#{data?.id}</p>
       </td>
@@ -267,7 +283,7 @@ const StudyMore = ({ id, setRefetch }) => {
     }
   };
   return (
-    <div className="bg-secondary rounded shadow absolute top-1/2 p-2 right-[60%] space-y-2">
+    <div className="bg-secondary rounded shadow absolute top-1/2 p-2 right-[60%] space-y-2 z-50">
       <button
         onClick={() =>
           router.push(`/admin/study-material/form/add-${list}?id=${id}`)

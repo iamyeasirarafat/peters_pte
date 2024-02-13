@@ -35,7 +35,7 @@ function AddStudyMaterial() {
   }, [id, reset, router?.isReady]);
 
   // getTopics
-  const [topics, setTopics] = useState({});
+  const [topics, setTopics] = useState([]);
   useEffect(() => {
     const getTopic = async () => {
       const { data } = await axios.get("/topic");
@@ -52,7 +52,6 @@ function AddStudyMaterial() {
         try {
           const response = await fetch(dataDetails?.file);
           const pdfBlob = await response.blob();
-          console.log("pdfBlob", pdfBlob);
           const fileName = getFileName(dataDetails?.file);
 
           setStudyFile([{ file: pdfBlob, name: fileName }]);
@@ -171,7 +170,7 @@ const FileForm = ({
         <Select
           label="Topic"
           className="mb-2"
-          items={topics?.results}
+          items={topics}
           value={topic}
           onChange={setTopic}
         />

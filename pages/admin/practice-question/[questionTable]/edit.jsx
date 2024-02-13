@@ -39,7 +39,7 @@ const EditForms = () => {
     content = <AnswerShotQues />;
   } else if (questionTable == "describe-image") {
     content = <DescribeImage />;
-  }  else if (questionTable == "summarize-spoken") {
+  } else if (questionTable == "summarize-spoken") {
     content = <SummerizeSpoken />;
   } else if (questionTable == "dictation") {
     content = <Dictation />;
@@ -65,9 +65,9 @@ const EditForms = () => {
     content = <FillTheBlanks />;
   } else if (questionTable == "multi-choice-reading") {
     content = <MultipleChoiceReading />;
-  } else if (questionTable == "highlight-incorrect-words") {
+  } else if (questionTable == "highlight-incorrect-word") {
     content = <HighlightIncorrectWord />;
-  }  else if (questionTable == "multi-choice-reading-single") {
+  } else if (questionTable == "multi-choice-reading-single") {
     content = <MultipleSingleReading />;
   } else if (questionTable == "reorder-paragraph") {
     content = <ReOrderParagraph />;
