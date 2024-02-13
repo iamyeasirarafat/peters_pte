@@ -133,9 +133,6 @@ const PaymentMethod = () => {
             <div className="text-right">
               <Switch value={payment} setValue={setPayment} />
             </div>
-            <button className="btn-transparent-dark btn-small btn-square md:hidden">
-              <Icon name="dots" />
-            </button>
           </div>
         </div>
       </div>

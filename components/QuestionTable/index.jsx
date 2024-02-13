@@ -69,6 +69,7 @@ const Students = ({ items, student, setReFetch }) => {
                   setDeleteUserList={setDeleteUserList}
                   setOpenMultiActions={setOpenMultiActions}
                   setStatus={setReFetch}
+                  onlyDelete
                 />
               )}
             </div>

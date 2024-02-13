@@ -56,13 +56,13 @@ const Index = () => {
       url = "blanks";
     } else if (questionTable === "reading-blank") {
       url = "reading_blanks";
-    }  else if (questionTable == "highlight-incorrect-words") {
+    } else if (questionTable == "highlight-incorrect-word") {
       url = "highlight_incorrect_words";
-    }else if (questionTable === "spelling-bee") {
+    } else if (questionTable === "spelling-bee") {
       url = "games/spelling_bees";
-    }else if (questionTable === "speaking-spell") {
+    } else if (questionTable === "speaking-spell") {
       url = "games/speaking_spells";
-    }else if (questionTable === "listening-frenzy") {
+    } else if (questionTable === "listening-frenzy") {
       url = "games/listening_frenzies";
     }
 
@@ -93,13 +93,6 @@ const Index = () => {
               Create New Question
             </button>
           </Link>
-          <button
-            className="h-10 px-6 text-sm font-bold last:mb-0 dark:text-black bg-white  transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-            as="button"
-          >
-            <Icon className="-mt-0.25 mr-3 dark:fill-black" name="filters" />
-            filters
-          </button>
         </div>
         <button className="px-3 py-[0.4rem] border bg-white">
           <Icon className=" dark:fill-black" name="search" />
