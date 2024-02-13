@@ -1,12 +1,21 @@
+import axios from "axios";
 import Icon from "@/components/Icon";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import AudioVisualizer from "../AudioVisualizer";
+
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 const ListeningFrenzy = () => {
+  const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
+
+ 
   const [formData, setFormData] = useState({
     title: "",
     audio: null,
   });
-
+ 
   const [audioSrc, setAudioSrc] = useState(null);
   const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
@@ -33,10 +42,48 @@ const ListeningFrenzy = () => {
     setAudioName(null);
   };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // Set initial form values based on itemObj
+    if (itemObj) {
+      setFormData({
+        title:itemObj?.word,
+        audio:itemObj?.audio
+      })
+      
+      setAudioSrc(itemObj?.audio);
+    }
+  }, [item]);
+
+  console.log(formData)
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    if (formData.audio) {
+      console.log(formData)
+      try {
+        const newForm = new FormData();
+        newForm.append("word", formData?.title);
+        if (formData.audio instanceof Blob || formData.audio instanceof File) {
+          newForm.append("audio", formData.audio, "recorded.wav");
+        }
+        const config = { headers: { "content-type": "multipart/form-data" } };
+
+        console.log(formData);
+        const response = await axios.put(`/games/listening_frenzy/${itemObj?.id}/update`, newForm, config);
+        toast.success("update question successfully");
+        if (response?.data) {
+          router.back();
+        }
+
+      } catch (error) {
+        console.error("Error create question:", error);
+        toast.error("Something went wrong, try again later.");
+      }
+    } else {
+      toast.error("You need provide data successfully!");
+    }
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -52,6 +99,7 @@ const ListeningFrenzy = () => {
             className="w-full border-none py-4 px-5 text-sm "
             id="name"
             type="text"
+            value={formData.title}
             onChange={({ target }) =>
               setFormData((prev) => ({
                 ...prev,

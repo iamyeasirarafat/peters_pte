@@ -64,11 +64,14 @@ const ReOrderParagraph = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const response = await axios.post("reorder_paragraph", formData);
-      // toast.success("Create question successfully");
-      // if (response?.data) {
-      //   router.back();
-      // }
+      const response = await axios.put(
+        `/reorder_paragraph/${itemObj?.id}/update`,
+        formData
+      );
+      toast.success("update question successfully");
+      if (response?.data) {
+        router.back();
+      }
     } catch (error) {
       toast.error("something went wrong");
       console.log(error);

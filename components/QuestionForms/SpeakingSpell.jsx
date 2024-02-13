@@ -3,7 +3,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+import { useRouter } from "next/router";
 const SpeakingSpell = () => {
+
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = async (data) => {
@@ -15,6 +18,9 @@ const SpeakingSpell = () => {
       toast.success("Question created successfully");
       setLoading(false);
       reset();
+      if (res?.data) {
+        router.back();
+      }
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.error || "Something went wrong");

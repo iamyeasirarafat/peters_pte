@@ -91,6 +91,7 @@ const HighlightSummary = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData?.audio) {
+      console.log(formData);
       try {
         setLoading(true);
         const formDatas = new FormData();
@@ -99,6 +100,8 @@ const HighlightSummary = () => {
         const optionsJson = JSON.stringify(formData?.options);
         formDatas.append("options", optionsJson);
         formDatas.append("right_option", formData?.right_option);
+
+        // formData.right_option.forEach((item) => newForm.append("sentence", item));
         formDatas.append("appeared", formData?.appeared);
         formDatas.append("prediction", formData?.prediction);
         const config = {

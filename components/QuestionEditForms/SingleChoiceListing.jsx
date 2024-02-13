@@ -152,7 +152,10 @@ const SingleChoiceListing = () => {
         }
         newForm.append("title", formData?.title);
         newForm.append("options", optionsJson);
-        newForm.append("right_options", rightOptionsJson);
+        // newForm.append("right_options", rightOptionsJson);
+        formData.right_options.forEach((item) =>
+          newForm.append("right_options", item)
+        );
         newForm.append("appeared", formData?.appeared);
         newForm.append("prediction", formData?.prediction);
         newForm.append("single", true);

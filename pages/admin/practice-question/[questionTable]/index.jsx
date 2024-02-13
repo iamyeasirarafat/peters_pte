@@ -58,6 +58,12 @@ const Index = () => {
       url = "reading_blanks";
     }  else if (questionTable == "highlight-incorrect-words") {
       url = "highlight_incorrect_words";
+    }else if (questionTable === "spelling-bee") {
+      url = "games/spelling_bees";
+    }else if (questionTable === "speaking-spell") {
+      url = "games/speaking_spells";
+    }else if (questionTable === "listening-frenzy") {
+      url = "games/listening_frenzies";
     }
 
     const fetchData = async () => {

@@ -178,7 +178,9 @@ const FillTheBlanks = () => {
       try {
         setLoading(true);
         const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        if (formData.audio instanceof Blob || formData.audio instanceof File) {
+          newForm.append("audio", formData.audio, "recorded.wav");
+        }
         newForm.append("title", formData?.title);
         // newForm.append("sentence", formData?.sentence);
         formData.sentence.forEach((item) => newForm.append("sentence", item));
@@ -191,8 +193,12 @@ const FillTheBlanks = () => {
           },
         };
         console.log(formData, "updat");
-        const { data } = await axios.post("/blank", newForm, config);
-        toast.success("Create question successfully");
+        const { data } = await axios.put(
+          `/blank/${itemObj.id}/update`,
+          newForm,
+          config
+        );
+        toast.success("update question successfully");
         if (data) {
           router.back();
         }
