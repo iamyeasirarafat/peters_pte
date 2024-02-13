@@ -4,13 +4,20 @@ import Image from "@/components/Image";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Row = ({ item }) => {
+const Row = ({ item, setDeleteUserList, deleteUserList }) => {
   const router = useRouter();
   const { questionTable } = router.query;
   const [value, setValue] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    if (deleteUserList && deleteUserList.includes(item.id)) {
+      setValue(true);
+    } else {
+      setValue(false);
+    }
+  }, [item, deleteUserList]);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -25,7 +32,17 @@ const Row = ({ item }) => {
   return (
     <tr className="">
       <td className="td-custom">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+        <Checkbox
+          value={value}
+          onChange={() => {
+            setValue(!value);
+            if (!value) {
+              setDeleteUserList((prev) => [...prev, item.id]);
+            } else {
+              setDeleteUserList((prev) => prev.filter((i) => i !== item.id));
+            }
+          }}
+        />
       </td>
       <td className="td-custom">
         <div className="flex items-center ">
@@ -59,7 +76,12 @@ const Row = ({ item }) => {
             onClick={toggleDropdown}
             // onBlur={closeDropdown}
           >
-            <button className="btn-transparent-dark btn-small btn-square">
+            <button
+              disabled={deleteUserList?.length > 0}
+              className={`btn-transparent-dark btn-small btn-square ${
+                deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+              }`}
+            >
               <Icon name="dots" />
             </button>
             <div
@@ -110,13 +132,29 @@ const Row = ({ item }) => {
 
 export default Row;
 
-export const StudentRow = ({ item }) => {
+export const StudentRow = ({ item, setDeleteUserList, deleteUserList }) => {
   const [value, setValue] = useState(false);
-
+  useEffect(() => {
+    if (deleteUserList && deleteUserList.includes(item.id)) {
+      setValue(true);
+    } else {
+      setValue(false);
+    }
+  }, [item, deleteUserList]);
   return (
     <tr className="">
       <td className="td-custom">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+        <Checkbox
+          value={value}
+          onChange={() => {
+            setValue(!value);
+            if (!value) {
+              setDeleteUserList((prev) => [...prev, item.id]);
+            } else {
+              setDeleteUserList((prev) => prev.filter((i) => i !== item.id));
+            }
+          }}
+        />
       </td>
       <td className="td-custom">
         <Link

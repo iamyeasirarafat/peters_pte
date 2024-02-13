@@ -1,19 +1,20 @@
 import Select from "@/components/AddStudentSelect";
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
-import { StudentFilter } from "@/components/Filters";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import TablePagination from "@/components/TablePagination";
+import { toggle } from "@/redux/slice/refetchSlice";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
-import Students from "../../components/Students_list";
+import { FaPeopleGroup } from "react-icons/fa6";
 import { IoFilterSharp } from "react-icons/io5";
 import { RiGraduationCapFill } from "react-icons/ri";
-import { FaPeopleGroup } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import Students from "../../components/Students_list";
 
 const StudentList = () => {
   const [data, setData] = useState([]);
@@ -21,9 +22,8 @@ const StudentList = () => {
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
-
-  console.log("data", data);
-
+  const { state } = useSelector((state) => state.refetch);
+  console.log(state, "dddd")
   useEffect(() => {
     const getData = async () => {
       const res = await axios(
@@ -33,7 +33,7 @@ const StudentList = () => {
       setLoading(false);
     };
     getData();
-  }, [status, pageNumber]);
+  }, [status, pageNumber, state]);
   console.log(data);
   return (
     <Layout title="Students" background>
@@ -161,6 +161,7 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({});
+  const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
     const submitData = {
@@ -175,6 +176,7 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
       setVisible(false);
       setStatus && setStatus((state) => !state);
       setReplace(Math.random());
+      dispatch(toggle());
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");

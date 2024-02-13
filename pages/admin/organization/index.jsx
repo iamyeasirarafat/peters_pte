@@ -1,17 +1,18 @@
 import Empty from "@/components/Empty";
 import Field from "@/components/Field";
-import { StudentFilter } from "@/components/Filters";
 import Icon from "@/components/Icon";
 import Layout from "@/components/Layout";
 import Modal from "@/components/Modal";
 import OrganizationList from "@/components/OrganizationList";
 import { PhoneNumberInput } from "@/components/Students_list/Row";
 import TablePagination from "@/components/TablePagination";
+import { toggle } from "@/redux/slice/refetchSlice";
 import { Listbox, Transition } from "@headlessui/react";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import countryList from 'react-select-country-list';
 import { twMerge } from "tailwind-merge";
 const Organizations = () => {
@@ -20,6 +21,7 @@ const Organizations = () => {
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
+  const { state } = useSelector((state) => state.refetch);
 
   useEffect(() => {
     const getData = async () => {
@@ -30,7 +32,7 @@ const Organizations = () => {
       setLoading(false);
     };
     getData();
-  }, [pageNumber, status]);
+  }, [pageNumber, status, state]);
 
   return (
     <Layout title="Organizations" background>
@@ -97,6 +99,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
   } = useForm({});
   const [country, setCountry] = useState('')
   const countries = useMemo(() => countryList().getData(), [])
+  const dispatch = useDispatch()
   const onSubmit = async (data) => {
     if (country !== "") {
       try {
@@ -104,6 +107,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
         toast.success("Successfully added");
         setVisible(false);
         setStatus && setStatus(Math.random());
+        dispatch(toggle())
       } catch (err) {
         const key = Object.keys(err?.response?.data)[0];
         const value = err?.response?.data[key];
