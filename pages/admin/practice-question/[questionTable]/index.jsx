@@ -51,14 +51,18 @@ const Index = () => {
       url = "spoken/summarizes";
     } else if (questionTable === "reading-&-writing:-FIB") {
       url = "reading_blanks";
-    } else if (questionTable === "spelling-bee") {
-      url = "games/spelling_bees";
-    } else if (questionTable == "fill-in-the-blanks") {
+    }  else if (questionTable == "fill-in-the-blanks") {
       url = "blanks";
     } else if (questionTable == "reading:-fill-in-the-blanks") {
       url = "read-write/blanks";
     } else if (questionTable == "highlight-incorrect-words") {
       url = "highlight_incorrect_words";
+    }else if (questionTable === "spelling-bee") {
+      url = "games/spelling_bees";
+    }else if (questionTable === "speaking-spell") {
+      url = "games/speaking_spells";
+    }else if (questionTable === "listening-frenzy") {
+      url = "games/listening_frenzies";
     }
 
     const fetchData = async () => {

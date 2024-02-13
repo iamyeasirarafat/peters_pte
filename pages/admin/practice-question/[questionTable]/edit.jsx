@@ -23,6 +23,7 @@ import MultipleSingleReading from "@/components/QuestionEditForms/MultipleSingle
 import SelectMissingWord from "@/components/QuestionEditForms/SelectMissingWord";
 import Dictation from "@/components/QuestionEditForms/Dictation";
 import HighlightIncorrectWord from "../../../../components/QuestionEditForms/HighlightIncorrectWord";
+import SummerizeSpoken from "../../../../components/QuestionEditForms/SummerizeSpoken";
 const EditForms = () => {
   const router = useRouter();
   const { questionTable, item } = router.query;
@@ -39,16 +40,16 @@ const EditForms = () => {
   } else if (questionTable == "describe-image") {
     content = <DescribeImage />;
   } else if (questionTable == "summarize-spoken-text") {
-    content = <ReTelLecture />;
+    content = <SummerizeSpoken />;
   } else if (questionTable == "write-from-dictation") {
     content = <Dictation />;
   } else if (questionTable == "summarize-written-text") {
     content = <SummerizeWritten />;
   } else if (questionTable == "write-essay") {
     content = <EssayQuestion />;
-  } else if (questionTable == "Speaking Spell") {
+  } else if (questionTable == "speaking-spell") {
     content = <SpeakingSpell />;
-  } else if (questionTable == "Listening Frenzy") {
+  } else if (questionTable == "listening-frenzy") {
     content = <ListeningFrenzy />;
   } else if (questionTable == "spelling-bee") {
     content = <SpellingBee />;

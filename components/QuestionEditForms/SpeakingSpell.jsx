@@ -1,10 +1,41 @@
 import Counter from "@/components/Counter";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
+
 const SpeakingSpell = () => {
   const [title, setTitle] = useState("");
-  const handleSubmit = (e) => {
+  const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
+
+  useEffect(() => {
+    const getDetails = async (id) => {
+      try {
+        const response = await axios.get(`/games/speaking_spell/${id}`);
+        if (response?.data) {
+          setTitle(response?.data?.word)
+        }
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }
+    };
+    getDetails(itemObj.id);
+
+  }, [item]);
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(title);
+    const res = await axios.put(
+      `/games/speaking_spell/${itemObj.id}/update`,
+      {word:title}
+    );
+    toast.success("Question updated successfully");
+    if (res?.data) {
+      router.back();
+    }
   };
 
   return (
@@ -22,6 +53,7 @@ const SpeakingSpell = () => {
             className="w-full border-none py-4 px-5 text-sm "
             id="name"
             type="text"
+            value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>

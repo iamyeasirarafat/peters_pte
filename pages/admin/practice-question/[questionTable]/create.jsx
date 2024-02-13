@@ -47,9 +47,9 @@ const AllForms = () => {
     content = <SummerizeWritten />;
   } else if (questionTable == "write-essay") {
     content = <EssayQuestion />;
-  } else if (questionTable == "Speaking Spell") {
+  } else if (questionTable == "speaking-spell") {
     content = <SpeakingSpell />;
-  } else if (questionTable == "Listening Frenzy") {
+  } else if (questionTable == "listening-frenzy") {
     content = <ListeningFrenzy />;
   } else if (questionTable == "spelling-bee") {
     content = <SpellingBee />;

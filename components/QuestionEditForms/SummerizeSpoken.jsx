@@ -1,18 +1,34 @@
 import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import axios from "axios";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import toast from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 const SummerizeSpoken = () => {
   const router = useRouter();
+  const { item } = router.query;
+  const itemObj = JSON.parse(item);
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
 
-  const { register, handleSubmit, setError, formState } = useForm();
+  const { register, handleSubmit,setValue, setError, formState } = useForm();
+
+  useEffect(() => {
+    // Set initial form values based on itemObj
+
+    if (itemObj) {
+      setValue("title", itemObj.title);
+      setValue("reference_text", itemObj.reference_text);
+      setValue("prediction", itemObj.prediction);
+      setAppeared(itemObj.appeared || 0);
+      setAudio(itemObj?.audio);
+      setAudioSrc(itemObj?.audio);
+    }
+  }, [item, setValue]);
+
   const onsubmit = async (data) => {
     if (audio) {
       try {
@@ -20,23 +36,28 @@ const SummerizeSpoken = () => {
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
         formData.append("prediction", data?.prediction);
-        formData.append("audio", audio);
+        if (formData.audio instanceof Blob || formData.audio instanceof File) {
+          newForm.append("audio", formData.audio, "recorded.wav");
+        }
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-        console.log(formData);
-        // const response = await axios.post("/repeat_sentence", formData, config);
-        // toast.success("Create question successfully");
-        // if (response?.data) {
-        //   router.back();
-        // }
+        
+        const response = await axios.put(`/spoken/summarize/${itemObj?.id}/update`, formData, config);
+        toast.success("update question successfully");
+        if (response?.data) {
+          router.back();
+        }
       } catch (error) {
-        console.error("Error create question:", error);
+        console.error("Error update question:", error);
         toast.error("Something went wrong, try again later.");
       }
     } else {
       toast.error("You need provide data successfully!");
     }
   };
+
+  
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -55,7 +76,7 @@ const SummerizeSpoken = () => {
   return (
     <div>
       <form onSubmit={handleSubmit(onsubmit)} encType="multipart/form-data">
-        <div className=" flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <label for="title" className="font-bold text-sm">
               Question Name

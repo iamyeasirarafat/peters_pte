@@ -36,7 +36,9 @@ const AnswerShotQues = () => {
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
         formData.append("prediction", data?.prediction);
-        formData.append("audio", audio);
+        if (formData.audio instanceof Blob || formData.audio instanceof File) {
+          newForm.append("audio", formData.audio, "recorded.wav");
+        }
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
         const response = await axios.put(

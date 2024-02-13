@@ -178,14 +178,14 @@ const CardItems = () => {
       title: "Speaking Spell",
       items: "233",
       bg: "#AE7AFF",
-      link: "Speaking Spell",
+      link: "speaking-spell",
       text: "SP",
     },
     {
       title: "Listening Frenzy",
       items: "233",
       bg: "#AE7AFF",
-      link: "Listening Frenzy",
+      link: "listening-frenzy",
       text: "LF",
     },
   ];

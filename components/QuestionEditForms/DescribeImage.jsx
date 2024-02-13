@@ -37,7 +37,10 @@ const RepeatSentence = () => {
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
         formData.append("prediction", data?.prediction);
-        formData.append("image", image);
+
+        if (image instanceof File) {
+          formData.append("image", image);
+        }
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
         const response = await axios.put(
