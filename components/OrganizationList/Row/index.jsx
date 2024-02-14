@@ -187,7 +187,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
   );
 };
 
-const OrgMore = ({ setEditData, setVisible, setStatus, item }) => {
+const OrgMore = ({ setEditData, setVisible, setStatus, item }) => { 
   return (
     <div
       className={`bg-secondary dark:bg-black font-semibold absolute right-full dark:border-white border border-transparent top-0 z-3 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}

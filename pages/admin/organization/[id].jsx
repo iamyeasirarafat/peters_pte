@@ -118,6 +118,7 @@ const StudentProfileInfo = ({ data }) => {
 };
 
 const StudentDetailsRight = ({ data }) => {
+  const [isOpen, setIsOpen] = useState(null);
   const [fetchGroup, setFetchGroup] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 3;
@@ -198,7 +199,12 @@ const StudentDetailsRight = ({ data }) => {
             <AccountPlanMobile key={i} data={item} />
           ))
         ) : (
-          <AccountPlan data={groups?.results} />
+          <AccountPlan
+            data={groups?.results}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            setFetchGroup={setFetchGroup}
+          />
         )}
       </div>
       <TablePagination
@@ -350,7 +356,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
   );
 };
 
-const AccountPlan = ({ data }) => {
+const AccountPlan = ({ data, isOpen, setIsOpen,setFetchGroup }) => {
   return (
     <div>
       <table className="bg-white dark:bg-black w-full">
@@ -380,14 +386,45 @@ const AccountPlan = ({ data }) => {
               </td>
               <td className="py-2 px-3 flex items-center text-sm justify-end gap-x-5">
                 N/A
-                <button className="btn-transparent-dark btn-small btn-square">
-                  <Icon name="dots" />
-                </button>
+                {/* remove */}
+                <div
+                  className="relative inline-block text-left"
+
+                  onClick={() =>
+                    setIsOpen(isOpen === group.id ? null : group.id)
+                  }
+                >
+                  <button  className="btn-transparent-dark btn-small btn-square disabled:cursor-not-allowed">
+                    <Icon name="dots" />
+                  </button>
+                  {isOpen === group.id && <OrgMore item={group} setFetchGroup={setFetchGroup} />}
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+    </div>
+  );
+};
+
+const OrgMore = ({ item,setFetchGroup }) => {
+  return (
+    <div
+      className={`bg-secondary dark:bg-black font-semibold absolute right-full dark:border-white border border-transparent top-0 z-3 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+    >
+      <div role="none">
+        <button
+          onClick={async () => {
+            await axios.delete(`/group/${item.id}` );
+            setFetchGroup((prev) => !prev);
+            
+          }}
+          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="cross" /> Remove
+        </button>
+      </div>
     </div>
   );
 };

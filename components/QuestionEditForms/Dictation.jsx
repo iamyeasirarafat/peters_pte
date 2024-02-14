@@ -21,7 +21,7 @@ const Dictation = () => {
     // Set initial form values based on itemObj
     if (itemObj) {
       setValue("title", itemObj.title);
-      setValue("reference_text", itemObj.reference_text);
+      setValue("reference_text", itemObj.content);
       setValue("prediction", itemObj.prediction);
       setAppeared(itemObj.appeared || 0);
       setAudio(itemObj?.audio);
@@ -33,15 +33,15 @@ const Dictation = () => {
       try {
         const formData = new FormData();
         formData.append("title", data?.title);
-        formData.append("reference_text", data?.reference_text);
+        formData.append("content", data?.reference_text);
         formData.append("prediction", data?.prediction);
         if (formData.audio instanceof Blob || formData.audio instanceof File) {
           newForm.append("audio", formData.audio, "recorded.wav");
         }
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-        const response = await axios.put("/retell_sentence", formData, config);
-        toast.success("Create question successfully");
+        const response = await axios.put(`/dictation/${itemObj?.id}/update`, formData, config);
+        toast.success("update question successfully");
         if (response?.data) {
           router.back();
         }
