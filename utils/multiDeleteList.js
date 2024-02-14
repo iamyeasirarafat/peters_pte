@@ -14,6 +14,5 @@ export const multiDeleteList = async (type, list, incDec, action) => {
     return res.data;
   } catch (error) {
     console.log(error);
-    throw error;
   }
 };

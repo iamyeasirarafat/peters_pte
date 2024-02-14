@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import countryList from 'react-select-country-list';
+import countryList from "react-select-country-list";
 import { twMerge } from "tailwind-merge";
 const Organizations = () => {
   const [data, setData] = useState([]);
@@ -97,9 +97,9 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
     control,
     formState: { errors },
   } = useForm({});
-  const [country, setCountry] = useState('')
-  const countries = useMemo(() => countryList().getData(), [])
-  const dispatch = useDispatch()
+  const [country, setCountry] = useState("");
+  const countries = useMemo(() => countryList().getData(), []);
+  const dispatch = useDispatch();
   const onSubmit = async (data) => {
     if (country !== "") {
       try {
@@ -107,14 +107,14 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
         toast.success("Successfully added");
         setVisible(false);
         setStatus && setStatus(Math.random());
-        dispatch(toggle())
+        dispatch(toggle());
       } catch (err) {
         const key = Object.keys(err?.response?.data)[0];
         const value = err?.response?.data[key];
         toast.error(`${key} - ${value}`);
       }
     } else {
-      toast.error('Country is required');
+      toast.error("Country is required");
     }
   };
 
@@ -185,7 +185,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
           register={register}
           name="country"
         /> */}
-        <Select
+        <SelectCountry
           errors={errors}
           className="mb-6"
           label="Country"
@@ -200,9 +200,7 @@ export const AddOrgModal = ({ visible, setVisible, setStatus }) => {
   );
 };
 
-
-
-const Select = ({
+export const SelectCountry = ({
   label,
   className,
   classButton,
@@ -218,13 +216,15 @@ const Select = ({
 }) => (
   <div className={`relative ${className}`}>
     {label && <div className="mb-3 text-xs font-bold">{label}</div>}
-    <Listbox value={value} onChange={onChange} >
+    <Listbox value={value} onChange={onChange}>
       {({ open }) => (
         <>
           <Listbox.Button
             className={twMerge(
-              `flex items-center w-full h-16 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-n-1 dark:border-white dark:text-white ${small ? "h-6 px-4 text-xs" : ""
-              } ${open ? "border-purple-1 dark:border-purple-1" : ""
+              `flex items-center w-full h-16 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-n-1 dark:border-white dark:text-white ${
+                small ? "h-6 px-4 text-xs" : ""
+              } ${
+                open ? "border-purple-1 dark:border-purple-1" : ""
               } ${classButton}`
             )}
           >
@@ -238,8 +238,9 @@ const Select = ({
               )}
             </span>
             <Icon
-              className={`shrink-0 icon-20 ml-6 -mr-0.5 transition-transform dark:fill-white ${small ? "ml-2 -mr-2" : ""
-                } ${open ? "rotate-180" : ""} ${classArrow}`}
+              className={`shrink-0 icon-20 ml-6 -mr-0.5 transition-transform dark:fill-white ${
+                small ? "ml-2 -mr-2" : ""
+              } ${open ? "rotate-180" : ""} ${classArrow}`}
               name="arrow-bottom"
             />
           </Listbox.Button>
@@ -250,15 +251,18 @@ const Select = ({
           >
             <Listbox.Options
               className={twMerge(
-                `absolute left-0 right-0 w-full mt-1 p-2 bg-white h-40 overflow-y-auto  border-n-3 rounded-sm shadow-lg dark:bg-n-1 dark:border-white ${small ? "p-0" : ""
-                } ${up ? "top-auto bottom-full mt-0 mb-1" : ""} ${open ? "z-10" : ""
+                `absolute left-0 right-0 w-full mt-1 p-2 bg-white h-40 overflow-y-auto  border-n-3 rounded-sm shadow-lg dark:bg-n-1 dark:border-white ${
+                  small ? "p-0" : ""
+                } ${up ? "top-auto bottom-full mt-0 mb-1" : ""} ${
+                  open ? "z-10" : ""
                 } ${classOptions}`
               )}
             >
               {items?.map((item) => (
                 <Listbox.Option
-                  className={`flex items-start px-3 py-2 rounded-sm capitalize text-sm font-bold text-n-3 transition-colors cursor-pointer hover:text-n-1 ui-selected:!bg-n-3/20 ui-selected:!text-n-1 tap-highlight-color dark:text-white/50 dark:hover:text-white dark:ui-selected:!text-white ${small ? "!py-1 !pl-4 text-xs" : ""
-                    } ${classOption}`}
+                  className={`flex items-start px-3 py-2 rounded-sm capitalize text-sm font-bold text-n-3 transition-colors cursor-pointer hover:text-n-1 ui-selected:!bg-n-3/20 ui-selected:!text-n-1 tap-highlight-color dark:text-white/50 dark:hover:text-white dark:ui-selected:!text-white ${
+                    small ? "!py-1 !pl-4 text-xs" : ""
+                  } ${classOption}`}
                   key={item.value}
                   value={item.label}
                 >

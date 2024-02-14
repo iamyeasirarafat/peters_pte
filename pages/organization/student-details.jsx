@@ -18,7 +18,8 @@ import { formatDateWithName } from "@/utils/formatDateWithName";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { SelectCountry } from "pages/admin/organization";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
@@ -29,6 +30,7 @@ import { IoIosCall, IoMdMail } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
 import { RiRadioButtonFill, RiSettings2Fill } from "react-icons/ri";
 import { useMediaQuery } from "react-responsive";
+import countryList from "react-select-country-list";
 
 export default function StudentDetails() {
   const [fetch, setFetch] = useState(false);
@@ -430,6 +432,8 @@ export const UpdateInformation = ({
   const [group, setGroup] = useState({});
   const [gender, setGender] = useState(genders[0]);
   const [isLoading, setLoading] = useState(false);
+  const countries = useMemo(() => countryList().getData(), []);
+  const [country, setCountry] = useState("");
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -463,6 +467,7 @@ export const UpdateInformation = ({
       profile: {
         gender: gender?.name,
         ...data?.profile,
+        country: country,
       },
     };
     try {
@@ -487,10 +492,7 @@ export const UpdateInformation = ({
     setValue("full_name", openUpdateInformation?.data?.full_name);
     setValue("email", openUpdateInformation?.data?.email);
     setValue("phone", openUpdateInformation?.data?.phone);
-    setValue(
-      "profile.country",
-      openUpdateInformation?.data?.profile[0]?.country
-    );
+    setCountry(openUpdateInformation?.data?.profile[0]?.country);
     setValue(
       "profile.education",
       openUpdateInformation?.data?.profile[0]?.education
@@ -572,14 +574,14 @@ export const UpdateInformation = ({
           value={group}
           onChange={setGroup}
         />
-        <Field
+        <SelectCountry
           errors={errors}
-          className="mb-2"
+          className="mb-6"
           label="Country"
           placeholder="Enter Country"
-          required
-          register={register}
-          name="profile.country"
+          items={countries}
+          value={country}
+          onChange={setCountry}
         />
         <Field
           errors={errors}
@@ -916,16 +918,18 @@ const ProgressModal = ({ data }) => {
             <div className="flex items-center gap-x-4 w-full">
               <button
                 onClick={() => setTab("performance")}
-                className={` ${tab === "performance" ? "bg-[#849C3E] text-white" : "bg-white"
-                  } p-2.5 text-xl text-center rounded border border-[#849C3E]`}
+                className={` ${
+                  tab === "performance" ? "bg-[#849C3E] text-white" : "bg-white"
+                } p-2.5 text-xl text-center rounded border border-[#849C3E]`}
               >
                 <p className="leading-none">Your Performance</p>
                 <FiAward className="text-2xl inline-block mt-2" />
               </button>
               <button
                 onClick={() => setTab("progress")}
-                className={`${tab === "progress" ? "bg-blue text-white" : "bg-white"
-                  } p-2.5 text-xl text-center rounded border border-blue`}
+                className={`${
+                  tab === "progress" ? "bg-blue text-white" : "bg-white"
+                } p-2.5 text-xl text-center rounded border border-blue`}
               >
                 <p className="leading-none">Practice Progress</p>
                 <FiTrendingUp className="text-2xl inline-block mt-2" />

@@ -113,15 +113,17 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
     const fetchGroup = async () => {
       try {
         const res = await axios(org.id + "/groups");
-        const fetchedGroups = res.data?.results || [];
-        const formattedGroup = [
+        let formattedGroups = [
           {
             id: null,
             name: "None",
           },
-          ...fetchedGroups,
         ];
-        setGroups(formattedGroup);
+        await res.data.forEach((item) =>
+          formattedGroups.push({ id: item.id, name: item.name })
+        );
+        setGroups(formattedGroups);
+        setGroup(formattedGroups[0]);
       } catch (error) {
         console.error("Error fetching groups:", error);
       }
@@ -130,8 +132,8 @@ export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   }, [org]);
 
   useEffect(() => {
-    setGroup({});
-  }, [org]);
+    setGroup(groups[0]);
+  }, [org, groups]);
 
   //get Organizations
   useEffect(() => {
