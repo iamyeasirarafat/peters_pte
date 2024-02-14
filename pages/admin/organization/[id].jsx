@@ -1,4 +1,3 @@
-import Select from "@/components/AddStudentSelect";
 import Field from "@/components/Field";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
@@ -10,17 +9,20 @@ import TablePagination from "@/components/TablePagination";
 import { useHydrated } from "@/hooks/useHydrated";
 import { calculateDaysLeft } from "@/utils/calculateDaysLeft";
 import { formatDateWithName } from "@/utils/formatDateWithName";
+import countryList from "react-select-country-list";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BiRightArrowAlt, BiSolidEditAlt } from "react-icons/bi";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { IoIosCall, IoMdMail } from "react-icons/io";
 import { useMediaQuery } from "react-responsive";
+import { SelectCountry } from "./index";
 function OrgDetails() {
+  const [reFetch, setReFetch] = useState(false);
   const router = useRouter();
   const id = router?.query?.id;
   const [orgData, setOrgData] = useState({});
@@ -30,12 +32,12 @@ function OrgDetails() {
       setOrgData(res?.data);
     };
     router.isReady && getOrgDetails();
-  }, [id, router.isReady]);
+  }, [id, router.isReady, reFetch]);
   return (
     <Layout title="Organizations Details" back>
       <div className={` grid grid-cols-12 gap-x-20 gap-y-5`}>
         <div className={`md:col-span-12 col-span-4`}>
-          <StudentProfileInfo data={orgData} />
+          <StudentProfileInfo data={orgData} setReFetch={setReFetch} />
         </div>
         <div className={`md:col-span-12 col-span-8  `}>
           <StudentDetailsRight data={orgData} />
@@ -47,7 +49,7 @@ function OrgDetails() {
 
 export default OrgDetails;
 
-const StudentProfileInfo = ({ data }) => {
+const StudentProfileInfo = ({ data, setReFetch }) => {
   const [visible, setVisible] = useState(false);
   const [editData, setEditData] = useState({});
   return (
@@ -112,7 +114,7 @@ const StudentProfileInfo = ({ data }) => {
           <IoIosCall />
         </Link>
       </div>
-      <EditOrgModal {...{ visible, setVisible, editData }} />
+      <EditOrgModal {...{ visible, setVisible, editData, setReFetch }} />
     </div>
   );
 };
@@ -258,8 +260,9 @@ const StudentDetailsRight = ({ data }) => {
   );
 };
 
-const EditOrgModal = ({ visible, setVisible, editData }) => {
-  console.log(editData);
+const EditOrgModal = ({ visible, setVisible, editData, setReFetch }) => {
+  const countries = useMemo(() => countryList().getData(), []);
+  const [country, setCountry] = useState("");
   const {
     register,
     handleSubmit,
@@ -273,7 +276,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
       setValue("email", editData?.email);
       setValue("phone", editData?.phone);
       setValue("address", editData?.profile?.[0]?.address || "");
-      setValue("country", editData?.profile?.[0]?.country || "");
+      setCountry(editData?.profile?.[0]?.country || "");
     }
   }, [editData, setValue]);
   const onSubmit = async (data) => {
@@ -282,7 +285,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
       phone: data.phone,
       profile: {
         address: data.address,
-        country: data.country,
+        country: country,
         org_name: data.org_name,
       },
     };
@@ -290,6 +293,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
       await axios.put(`/organization/${editData?.id}/update`, submitData);
       toast.success("Successfully Updated");
       setVisible(false);
+      setReFetch((prev) => !prev);
     } catch (err) {
       const key = Object.keys(err?.response?.data)[0];
       const value = err?.response?.data[key];
@@ -336,13 +340,14 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
           register={register}
           name="address"
         />
-        <Field
+        <SelectCountry
           errors={errors}
           className="mb-6"
           label="Country"
           placeholder="Enter Country"
-          register={register}
-          name="country"
+          items={countries}
+          value={country}
+          onChange={setCountry}
         />
         <button className="btn-purple  w-full">Update Info</button>
       </form>

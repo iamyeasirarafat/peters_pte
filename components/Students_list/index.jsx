@@ -137,7 +137,7 @@ export const MultiActions = ({
                 e.preventDefault();
                 handleMultiDelete("increase", "appeared");
               }}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
             >
               <Icon name="plus" /> Increase Appeared by 1
             </button>
@@ -146,7 +146,7 @@ export const MultiActions = ({
                 e.preventDefault();
                 handleMultiDelete("decrease", "appeared");
               }}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
             >
               <Icon name="plus" /> Decrease Appeared by 1
             </button>
@@ -155,7 +155,7 @@ export const MultiActions = ({
                 e.preventDefault();
                 handleMultiDelete("on", "prediction");
               }}
-              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
             >
               <Icon name="prediction" /> Prediction On
             </button>
@@ -164,7 +164,7 @@ export const MultiActions = ({
                 e.preventDefault();
                 handleMultiDelete("off", "prediction");
               }}
-              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
             >
               <Icon name="predictionOff" /> Prediction Off
             </button>
