@@ -18,7 +18,7 @@ const Index = () => {
   const [searchText, setSearchText] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
-  
+
   useEffect(() => {
     const url = getBaseUrl(questionTable);
     setBaseUrl(url);

@@ -5,12 +5,20 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { convertToCamelCase } from "..";
+import toast from "react-hot-toast";
+import axios from "axios";
 
-const Row = ({ item, setDeleteUserList, deleteUserList }) => {
+const Row = ({
+  item,
+  setDeleteUserList,
+  deleteUserList,
+  setIsOpen,
+  isOpen,
+}) => {
   const router = useRouter();
   const { questionTable } = router.query;
   const [value, setValue] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     if (deleteUserList && deleteUserList.includes(item.id)) {
       setValue(true);
@@ -18,9 +26,6 @@ const Row = ({ item, setDeleteUserList, deleteUserList }) => {
       setValue(false);
     }
   }, [item, deleteUserList]);
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
 
   const handleUpdateClick = (item) => {
     router.push({
@@ -73,8 +78,7 @@ const Row = ({ item, setDeleteUserList, deleteUserList }) => {
         <div className="flex justify-center bg-gray-100 ">
           <div
             className="relative inline-block text-left"
-            onClick={toggleDropdown}
-            // onBlur={closeDropdown}
+            onClick={() => setIsOpen(isOpen === item?.id ? null : item?.id)}
           >
             <button
               disabled={deleteUserList?.length > 0}
@@ -84,45 +88,9 @@ const Row = ({ item, setDeleteUserList, deleteUserList }) => {
             >
               <Icon name="dots" />
             </button>
-            <div
-              style={{ backgroundColor: "#FAF4F0" }}
-              className={`${
-                isOpen ? "block" : "hidden"
-              } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-            >
-              <div role="none">
-                <div
-                  onClick={() => handleUpdateClick(item)}
-                  className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="settings" /> Edit Question
-                </div>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="plus" /> Increase Appeared by 1
-                </a>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="prediction" /> Prediction On
-                </a>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="predictionOff" /> Prediction Off
-                </a>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="cross" /> Remove
-                </a>
-              </div>
-            </div>
+            {isOpen === item?.id && (
+              <MoreButton handleUpdateClick={handleUpdateClick} item={item} />
+            )}
           </div>
         </div>
       </td>
@@ -207,5 +175,68 @@ export const StudentRow = ({ item, setDeleteUserList, deleteUserList }) => {
         </button>
       </td>
     </tr>
+  );
+};
+
+const MoreButton = ({ handleUpdateClick, item }) => {
+  const router = useRouter();
+  const { questionTable } = router.query;
+  const pageName = convertToCamelCase(questionTable);
+  const handelAction = async (type, incDec, action) => {
+    try {
+      const res = incDec
+        ? await axios.put(`/${type}/${action}/${incDec}`, {
+            id: item?.id,
+          })
+        : await axios.delete(`/${type}/${item?.id}`);
+      toast.success(res.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div
+      className={`bg-secondary origin-top-right font-semibold absolute right-full z-3 mt-1 w-[230px] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+    >
+      <div role="none">
+        <div
+          onClick={() => handleUpdateClick(item)}
+          className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="settings" /> Edit Question
+        </div>
+        <button
+          onClick={() => handelAction(pageName, "increase", "appeared")}
+          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="plus" /> Increase Appeared by 1
+        </button>
+        <button
+          onClick={() => handelAction(pageName, "decrease", "appeared")}
+          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="plus" /> Decrease Appeared by 1
+        </button>
+        <button
+          onClick={() => handelAction(pageName, "on", "prediction")}
+          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="prediction" /> Prediction On
+        </button>
+        <button
+          onClick={() => handelAction(pageName, "off", "prediction")}
+          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="predictionOff" /> Prediction Off
+        </button>
+        <button
+          onClick={() => handelAction(pageName)}
+          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+        >
+          <Icon name="cross" /> Remove
+        </button>
+      </div>
+    </div>
   );
 };
