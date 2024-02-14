@@ -114,9 +114,8 @@ const StudentRow = ({
           >
             <button
               disabled={deleteUserList?.length > 0}
-              className={`btn-transparent-dark btn-small btn-square ${
-                deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
-              }`}
+              className={`btn-transparent-dark btn-small btn-square ${deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+                }`}
             >
               <Icon name="dots" />
             </button>
@@ -221,7 +220,7 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
     const fetchGroup = async () => {
       try {
         const res = await axios(org.id + "/groups");
-        const fetchedGroups = res.data?.results || [];
+        const fetchedGroups = res.data || [];
         const formattedGroup = [
           {
             id: null,
@@ -295,7 +294,7 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       email: data.email,
       phone: data.phone,
       ...(group.id && { group: group.id }),
-      ...(org && { organization: org.id }),
+      ...(org?.id && { organization: org.id }),
       profile: {
         gender: gender.name,
         birth_date: data.birth_date,

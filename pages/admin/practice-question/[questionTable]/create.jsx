@@ -63,9 +63,9 @@ const AllForms = () => {
     content = <SelectMissingWord />;
   } else if (questionTable == "blank") {
     content = <FillTheBlanks />;
-  }  else if (questionTable == "multi-choice-reading") {
-     content = <MultipleChoiceReading />;
-  } else if (questionTable == "highlight-incorrect-words") {
+  } else if (questionTable == "multi-choice-reading") {
+    content = <MultipleChoiceReading />;
+  } else if (questionTable == "highlight-incorrect-word") {
     content = <HighlightIncorrectWord />;
   } else if (questionTable == "multi-choice-reading-single") {
     content = <MultipleSingleReading />;

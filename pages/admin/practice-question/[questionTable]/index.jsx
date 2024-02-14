@@ -18,7 +18,7 @@ const Index = () => {
   const [searchText, setSearchText] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
-
+  
   useEffect(() => {
     const url = getBaseUrl(questionTable);
     setBaseUrl(url);
@@ -81,13 +81,6 @@ const Index = () => {
               Create New Question
             </button>
           </Link>
-          <button
-            className="h-10 px-6 text-sm font-bold last:mb-0 dark:text-black bg-white  transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-            as="button"
-          >
-            <Icon className="-mt-0.25 mr-3 dark:fill-black" name="filters" />
-            filters
-          </button>
         </div>
         <div className="overflow-hidden">
           <input

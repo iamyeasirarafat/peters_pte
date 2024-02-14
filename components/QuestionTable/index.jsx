@@ -69,13 +69,11 @@ const Students = ({ items, student, setReFetch }) => {
                   setDeleteUserList={setDeleteUserList}
                   setOpenMultiActions={setOpenMultiActions}
                   setStatus={setReFetch}
+                  onlyDelete
                 />
               )}
             </div>
           </th>
-          {/* <th className="th-custom text-right">
-            <Sorting title="..." />
-          </th> */}
         </tr>
       </thead>
       <tbody className="overflow-x-scroll">

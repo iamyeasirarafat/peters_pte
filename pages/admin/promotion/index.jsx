@@ -22,7 +22,6 @@ function DiscussionList() {
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/coupon");
-      console.log(data);
       setData(data || []);
     };
     getData();
@@ -47,10 +46,6 @@ const DiscussionTab = ({}) => {
 
   return (
     <div className="flex items-center gap-x-1.5">
-      <button className="bg-white font-bold btn-small">
-        <Icon name="filters" />
-        <span>Apply Filters</span>
-      </button>
       <button
         onClick={() => {
           router.push("/admin/promotion/create-coupon");
@@ -220,6 +215,7 @@ const DiscussionRow = ({
                   onClick={async () => {
                     await axios.delete("/coupon/" + data.id);
                     router.replace("/admin/promotion");
+                    setStatus((prev) => !prev);
                   }}
                   className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
                 >

@@ -2,7 +2,6 @@ import Icon from "@/components/Icon";
 import { useScrollPosition } from "@n8tb1t/use-scroll-position";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import Apps from "./Apps";
 import Create from "./Create";
 
 type HeaderProps = {
@@ -46,7 +45,6 @@ const Header = ({ back, title }: HeaderProps) => {
             <Icon name="notification" />
             <div className="absolute top-1.5 right-[0.5625rem] w-2 h-2 border border-white rounded-full bg-green-1 md:top-0.5 md:right-[0.5rem] dark:border-n-2"></div>
           </button> */}
-          <Apps />
           <Create />
           {/* <button
             onClick={() => Logout()}
