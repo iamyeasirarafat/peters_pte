@@ -203,6 +203,7 @@ const StudentDetailsRight = ({ data }) => {
             data={groups?.results}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
+            setFetchGroup={setFetchGroup}
           />
         )}
       </div>
@@ -355,7 +356,7 @@ const EditOrgModal = ({ visible, setVisible, editData }) => {
   );
 };
 
-const AccountPlan = ({ data, isOpen, setIsOpen }) => {
+const AccountPlan = ({ data, isOpen, setIsOpen,setFetchGroup }) => {
   return (
     <div>
       <table className="bg-white dark:bg-black w-full">
@@ -386,17 +387,18 @@ const AccountPlan = ({ data, isOpen, setIsOpen }) => {
               <td className="py-2 px-3 flex items-center text-sm justify-end gap-x-5">
                 N/A
                 {/* remove */}
-                {/* <div
+                <div
                   className="relative inline-block text-left"
+
                   onClick={() =>
                     setIsOpen(isOpen === group.id ? null : group.id)
                   }
                 >
-                  <button className="btn-transparent-dark btn-small btn-square">
+                  <button  className="btn-transparent-dark btn-small btn-square disabled:cursor-not-allowed">
                     <Icon name="dots" />
                   </button>
-                  {isOpen === group.id && <OrgMore item={group} />}
-                </div> */}
+                  {isOpen === group.id && <OrgMore item={group} setFetchGroup={setFetchGroup} />}
+                </div>
               </td>
             </tr>
           ))}
@@ -406,7 +408,7 @@ const AccountPlan = ({ data, isOpen, setIsOpen }) => {
   );
 };
 
-const OrgMore = ({ item }) => {
+const OrgMore = ({ item,setFetchGroup }) => {
   return (
     <div
       className={`bg-secondary dark:bg-black font-semibold absolute right-full dark:border-white border border-transparent top-0 z-3 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
@@ -414,8 +416,9 @@ const OrgMore = ({ item }) => {
       <div role="none">
         <button
           onClick={async () => {
-            // await axios.delete("/student/" + item.id);
-            console.log(item);
+            await axios.delete(`/group/${item.id}` );
+            setFetchGroup((prev) => !prev);
+            
           }}
           className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
         >
