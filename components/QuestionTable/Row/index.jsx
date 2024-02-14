@@ -46,7 +46,7 @@ const Row = ({ item, setDeleteUserList, deleteUserList }) => {
       </td>
       <td className="td-custom">
         <div className="flex items-center ">
-          <p className="text-sm font-semibold">{item?.title}</p>
+          <p className="text-sm font-semibold">{item?.title || item?.word}</p>
         </div>
       </td>
       <td className="td-custom">
