@@ -1,11 +1,12 @@
-import EditCounter from "./EditCounter";
 import Icon from "@/components/Icon";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import AudioVisualizer from "../AudioVisualizer";
-import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast, { LoaderIcon } from "react-hot-toast";
+import useTextToAudio from "../../utils/textToAudio";
+import AudioVisualizer from "../AudioVisualizer";
+import EditCounter from "./EditCounter";
 const Dictation = () => {
   const router = useRouter();
   const { item } = router.query;
@@ -39,13 +40,11 @@ const Dictation = () => {
         }
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
-
-        console.log(formData);
-        // const response = await axios.post("/retell_sentence", formData, config);
-        // toast.success("Create question successfully");
-        // if (response?.data) {
-        //   router.back();
-        // }
+        const response = await axios.put("/retell_sentence", formData, config);
+        toast.success("Create question successfully");
+        if (response?.data) {
+          router.back();
+        }
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");
@@ -68,18 +67,29 @@ const Dictation = () => {
     setAudioSrc(null);
     setAudio(null);
   };
-  const regenerateTextToAudio = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post("/text_to_audio", {
-        text: watch("reference_text"),
-      });
-      setAudio(data);
-      setAudioSrc(URL.createObjectURL(data));
-    } catch {
-      (err) => console.log(err);
+
+  //!generate reference audio staff
+  const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
+  useEffect(() => {
+    if (watch().reference_text !== "") {
+      setEnableGenerateBtn(true)
+    } else {
+      setEnableGenerateBtn(false)
     }
-  };
+  }, [watch()])
+
+  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError
+  } = useTextToAudio();
+  useEffect(() => {
+    if (generatedAudio) {
+      setAudio(generatedAudio);
+      setAudioSrc(generatedAudioSrc);
+    }
+    if (audioError) {
+      toast.error('Failed to fetch audio from API');
+      console.error('Error fetching audio from API:', audioError);
+    }
+  }, [audioError, generatedAudio, generatedAudioSrc])
 
   return (
     <div>
@@ -97,6 +107,21 @@ const Dictation = () => {
             id="title"
             type="text"
             {...register("title", { required: "Title is required" })}
+          />
+        </div>
+        <div className="flex flex-col gap-2 my-5">
+          <label for="reference_text" className="font-bold text-sm">
+            Reference Text
+          </label>
+          <textarea
+            rows={5}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm "
+            id="reference_text"
+            type="text"
+            {...register("reference_text", {
+              required: "reference text is required",
+            })}
           />
         </div>
 
@@ -138,33 +163,22 @@ const Dictation = () => {
               </div>
               <div className="w-full">
                 <AudioVisualizer selectedFile={audioSrc} />
-                <button
-                  onClick={regenerateTextToAudio}
-                  className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20"
-                >
-                  <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
-                  Generate Reference Text
-                </button>
+
               </div>
             </div>
           )}
         </div>
+        <button
+          onClick={async (e) => {
+            e.preventDefault()
+            await getAudio(watch().reference_text)
+          }}
+          disabled={!enableGenerateBtn}
+          className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
+          <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+          {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+        </button>
 
-        <div className="flex flex-col gap-2 my-5">
-          <label for="reference_text" className="font-bold text-sm">
-            Reference Text
-          </label>
-          <textarea
-            rows={5}
-            placeholder="Start Typing..."
-            className="w-full border-none py-4 px-5 text-sm "
-            id="reference_text"
-            type="text"
-            {...register("reference_text", {
-              required: "reference text is required",
-            })}
-          />
-        </div>
         <div className="flex justify-between gap-6">
           <EditCounter
             className="bg-white w-1/2"

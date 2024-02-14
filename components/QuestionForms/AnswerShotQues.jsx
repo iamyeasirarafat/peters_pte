@@ -3,10 +3,11 @@ import Icon from "@/components/Icon";
 import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import audioToText from "../../utils/audioToText";
+import useTextToAudio from "../../utils/textToAudio";
 import AudioVisualizer from "../AudioVisualizer";
 const AnswerShotQues = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const AnswerShotQues = () => {
   const [audio, setAudio] = useState(null);
   const [loading, setLoading] = useState(false);
   const [getText, aiLoading, error] = audioToText();
-  const { register, handleSubmit, setError, formState } = useForm();
+  const { register, handleSubmit, watch, setError, formState } = useForm();
   console.log(aiLoading, "aiLoading");
   const onsubmit = async (data) => {
     if (audio) {
@@ -58,6 +59,29 @@ const AnswerShotQues = () => {
     setAudio(null);
   };
 
+  //!generate reference audio staff
+  const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
+  useEffect(() => {
+    if (watch().reference_text !== "") {
+      setEnableGenerateBtn(true)
+    } else {
+      setEnableGenerateBtn(false)
+    }
+  }, [watch()])
+
+  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError
+  } = useTextToAudio();
+  useEffect(() => {
+    if (generatedAudio) {
+      setAudio(generatedAudio);
+      setAudioSrc(generatedAudioSrc);
+    }
+    if (audioError) {
+      toast.error('Failed to fetch audio from API');
+      console.error('Error fetching audio from API:', audioError);
+    }
+  }, [audioError, generatedAudio, generatedAudioSrc])
+
   return (
     <div>
       <form onSubmit={handleSubmit(onsubmit)} encType="multipart/form-data">
@@ -76,7 +100,21 @@ const AnswerShotQues = () => {
             {...register("title", { required: "Title is required" })}
           />
         </div>
-
+        <div className="flex flex-col gap-2 my-5">
+          <label for="reference_text" className="font-bold text-sm">
+            Reference Text
+          </label>
+          <textarea
+            rows={5}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm "
+            id="reference_text"
+            type="text"
+            {...register("reference_text", {
+              required: "reference text is required",
+            })}
+          />
+        </div>
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audio?.name && !audioSrc ? (
@@ -115,37 +153,23 @@ const AnswerShotQues = () => {
               </div>
               <div className="w-full">
                 <AudioVisualizer selectedFile={audioSrc} />
-                <button
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    const text = await getText(audio);
-                    console.log(text);
-                  }}
-                  className="mr-3 text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-600 dark:hover:bg-white/20"
-                >
-                  <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
-                  Generate Reference Text
-                </button>
+
               </div>
             </div>
           )}
+          <button
+            onClick={async (e) => {
+              e.preventDefault()
+              await getAudio(watch().reference_text)
+            }}
+            disabled={!enableGenerateBtn}
+            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+          </button>
         </div>
 
-        <div className="flex flex-col gap-2 my-5">
-          <label for="reference_text" className="font-bold text-sm">
-            Reference Text
-          </label>
-          <textarea
-            rows={5}
-            placeholder="Start Typing..."
-            className="w-full border-none py-4 px-5 text-sm "
-            id="reference_text"
-            type="text"
-            {...register("reference_text", {
-              required: "reference text is required",
-            })}
-          />
-        </div>
+
         <div className="flex justify-between gap-6">
           <Counter
             className="bg-white w-1/2"
