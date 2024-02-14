@@ -113,10 +113,10 @@ export const MultiActions = ({
   const [loadingDelete, setLoadingDelete] = useState(false);
 
   // handle multi delete
-  const handleMultiDelete = async () => {
+  const handleMultiDelete = async (incDec, action) => {
     try {
       setLoadingDelete(true);
-      const res = await multiDeleteList(type, deleteUserList);
+      const res = await multiDeleteList(type, deleteUserList, incDec, action);
       toast.success(res?.message);
       setDeleteUserList([]);
       setOpenMultiActions(false);
@@ -132,13 +132,40 @@ export const MultiActions = ({
       <div role="none">
         {onlyDelete && (
           <>
-            <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleMultiDelete("increase", "appeared");
+              }}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            >
               <Icon name="plus" /> Increase Appeared by 1
             </button>
-            <button className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleMultiDelete("decrease", "appeared");
+              }}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            >
+              <Icon name="plus" /> Decrease Appeared by 1
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleMultiDelete("on", "prediction");
+              }}
+              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+            >
               <Icon name="prediction" /> Prediction On
             </button>
-            <button className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleMultiDelete("off", "prediction");
+              }}
+              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+            >
               <Icon name="predictionOff" /> Prediction Off
             </button>
           </>

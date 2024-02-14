@@ -74,9 +74,6 @@ const Students = ({ items, student, setReFetch }) => {
               )}
             </div>
           </th>
-          {/* <th className="th-custom text-right">
-            <Sorting title="..." />
-          </th> */}
         </tr>
       </thead>
       <tbody className="overflow-x-scroll">
