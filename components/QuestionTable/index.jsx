@@ -88,6 +88,7 @@ const Students = ({ items, student, setReFetch }) => {
                 deleteUserList={deleteUserList}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
+                setReFetch={setReFetch}
               />
             );
           } else {
@@ -99,6 +100,7 @@ const Students = ({ items, student, setReFetch }) => {
                 deleteUserList={deleteUserList}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
+                setReFetch={setReFetch}
               />
             );
           }
