@@ -122,7 +122,9 @@ const TransactionsRow = ({ data, listName, moreShow, setMoreShow }) => {
           </p>
         </div>
       </td>
-      <td className="td-custom text-sm font-bold text-center">N/a</td>
+      <td className="td-custom text-sm font-bold text-center">
+        {data?.sku || "N/a"}
+      </td>
       <td className="td-custom text-center">
         {listName === "students_package"
           ? `${data?.validity} Days`
