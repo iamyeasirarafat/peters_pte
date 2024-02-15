@@ -15,6 +15,7 @@ const Row = ({
   deleteUserList,
   setIsOpen,
   isOpen,
+  setReFetch,
 }) => {
   const router = useRouter();
   const { questionTable } = router.query;
@@ -89,7 +90,11 @@ const Row = ({
               <Icon name="dots" />
             </button>
             {isOpen === item?.id && (
-              <MoreButton handleUpdateClick={handleUpdateClick} item={item} />
+              <MoreButton
+                handleUpdateClick={handleUpdateClick}
+                item={item}
+                setReFetch={setReFetch}
+              />
             )}
           </div>
         </div>
@@ -100,7 +105,12 @@ const Row = ({
 
 export default Row;
 
-export const StudentRow = ({ item, setDeleteUserList, deleteUserList }) => {
+export const StudentRow = ({
+  item,
+  setDeleteUserList,
+  deleteUserList,
+  setReFetch,
+}) => {
   const [value, setValue] = useState(false);
   useEffect(() => {
     if (deleteUserList && deleteUserList.includes(item.id)) {
@@ -178,7 +188,7 @@ export const StudentRow = ({ item, setDeleteUserList, deleteUserList }) => {
   );
 };
 
-const MoreButton = ({ handleUpdateClick, item }) => {
+const MoreButton = ({ handleUpdateClick, item, setReFetch }) => {
   const router = useRouter();
   const { questionTable } = router.query;
   const pageName = convertToCamelCase(questionTable);
@@ -186,10 +196,15 @@ const MoreButton = ({ handleUpdateClick, item }) => {
     try {
       const res = incDec
         ? await axios.put(`/${type}/${action}/${incDec}`, {
-            id: item?.id,
+            ids: [item?.id],
           })
-        : await axios.delete(`/${type}/${item?.id}`);
-      toast.success(res.message);
+        : await axios.delete(`/${type}/delete_many`, {
+            data: {
+              ids: [item?.id],
+            },
+          });
+      toast.success(res.data.message);
+      setReFetch((prev) => !prev);
     } catch (error) {
       console.log(error);
     }
