@@ -95,6 +95,10 @@ const getBaseUrl = (questionTable) => {
     url = "highlight_incorrect_words";
   } else if (questionTable === "spelling-bee") {
     url = "games/spelling_bees";
+  } else if (questionTable === "speaking-spell"){
+    url = "games/speaking_spells";
+  } else if (questionTable === "listening-frenzy"){
+    url = "games/listening_frenzies";
   }
   return url;
 };
