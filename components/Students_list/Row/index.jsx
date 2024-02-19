@@ -8,8 +8,10 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { SelectCountry } from "pages/admin/organization";
+import countryList from "react-select-country-list";
 import { UpdateInformation } from "pages/organization/student-details";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
@@ -56,8 +58,9 @@ const StudentRow = ({
         />
         <Link
           className="inline-flex items-center text-sm font-bold transition-colors hover:text-primary"
-          href={`/${admin ? "admin" : "organization"}/student-details?id=${item.id
-            }`}
+          href={`/${admin ? "admin" : "organization"}/student-details?id=${
+            item.id
+          }`}
         >
           <div className="w-11 h-11  mr-3 ">
             <Image
@@ -84,14 +87,15 @@ const StudentRow = ({
       </td>
       <td className="td-custom text-center">
         <div
-          className={`border min-w-[4rem] ${item.avl === "Paid"
-            ? "label-stroke-green"
-            : item.avl === "Med"
+          className={`border min-w-[4rem] ${
+            item.avl === "Paid"
+              ? "label-stroke-green"
+              : item.avl === "Med"
               ? "label-stroke-yellow"
               : item.avl === "Low"
-                ? "label-stroke-pink"
-                : "label-stroke"
-            }`}
+              ? "label-stroke-pink"
+              : "label-stroke"
+          }`}
         >
           {item.avg_score || "N/A"}
         </div>
@@ -114,8 +118,9 @@ const StudentRow = ({
           >
             <button
               disabled={deleteUserList?.length > 0}
-              className={`btn-transparent-dark btn-small btn-square ${deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
-                }`}
+              className={`btn-transparent-dark btn-small btn-square ${
+                deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
+              }`}
             >
               <Icon name="dots" />
             </button>
@@ -131,7 +136,9 @@ const StudentRow = ({
           </div>
         </div>
         {visible && admin && (
-          <EditStudentModalAdmin {...{ visible, setVisible, editData }} />
+          <EditStudentModalAdmin
+            {...{ visible, setVisible, editData, setStatus }}
+          />
         )}
         {visible && !admin && (
           // <EditStudentModal {...{ visible, setVisible, editData }} />
@@ -139,6 +146,7 @@ const StudentRow = ({
             openUpdateInformation={openUpdateInformation}
             setOpenUpdateInformation={setOpenUpdateInformation}
             setFetch={setStatus}
+            admin={admin ? true : false}
           />
         )}
       </td>
@@ -201,7 +209,12 @@ const StudentMoreButton = ({
   );
 };
 
-export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
+export const EditStudentModalAdmin = ({
+  visible,
+  setVisible,
+  editData,
+  setStatus,
+}) => {
   const genders = [
     {
       name: "male",
@@ -215,6 +228,8 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
   const [group, setGroup] = useState({});
   const [orgs, setOrgs] = useState([]);
   const [org, setOrg] = useState();
+  const countries = useMemo(() => countryList().getData(), []);
+  const [country, setCountry] = useState("");
   //get groups
   useEffect(() => {
     const fetchGroup = async () => {
@@ -224,9 +239,9 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
         const formattedGroup = [
           {
             id: null,
-            name: "None"
+            name: "None",
           },
-          ...fetchedGroups
+          ...fetchedGroups,
         ];
         setGroups(formattedGroup);
       } catch (error) {
@@ -237,8 +252,8 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
   }, [org]);
 
   useEffect(() => {
-    setGroup({});
-  }, [org]);
+    setGroup(groups?.[1] || {});
+  }, [groups]);
 
   //get Organizations
   useEffect(() => {
@@ -271,7 +286,7 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
       setValue("phone", editData?.phone);
       setValue("address", editData?.profile[0]?.address || "");
       setValue("education", editData?.profile[0]?.education || "");
-      // setValue("birth_date", editData?.profile[0]?.birth_date || "");
+      setCountry(editData?.profile[0]?.country || "");
       setValue(
         "birth_date",
         formatDateTime(editData?.profile[0]?.birth_date, "datere") || ""
@@ -300,13 +315,14 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
         birth_date: data.birth_date,
         education: data.education,
         address: data.address,
-        country: data.country,
+        country: country,
       },
     };
     try {
       await axios.put(`/student/${editData?.id}/update`, submitData);
       toast.success("Successfully Updated");
       setVisible(false);
+      setStatus(Math.random());
     } catch (err) {
       const key = Object.keys(err?.response?.data)[0];
       const value = err?.response?.data[key];
@@ -376,13 +392,14 @@ export const EditStudentModalAdmin = ({ visible, setVisible, editData }) => {
           value={group}
           onChange={setGroup}
         />
-        <Field
+        <SelectCountry
           errors={errors}
-          className="mb-6"
+          className="mb-2"
           label="Country"
           placeholder="Enter Country"
-          register={register}
-          name="country"
+          items={countries}
+          value={country}
+          onChange={setCountry}
         />
         <Field
           errors={errors}
@@ -427,7 +444,8 @@ export const PhoneNumberInput = ({ name, control, errors, label }) => {
               defaultCountry="BD"
               id={name}
               className={twMerge(
-                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${error ? "pr-15 !border-pink-1" : ""
+                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${
+                  error ? "pr-15 !border-pink-1" : ""
                 }`
               )}
             />
@@ -465,7 +483,8 @@ export const PhoneNumberInputJoin = ({ name, control, errors, label }) => {
               defaultCountry="BD"
               id={name}
               className={twMerge(
-                `bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-1 px-5 border ${error ? "border-red" : "border-[#B9B9B9]"
+                `bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-1 px-5 border ${
+                  error ? "border-red" : "border-[#B9B9B9]"
                 }  rounded-[16px] outline-none`
               )}
             />
