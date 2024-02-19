@@ -44,7 +44,6 @@ export default function StudentDetails() {
     };
     router.isReady && fetchData();
   }, [id, router, fetch]);
-  console.log("studentDetails", studentDetails);
   return (
     <Layout title="Student Details" back>
       <StudentsDetailsMain
@@ -70,6 +69,7 @@ export const StudentsDetailsMain = ({ studentDetails, setFetch }) => {
 };
 
 const StudentProfileInfo = ({ data, setFetch }) => {
+  const router = useRouter();
   const [openUpdateInformation, setOpenUpdateInformation] = useState({
     state: false,
     data: null,
@@ -185,6 +185,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
         openUpdateInformation={openUpdateInformation}
         setOpenUpdateInformation={setOpenUpdateInformation}
         setFetch={setFetch}
+        admin={router.asPath?.startsWith("/admin") ? true : false}
       />
     </div>
   );
@@ -423,11 +424,14 @@ export const UpdateInformation = ({
   openUpdateInformation,
   setOpenUpdateInformation,
   setFetch,
+  admin,
 }) => {
   const genders = [
     { id: 1, name: "male" },
     { id: 2, name: "female" },
   ];
+  const [orgs, setOrgs] = useState([]);
+  const [org, setOrg] = useState({});
   const [groups, setGroups] = useState([]);
   const [group, setGroup] = useState({});
   const [gender, setGender] = useState(genders[0]);
@@ -435,20 +439,48 @@ export const UpdateInformation = ({
   const countries = useMemo(() => countryList().getData(), []);
   const [country, setCountry] = useState("");
 
+  //get groups
   useEffect(() => {
     const fetchGroup = async () => {
-      const formattedGroup = [
+      try {
+        const res = await axios(org.id + "/groups");
+        const fetchedGroups = res.data || [];
+        const formattedGroup = [
+          {
+            id: null,
+            name: "None",
+          },
+          ...fetchedGroups,
+        ];
+        setGroups(formattedGroup);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
+    };
+    admin && org?.id && fetchGroup();
+  }, [admin, org]);
+
+  useEffect(() => {
+    setGroup(groups?.[1] || {});
+  }, [groups]);
+
+  //get Organizations
+  useEffect(() => {
+    const fetchOrgs = async () => {
+      const res = await axios("/organizations?all=true");
+      let formattedOrgs = [
         {
           id: null,
           name: "None",
         },
       ];
-      const res = await axios("/groups");
-      formattedGroup.push(...res.data);
-      setGroups(formattedGroup);
+      await res.data.forEach((item) =>
+        formattedOrgs.push({ id: item.id, name: item.full_name })
+      );
+      setOrgs(formattedOrgs);
     };
-    fetchGroup();
-  }, []);
+    admin && fetchOrgs();
+  }, [admin]);
 
   const {
     register,
@@ -462,8 +494,8 @@ export const UpdateInformation = ({
   const onSubmit = async (data) => {
     const updateData = {
       ...data,
-      ...(group?.id && { group: group.id }),
-      organization: openUpdateInformation?.data?.profile[0]?.organization?.id,
+      ...(group.id && { group: group.id }),
+      ...(org?.id && { organization: org.id }),
       profile: {
         gender: gender?.name,
         ...data?.profile,
@@ -492,7 +524,7 @@ export const UpdateInformation = ({
     setValue("full_name", openUpdateInformation?.data?.full_name);
     setValue("email", openUpdateInformation?.data?.email);
     setValue("phone", openUpdateInformation?.data?.phone);
-    setCountry(openUpdateInformation?.data?.profile[0]?.country);
+    setCountry(openUpdateInformation?.data?.profile[0]?.country || "");
     setValue(
       "profile.education",
       openUpdateInformation?.data?.profile[0]?.education
@@ -514,7 +546,13 @@ export const UpdateInformation = ({
         : genders[1]
     );
     setGroup(openUpdateInformation?.data?.profile[0]?.group);
-  }, [openUpdateInformation?.data, groups, setValue]);
+    setOrg(
+      {
+        id: openUpdateInformation?.data?.profile[0]?.organization.id,
+        name: openUpdateInformation?.data?.profile[0]?.organization.full_name,
+      } || {}
+    );
+  }, [openUpdateInformation?.data, setValue]);
 
   return (
     <Modal
@@ -531,7 +569,6 @@ export const UpdateInformation = ({
           className="mb-2"
           label="Student Name"
           placeholder="Student Name"
-          required
           register={register}
           name="full_name"
         />
@@ -541,7 +578,6 @@ export const UpdateInformation = ({
           label="Email"
           placeholder="Enter email"
           type="email"
-          required
           register={register}
           name="email"
         />
@@ -556,7 +592,6 @@ export const UpdateInformation = ({
           className="my-2"
           label="Address"
           placeholder="Enter Address"
-          required
           register={register}
           name="profile.address"
         />
@@ -567,16 +602,28 @@ export const UpdateInformation = ({
           value={gender}
           onChange={setGender}
         />
-        <Select
-          label="Group *"
-          className="mb-2"
-          items={groups}
-          value={group}
-          onChange={setGroup}
-        />
+        {admin && (
+          <>
+            <Select
+              label="Organization *"
+              className="mb-2 w-full"
+              items={orgs}
+              value={org}
+              onChange={setOrg}
+            />
+
+            <Select
+              label="Group *"
+              className="mb-2"
+              items={groups}
+              value={group}
+              onChange={setGroup}
+            />
+          </>
+        )}
         <SelectCountry
           errors={errors}
-          className="mb-6"
+          className="mb-2"
           label="Country"
           placeholder="Enter Country"
           items={countries}
@@ -588,7 +635,6 @@ export const UpdateInformation = ({
           className="mb-2"
           label="Education"
           placeholder="Enter Education"
-          required
           register={register}
           name="profile.education"
         />
@@ -598,7 +644,6 @@ export const UpdateInformation = ({
           label="Birth Date"
           placeholder="Enter Birth Date"
           type="date"
-          required
           register={register}
           name="profile.birth_date"
         />
