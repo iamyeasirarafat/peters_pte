@@ -91,7 +91,7 @@ const getBaseUrl = (questionTable) => {
     url = "blanks";
   } else if (questionTable === "reading-blank") {
     url = "reading_blanks";
-  } else if (questionTable == "highlight-incorrect-words") {
+  } else if (questionTable == "highlight-incorrect-word") {
     url = "highlight_incorrect_words";
   } else if (questionTable === "spelling-bee") {
     url = "games/spelling_bees";
