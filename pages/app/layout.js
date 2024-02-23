@@ -37,7 +37,7 @@ const DashboardLayout = ({ children }) => {
             />
           </button>
         )}
-        <SideNav />
+        {/* <SideNav /> */}
         <div
           className={` w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"}
