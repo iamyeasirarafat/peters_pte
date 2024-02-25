@@ -110,3 +110,14 @@
 .calendarCell {
   border: 1px solid #f2f2f5;
 }
+
+
+/* designs for custom calendar of user dashboard page */
+/* on hover */
+.calendar-component-front .rs-calendar-header-title:hover, .calendar-component-front .rs-calendar-header-backward:hover, .calendar-component-front .rs-calendar-header-forward:hover {
+  background-color: #FFF4EB;
+}
+/* on focus */
+.calendar-component-front .rs-calendar-header-title:focus, .calendar-component-front .rs-calendar-header-backward:focus, .calendar-component-front .rs-calendar-header-forward:focus {
+  background-color: #FFF4EB;
+}
