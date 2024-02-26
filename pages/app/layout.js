@@ -5,6 +5,7 @@ import { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SideNav from "../../components/DashboardLayout/SideNav";
 import TopNav from "../../components/DashboardLayout/TopNav";
+import Footer from "../../components/UserDashboard/Footer";
 
 function SearchBarFallback() {
   return <>placeholder</>;
@@ -37,18 +38,22 @@ const DashboardLayout = ({ children }) => {
             />
           </button>
         )}
-        {/* <SideNav /> */}
+        <SideNav />
         <div
           className={` w-full
-        ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"}
-        overflow-y-auto  bg-white px-5 md:px-10 2xl:px-0`}
+        ${!topNav ? "h-screen" : "h-[calc(100vh-64px)]"}
+        overflow-y-auto  bg-white `}
         >
           <Suspense fallback={<SearchBarFallback />}>
             <div className="max-w-7xl w-full mx-auto">{children}</div>
           </Suspense>
+          {/* footer */}
+          <Footer />
         </div>
         {/* <GlobalModal /> */}
+
       </div>
+
     </>
   );
 };

@@ -166,9 +166,8 @@ const SideNav = () => {
   };
   return (
     <div
-      className={`${sideNav ? "w-72" : "w-[134px]"} flex-shrink-0 ${
-        !topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
-      } transition-all relative duration-300 ease-linear bg-secondary md:hidden block`}
+      className={`${sideNav ? "w-0" : "w-[300px]"} flex-shrink-0 ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
+        } transition-all relative duration-300 ease-linear bg-secondary md:hidden block`}
     >
       {/* side Nav container */}
       <SideMenuContainer topNav={topNav} />
@@ -180,7 +179,7 @@ const SideNav = () => {
         className="top-2/4 absolute h-14 w-5 bg-secondary -right-[20px] rounded-tr-3xl rounded-br-3xl "
       >
         <Image
-          className={`object-cover ${sideNav ? "" : "rotate-180"}`}
+          className={`object-cover ${sideNav ? "rotate-180" : ""}`}
           src="/icons/chevrons-left-double.svg"
           width={16}
           height={16}
@@ -200,9 +199,8 @@ const TodoPanel = () => {
 const SideMenuContainer = ({ topNav }) => {
   return (
     <div
-      className={`w-full transition-all relative duration-300 ease-linear overflow-y-auto  nav-scrollbar  ${
-        topNav ? "h-[calc(100%-9.5rem)]" : "h-[calc(100%-11rem)]"
-      }`}
+      className={`w-full transition-all relative duration-300 ease-linear overflow-y-auto  nav-scrollbar  ${topNav ? "h-[calc(100%-9.5rem)]" : "h-[calc(100%-11rem)]"
+        }`}
     >
       {/* menu items */}
       {Object.keys(navItems).map((item) => (
@@ -220,17 +218,15 @@ const SideMenu = ({ data }) => {
       <div className="pb-2 mb-1 border-b border-primary">
         <div className="pl-9 w-full  flex items-center justify-between pr-3">
           <h1
-            className={`font-avantt font-semibold text-gray ${
-              sideNav ? "text-xl" : "text-base"
-            }`}
+            className={`font-avantt font-semibold text-gray ${sideNav ? "text-xl" : "text-base"
+              }`}
           >
             {sideNav ? data : data.split(" ")[0]}
           </h1>
           <button onClick={() => setIsOpen(!isOpen)}>
             <IoIosArrowDown
-              className={`text-gray text-base duration-200 ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`text-gray text-base duration-200 ${isOpen ? "rotate-180" : ""
+                }`}
             />
           </button>
         </div>
