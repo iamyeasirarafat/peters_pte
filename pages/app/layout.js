@@ -11,7 +11,7 @@ function SearchBarFallback() {
   return <>placeholder</>;
 }
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children, dashboard }) => {
   const { topNav } = useSelector((state) => state.layout);
   const dispatch = useDispatch();
   const toggleTopNav = () => {
@@ -22,7 +22,7 @@ const DashboardLayout = ({ children }) => {
   }, [dispatch]);
   return (
     <>
-      <TopNav />
+      <TopNav dashboard={dashboard} />
       <div className="flex relative">
         {!topNav && (
           <button
@@ -38,22 +38,22 @@ const DashboardLayout = ({ children }) => {
             />
           </button>
         )}
-        <SideNav />
+        <SideNav dashboard={dashboard} />
         <div
           className={` w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-64px)]"}
         overflow-y-auto  bg-white `}
         >
           <Suspense fallback={<SearchBarFallback />}>
-            <div className="max-w-7xl w-full mx-auto">{children}</div>
+            <div className="max-w-6xl mx-auto px-6 md:px-10 4xl:px-0">
+              {children}
+            </div>
           </Suspense>
           {/* footer */}
-          <Footer />
+          {dashboard && <Footer />}
         </div>
         {/* <GlobalModal /> */}
-
       </div>
-
     </>
   );
 };

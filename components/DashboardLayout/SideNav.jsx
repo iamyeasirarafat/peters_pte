@@ -11,7 +11,7 @@ export const navItems = {
   "Speaking Test": [
     {
       name: "Read Aloud",
-      path: "/app/practice/speaking_test/read_aloud?que_no=1",
+      path: "/app/practice/speaking_test/read_aloud",
       ai: true,
       icon: "RA",
       bg: "gold",
@@ -48,7 +48,7 @@ export const navItems = {
   "Writing Test": [
     {
       name: "Summarize Written Text",
-      path: "/app/practice/writing_test/summarize_written?que_no=1",
+      path: "/app/practice/writing_test/summarize_written",
       ai: true,
       icon: "SWT",
       bg: "primary",
@@ -71,7 +71,7 @@ export const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "/app/practice/reading_test/multiple_answers?que_no=3",
+      path: "/app/practice/reading_test/multiple_answers",
       ai: false,
       icon: "MCM",
       bg: "cream",
@@ -85,14 +85,14 @@ export const navItems = {
     },
     {
       name: "Reading Fill in the Blanks",
-      path: "/app/practice/reading_test/fill_blanks?que_no=6",
+      path: "/app/practice/reading_test/fill_blanks",
       ai: false,
       icon: "FIB",
       bg: "cream",
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/reading_test/single_answer?que_no=5",
+      path: "/app/practice/reading_test/single_answer",
       ai: false,
       icon: "MCS",
       bg: "cream",
@@ -101,42 +101,42 @@ export const navItems = {
   "Listing Test": [
     {
       name: "Summarize Spoken Text",
-      path: "/app/practice/listing_test/spoken_text?que_no=1",
+      path: "/app/practice/listing_test/spoken_text",
       ai: true,
       icon: "SST",
       bg: "primary",
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "/app/practice/listing_test/multiple_answers?que_no=1",
+      path: "/app/practice/listing_test/multiple_answers",
       ai: false,
       icon: "MCM",
       bg: "primary",
     },
     {
       name: "Fill in the Blanks",
-      path: "/app/practice/listing_test/fill_blanks?que_no=1",
+      path: "/app/practice/listing_test/fill_blanks",
       ai: false,
       icon: "FIB",
       bg: "primary",
     },
     {
       name: "Highlight Correct Summary",
-      path: "/app/practice/listing_test/highlight_summary?que_no=1",
+      path: "/app/practice/listing_test/highlight_summary",
       ai: false,
       icon: "HCS",
       bg: "primary",
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/listing_test/single_answer?que_no=2",
+      path: "/app/practice/listing_test/single_answer",
       ai: false,
       icon: "MCS",
       bg: "primary",
     },
     {
       name: "Select Missing Word",
-      path: "/app/practice/listing_test/missing_word?que_no=1",
+      path: "/app/practice/listing_test/missing_word",
       ai: false,
       icon: "SMW",
       bg: "primary",
@@ -158,7 +158,7 @@ export const navItems = {
   ],
 };
 
-const SideNav = () => {
+const SideNav = ({ dashboard }) => {
   const { topNav, sideNav } = useSelector((state) => state.layout);
   const dispatch = useDispatch();
   const toggleNav = () => {
@@ -166,8 +166,11 @@ const SideNav = () => {
   };
   return (
     <div
-      className={`${sideNav ? "w-0" : "w-[300px]"} flex-shrink-0 ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
-        } transition-all relative duration-300 ease-linear bg-secondary md:hidden block`}
+      className={`${
+        sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
+      } flex-shrink-0 ${
+        !topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
+      } transition-all relative duration-300 ease-linear bg-secondary hidden lg:block`}
     >
       {/* side Nav container */}
       <SideMenuContainer topNav={topNav} />
@@ -176,10 +179,10 @@ const SideNav = () => {
       <TodoPanel />
       <button
         onClick={toggleNav}
-        className="top-2/4 absolute h-14 w-5 bg-secondary -right-[20px] rounded-tr-3xl rounded-br-3xl "
+        className="top-2/4 absolute h-18 flex items-center justify-center w-5 bg-secondary -right-[20px] rounded-tr-3xl rounded-br-3xl "
       >
         <Image
-          className={`object-cover ${sideNav ? "rotate-180" : ""}`}
+          className={`object-cover ${sideNav ? "" : "rotate-180"}`}
           src="/icons/chevrons-left-double.svg"
           width={16}
           height={16}
@@ -199,8 +202,9 @@ const TodoPanel = () => {
 const SideMenuContainer = ({ topNav }) => {
   return (
     <div
-      className={`w-full transition-all relative duration-300 ease-linear overflow-y-auto  nav-scrollbar  ${topNav ? "h-[calc(100%-9.5rem)]" : "h-[calc(100%-11rem)]"
-        }`}
+      className={`w-full transition-all relative duration-300 ease-linear overflow-y-auto  nav-scrollbar  ${
+        topNav ? "h-[calc(100%-9.5rem)]" : "h-[calc(100%-11rem)]"
+      }`}
     >
       {/* menu items */}
       {Object.keys(navItems).map((item) => (
@@ -218,15 +222,17 @@ const SideMenu = ({ data }) => {
       <div className="pb-2 mb-1 border-b border-primary">
         <div className="pl-9 w-full  flex items-center justify-between pr-3">
           <h1
-            className={`font-avantt font-semibold text-gray ${sideNav ? "text-xl" : "text-base"
-              }`}
+            className={`font-avantt font-semibold text-gray ${
+              sideNav ? "text-xl" : "text-base"
+            }`}
           >
             {sideNav ? data : data.split(" ")[0]}
           </h1>
           <button onClick={() => setIsOpen(!isOpen)}>
             <IoIosArrowDown
-              className={`text-gray text-base duration-200 ${isOpen ? "rotate-180" : ""
-                }`}
+              className={`text-gray text-base duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
             />
           </button>
         </div>

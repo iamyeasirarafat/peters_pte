@@ -22,7 +22,7 @@ export default function AuthHeader({ page, setPage }) {
   return (
     <>
       {/* site logo */}
-      <div className="lg:w-[205px] lg:h-[72px] w-[305px] h-[107px]">
+      <div className="w-[205px] h-[72px] lg:w-[305px] lg:h-[107px]">
         <div className="w-full h-full relative">
           <Image
             className="object-cover"
@@ -33,10 +33,10 @@ export default function AuthHeader({ page, setPage }) {
         </div>
       </div>
       {/* login heading */}
-      <h1 className="xl:text-3xl text-6xl font-semibold uppercase mt-4">
+      <h1 className="text-3xl xl:text-6xl font-semibold uppercase mt-4">
         THE MOST ACCURATE
       </h1>
-      <h2 className="xl:text-2xl text-4xl font-semibold mt-2 text-center">
+      <h2 className="text-2xl xl:text-4xl font-semibold mt-2 text-center">
         PTE Mock Test & Practice{" "}
       </h2>
       {/* login and signup toggle button */}

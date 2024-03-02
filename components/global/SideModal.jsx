@@ -1,6 +1,7 @@
 import { toggleModal as modalSlice } from "@/redux/slice/globalModalSlice";
 import { useDispatch } from "react-redux";
 import GlobalModal from "./GlobalModal";
+import { MdDoubleArrow } from "react-icons/md";
 
 const SideModal = ({ data }) => {
   const dispatch = useDispatch();
@@ -16,9 +17,9 @@ const SideModal = ({ data }) => {
     <>
       <button
         onClick={toggleModal}
-        className="top-2/4 absolute h-20 w-7 bg-primary right-0 rounded-tl-3xl rounded-bl-3xl "
+        className="top-2/4 absolute h-16 w-5 lg:h-20 lg:w-7 flex items-center justify-center bg-primary right-0 rounded-tl-3xl rounded-bl-3xl "
       >
-        <img src="/icons/chevrons-right-double.svg" alt="" />
+        <MdDoubleArrow className="rotate-180" />
       </button>
       <GlobalModal />
     </>

@@ -15,13 +15,14 @@ import HelpAndsupport from "../../components/UserDashboard/Help&support/HelpAnds
 import PracticeSlider from "../../components/UserDashboard/PracticeSlider/PracticeSlider";
 import PracticeProgress from "../../components/UserDashboard/PracticeProgress/PracticeProgress";
 
+
 import Link from "next/link";
 
 const Index = () => {
   const [toggleProgress, setToggleProgress] = useState(true);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout dashboard>
       <div className="p-3">
         <div className="flex justify-between items-center">
           <p className="text-[#949494] text-[36px] lg:text-[16px] xl:text-[10px] ">
@@ -58,6 +59,7 @@ const Index = () => {
         {/* toggle buttons */}
         <div className="w-full bg-gray-500 flex justify-between mb-3">
           <div className="flex gap-2">
+
             <button
               onClick={() => setToggleProgress(true)}
               className="bg-[#849C3E] hover:bg-[#4399FF] hover:text-white px-4 py-2 text-white text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
