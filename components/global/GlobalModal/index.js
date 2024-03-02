@@ -6,6 +6,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBlock from "./QuestionBlock";
 import QuestionNavigation from "./QuestionNavigation";
+import Image from "next/image";
 
 const GlobalModal = () => {
   //redux state management functions
@@ -41,7 +42,6 @@ const GlobalModal = () => {
       setFilteredData(filter);
     }
   }, [data, questionType]);
-  console.log("data", data);
   return (
     <Transition.Root show={state.visible} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={toggleModal}>
@@ -83,13 +83,15 @@ const GlobalModal = () => {
                       </div>
                       <div className="max-w-lg w-full relative bg-white overflow-hidden rounded-3xl">
                         <input
-                          className="w-full focus:ring-0 placeholder:text-xl rounded-3xl border-none pl-8 placeholder:text-gray placeholder:font-light "
+                          className="w-full focus:ring-0 placeholder:text-lg rounded-3xl border-none pl-8 placeholder:text-gray placeholder:font-light "
                           placeholder="Search By Question Title / Number"
                         />
-                        <img
+                        <Image
                           src="/icons/searchIcon.svg"
-                          alt=""
-                          className="absolute right-4 top-0"
+                          alt="icon"
+                          width={20}
+                          height={20}
+                          className="absolute right-4 top-1/2 -translate-y-1/2"
                         />
                       </div>
                     </div>
@@ -101,7 +103,7 @@ const GlobalModal = () => {
                     {/* Questions block  */}
                     <div className="relative border border-primary rounded-[13px] bg-white p-5 mt-11">
                       {/* tab button */}
-                      <div className="flex items-center gap-x-2 absolute bottom-[100.2%] right-5">
+                      <div className="flex items-center gap-x-2 absolute bottom-full right-5">
                         <button className="text-gray py-1 px-3 rounded-t-md text-base bg-cream">
                           All
                         </button>
@@ -112,7 +114,7 @@ const GlobalModal = () => {
                           BookMarked
                         </button>
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-2 h-[450px] pr-2 overflow-auto content-scrollbar">
                         {/* Question */}
                         {filteredData?.map((item, i) => (
                           <QuestionBlock

@@ -5,17 +5,17 @@ const GlobalMainContent = ({ children, data }) => {
   return (
     <div className="relative border border-primary rounded-[15px] mt-12">
       {/* tab button */}
-      <div className="flex items-center gap-x-2 absolute bottom-[101%] right-5">
+      <div className="flex items-center gap-x-2 absolute bottom-full right-5">
         {data?.prediction && (
-          <button className="text-gray py-1 px-3 rounded text-base bg-cream">
+          <button className="text-gray py-1 px-3 rounded-t text-base bg-cream">
             Prediction
           </button>
         )}
 
-        <button className="text-gray py-1 px-3 rounded text-base bg-primary">
+        <button className="text-gray py-1 px-3 rounded-t text-base bg-primary">
           Practiced {data?.practiced ? `(${data?.practiced})` : ""}
         </button>
-        <button className="text-white py-1 px-3 rounded text-base bg-blue">
+        <button className="text-white py-1 px-3 rounded-t text-base bg-blue">
           Appeared (12)
         </button>
       </div>

@@ -45,7 +45,9 @@ const DashboardLayout = ({ children, footer }) => {
         overflow-y-auto  bg-white `}
         >
           <Suspense fallback={<SearchBarFallback />}>
-            <div className="max-w-7xl w-full mx-auto">{children}</div>
+            <div className="max-w-7xl w-full mx-auto px-7 md:px-10 lg:px-10 xl:px-20">
+              {children}
+            </div>
           </Suspense>
           {/* footer */}
           {footer && <Footer />}

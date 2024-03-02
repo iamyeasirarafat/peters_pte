@@ -23,7 +23,7 @@ const Index = () => {
       const { data } = await axios("/summarize/" + id);
       setData(data);
     };
-    getData();
+    id && getData();
   }, [id]);
 
   // sideModal Data

@@ -44,7 +44,7 @@ const QuestionBlock = ({ data, toggleModal }) => {
               textColor={"gray"}
             />
           )}
-          {data?.practiced && (
+          {data?.practiced > 0 && (
             <ButtonFill
               text="Practiced"
               count={`(${data?.practiced})`}
