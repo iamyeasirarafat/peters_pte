@@ -13,15 +13,18 @@ import Performances from "../../components/UserDashboard/Performances/Performanc
 import StudyMaterial from "../../components/UserDashboard/StudyMaterial/StudyMaterial";
 import HelpAndsupport from "../../components/UserDashboard/Help&support/HelpAndsupport";
 import PracticeSlider from "../../components/UserDashboard/PracticeSlider/PracticeSlider";
+import PracticeProgress from "../../components/UserDashboard/PracticeProgress/PracticeProgress";
 
+import Link from "next/link";
 
 const Index = () => {
+  const [toggleProgress, setToggleProgress] = useState(true);
 
   return (
     <DashboardLayout>
       <div className="p-3">
         <div className="flex justify-between items-center">
-          <p className="text-[#949494] lg:text-[36px]  md:text-[20px] sm:text-[10px]   ">
+          <p className="text-[#949494] text-[36px] lg:text-[16px] xl:text-[10px] ">
             Welcome, <span className="text-black">Tushar</span>
           </p>
           {/* Exam Count Down */}
@@ -55,10 +58,18 @@ const Index = () => {
         {/* toggle buttons */}
         <div className="w-full bg-gray-500 flex justify-between mb-3">
           <div className="flex gap-2">
-            <button className="bg-[#849C3E] hover:bg-[#4399FF] hover:text-white px-4 py-2 text-white text-[21px] gap-1 flex flex-col justify-center items-center   rounded-[10px]">Your Performance
+            <button
+              onClick={() => setToggleProgress(true)}
+              className="bg-[#849C3E] hover:bg-[#4399FF] hover:text-white px-4 py-2 text-white text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
+            >
+              Your Performance
               <SlBadge />
             </button>
-            <button className="border border-[#CF8800] hover:bg-[#4399FF] hover:text-white px-4 py-2 text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]">Prcatice Progress
+            <button
+              onClick={() => setToggleProgress(false)}
+              className="border border-[#CF8800] hover:bg-[#4399FF] hover:text-white px-4 py-2 text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
+            >
+              Prcatice Progress
               <IoAnalyticsOutline />
             </button>
           </div>
@@ -70,13 +81,14 @@ const Index = () => {
               <option value="reading">Reading</option>
               <option value="listening">Listening</option>
             </select>
-            <p className="text-[16px] font-normal text-[#949494]">Last updated on 25/07/2023</p>
+            <p className="text-[16px] font-normal text-[#949494]">
+              Last updated on 25/07/2023
+            </p>
           </div>
         </div>
 
         {/* all time progress  */}
-
-        <Performances />
+        {toggleProgress ? <Performances /> : <PracticeProgress />}
 
         {/* study material  */}
 
@@ -84,8 +96,6 @@ const Index = () => {
 
         {/* help & support */}
         <HelpAndsupport />
-
-
       </div>
     </DashboardLayout>
   );

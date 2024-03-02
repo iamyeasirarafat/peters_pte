@@ -54,7 +54,7 @@ export default function PTECurrentDayTask() {
           </div>
         </div>
         {/* Cards */}
-        <div className="flex text-white justify-between">
+        <div className="flex gap-2.5 text-white justify-between">
           {taskCard.map((card) => (
             <TodayTaskCard key={card.name} data={card} />
           ))}
