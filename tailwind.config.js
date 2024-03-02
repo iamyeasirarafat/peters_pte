@@ -12,8 +12,8 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        "4xl": { max: "1719px" },
-        "2xl": { max: "1419px" },
+        "4xl": { min: "1719px" },
+        "2xl": { min: "1419px" },
         // xl: { max: "1259px" },
         // xls: { max: "1179px" },
         // lg: { max: "1024px" },

@@ -20,14 +20,15 @@ const TopNav = () => {
   };
   return (
     <div
-      className={`${topNav ? "" : "-mt-16"
-        } transition-all duration-300 ease-linear`}
+      className={`${
+        topNav ? "" : "-mt-16"
+      } transition-all duration-300 ease-linear`}
     >
       <div className="h-16 bg-primary flex items-center p-1.5 justify-center ">
         <div className="w-full justify-between items-center max-w-6xl h-full flex">
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="md:block hidden"
+            className="block md:hidden"
           >
             <RiMenu2Line className="text-white text-4xl" />
           </button>
@@ -38,7 +39,7 @@ const TopNav = () => {
       </div>
       <button
         onClick={toggleTopNav}
-        className="md:hidden block absolute top-6 right-4"
+        className="hidden md:block absolute top-6 right-4"
       >
         <Image
           className="object-cover"
@@ -69,7 +70,7 @@ const Logo = () => {
 const MenuItem = () => {
   const menuData = navItems;
   return (
-    <ul className="text-white md:hidden flex items-center gap-4 text-xl font-semibold font-avantt">
+    <ul className="text-white hidden md:flex items-center gap-4 text-xl font-semibold font-avantt">
       <li>
         <Link href="/">Home</Link>
       </li>
@@ -140,7 +141,7 @@ const UserDropdown = () => {
   const { user } = useSelector((state) => state?.user);
   return (
     <div className="flex gap-2 relative">
-      <button className="bg-gold md:hidden xs:flex text-lg text-white font-avantt font-semibold items-center py-3 px-5 rounded-[32px] gap-1">
+      <button className="bg-gold hidden md:flex text-lg text-white font-avantt font-semibold items-center py-3 px-5 rounded-[32px] gap-1">
         <span>Become Premium</span>
         <Image
           className="object-cover"
@@ -154,12 +155,16 @@ const UserDropdown = () => {
         onClick={() => setShowProfile(!showProfile)}
         className="rounded-full overflow-hidden text-4xl text-gray w-12 h-12 bg-white capitalize flex items-center justify-center"
       >
-        {user?.picture ? <Image
-          src={user?.picture}
-          width={1000}
-          height={1000}
-          alt="profile pic"
-        /> : user?.full_name?.charAt(0)}
+        {user?.picture ? (
+          <Image
+            src={user?.picture}
+            width={1000}
+            height={1000}
+            alt="profile pic"
+          />
+        ) : (
+          user?.full_name?.charAt(0)
+        )}
       </button>
 
       {/* user info */}
@@ -207,8 +212,9 @@ const UserDropdown = () => {
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   return (
     <div
-      className={`w-[250px] h-full bg-secondary absolute top-0  ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } z-50 pt-14 transition-transform duration-500 ease-in-out`}
+      className={`w-[250px] h-full bg-secondary absolute top-0  ${
+        mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+      } z-50 pt-14 transition-transform duration-500 ease-in-out`}
     >
       <RiCloseCircleLine
         onClick={() => setMobileMenuOpen(false)}
