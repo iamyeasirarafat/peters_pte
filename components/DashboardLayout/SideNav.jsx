@@ -170,7 +170,7 @@ const SideNav = ({ dashboard }) => {
         sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
       } flex-shrink-0 ${
         !topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
-      } transition-all relative duration-300 ease-linear bg-secondary hidden md:block`}
+      } transition-all relative duration-300 ease-linear bg-secondary hidden lg:block`}
     >
       {/* side Nav container */}
       <SideMenuContainer topNav={topNav} />
