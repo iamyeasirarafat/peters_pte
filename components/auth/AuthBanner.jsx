@@ -14,7 +14,7 @@ const AuthBanner = () => {
     },
   };
   return (
-    <div className="lg:hidden block w-1/2 h-full relative">
+    <div className="hidden lg:block w-1/2 h-full relative">
       <div className="px-16 pt-16 h-full bg-[#FFF4EB]">
         <div className="h-full">
           <Swiper

@@ -13,7 +13,7 @@ const Auth = () => {
       {/* left side of joining page */}
       <AuthBanner />
       {/* right side joining forms */}
-      <div className="xl:w-full w-1/2 flex flex-col items-center px-7 2xl:px-12 lg:px-[150px] justify-center">
+      <div className="w-full lg:w-1/2 flex flex-col items-center px-7 justify-center">
         {/* logo and slogan */}
         <AuthHeader page={page} setPage={setPage} />
         {/* Join form */}
