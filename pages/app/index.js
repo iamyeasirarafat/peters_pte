@@ -16,7 +16,7 @@ import PracticeSlider from "../../components/UserDashboard/PracticeSlider/Practi
 
 const Index = () => {
   return (
-    <DashboardLayout footer>
+    <DashboardLayout dashboard>
       <div className="p-3">
         <div className="flex justify-between items-center">
           <p className="text-[#949494] lg:text-[36px]  md:text-[20px] sm:text-[10px]   ">

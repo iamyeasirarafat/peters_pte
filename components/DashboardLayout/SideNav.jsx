@@ -158,7 +158,7 @@ export const navItems = {
   ],
 };
 
-const SideNav = () => {
+const SideNav = ({ dashboard }) => {
   const { topNav, sideNav } = useSelector((state) => state.layout);
   const dispatch = useDispatch();
   const toggleNav = () => {
@@ -166,7 +166,9 @@ const SideNav = () => {
   };
   return (
     <div
-      className={`${sideNav ? "w-72" : "w-[134px]"} flex-shrink-0 ${
+      className={`${
+        sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
+      } flex-shrink-0 ${
         !topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
       } transition-all relative duration-300 ease-linear bg-secondary hidden md:block`}
     >
@@ -177,7 +179,7 @@ const SideNav = () => {
       <TodoPanel />
       <button
         onClick={toggleNav}
-        className="top-2/4 absolute h-14 w-5 bg-secondary -right-[20px] rounded-tr-3xl rounded-br-3xl "
+        className="top-2/4 absolute h-18 flex items-center justify-center w-5 bg-secondary -right-[20px] rounded-tr-3xl rounded-br-3xl "
       >
         <Image
           className={`object-cover ${sideNav ? "" : "rotate-180"}`}

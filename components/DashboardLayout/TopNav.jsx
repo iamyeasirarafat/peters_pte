@@ -11,9 +11,9 @@ import { RiCloseCircleLine, RiMenu2Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { navItems } from "./SideNav";
 
-const TopNav = () => {
+const TopNav = ({ dashboard }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { topNav } = useSelector((state) => state.layout);
+  const { topNav, sideNav } = useSelector((state) => state.layout);
   const dispatch = useDispatch();
   const toggleTopNav = () => {
     dispatch(toggleNav());
@@ -24,17 +24,26 @@ const TopNav = () => {
         topNav ? "" : "-mt-16"
       } transition-all duration-300 ease-linear`}
     >
-      <div className="h-16 bg-primary flex items-center p-1.5 justify-center ">
-        <div className="w-full justify-between items-center max-w-6xl h-full flex">
-          <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="block md:hidden"
-          >
-            <RiMenu2Line className="text-white text-4xl" />
-          </button>
-          <Logo />
-          <MenuItem />
-          <UserDropdown />
+      <div className="flex h-16 bg-primary w-full p-1.5">
+        {/* fake left */}
+        <div
+          className={`${
+            sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
+          } flex-shrink-0 transition-all relative duration-300 ease-linear hidden md:block`}
+        ></div>
+        {/* top nav */}
+        <div className="w-full">
+          <div className="h-full max-w-6xl mx-auto flex items-center justify-between">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="block md:hidden"
+            >
+              <RiMenu2Line className="text-white text-4xl" />
+            </button>
+            <Logo />
+            <MenuItem />
+            <UserDropdown />
+          </div>
         </div>
       </div>
       <button
