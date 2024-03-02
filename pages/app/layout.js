@@ -11,7 +11,7 @@ function SearchBarFallback() {
   return <>placeholder</>;
 }
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children, footer }) => {
   const { topNav } = useSelector((state) => state.layout);
   const dispatch = useDispatch();
   const toggleTopNav = () => {
@@ -48,12 +48,10 @@ const DashboardLayout = ({ children }) => {
             <div className="max-w-7xl w-full mx-auto">{children}</div>
           </Suspense>
           {/* footer */}
-          <Footer />
+          {footer && <Footer />}
         </div>
         {/* <GlobalModal /> */}
-
       </div>
-
     </>
   );
 };

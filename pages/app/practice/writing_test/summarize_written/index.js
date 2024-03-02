@@ -50,7 +50,7 @@ const Index = () => {
         {/* text block */}
         <TextBlock data={data} />
         {/* type Block */}
-        <TypingBlock setResult={setResult} />
+        <TypingBlock setResult={setResult} api="/test" />
       </GlobalMainContent>
       {/* result section */}
       {result && (
