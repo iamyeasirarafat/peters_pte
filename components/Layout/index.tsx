@@ -6,8 +6,8 @@ import { getUser } from "@/redux/slice/userSlice";
 import Head from "next/head";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { AnyAction } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import Menu from "./Menu";
 type LayoutProps = {
   background?: boolean;

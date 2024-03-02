@@ -41,6 +41,7 @@ const GlobalModal = () => {
       setFilteredData(filter);
     }
   }, [data, questionType]);
+  console.log("data", data);
   return (
     <Transition.Root show={state.visible} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={toggleModal}>

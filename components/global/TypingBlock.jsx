@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import Pagination from "./Pagination";
 
-const TypingBlock = ({ setResult }) => {
+const TypingBlock = ({ setResult, api }) => {
   // remaining time function
   const initialMinutes = 10;
   const [minutes, setMinutes] = useState(initialMinutes);
@@ -30,25 +30,23 @@ const TypingBlock = ({ setResult }) => {
   }, [minutes, seconds]);
 
   //handle submit functionalities
-  const [summary, setSummary] = useState("");
+  const [textAnswer, setTextAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const id = router.query.que_no;
   const handleSubmit = async () => {
     setIsLoading(true);
-    if (summary.length > 0) {
+    if (textAnswer.length > 0) {
       try {
-        const { data } = await axios.post("/summarize/answer", {
-          summarize: id,
-          summarize_text: summary,
+        const res = await axios.post(api, {
+          id: id,
+          answer: textAnswer,
         });
-        console.log(data);
-        setResult(data);
-
+        setResult(res?.data);
+        toast.success(res?.data?.massage || "Submitted Successfully");
         setIsLoading(false);
       } catch (error) {
-        toast.error("Something went wrong");
-        console.log("summarize error", error);
+        toast.error(error?.massage || "Something went wrong");
         setIsLoading(false);
       }
     } else {
@@ -59,7 +57,7 @@ const TypingBlock = ({ setResult }) => {
 
   // after change question automatically clearing textfild
   useEffect(() => {
-    setSummary("");
+    setTextAnswer("");
   }, [id]);
 
   return (
@@ -74,14 +72,14 @@ const TypingBlock = ({ setResult }) => {
               </i>
             </p>
             <p className="text-gray text-xs text-center">
-              Word Count: {summary.split(" ").length}
+              Word Count: {textAnswer.split(" ").length}
             </p>
           </div>
         </div>
         <div className="p-3">
           <textarea
-            onChange={(e) => setSummary(e.target.value)}
-            value={summary}
+            onChange={(e) => setTextAnswer(e.target.value)}
+            value={textAnswer}
             disabled={timerExpired}
             className="w-full disabled:opacity-40 border-0 text-gray focus:ring-0"
             placeholder="Type your summary here..."
