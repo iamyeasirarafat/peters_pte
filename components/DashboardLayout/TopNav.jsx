@@ -29,14 +29,14 @@ const TopNav = ({ dashboard }) => {
         <div
           className={`${
             sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
-          } flex-shrink-0 transition-all relative duration-300 ease-linear hidden md:block`}
+          } flex-shrink-0 transition-all relative duration-300 ease-linear hidden lg:block`}
         ></div>
         {/* top nav */}
         <div className="w-full">
-          <div className="h-full max-w-6xl mx-auto flex items-center justify-between">
+          <div className="h-full max-w-6xl mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="block md:hidden"
+              className="block lg:hidden"
             >
               <RiMenu2Line className="text-white text-4xl" />
             </button>
@@ -48,7 +48,7 @@ const TopNav = ({ dashboard }) => {
       </div>
       <button
         onClick={toggleTopNav}
-        className="hidden md:block absolute top-6 right-4"
+        className="hidden lg:block absolute top-6 right-4"
       >
         <Image
           className="object-cover"
@@ -79,9 +79,11 @@ const Logo = () => {
 const MenuItem = () => {
   const menuData = navItems;
   return (
-    <ul className="text-white hidden md:flex items-center gap-4 text-xl font-semibold font-avantt">
+    <ul className="text-white hidden lg:flex items-center gap-4 text-xl font-semibold font-avantt">
       <li>
-        <Link href="/">Home</Link>
+        <Link className="text-base md:text-lg xl:text-xl" href="/app">
+          Home
+        </Link>
       </li>
       <li className="group flex items-center gap-x-2 cursor-pointer">
         Practice Test <IoIosArrowDown className="text-sm text-white" />
@@ -91,7 +93,6 @@ const MenuItem = () => {
         >
           <div className="pt-5 bg-white h-full w-full mt-5">
             <div className="max-w-6xl mx-auto flex justify-between gap-x-3">
-              {/* Speaking Test */}
               {Object.keys(menuData).map((item, index) => {
                 return (
                   <div key={index} className="w-full">
@@ -133,13 +134,19 @@ const MenuItem = () => {
         </div>
       </li>
       <li>
-        <Link href="/about">Mock Test</Link>
+        <Link className="text-base md:text-lg xl:text-xl" href="/about">
+          Mock Test
+        </Link>
       </li>
       <li>
-        <Link href="/contact">Prediction</Link>
+        <Link className="text-base md:text-lg xl:text-xl" href="/contact">
+          Prediction
+        </Link>
       </li>
       <li>
-        <Link href="/contact">Mobile App</Link>
+        <Link className="text-base md:text-lg xl:text-xl" href="/contact">
+          Mobile App
+        </Link>
       </li>
     </ul>
   );
@@ -150,7 +157,7 @@ const UserDropdown = () => {
   const { user } = useSelector((state) => state?.user);
   return (
     <div className="flex gap-2 relative">
-      <button className="bg-gold hidden md:flex text-lg text-white font-avantt font-semibold items-center py-3 px-5 rounded-[32px] gap-1">
+      <button className="bg-gold hidden md:flex text-sm md:text-base xl:text-lg text-white font-avantt font-semibold items-center py-2 px-3 xl:py-3 xl:px-5 rounded-[32px] gap-1">
         <span>Become Premium</span>
         <Image
           className="object-cover"
