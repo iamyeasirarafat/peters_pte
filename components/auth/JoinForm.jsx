@@ -73,7 +73,7 @@ const JoinForm = ({ setPage }) => {
   return (
     <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
       <div className="p-4 space-y-2 bg-[#FFF4EB] rounded-[32px] w-full">
-        <div className="flex md:flex-col flex-row items-center gap-3">
+        <div className="flex flex-col md:flex-row items-center gap-3">
           <input
             className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 ${
               errors?.full_name ? "border-red" : "border-[#B9B9B9]"
@@ -99,7 +99,7 @@ const JoinForm = ({ setPage }) => {
         {/* phone */}
         <PhoneNumberInputJoin name="phone" control={control} errors={errors} />
         {/* pass */}
-        <div className="flex md:flex-col flex-row items-center gap-3">
+        <div className="flex flex-col md:flex-row items-center gap-3">
           <div className="relative w-full">
             <input
               className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 ${
