@@ -1,6 +1,5 @@
 import Layout from "@/components/Layout";
 // import Image from "next/image";
-import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import { Switch as SwitchReact } from "@headlessui/react";
 import axios from "axios";
@@ -41,7 +40,7 @@ function BillingPayment() {
     <Layout title="Billing & Payment">
       <div className="grid grid-cols-12 gap-5">
         {/* left side content */}
-        <div className="col-span-8 flex flex-col justify-between md:col-span-12 p-5 bg-white dark:bg-black">
+        <div className="md:col-span-8 flex flex-col justify-between col-span-12 p-5 bg-white dark:bg-black">
           <div>
             <p className="text-lg font-extrabold">Plan & Package Creator</p>
             <p className="text-xs font-bold my-5">Click to Go</p>
@@ -59,7 +58,7 @@ function BillingPayment() {
           </div>
         </div>
         {/* right side content */}
-        <div className="col-span-4 md:col-span-12 flex flex-col gap-y-3">
+        <div className="md:col-span-4 col-span-12 flex flex-col gap-y-3">
           <CountCart />
           <div className="w-full h-full bg-[url('/images/payment/th-bg.png')] bg-no-repeat bg-cover bg-center p-5 space-y-2">
             <p className="text-lg font-extrabold text-white">
@@ -84,7 +83,7 @@ export default BillingPayment;
 
 const Pricing = ({ data }) => {
   return (
-    <div className="flex flex-row md:flex-col gap-3 w-full">
+    <div className="flex md:flex-row flex-col gap-3 w-full">
       {data?.map((item, i) => {
         return (
           <Link key={item?.id || i} href={item.link} className="w-full">
@@ -185,8 +184,7 @@ const Switch = ({ className, value, setValue }) => (
       <span
         aria-hidden="true"
         className={twMerge(
-          `pointer-events-none inline-block w-4 h-4 transition-all ${
-            value ? "translate-x-4 bg-primary" : "translate-x-0 bg-n-1"
+          `pointer-events-none inline-block w-4 h-4 transition-all ${value ? "translate-x-4 bg-primary" : "translate-x-0 bg-n-1"
           }`
         )}
       />

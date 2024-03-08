@@ -19,11 +19,10 @@ const Header = ({ back, title }: HeaderProps) => {
 
   return (
     <header
-      className={`fixed top-0 right-0 left-[18.75rem] z-20  xl:left-20 md:left-0 md:relative  ${
-        headerStyle ? "bg-background dark:bg-n-2 md:!bg-transparent" : ""
-      }`}
+      className={`md:fixed top-0 right-0  z-20   left-0 relative  ${headerStyle ? "md:bg-background dark:bg-n-2 bg-transparent" : ""
+        }`}
     >
-      <div className="flex items-center max-w-[90rem] m-auto w-full h-18 px-16 2xl:px-8 lg:px-6 md:px-5">
+      <div className="flex items-center max-w-[90rem] m-auto w-full h-18 2xl:px-16 lg:px-8 md:px-6 px-5">
         {back && (
           <button
             className="btn-stroke border btn-square btn-medium shrink-0 mr-6 2xl:mr-4 md:!w-6 md:h-6 md:mr-3"
@@ -33,7 +32,7 @@ const Header = ({ back, title }: HeaderProps) => {
           </button>
         )}
         {title && (
-          <div className="mr-4 text-h3 truncate md:mr-2 md:text-h4 capitalize">
+          <div className="md:mr-4 md:text-h3 truncate mr-2 text-h4 capitalize">
             {title.replaceAll("-", " ")}
           </div>
         )}

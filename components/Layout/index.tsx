@@ -26,16 +26,14 @@ const Layout = ({ background, back, title, children }: LayoutProps) => {
       <Head>
         <title>Peters PTE</title>
       </Head>
-      <div className="relative pl-[18.75rem] xl:pl-20 md:pl-0 md:pb-20">
+      <div className="w-full flex">
         <Sidebar />
-        <div className="flex flex-col min-h-screen pt-18 md:pt-0 md:min-h-[calc(100vh-5rem)]">
+        <div className="flex flex-col w-full md:pt-18 pt-0 ">
           <Header back={back} title={title} />
-          <div className="flex grow">
-            <div className="flex flex-col grow max-w-[90rem] mx-auto pt-6 px-16 pb-2 4xl:max-w-full 2xl:px-8 lg:px-6 md:px-5">
-              {children}
-            </div>
+          <div className="flex flex-col  overflow-y-auto scroll-smooth h-[calc(100vh-80px)] grow w-full  px-2 md:px-10">
+            {children}
+            <Footer />
           </div>
-          <Footer />
           {background && (
             <div className="absolute inset-0 -z-1 overflow-hidden pointer-events-none dark:opacity-70">
               <div className="absolute z-1 inset-0 bg-n-1 opacity-0 dark:opacity-80"></div>

@@ -1,44 +1,41 @@
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Logo from "@/components/Logo";
-import Link from "next/link";
-import { useState } from "react";
-import Menu from "./Menu";
-import { useSelector } from "react-redux";
-import { MdLogout } from "react-icons/md";
 import { Logout } from "@/utils/Logout";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { MdLogout } from "react-icons/md";
+import { useSelector } from "react-redux";
+import Menu from "./Menu";
 
 type SidebarProps = {};
 
-const Sidebar = ({}: SidebarProps) => {
-  const [visible, setVisible] = useState<boolean>(false);
+const Sidebar = ({ }: SidebarProps) => {
+  const [visible, setVisible] = useState<boolean>(true);
   const [showUserDialog, setShowUserDialog] = useState<boolean>(false);
   const user = useSelector((state: any) => state.user?.user);
   const router = useRouter();
 
   return (
     <div
-      className={`fixed top-0 left-0 bottom-0 flex flex-col w-[18.75rem] pt-6 px-8 pb-4.5 bg-n-1 overflow-auto scroll-smooth xl:z-30 md:hidden ${
-        visible ? "w-[18.75rem]" : "xl:w-20"
-      }`}
+      className={`xl:flex hidden flex-col w-[18.75rem] pt-6 px-8 pb-4.5 bg-n-1 h-screen ${visible ? "w-[18.75rem]" : "w-20"
+        }`}
     >
       <div className="flex justify-between items-center h-[1.625rem] mb-11">
-        <Logo className={visible ? "flex" : "xl:hidden"} light />
+        <Logo className={visible ? "flex" : "xl:flex"} light />
         <button onClick={() => setVisible(!visible)} className="hidden xl:flex">
           <Icon className="fill-white" name={visible ? "close" : "burger"} />
         </button>
       </div>
       <Menu visible={visible} />
       <div
-        className={`flex items-center h-18 mt-auto mx-0 pt-10 ${
-          visible ? "mx-0" : "xl:-mx-4"
-        } relative`}
+        className={`flex items-center h-18 mt-auto mx-0 pt-10 ${visible ? "mx-0" : "xl:-mx-4"
+          } relative`}
       >
         <Link
-          className={`inline-flex items-center font-bold text-white text-sm transition-colors hover:text-purple-1 ${
-            visible ? "mx-0 text-sm" : "xl:mx-auto xl:text-0"
-          }`}
+          className={`inline-flex items-center font-bold text-white text-sm transition-colors hover:text-purple-1 ${visible ? "mx-auto text-0" : "xl:mx-0 xl:text-sm"
+            }`}
           href={
             router?.asPath?.startsWith("/admin")
               ? "/admin/profile"
@@ -46,9 +43,8 @@ const Sidebar = ({}: SidebarProps) => {
           }
         >
           <div
-            className={`relative w-5.5 h-5.5 mr-2.5 rounded-full overflow-hidden ${
-              visible ? "mr-2.5" : "xl:mr-0"
-            }`}
+            className={`relative w-5.5 h-5.5 mr-2.5 rounded-full overflow-hidden ${visible ? "mr-2.5" : "xl:mr-0"
+              }`}
           >
             <Image
               className="object-cover scale-105"
@@ -61,9 +57,8 @@ const Sidebar = ({}: SidebarProps) => {
         </Link>
         <button
           onClick={() => setShowUserDialog(!showUserDialog)}
-          className={`btn-transparent-light btn-square btn-small ml-auto ${
-            visible ? "flex" : "xl:hidden"
-          }`}
+          className={`btn-transparent-light btn-square btn-small ml-auto ${visible ? "flex" : "xl:hidden"
+            }`}
         >
           <Icon name="dots" />
         </button>

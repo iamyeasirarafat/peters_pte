@@ -1,27 +1,27 @@
-import React from "react";
-import AdminLayout from "@/components/AdminLayout";
-import { useRouter } from "next/router";
-import ReadAloud from "@/components/QuestionEditForms/ReadAloud";
-import RepeatSentence from "@/components/QuestionEditForms/RepeatSentence";
-import ReTelLecture from "@/components/QuestionEditForms/ReTelLecture";
-import DescribeImage from "@/components/QuestionEditForms/DescribeImage";
-import EssayQuestion from "@/components/QuestionEditForms/EssayQuestion";
-import SpeakingSpell from "@/components/QuestionEditForms/SpeakingSpell";
-import ListeningFrenzy from "@/components/QuestionEditForms/ListeningFrenzy";
-import SpellingBee from "@/components/QuestionEditForms/SpellingBee";
-import MultipleChoiceListing from "@/components/QuestionEditForms/MultipleChoiceListing";
-import SingleChoiceListing from "@/components/QuestionEditForms/SingleChoiceListing";
-import FillTheBlanks from "@/components/QuestionEditForms/FillTheBlanks";
-import MultipleChoiceReading from "@/components/QuestionEditForms/MultipleChoiceReading";
-import ReOrderParagraph from "@/components/QuestionEditForms/ReOrderParagraph";
-import ReadingFillTheBlanks from "@/components/QuestionEditForms/ReadingFillTheBlanks";
-import FibReading from "@/components/QuestionEditForms/FibReading";
-import SummerizeWritten from "@/components/QuestionEditForms/SummerizeWritten";
-import HighlightSummary from "@/components/QuestionEditForms/HighlightSummary";
+import Layout from "@/components/Layout";
 import AnswerShotQues from "@/components/QuestionEditForms/AnswerShotQues";
-import MultipleSingleReading from "@/components/QuestionEditForms/MultipleSingleReading";
-import SelectMissingWord from "@/components/QuestionEditForms/SelectMissingWord";
+import DescribeImage from "@/components/QuestionEditForms/DescribeImage";
 import Dictation from "@/components/QuestionEditForms/Dictation";
+import EssayQuestion from "@/components/QuestionEditForms/EssayQuestion";
+import FibReading from "@/components/QuestionEditForms/FibReading";
+import FillTheBlanks from "@/components/QuestionEditForms/FillTheBlanks";
+import HighlightSummary from "@/components/QuestionEditForms/HighlightSummary";
+import ListeningFrenzy from "@/components/QuestionEditForms/ListeningFrenzy";
+import MultipleChoiceListing from "@/components/QuestionEditForms/MultipleChoiceListing";
+import MultipleChoiceReading from "@/components/QuestionEditForms/MultipleChoiceReading";
+import MultipleSingleReading from "@/components/QuestionEditForms/MultipleSingleReading";
+import ReOrderParagraph from "@/components/QuestionEditForms/ReOrderParagraph";
+import ReTelLecture from "@/components/QuestionEditForms/ReTelLecture";
+import ReadAloud from "@/components/QuestionEditForms/ReadAloud";
+import ReadingFillTheBlanks from "@/components/QuestionEditForms/ReadingFillTheBlanks";
+import RepeatSentence from "@/components/QuestionEditForms/RepeatSentence";
+import SelectMissingWord from "@/components/QuestionEditForms/SelectMissingWord";
+import SingleChoiceListing from "@/components/QuestionEditForms/SingleChoiceListing";
+import SpeakingSpell from "@/components/QuestionEditForms/SpeakingSpell";
+import SpellingBee from "@/components/QuestionEditForms/SpellingBee";
+import SummerizeWritten from "@/components/QuestionEditForms/SummerizeWritten";
+import { useRouter } from "next/router";
+import React from "react";
 import HighlightIncorrectWord from "../../../../components/QuestionEditForms/HighlightIncorrectWord";
 import SummerizeSpoken from "../../../../components/QuestionEditForms/SummerizeSpoken";
 const EditForms = () => {
@@ -79,9 +79,9 @@ const EditForms = () => {
     content = <h2>this is new question from</h2>;
   }
   return (
-    <AdminLayout back={true} title={`${questionTable} / Q. # ${itemObj?.id}`}>
+    <Layout back={true} title={`${questionTable} / Q. # ${itemObj?.id}`}>
       {content}
-    </AdminLayout>
+    </Layout>
   );
 };
 

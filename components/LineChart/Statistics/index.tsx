@@ -7,7 +7,7 @@ type StatisticsProps = {
 };
 
 const Statistics = ({ title, percent, count }: StatisticsProps) => (
-  <div className="flex-1 px-5 py-4 border-r border-n-1 last:border-none md:border-r-0 md:border-b dark:border-white">
+  <div className="flex-1 px-5 py-4 md:border-r md:border-n-1 last:border-none border-r-0 border-b dark:border-white">
     <div className="flex justify-between items-center mb-2">
       <div className="text-sm text-n-3 dark:text-white/75">{title}</div>
       <Icon

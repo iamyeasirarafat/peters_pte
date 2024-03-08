@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Icon from "@/components/Icon";
 import ToggleTheme from "./ToggleTheme";
 
 const navigations = [
@@ -19,9 +17,9 @@ const navigations = [
 
 type FooterProps = {};
 
-const Footer = ({}: FooterProps) => (
+const Footer = ({ }: FooterProps) => (
   <footer className="">
-    <div className="flex items-center justify-end h-16 px-16 max-w-[90rem] mx-auto 2xl:px-8 lg:px-6 md:px-5">
+    <div className="flex items-center justify-end h-16 2xl:px-16 max-w-[90rem] mx-auto lg:px-8 md:px-6 px-5">
       <ToggleTheme />
     </div>
   </footer>
