@@ -112,7 +112,7 @@ const items = [
   {
     name: "Summarize Spoken Text",
     bg: "#616161",
-    path: "/app/practice/listing_test/spoken_text?que_no=1",
+    path: "/app/practice/listening_test/spoken_text?que_no=1",
     uv: 2390,
     pv: 3800,
     abbr: "SST",
@@ -120,7 +120,7 @@ const items = [
   {
     name: "Multiple Choice Multiple Question",
     bg: "#616161",
-    path: "/app/practice/listing_test/multiple_answers?que_no=1",
+    path: "/app/practice/listening_test/multiple_answers?que_no=1",
     uv: 3490,
     pv: 4300,
     abbr: "MCMQ",
@@ -128,7 +128,7 @@ const items = [
   {
     name: "Fill in the Blanks",
     bg: "#616161",
-    path: "/app/practice/listing_test/fill_blanks?que_no=1",
+    path: "/app/practice/listening_test/fill_blanks?que_no=1",
     uv: 4000,
     pv: 2400,
     abbr: "LFIB",
@@ -136,7 +136,7 @@ const items = [
   {
     name: "Highlight Correct Summary",
     bg: "#616161",
-    path: "/app/practice/listing_test/highlight_summary?que_no=1",
+    path: "/app/practice/listening_test/highlight_summary?que_no=1",
     uv: 3000,
     pv: 1398,
     abbr: "HCS",
@@ -144,7 +144,7 @@ const items = [
   {
     name: "Multiple Choice (Single)",
     bg: "#616161",
-    path: "/app/practice/listing_test/single_answer?que_no=2",
+    path: "/app/practice/listening_test/single_answer?que_no=2",
     uv: 2000,
     pv: 9800,
     abbr: "LMCS",
@@ -152,7 +152,7 @@ const items = [
   {
     name: "Select Missing Word",
     bg: "#616161",
-    path: "/app/practice/listing_test/missing_word?que_no=1",
+    path: "/app/practice/listening_test/missing_word?que_no=1",
     uv: 2780,
     pv: 3908,
     abbr: "SMW",
@@ -160,7 +160,7 @@ const items = [
   {
     name: "Highlight Incorrect Words",
     bg: "#616161",
-    path: "/app/practice/listing_test/highlight_incorrect_words",
+    path: "/app/practice/listening_test/highlight_incorrect_words",
     uv: 1890,
     pv: 4800,
     abbr: "HIW",
@@ -168,7 +168,7 @@ const items = [
   {
     name: "Write From Dictation",
     bg: "#616161",
-    path: "/app/practice/listing_test/write_dictation",
+    path: "/app/practice/listening_test/write_dictation",
     uv: 2390,
     pv: 3800,
     abbr: "WFD",

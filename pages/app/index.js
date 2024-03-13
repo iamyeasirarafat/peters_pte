@@ -5,18 +5,13 @@ import HeaderCounter from "../../components/UserDashboard/HeaderCounter/HeaderCo
 import PTEAccurateMock from "../../components/UserDashboard/AccurateMockTest/PTEAccurateMock";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { SlBadge } from "react-icons/sl";
-import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import MiniGameWidgets from "../../components/UserDashboard/MiniGameWidgets/MiniGameWidgets";
-import LineProgressWidget from "../../components/UserDashboard/Cards/LineProgressWidget";
 import Performances from "../../components/UserDashboard/Performances/Performances";
 import StudyMaterial from "../../components/UserDashboard/StudyMaterial/StudyMaterial";
 import HelpAndsupport from "../../components/UserDashboard/Help&support/HelpAndsupport";
 import PracticeSlider from "../../components/UserDashboard/PracticeSlider/PracticeSlider";
 import PracticeProgress from "../../components/UserDashboard/PracticeProgress/PracticeProgress";
-
-
-import Link from "next/link";
 
 const Index = () => {
   const [toggleProgress, setToggleProgress] = useState(true);
@@ -59,7 +54,6 @@ const Index = () => {
         {/* toggle buttons */}
         <div className="w-full bg-gray-500 flex justify-between mb-3">
           <div className="flex gap-2">
-
             <button
               onClick={() => setToggleProgress(true)}
               className="bg-[#849C3E] hover:bg-[#4399FF] hover:text-white px-4 py-2 text-white text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"

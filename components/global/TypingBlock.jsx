@@ -2,9 +2,8 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import Pagination from "./Pagination";
 
-const TypingBlock = ({ setResult, api }) => {
+const TypingBlock = ({ result, setReFetch, api }) => {
   // remaining time function
   const initialMinutes = 10;
   const [minutes, setMinutes] = useState(initialMinutes);
@@ -39,12 +38,12 @@ const TypingBlock = ({ setResult, api }) => {
     if (textAnswer.length > 0) {
       try {
         const res = await axios.post(api, {
-          id: id,
           answer: textAnswer,
         });
-        setResult(res?.data);
-        toast.success(res?.data?.massage || "Submitted Successfully");
+        toast.success(res?.data?.massage || "Answer Submitted Successfully");
         setIsLoading(false);
+        setReFetch((prev) => !prev);
+        setTextAnswer("");
       } catch (error) {
         toast.error(error?.massage || "Something went wrong");
         setIsLoading(false);
@@ -87,8 +86,52 @@ const TypingBlock = ({ setResult, api }) => {
           ></textarea>
         </div>
       </div>
-      {/* pagination */}
-      <Pagination HandleSubmit={handleSubmit} isLoading={isLoading} />
+      {/* button */}
+      <div className="flex items-center gap-x-4">
+        {result?.self?.[0]?.user ? (
+          <button
+            disabled={isLoading}
+            onClick={handleSubmit}
+            className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-primary text-white font-semibold text-sm md:text-lg"
+          >
+            {isLoading ? (
+              <>
+                <div
+                  className="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                  role="status"
+                  aria-label="loading"
+                >
+                  <span className="sr-only">Loading...</span>
+                </div>
+                Loading...
+              </>
+            ) : (
+              "Re-Test"
+            )}
+          </button>
+        ) : (
+          <button
+            disabled={isLoading}
+            onClick={handleSubmit}
+            className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
+          >
+            {isLoading ? (
+              <>
+                <div
+                  className="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                  role="status"
+                  aria-label="loading"
+                >
+                  <span className="sr-only">Loading...</span>
+                </div>
+                Loading...
+              </>
+            ) : (
+              "Submit"
+            )}
+          </button>
+        )}
+      </div>
     </>
   );
 };

@@ -13,18 +13,27 @@ import { Toaster } from "react-hot-toast";
 import DashboardLayout from "../../../layout";
 
 const Index = () => {
+  const [reFetch, setReFetch] = useState(false);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/summarize/${id}/answer`;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/summarize/" + id);
       setData(data);
     };
-    id && getData();
-  }, [id]);
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      getResult();
+    }
+  }, [id, answerApi, reFetch]);
 
   // sideModal Data
   const SideModalData = {
@@ -50,15 +59,13 @@ const Index = () => {
         {/* text block */}
         <TextBlock data={data} />
         {/* type Block */}
-        <TypingBlock setResult={setResult} api="/test" />
+        <TypingBlock result={result} setReFetch={setReFetch} api={answerApi} />
       </GlobalMainContent>
       {/* result section */}
-      {result && (
+      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection summary result={result} setOpenModal={setOpen} />
       )}
-      {result && (
-        <SummarizeModal result={result} open={open} setOpen={setOpen} />
-      )}
+      <SummarizeModal result={result} open={open} setOpen={setOpen} />
       {/*<DiscursionSection /> */}
     </DashboardLayout>
   );
