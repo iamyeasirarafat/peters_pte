@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import TabButton from "./TabButton";
 import Score from "./Score";
-import DiscursionSection from "./DiscursionSection";
 import CommentSection from "./CommentSection";
 const sectionTabButton = [
   {
@@ -53,16 +52,32 @@ const ResultSection = ({
       </div>
       {/* score */}
       {pageTab === "My Score" ? (
-        <Score
-          summary={summary}
-          setOpenModal={setOpenModal}
-          result={result}
-          setOpenScoreModal={setOpenScoreModal}
-        />
+        <div className="space-y-2">
+          {result?.self?.map((item, index) => (
+            <Score
+              key={index}
+              summary={summary}
+              setOpenModal={setOpenModal}
+              result={item}
+              setOpenScoreModal={setOpenScoreModal}
+            />
+          ))}
+        </div>
       ) : pageTab === "Community Score" ? (
-        <CommentSection />
+        <div className="space-y-2">
+          {result?.others?.map((item, index) => (
+            <Score
+              key={index}
+              summary={summary}
+              setOpenModal={setOpenModal}
+              result={item}
+              setOpenScoreModal={setOpenScoreModal}
+              others
+            />
+          ))}
+        </div>
       ) : pageTab === "Forum" ? (
-        <DiscursionSection />
+        <CommentSection />
       ) : null}
     </div>
   );

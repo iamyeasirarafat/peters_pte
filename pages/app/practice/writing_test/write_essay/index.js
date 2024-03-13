@@ -6,21 +6,37 @@ import TextBlock from "@/components/global/TextBlock";
 import TypingBlock from "@/components/global/TypingBlock";
 import WriteEssayModal from "@/components/write_essay/WriteEssayModal";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import DashboardLayout from "../../../layout";
+import axios from "axios";
 
 const Index = () => {
+  const [reFetch, setReFetch] = useState(false);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
   const router = useRouter();
   const id = router.query.que_no;
-
+  const answerApi = `/write_easy/${id}/answer`;
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios("/write_easy/" + id);
+      setData(data);
+    };
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      // getResult();
+    }
+  }, [id, answerApi, reFetch]);
   // sideModal Data
   const SideModalData = {
-    title: "Summarize Text",
-    api: "/summarizes",
+    title: "Write Essay",
+    api: "/write_easies",
   };
   return (
     <DashboardLayout>
@@ -41,15 +57,13 @@ const Index = () => {
         {/* text block */}
         <TextBlock data={data} />
         {/* type Block */}
-        <TypingBlock setResult={setResult} />
+        <TypingBlock result={result} setReFetch={setReFetch} api={answerApi} />
       </GlobalMainContent>
       {/* result section */}
-      {!result && (
+      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection summary result={result} setOpenModal={setOpen} />
       )}
-      {!result && (
-        <WriteEssayModal result={result} open={open} setOpen={setOpen} />
-      )}
+      <WriteEssayModal result={result} open={open} setOpen={setOpen} />
     </DashboardLayout>
   );
 };

@@ -1,7 +1,6 @@
 import { formatDateTime } from "@/utils/formatDateTime";
 import { getPageName } from "@/utils/getPageName";
 import axios from "axios";
-import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,7 +17,6 @@ import { useSelector } from "react-redux";
 import ReusableModal from "./ReusableModal";
 
 function CommentSection({ discussionId, discussionName }) {
-  console.log(discussionId, discussionName)
   const [open, setOpen] = useState({ state: false, id: null });
   const [isAddReply, setIsAddReply] = useState({ state: false, id: null });
   const [parentComment, setParentComment] = useState([]);
@@ -26,8 +24,7 @@ function CommentSection({ discussionId, discussionName }) {
   const { user } = useSelector((state) => state?.user);
   const router = useRouter();
   const id = router.query.que_no;
-  const pathname = usePathname();
-
+  const pathname = router?.pathname;
   useEffect(() => {
     let pageName = getPageName(pathname);
     pageName =
@@ -36,7 +33,9 @@ function CommentSection({ discussionId, discussionName }) {
         : pageName;
     try {
       const getComment = async () => {
-        const url = `/${discussionName ? discussionName : pageName}/${discussionId ? discussionId : id}/discussions`
+        const url = `/${discussionName ? discussionName : pageName}/${
+          discussionId ? discussionId : id
+        }/discussions`;
         const res = await axios.get(url);
         setParentComment(res?.data);
       };
@@ -48,14 +47,14 @@ function CommentSection({ discussionId, discussionName }) {
   return (
     <>
       {/*add comment modal open */}
-      {
-        !discussionName && <button
+      {!discussionName && (
+        <button
           onClick={() => setOpen({ state: true, id: id })}
           className="py-2 px-3 bg-primary text-gray text-base rounded-[15px] flex items-center gap-x-2 mb-2"
         >
           Add comment <AiOutlinePlusCircle className="text-base" />
         </button>
-      }
+      )}
       {/* comment show*/}
       <div className="space-y-2">
         {parentComment?.map((item) => {
@@ -306,8 +305,9 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
                 type="button"
                 key={i}
                 onClick={() => setCommentType(type?.name)}
-                className={`text-base text-gray ${type?.name === commentType ? "bg-secondary" : "bg-white"
-                  } border border-primary py-2 px-3 rounded-[10px] font-medium`}
+                className={`text-base text-gray ${
+                  type?.name === commentType ? "bg-secondary" : "bg-white"
+                } border border-primary py-2 px-3 rounded-[10px] font-medium`}
               >
                 {type?.name}
               </button>

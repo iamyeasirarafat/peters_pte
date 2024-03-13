@@ -7,8 +7,10 @@ const TextBlock = ({ data }) => {
   let synth = typeof window !== "undefined" ? window?.speechSynthesis : null;
   //handle speak function
   const handleSpeak = () => {
-    if (synth && data?.content) {
-      const utterance = new SpeechSynthesisUtterance(data?.content);
+    if (synth && (data?.content || data?.question)) {
+      const utterance = new SpeechSynthesisUtterance(
+        data?.content || data?.question
+      );
       synth.speak(utterance);
       setTalking(true);
     }
@@ -22,7 +24,7 @@ const TextBlock = ({ data }) => {
 
   return (
     <div className="border border-primary rounded-[15px] p-2 md:p-4">
-      <p className="text-xl">{data?.content}</p>
+      <p className="text-xl">{data?.content || data?.question}</p>
       {/*  */}
       <div className="mt-[40px] flex justify-end">
         <button
