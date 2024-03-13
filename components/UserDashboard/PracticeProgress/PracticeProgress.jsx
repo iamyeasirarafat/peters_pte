@@ -43,7 +43,7 @@ export default function PracticeProgress() {
         <p className="text-center my-3 text-[21px] text-[#949494] font-medium">
           Time Spent
         </p>
-        <div className="flex gap-4 justify-around items-center bg-white text-white p-3 rounded-lg">
+        <div className="flex flex-col md:flex-row gap-4 justify-around items-center bg-white text-white p-3 rounded-lg">
           {taskCard.map((task) => (
             <TodayTaskCard key={task.name} data={task} />
           ))}

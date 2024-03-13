@@ -166,22 +166,21 @@ const PracticeSlider = () => {
   };
 
   return (
-    <div className="flex w-full h-[143px] justify-between items-center">
+    <div className="relative flex w-full h-[143px] justify-between items-center">
       {/* here row carousel bar goes */}
       <button
         onClick={() => moveCarousel("left")}
-        className="cursor-pointer pr-[20px] z-2 bg-white hover"
+        className="absolute top-1/2 -left-7 cursor-pointer pr-[5px] z-2"
       >
-        <BsArrowLeftCircle size={42} color="" />
+        <BsArrowLeftCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full"/>
       </button>
       {/* all items of carousel bar */}
       <div ref={carouselRef} className="flex gap-10 overflow-auto no-scrollbar">
         {Object.keys(navItems).length > 0 &&
           Object.keys(navItems)?.map((item, index) => {
             return (
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense key={index} fallback={<div>Loading...</div>}>
                 <div
-                  key={index}
                   ref={carouselItemRef}
                   className="carousel-item"
                 >
@@ -216,9 +215,9 @@ const PracticeSlider = () => {
       </div>
       <button
         onClick={() => moveCarousel("right")}
-        className="cursor-pointer pl-[20px] z-2 bg-white"
+        className="absolute top-1/2 -right-7 cursor-pointer pl-[5px] z-2"
       >
-        <BsArrowRightCircle size={48} />
+        <BsArrowRightCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full"/>
       </button>
     </div>
   );

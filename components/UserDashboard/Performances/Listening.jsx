@@ -65,7 +65,7 @@ function Listening() {
             <h3 className="font-medium text-[21px] text-[#949494] text-center mb-2.5">
                 Listening
             </h3>
-            <div className='flex gap-2 flex-wrap justify-center'>
+            <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2'>
                 {/* card 1  */}
                 {ListeningPerformances?.map((Listening, index) => (<CircularProgressWidget key={index} data={Listening} />))}
             </div>

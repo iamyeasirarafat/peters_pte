@@ -47,7 +47,7 @@ const Performances = () => {
           <h3 className="font-medium text-[21px] text-center mb-2.5">
             All Time Progress
           </h3>
-          <div className="bg-white rounded-[10px] h-full p-[15px] grid grid-cols-5 gap-1">
+          <div className="bg-white rounded-[10px] h-full p-[15px] grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
             {/* cards  */}
             {allTimePerformances.map((performance, index) => (
               <LineProgressWidget key={index} data={performance} />
@@ -65,7 +65,7 @@ const Performances = () => {
           <Listening />
           <hr />
           {/* double */}
-          <div className="flex justify-between gap-2">
+          <div className="flex flex-col md:flex-row justify-between gap-2">
             {/* Writing  */}
             <Writing />
             {/* Mocktest */}

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   BarChart,
@@ -175,9 +175,31 @@ const items = [
   },
 ];
 export default function BarChartPTE() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(()=> {
+    const handleResize = () => {
+      if(window.innerWidth<767) {
+        setIsMobile(true);
+      }
+      else {
+        setIsMobile(false);
+      }
+    }
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+
+  }, []);
+  console.log(isMobile)
+
   return (
     <div className="border border-[#FF8412] bg-[#FFF4EB] rounded-lg p-4">
-      <div className="flex gap-5 text-[#949494] mb-4 ml-4">
+      <div className="flex flex-wrap gap-5 text-[#949494] mb-4 ml-4">
         <p className="flex gap-1 justify-start items-center">
           <span className="w-3 h-3 rounded-full bg-[#FF8412]" />
           Speaking
@@ -195,22 +217,19 @@ export default function BarChartPTE() {
           Listening
         </p>
       </div>
-      <div className="h-[500px] w-full bg-white rounded-lg">
+      <div className="h-[300px] md:h-[500px] w-full bg-white rounded-lg">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             key="unique-chart-key"
-            width={500}
-            height={300}
             data={items}
             margin={{ top: 60, bottom: 20, left: 20, right: 20 }}
           >
             <XAxis
               dataKey="abbr"
-              padding={{ left: 40 }}
               axisLine={false}
               tick={<CustomizedAxisTick />}
             />
-            <YAxis axisLine={false} />
+            <YAxis axisLine={false} hide={isMobile}/>
             <Tooltip
               cursor={{
                 fill: "transparent",

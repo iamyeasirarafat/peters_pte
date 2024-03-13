@@ -24,7 +24,7 @@ const Mocktest = () => {
             <h3 className="font-medium text-[21px] text-[#F44141] text-center mb-2.5">
                 Mocktest
             </h3>
-            <div className='flex gap-2 flex-wrap justify-center'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
                 {MocktestPerformances?.map((Mocktest, index) => (<CircularProgressWidget key={index} data={Mocktest} />))}
             </div>
         </div>
