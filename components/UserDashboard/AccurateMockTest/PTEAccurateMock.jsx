@@ -24,20 +24,20 @@ export default function PTEAccurateMock() {
   ];
 
   return (
-    <div className="flex justify-between bg-[url('/images/ptemocktest.png')] w-full bg-cover h-[213px] rounded-[15px] my-[25px] text-white">
+    <div className="flex flex-col md:flex-row justify-between bg-[url('/images/ptemocktest.png')] w-full bg-clip-content md:bg-cover md:h-[213px] rounded-[15px] my-[25px] text-white">
       {/* first element */}
-      <div className="flex flex-col justify-center w-full border border-white border-r-4">
-        <h2 className="text-[36px] font-normal ml-10 mb-5">
+      <div className="flex flex-col justify-center w-full border-b border-b-white md:border-b-0 md:border-r-2 md:border-r-white py-5">
+        <h2 className="text-[26px] lg:text-[36px] font-normal mx-auto md:ml-7 lg:ml-10 mb-5">
           PTE accurate Mock Test
         </h2>
-        <div className="flex gap-3 ml-10">
+        <div className="flex gap-3 mx-auto md:mx-5 lg:ml-10">
           <WhiteBGButton title={"Full Mock test"} />
           <WhiteBGButton title={"Sectional Mocktest"} />
         </div>
       </div>
 
       {/* second element */}
-      <div className="w-full">
+      <div className="pl-3 md:pl-0 items-center w-full border-t border-l-white md:border-t-0 md:border-l-2 md:border-r-white pb-10">
         <h2 className="text-[21px] pt-3 ml-10">Your Best Record Till Now</h2>
         <div className="ml-10 flex gap-2 mt-2">
           <div className="flex flex-col gap-2">

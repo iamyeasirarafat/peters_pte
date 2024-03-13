@@ -40,22 +40,22 @@ export default function SingleProgressTracker() {
   return (
     <div className="bg-white rounded-[10px] h-full">
       {/* cards  */}
-      <h3 className="font-medium text-[21px] text-[#949494] text-center mb-2.5">
+      <h3 className="font-medium text-[21px] text-[#949494] text-center my-2.5">
         Listening
       </h3>
-      <div className="flex gap-2 flex-wrap justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-2.5 px-3">
         {/* card 1  */}
         {ListeningPerformances?.map((listening, index) => (
           <div
             key={index}
-            className={`flex justify-between items-center py-2 px-3 w-[228px] min-h-[74px] gap-2 capitalize border border-[#F2B277] rounded-[10px]`}
+            className={`flex justify-between items-center py-2 px-3 w-auto min-h-[74px] gap-2 capitalize border border-[#F2B277] rounded-[10px]`}
           >
             <p
-              className={`text-[#949494] leading-[16px] text-[16px] font-normal`}
+              className={`text-[#949494] leading-[16px] text-[15px] font-normal`}
             >
               {listening.title}
             </p>
-            <p className="text-[26px] font-semibold text-[#949494]">
+            <p className="text-[24px] font-semibold text-[#949494]">
               {listening.time}
             </p>
           </div>

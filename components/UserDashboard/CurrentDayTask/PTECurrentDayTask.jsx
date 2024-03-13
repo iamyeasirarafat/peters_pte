@@ -35,7 +35,7 @@ export default function PTECurrentDayTask() {
   return (
     <div className="w-full flex flex-col text-[#616161] border border-[#F2B277] p-[15px] rounded-[10px] bg-[#FFF4EB]">
       <h3 className="font-medium text-[21px] text-center mb-2.5">
-        Today's Task
+        Today&apos;s Task
       </h3>
       <div className="bg-white rounded-[10px] h-full p-[15px]">
         {/* Task lists */}
@@ -54,7 +54,7 @@ export default function PTECurrentDayTask() {
           </div>
         </div>
         {/* Cards */}
-        <div className="flex gap-2.5 text-white justify-between">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 text-white">
           {taskCard.map((card) => (
             <TodayTaskCard key={card.name} data={card} />
           ))}

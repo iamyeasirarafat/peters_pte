@@ -24,7 +24,7 @@ const Writing = () => {
             <h3 className="font-medium text-[21px] text-[#F2B277] text-center mb-2.5">
                 Writing
             </h3>
-            <div className='flex gap-2 flex-wrap justify-center'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
                 {WritingPerformances?.map((Writing, index) => (<CircularProgressWidget key={index} data={Writing} />))}
             </div>
         </div>

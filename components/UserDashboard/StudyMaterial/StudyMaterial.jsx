@@ -36,12 +36,12 @@ const StudyMaterial = () => {
     return (
         <div className='my-5'>
             <h2 className="text-4xl font-normal mb-3 capitalize">study material</h2>
-            <div className="flex gap-2 w-full flex-wrap justify-between ">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {/* card  */}
                 {studyMaterials?.map((item, index) => (<div
                     key={index}
                     style={{ backgroundColor: item.bgcolor }}
-                    className={`bg-[#F2B277] text-white flex flex-col h-[97px] min-w-[235px] rounded-[10px] p-[12px] justify-center items-center`}
+                    className={`bg-[#F2B277] text-white flex flex-col h-[97px] w-full rounded-[10px] p-[12px] justify-center items-center`}
                 >
                     <p className="capitalize text-[21px] pb-1">{item.name}</p>
                     <div className="flex justify-center items-center ">{item.icon}</div>

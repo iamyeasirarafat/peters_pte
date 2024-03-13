@@ -6,7 +6,7 @@ const HelpAndsupport = () => {
   return (
     <div className='my-5'>
       <h2 className="text-4xl font-normal mb-3 capitalize">help & support</h2>
-      <div className="flex gap-2 w-full  justify-between ">
+      <div className="flex flex-col md:flex-row gap-2 w-full justify-between ">
         {/* card  */}
         <div className="bg-[url('/images/getexpert.png')] bg-cover w-full min-h-[130px] flex flex-col justify-center items-start gap-2 rounded-[15px] px-5 py-3 ">
           <h3 className="text-4xl font-normal text-white capitalize">Get Expert Help</h3>
