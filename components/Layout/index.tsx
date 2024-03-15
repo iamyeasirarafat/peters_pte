@@ -28,9 +28,9 @@ const Layout = ({ background, back, title, children }: LayoutProps) => {
       </Head>
       <div className="w-full flex">
         <Sidebar />
-        <div className="flex flex-col w-full md:pt-18 pt-0 ">
+        <div className="flex flex-col w-full px-2 md:px-10 mt-3">
           <Header back={back} title={title} />
-          <div className="flex flex-col  overflow-y-auto scroll-smooth h-[calc(100vh-80px)] grow w-full  px-2 md:px-10">
+          <div className="flex flex-col  overflow-y-auto scroll-smooth h-[calc(100vh-80px)] grow w-full mt-2">
             {children}
             <Footer />
           </div>

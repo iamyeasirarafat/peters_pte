@@ -1,15 +1,29 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // reactStrictMode: true,
-  ignoreBuildErrors: true,
+const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
+module.exports = (phase, { defaultConfig }) => {
+  if (phase === PHASE_DEVELOPMENT_SERVER) {
+    return {
+      reactStrictMode: true,
+      swcMinify: false,
+      images: {
+        domains: [
+          "api.codebyamirus.link",
+          "lh3.googleusercontent.com",
+          "images.unsplash.com",
+        ],
+      },
+    };
+  }
 
-  images: {
-    domains: [
-      "api.codebyamirus.link",
-      "lh3.googleusercontent.com",
-      "images.unsplash.com",
-    ],
-  },
+  return {
+    distDir: "production",
+    reactStrictMode: true,
+    swcMinify: false,
+    images: {
+      domains: [
+        "api.codebyamirus.link",
+        "lh3.googleusercontent.com",
+        "images.unsplash.com",
+      ],
+    },
+  };
 };
-
-module.exports = nextConfig;
