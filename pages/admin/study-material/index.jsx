@@ -38,7 +38,7 @@ const Index = () => {
   return (
     <Layout title="Study Material">
       <p className="text-lg font-extrabold">Material Type</p>
-      <div className="flex md:flex-col flex-row items-center justify-between gap-x-5 gap-y-3 mt-4">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-x-5 gap-y-3 mt-4">
         {studyMaterials?.map((item, i) => (
           <Link
             href={item?.url}

@@ -1,5 +1,5 @@
-import AdminLayout from "@/components/AdminLayout";
 import Icon from "@/components/Icon";
+import Layout from "@/components/Layout";
 import Table from "@/components/QuestionTable";
 import TablePagination from "@/components/TablePagination";
 import axios from "axios";
@@ -69,7 +69,7 @@ const Index = () => {
     }
   };
   return (
-    <AdminLayout title={questionTable} back={true}>
+    <Layout title={questionTable} back={true}>
       <div className="flex justify-between mb-6">
         <div>
           <Link href={`/admin/practice-question/${questionTable}/create`}>
@@ -87,9 +87,8 @@ const Index = () => {
             type="search"
             placeholder="Search"
             onChange={(e) => setSearchText(e.target.value)}
-            className={`${
-              searchInput ? "translate-x-0 w-auto " : "translate-x-[5rem] w-0"
-            }  duration-300 ease-in border-none outline-none focus:outline-none focus:ring-0`}
+            className={`${searchInput ? "translate-x-0 w-auto " : "translate-x-[5rem] w-0"
+              }  duration-300 ease-in border-none outline-none focus:outline-none focus:ring-0`}
           />
           <button
             onClick={() => {
@@ -130,7 +129,7 @@ const Index = () => {
           No Data found
         </h3>
       )}
-    </AdminLayout>
+    </Layout>
   );
 };
 

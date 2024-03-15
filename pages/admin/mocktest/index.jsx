@@ -52,7 +52,7 @@ const Index = () => {
   return (
     <Layout title="Mocktest">
       <p className="text-lg font-extrabold">Mock Test Type</p>
-      <div className="grid grid-cols-3 md:grid-cols-1 gap-5 mt-3">
+      <div className="grid md:grid-cols-3 grid-cols-1 gap-5 mt-3">
         {mocktest?.map((item, i) => (
           <MocktestCart key={i} item={item} />
         ))}

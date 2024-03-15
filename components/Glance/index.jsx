@@ -1,6 +1,6 @@
+import { BiSolidBarChartSquare, BiSolidStar } from "react-icons/bi";
 import { FaUser, FaUsers } from "react-icons/fa";
 import { IoDiamondSharp } from "react-icons/io5";
-import { BiSolidBarChartSquare, BiSolidStar } from "react-icons/bi";
 import { MdAccountBalanceWallet, MdQuiz, MdVerified } from "react-icons/md";
 
 const Glance = ({ studentSCounts }) => {
@@ -47,7 +47,7 @@ const Glance = ({ studentSCounts }) => {
     },
   ];
   return (
-    <div className="grid grid-cols-4 lg:grid-cols-1 gap-x-5 gap-y-4">
+    <div className="grid lg:grid-cols-4 grid-cols-1 gap-x-5 gap-y-4">
       {data?.map((item, i) => (
         <div
           key={i}

@@ -1,13 +1,13 @@
-import AdminLayout from "@/components/AdminLayout";
+import Layout from "@/components/Layout";
 import CardItems from "@/components/PracticeQuestion/CardItems";
 
 const PracticeQuestion = () => {
   return (
-    <AdminLayout title="PTE Practice">
+    <Layout title="PTE Practice">
       <div>
         <CardItems />
       </div>
-    </AdminLayout>
+    </Layout>
   );
 };
 

@@ -179,7 +179,7 @@ const DiscussionItem = ({ item, DiscussionList }) => {
       <p className="text-lg font-extrabold mb-3 mt-6">
         {item.replace("_", " ")}
       </p>
-      <div className="grid grid-cols-3 md:grid-cols-1 gap-5">
+      <div className="grid md:grid-cols-3 grid-cols-1 gap-5">
         {DiscussionList[item]?.map((item, i) => (
           <DiscussionCart key={i} item={item} />
         ))}
