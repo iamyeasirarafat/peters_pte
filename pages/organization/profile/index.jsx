@@ -31,16 +31,14 @@ export const ProfileMain = () => {
     dispatch(getUser());
   }, [dispatch, fetch]);
   return (
-    <>
-      <div className="grid grid-cols-12 gap-x-20">
-        <div className="col-span-4">
-          <StudentProfileInfo data={user} setFetch={setFetch} />
-        </div>
-        <div className="col-span-8">
-          <StudentDetailsRight data={user} />
-        </div>
+    <div className="flex flex-col md:flex-row gap-x-10">
+      <div className="w-full md:w-4/12">
+        <StudentProfileInfo data={user} setFetch={setFetch} />
       </div>
-    </>
+      <div className="w-full md:w-8/12">
+        <StudentDetailsRight data={user} />
+      </div>
+    </div>
   );
 };
 
@@ -130,35 +128,30 @@ const StudentProfileInfo = ({ data, setFetch }) => {
 const StudentDetailsRight = ({ data }) => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
   return (
-    <div>
-      {/* Security */}
-      <div className="bg-white dark:bg-black p-5 mt-4">
-        <div className="flex items-center justify-between">
-          <p className="text-lg font-extrabold">Security</p>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setOpenChangePassword(true)}
-              className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
-            >
-              <BiSolidEditAlt /> Update Password
-            </button>
-          </div>
-        </div>
-        <div className="flex items-center gap-x-13">
-          <div>
-            <p className="text-sm">User Name</p>
-            <p className="text-sm font-bold">{data?.full_name}</p>
-          </div>
-          <div>
-            <p className="text-sm">Password</p>
-            <p className="text-sm font-bold">**************</p>
-          </div>
-        </div>
-        <ChangePassword
-          openChangePassword={openChangePassword}
-          setOpenChangePassword={setOpenChangePassword}
-        />
+    <div className="bg-white dark:bg-black p-5 mt-4 space-y-2">
+      <div className="w-full flex items-center justify-between">
+        <p className="text-lg font-extrabold">Security</p>
+        <button
+          onClick={() => setOpenChangePassword(true)}
+          className="flex items-center gap-x-3 bg-secondary dark:bg-primary py-2.5 px-8 justify-center text-xs font-bold"
+        >
+          <BiSolidEditAlt /> Update Password
+        </button>
       </div>
+      <div className="flex items-center gap-x-13">
+        <div>
+          <p className="text-sm">User Name</p>
+          <p className="text-sm font-bold">{data?.full_name}</p>
+        </div>
+        <div>
+          <p className="text-sm">Password</p>
+          <p className="text-sm font-bold">**************</p>
+        </div>
+      </div>
+      <ChangePassword
+        openChangePassword={openChangePassword}
+        setOpenChangePassword={setOpenChangePassword}
+      />
     </div>
   );
 };

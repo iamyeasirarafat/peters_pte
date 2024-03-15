@@ -9,6 +9,7 @@ module.exports = (phase, { defaultConfig }) => {
           "api.codebyamirus.link",
           "lh3.googleusercontent.com",
           "images.unsplash.com",
+          "63.141.255.39",
         ],
       },
     };
@@ -23,6 +24,7 @@ module.exports = (phase, { defaultConfig }) => {
         "api.codebyamirus.link",
         "lh3.googleusercontent.com",
         "images.unsplash.com",
+        "63.141.255.39",
       ],
     },
   };
