@@ -49,7 +49,7 @@ const Layout = ({ background, back, title, children }: LayoutProps) => {
             </div>
           )}
         </div>
-        <Menu />
+        {/* <Menu /> */}
       </div>
     </>
   );

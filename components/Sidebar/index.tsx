@@ -11,7 +11,7 @@ import Menu from "./Menu";
 
 type SidebarProps = {};
 
-const Sidebar = ({ }: SidebarProps) => {
+const Sidebar = ({}: SidebarProps) => {
   const [visible, setVisible] = useState<boolean>(true);
   const [showUserDialog, setShowUserDialog] = useState<boolean>(false);
   const user = useSelector((state: any) => state.user?.user);
@@ -19,23 +19,22 @@ const Sidebar = ({ }: SidebarProps) => {
 
   return (
     <div
-      className={`xl:flex hidden flex-col w-[18.75rem] pt-6 px-8 pb-4.5 bg-n-1 h-screen ${visible ? "w-[18.75rem]" : "w-20"
-        }`}
+      className={`flex flex-col pt-6 px-8 pb-4.5 bg-n-1 h-screen duration-300 ${
+        visible ? "w-[18.75rem]" : "w-20"
+      }`}
     >
       <div className="flex justify-between items-center h-[1.625rem] mb-11">
-        <Logo className={visible ? "flex" : "xl:flex"} light />
-        <button onClick={() => setVisible(!visible)} className="hidden xl:flex">
+        <Logo className="flex" light />
+        <button onClick={() => setVisible(!visible)} className="flex xl:hidden">
           <Icon className="fill-white" name={visible ? "close" : "burger"} />
         </button>
       </div>
+      {/* Menu list */}
       <Menu visible={visible} />
-      <div
-        className={`flex items-center h-18 mt-auto mx-0 pt-10 ${visible ? "mx-0" : "xl:-mx-4"
-          } relative`}
-      >
+      {/* MENU FOOTER */}
+      <div className="flex items-center h-18 mt-auto mx-0 pt-10 relative">
         <Link
-          className={`inline-flex items-center font-bold text-white text-sm transition-colors hover:text-purple-1 ${visible ? "mx-auto text-0" : "xl:mx-0 xl:text-sm"
-            }`}
+          className="inline-flex items-center font-bold text-white text-sm transition-colors hover:text-purple-1"
           href={
             router?.asPath?.startsWith("/admin")
               ? "/admin/profile"
@@ -43,22 +42,24 @@ const Sidebar = ({ }: SidebarProps) => {
           }
         >
           <div
-            className={`relative w-5.5 h-5.5 mr-2.5 rounded-full overflow-hidden ${visible ? "mr-2.5" : "xl:mr-0"
-              }`}
+            className={`relative w-5.5 h-5.5 mr-2.5 rounded-full overflow-hidden`}
           >
             <Image
-              className="object-cover scale-105"
+              className="object-cover"
               src={user?.picture || "/images/avatars/avatar.jpg"}
               fill
               alt="Avatar"
             />
           </div>
-          <span className="capitalize">{user?.full_name}</span>
+          <span className={`capitalize ${visible ? "block" : "hidden"}`}>
+            {user?.full_name}
+          </span>
         </Link>
         <button
           onClick={() => setShowUserDialog(!showUserDialog)}
-          className={`btn-transparent-light btn-square btn-small ml-auto ${visible ? "flex" : "xl:hidden"
-            }`}
+          className={`${
+            visible ? "block" : "hidden"
+          } btn-transparent-light btn-square btn-small ml-auto`}
         >
           <Icon name="dots" />
         </button>
