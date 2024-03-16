@@ -27,17 +27,19 @@ const TextBlock = ({ data }) => {
       <p className="text-xl">{data?.content || data?.question}</p>
       {/*  */}
       <div className="mt-[40px] flex justify-end">
-        <button
-          onClick={() => {
-            if (talking) {
-              handleStop();
-            } else {
-              handleSpeak();
-            }
-          }}
-        >
-          <RxSpeakerLoud className="text-base md:text-xl" />
-        </button>
+        {data?.id && (
+          <button
+            onClick={() => {
+              if (talking) {
+                handleStop();
+              } else {
+                handleSpeak();
+              }
+            }}
+          >
+            <RxSpeakerLoud className="text-base md:text-xl" />
+          </button>
+        )}
       </div>
     </div>
   );

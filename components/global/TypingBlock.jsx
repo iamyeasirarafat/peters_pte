@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-const TypingBlock = ({ result, setReFetch, api }) => {
+const TypingBlock = ({ result, setReFetch, api, isReady }) => {
   // remaining time function
   const initialMinutes = 10;
   const [minutes, setMinutes] = useState(initialMinutes);
@@ -54,9 +54,11 @@ const TypingBlock = ({ result, setReFetch, api }) => {
     }
   };
 
-  // after change question automatically clearing textfild
+  // after change question automatically clearing textfield
   useEffect(() => {
     setTextAnswer("");
+    setMinutes(initialMinutes);
+    setSeconds(0);
   }, [id]);
 
   return (
@@ -79,7 +81,7 @@ const TypingBlock = ({ result, setReFetch, api }) => {
           <textarea
             onChange={(e) => setTextAnswer(e.target.value)}
             value={textAnswer}
-            disabled={timerExpired}
+            disabled={timerExpired || isReady}
             className="w-full disabled:opacity-40 border-0 text-gray focus:ring-0"
             placeholder="Type your summary here..."
             rows={4}
@@ -111,7 +113,7 @@ const TypingBlock = ({ result, setReFetch, api }) => {
           </button>
         ) : (
           <button
-            disabled={isLoading}
+            disabled={isLoading || isReady || timerExpired}
             onClick={handleSubmit}
             className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
           >

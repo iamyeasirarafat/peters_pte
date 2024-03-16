@@ -13,19 +13,28 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 const Page = () => {
+  const [reFetch, setReFetch] = useState(false);
   const [result, setResult] = useState({});
   const [open, setOpen] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [data, setData] = useState({});
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/write_easy/${id}/answer`;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/spoken/summarize/" + id);
       setData(data);
     };
-    id && getData();
-  }, [id]);
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      // getResult();
+    }
+  }, [id, answerApi, reFetch]);
   // sideModal Data
   const SideModalData = {
     title: "Summarize Spoken Text",
@@ -38,9 +47,16 @@ const Page = () => {
       {/* main content */}
       <GlobalMainContent>
         <ListenBlock setOpen={setOpen} data={data} />
-        <TypingBlock setResult={setResult} api="/spoken/summarizes/answer" />
+        <TypingBlock
+          result={result}
+          setReFetch={setReFetch}
+          api={answerApi}
+          isReady={data?.id ? false : true}
+        />
       </GlobalMainContent>
-      <ResultSection setOpenModal={setOpenScoreModal} />
+      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+        <ResultSection result={result} setOpenModal={setOpenScoreModal} />
+      )}
       <TranscriptModal open={open} setOpen={setOpen} />
       <SpokenTextModal open={openScoreModal} setOpen={setOpenScoreModal} />
     </DashboardLayout>

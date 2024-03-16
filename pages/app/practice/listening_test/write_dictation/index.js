@@ -4,6 +4,7 @@ import ListenBlock from "@/components/global/ListenBlock";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
 import TypingBlock from "@/components/global/TypingBlock";
+import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import WriteDictationModal from "@/components/write_dictation/WriteDictationModal";
 import SideModal from "@/components/global/SideModal";
 import { useEffect, useState } from "react";
@@ -12,19 +13,28 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 const Page = () => {
+  const [reFetch, setReFetch] = useState(false);
   const [result, setResult] = useState(null);
-  const [open, setOpen] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
+  const [open, setOpen] = useState(false);
   const [data, setData] = useState(null);
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/dictation/${id}/answer`;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/dictation/" + id);
       setData(data);
     };
-    id && getData();
-  }, [id]);
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      // getResult();
+    }
+  }, [id, answerApi, reFetch]);
   // sideModal Data
   const SideModalData = {
     title: "Write From Dictation",
@@ -35,13 +45,19 @@ const Page = () => {
       <SideModal data={SideModalData} />
       <PageHeader title="Write From Dictation" />
       {/* main content */}
-      {data && (
-        <GlobalMainContent>
-          <ListenBlock setOpen={setOpen} data={data} />
-          <TypingBlock setResult={setResult} api="/dictation/answer" />
-        </GlobalMainContent>
+      <GlobalMainContent>
+        <ListenBlock data={data} setOpen={setOpen} />
+        <TypingBlock
+          result={result}
+          setReFetch={setReFetch}
+          api={answerApi}
+          isReady={data?.id ? false : true}
+        />
+      </GlobalMainContent>
+      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+        <ResultSection result={result} setOpenModal={setOpenScoreModal} />
       )}
-      {result && <ResultSection setOpenModal={setOpenScoreModal} />}
+      <TranscriptModal open={open} setOpen={setOpen} />
       <WriteDictationModal open={openScoreModal} setOpen={setOpenScoreModal} />
     </DashboardLayout>
   );

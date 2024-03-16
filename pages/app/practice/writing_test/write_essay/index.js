@@ -57,7 +57,12 @@ const Index = () => {
         {/* text block */}
         <TextBlock data={data} />
         {/* type Block */}
-        <TypingBlock result={result} setReFetch={setReFetch} api={answerApi} />
+        <TypingBlock
+          result={result}
+          setReFetch={setReFetch}
+          api={answerApi}
+          isReady={data?.id ? false : true}
+        />
       </GlobalMainContent>
       {/* result section */}
       {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
