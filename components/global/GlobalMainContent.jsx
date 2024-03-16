@@ -11,12 +11,11 @@ const GlobalMainContent = ({ children, data }) => {
             Prediction
           </button>
         )}
-
         <button className="text-gray py-1 px-3 rounded-t text-base bg-primary">
           Practiced {data?.practiced ? `(${data?.practiced})` : ""}
         </button>
         <button className="text-white py-1 px-3 rounded-t text-base bg-blue">
-          Appeared (12)
+          Appeared ({data?.appeared ? data?.appeared : 0})
         </button>
       </div>
       <div className="bg-secondary rounded-t-[15px] py-1 px-4 md:px-6 flex items-center justify-between">
