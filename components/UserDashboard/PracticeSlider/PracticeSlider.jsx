@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 // import { navItems } from "../../DashboardLayout/SideNav";
@@ -191,10 +192,12 @@ const PracticeSlider = () => {
                   <div className="flex gap-2">
                     {navItems[item]?.map((subItem, index) => {
                       return (
+                        <Link key={index} href={subItem?.path}>
                         <button
                           style={{ backgroundColor: subItem.bg }}
-                          key={index}
+                          
                           className={`relative w-[55px] h-[55px] rounded-[13px] text-white`}
+                        
                         >
                           {subItem?.ai && (
                             <span className="absolute -top-1 -right-1 text-[16px] font-normal w-[23px] h-[23px] bg-[#4399FF] rounded-full">
@@ -205,6 +208,7 @@ const PracticeSlider = () => {
                             {subItem?.icon}
                           </span>
                         </button>
+                        </Link>
                       );
                     })}
                   </div>
