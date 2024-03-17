@@ -31,7 +31,7 @@ const Index = () => {
     };
     if (id) {
       getData();
-      // getResult();
+      getResult();
     }
   }, [id, answerApi, reFetch]);
   // sideModal Data
@@ -59,6 +59,7 @@ const Index = () => {
         <TextBlock data={data} />
         {/* type Block */}
         <TypingBlock
+          typingTime={20}
           result={result}
           setReFetch={setReFetch}
           api={answerApi}

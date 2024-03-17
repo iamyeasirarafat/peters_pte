@@ -21,17 +21,16 @@ const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
       {/* mark */}
       <div className="flex items-center gap-x-2">
         <button className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3">
-          <p className="text-3xl w-10 h-10 flex items-center justify-center rounded-full text-white bg-primary">
+          <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
             S
           </p>
           <p className="text-base lg:text-xl text-gray">
-            {result?.speaking_score || result?.Overall || result?.score}/
-            {result?.max_score || (summary ? "10" : "90")}
+            {result?.scores?.overall || result?.scores?.Overall}/10
           </p>
         </button>
         {!summary && (
           <button className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3">
-            <p className="lg:text-base text-3xl lg:w-5 lg:h-5 w-10 h-10 flex items-center justify-center rounded-full text-white bg-cream">
+            <p className="lg:text-base text-3xl lg:w-5 lg:h-5 w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-cream">
               R
             </p>
             <p className="text-base lg:text-xl text-gray">
@@ -42,7 +41,7 @@ const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
         <button
           onClick={() => {
             setOpenModal(true);
-            setAiResult(result?.scores);
+            setAiResult(result);
           }}
           className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3"
         >

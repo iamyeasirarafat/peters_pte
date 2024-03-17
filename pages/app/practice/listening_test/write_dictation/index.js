@@ -55,7 +55,11 @@ const Page = () => {
         />
       </GlobalMainContent>
       {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection result={result} setOpenModal={setOpenScoreModal} />
+        <ResultSection
+          summary
+          result={result}
+          setOpenModal={setOpenScoreModal}
+        />
       )}
       <TranscriptModal open={open} setOpen={setOpen} />
       <WriteDictationModal open={openScoreModal} setOpen={setOpenScoreModal} />

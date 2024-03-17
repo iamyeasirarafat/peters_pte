@@ -2,7 +2,7 @@ const LineProgressBar = ({ lineColor, strokeWidth, height }) => {
   return (
     <div
       style={{ height: `${height}px` }}
-      className={`w-full rounded-3xl bg-secondary relative`}
+      className={`w-full rounded-3xl bg-secondary relative overflow-hidden`}
     >
       <p
         style={{ width: `${strokeWidth}%` }}

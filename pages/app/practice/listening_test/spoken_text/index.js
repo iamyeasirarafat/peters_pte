@@ -1,4 +1,3 @@
-"use client";
 import GlobalMainContent from "@/components/global/GlobalMainContent";
 import ListenBlock from "@/components/global/ListenBlock";
 import PageHeader from "@/components/global/PageHeader";
@@ -13,6 +12,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 const Page = () => {
+  const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
   const [result, setResult] = useState({});
   const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ const Page = () => {
   const [data, setData] = useState({});
   const router = useRouter();
   const id = router.query.que_no;
-  const answerApi = `/write_easy/${id}/answer`;
+  const answerApi = `/summarize_spoken/${id}/answer`;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/spoken/summarize/" + id);
@@ -32,7 +32,7 @@ const Page = () => {
     };
     if (id) {
       getData();
-      // getResult();
+      getResult();
     }
   }, [id, answerApi, reFetch]);
   // sideModal Data
@@ -44,21 +44,35 @@ const Page = () => {
     <DashboardLayout>
       <SideModal data={SideModalData} />
       <PageHeader title="Summarize Spoken Text" />
+      <p className="text-gray text-base mt-2 text-center">
+        Look at the text below. In 35 seconds, you must read this text aloud as
+        naturally and clearly as possible. You have 35 seconds to read aloud.
+      </p>
       {/* main content */}
       <GlobalMainContent>
         <ListenBlock setOpen={setOpen} data={data} />
         <TypingBlock
           result={result}
           setReFetch={setReFetch}
+          typingTime={10}
           api={answerApi}
           isReady={data?.id ? false : true}
         />
       </GlobalMainContent>
       {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection result={result} setOpenModal={setOpenScoreModal} />
+        <ResultSection
+          summary
+          result={result}
+          setAiResult={setAiResult}
+          setOpenModal={setOpenScoreModal}
+        />
       )}
       <TranscriptModal open={open} setOpen={setOpen} />
-      <SpokenTextModal open={openScoreModal} setOpen={setOpenScoreModal} />
+      <SpokenTextModal
+        result={aiResult}
+        open={openScoreModal}
+        setOpen={setOpenScoreModal}
+      />
     </DashboardLayout>
   );
 };

@@ -4,20 +4,32 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { GrClose } from "react-icons/gr";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import LineProgressBar from "../global/LineProgressBar";
+import { useRouter } from "next/router";
 
-const SpokenTextModal = ({ open, setOpen }) => {
-  const totalScore = 50;
-  const content = 20;
-  const grammar = 30;
-  const form = 40;
-  const spelling = 50;
-  const vocabulary = 60;
+const SpokenTextModal = ({ open, setOpen, result }) => {
+  const router = useRouter();
+  const id = router.query.que_no;
+  const {
+    Content,
+    Grammar,
+    Form,
+    Spelling,
+    Vocabulary,
+    Overall: totalScore,
+  } = result?.scores || {};
+  const formateData = [
+    { color: "cream", value: Content, name: "Content" },
+    { color: "primary", value: Grammar, name: "Grammar" },
+    { color: "blue", value: Form, name: "Form" },
+    { color: "cream", value: Spelling, name: "Spelling" },
+    { color: "primary", value: Vocabulary, name: "Vocabulary" },
+  ];
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
         {/* modal header */}
         <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
-          <p className="text-white text-2xl">#15425454</p>
+          <p className="text-white text-2xl">#{id}</p>
           <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
           <div className="flex items-center gap-x-4">
             <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
@@ -52,6 +64,7 @@ const SpokenTextModal = ({ open, setOpen }) => {
                     value={totalScore}
                     text={totalScore}
                     strokeWidth={15}
+                    maxValue={10}
                     styles={buildStyles({
                       textColor: "gray",
                       textSize: "20px",
@@ -70,58 +83,24 @@ const SpokenTextModal = ({ open, setOpen }) => {
               </div>
               {/* progress bar */}
               <div className="space-y-1 p-4">
-                {/* Content */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Content</p>
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"cream"}
-                    strokeWidth={content}
-                  />
-                  <p className="text-gray text-xl">0/2</p>
-                </div>
-                {/* grammar */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Grammar</p>
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"primary"}
-                    strokeWidth={grammar}
-                  />
-                  <p className="text-gray text-xl">0/2</p>
-                </div>
-                {/* Form */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Form</p>
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"blue"}
-                    strokeWidth={form}
-                  />
-                  <p className="text-gray text-xl">0/2</p>
-                </div>
-                {/* Spelling */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Spelling</p>
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"blue"}
-                    strokeWidth={spelling}
-                  />
-                  <p className="text-gray text-xl">0/2</p>
-                </div>
-                {/* Vocabulary */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">
-                    Vocabulary
-                  </p>
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"blue"}
-                    strokeWidth={vocabulary}
-                  />
-                  <p className="text-gray text-xl">0/2</p>
-                </div>
+                {formateData.map((item, index) => (
+                  <div
+                    key={index}
+                    className="w-full flex items-center justify-between gap-x-5"
+                  >
+                    <p className="text-gray text-xl w-3/12 text-start">
+                      {item?.name}
+                    </p>
+                    <div className="w-8/12">
+                      <LineProgressBar
+                        height={30}
+                        lineColor={`${item?.color}`}
+                        strokeWidth={item?.value * 50}
+                      />
+                    </div>
+                    <p className="text-gray w-1/12 text-xl">{item?.value}/2</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -131,22 +110,16 @@ const SpokenTextModal = ({ open, setOpen }) => {
               <p className="text-gray text-xl">Your Response</p>
             </div>
             <div className="px-7 py-5">
-              <p className="text-left text-xl">
-                A report on inequality in the UK said last week that girls had
-                better educational results than boys at 16, went to university
-                in greater numbers and achieved better degrees once they got
-                there.{" "}
-                <q>
-                  More women now have higher education qualifications than men
-                  in every age group up to age 44,
-                </q>{" "}
-                the report said.
-              </p>
+              <p className="text-left text-xl">{result?.answer}</p>
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <p className="text-gray text-lg font-medium">Total: 50 words</p>
-            <p className="text-gray text-lg font-medium">Time Taken : 5:00</p>
+            <p className="text-gray text-lg font-medium">
+              Total: {result?.answer?.split(" ")?.length} words
+            </p>
+            <p className="text-gray text-lg font-medium">
+              Time Taken : {result?.time_taken}
+            </p>
           </div>
           {/* Suggestion */}
           <div className="w-full border border-primary rounded-[13px] mt-4">
@@ -155,15 +128,7 @@ const SpokenTextModal = ({ open, setOpen }) => {
             </div>
             <div className="p-4">
               <p className="text-left text-xl">
-                A report on inequality in the UK said last week that girls had
-                better educational results than boys at 16, went to university
-                in greater numbers and achieved better degrees once they got
-                there.{" "}
-                <q>
-                  More women now have higher education qualifications than men
-                  in every age group up to age 44,
-                </q>{" "}
-                the report said.
+                {result?.suggestion || "No Suggestion"}
               </p>
             </div>
           </div>

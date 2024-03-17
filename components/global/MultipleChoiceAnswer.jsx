@@ -1,17 +1,16 @@
 import axios from "axios";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 
 function MultipleChoiceAnswer({ answers, result, api, setReFetch }) {
   const [loading, setLoading] = useState(false);
   const [answerData, setAnswerData] = useState([]);
-  console.log("answerData", answerData);
   //submit data
   const handelSubmit = async () => {
     try {
       setLoading(true);
       const res = await axios.post(api, {
-        answer: answerData,
+        answers: answerData,
       });
       toast.success(res.data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
@@ -45,10 +44,9 @@ function MultipleChoiceAnswer({ answers, result, api, setReFetch }) {
           onClick={handelSubmit}
           disabled={loading}
           className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
-          type="submit"
         >
-          {loading && <LoaderIcon />}{" "}
-          {result?.self?.user ? "Re-Submit" : "Submit"}
+          {loading && <LoaderIcon />}
+          {result?.self?.[0]?.user ? "Re-Submit" : "Submit"}
         </button>
       </div>
     </>

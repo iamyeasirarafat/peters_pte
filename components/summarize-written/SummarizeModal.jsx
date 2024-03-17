@@ -4,15 +4,24 @@ import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
+import { useRouter } from "next/router";
 
 const SummarizeModal = ({ open, setOpen, result }) => {
-  const params = useSearchParams();
-  const id = params.get("que_no");
-  const totalScore = result?.overall || 0;
-  const content = result?.content || 0;
-  const grammar = result?.grammar || 0;
-  const pronunciation = result?.form || 0;
-  const vocabulary = result?.vocabulary || 0;
+  const router = useRouter();
+  const id = router.query.que_no;
+  const {
+    content,
+    grammar,
+    form,
+    vocabulary,
+    overall: totalScore,
+  } = result?.scores || {};
+  const formateData = [
+    { color: "cream", value: content, name: "Content" },
+    { color: "primary", value: grammar, name: "Grammar" },
+    { color: "blue", value: form, name: "Form" },
+    { color: "cream", value: vocabulary, name: "Vocabulary" },
+  ];
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -72,48 +81,24 @@ const SummarizeModal = ({ open, setOpen, result }) => {
               </div>
               {/* progress bar */}
               <div className="space-y-3 p-5">
-                {/* Content */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Content</p>
-                  <LineProgressBar
-                    height={35}
-                    lineColor={"cream"}
-                    strokeWidth={content * 50}
-                  />
-                  <p className="text-gray text-xl">{content}/2</p>
-                </div>
-                {/* Grammar */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Grammar</p>
-                  <LineProgressBar
-                    height={35}
-                    lineColor={"primary"}
-                    strokeWidth={grammar * 50}
-                  />
-                  <p className="text-gray text-xl">{grammar}/2</p>
-                </div>
-                {/* Form */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Form</p>
-                  <LineProgressBar
-                    height={35}
-                    lineColor={"blue"}
-                    strokeWidth={pronunciation * 50}
-                  />
-                  <p className="text-gray text-xl">{pronunciation}/2</p>
-                </div>
-                {/* Vocabulary Range */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">
-                    Vocabulary Range
-                  </p>
-                  <LineProgressBar
-                    height={35}
-                    lineColor={"primary"}
-                    strokeWidth={vocabulary * 50}
-                  />
-                  <p className="text-gray text-xl">{vocabulary}/2</p>
-                </div>
+                {formateData.map((item, index) => (
+                  <div
+                    key={index}
+                    className="w-full flex items-center justify-between gap-x-5"
+                  >
+                    <p className="text-gray text-xl w-3/12 text-start">
+                      {item?.name}
+                    </p>
+                    <div className="w-8/12">
+                      <LineProgressBar
+                        height={35}
+                        lineColor={`${item?.color}`}
+                        strokeWidth={item?.value * 50}
+                      />
+                    </div>
+                    <p className="text-gray w-1/12 text-xl">{item?.value}/2</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -124,18 +109,17 @@ const SummarizeModal = ({ open, setOpen, result }) => {
             </div>
             <div className="px-7 py-5">
               <p className="text-left text-xl leading-normal">
-                The bill calls for the establishment of the National Landslide
-                Hazards Reduction Program within one year of becoming law. The
-                program serves numerous functions, including to identify and
-                understand landslide hazards and risks, reduce losses from
-                landslides, protect communities at risk of landslides hazards,
-                and improve communication and emergency preparedness.
+                {result?.answer}
               </p>
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <p className="text-gray text-lg font-medium">Total: 50 words</p>
-            <p className="text-gray text-lg font-medium">Time : 5:00</p>
+            <p className="text-gray text-lg font-medium">
+              Total: {result?.answer?.split(" ").length} words
+            </p>
+            <p className="text-gray text-lg font-medium">
+              Time : {result?.time_taken}
+            </p>
             <p className="text-gray text-lg font-medium">English: British</p>
           </div>
           {/* Suggestion */}
@@ -145,9 +129,7 @@ const SummarizeModal = ({ open, setOpen, result }) => {
             </div>
             <div className="px-7 py-5">
               <p className="text-left text-base leading-normal">
-                Form: Your response has to be in ONE single, complete sentence
-                only. If this criterion is not met, you won’t get a score in
-                rest of the enabling skills.
+                {result?.suggestion}
               </p>
             </div>
           </div>

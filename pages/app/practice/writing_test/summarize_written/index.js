@@ -41,7 +41,6 @@ const Index = () => {
     title: "Summarize Text",
     api: "/summarizes",
   };
-  console.log("result", result);
   return (
     <DashboardLayout>
       {/* Toast component  */}
@@ -62,6 +61,7 @@ const Index = () => {
         <TextBlock data={data} />
         {/* type Block */}
         <TypingBlock
+          typingTime={10}
           result={result}
           setReFetch={setReFetch}
           api={answerApi}
@@ -78,7 +78,6 @@ const Index = () => {
         />
       )}
       <SummarizeModal result={aiResult} open={open} setOpen={setOpen} />
-      {/*<DiscursionSection /> */}
     </DashboardLayout>
   );
 };

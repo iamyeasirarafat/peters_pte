@@ -33,6 +33,7 @@ const answers = [
   },
 ];
 function Page() {
+  const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
@@ -41,20 +42,21 @@ function Page() {
   // get data
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/multi_choice_reading/${id}/answer`;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/multi_choice/reading/" + id);
       setData(data);
     };
     const getResult = async () => {
-      const { data } = await axios(`/multi_choice/${id}/answer`);
+      const { data } = await axios(answerApi);
       setResult(data);
     };
     if (id) {
       getData();
-      // getResult();
+      getResult();
     }
-  }, [id, reFetch]);
+  }, [id, reFetch, answerApi]);
 
   //sideModal Data
   const SideModalData = {
@@ -79,15 +81,16 @@ function Page() {
           answers={answers}
           result={result}
           setReFetch={setReFetch}
-          api={`/multi_choice_reading/${id}/answer`}
+          api={answerApi}
         />
       </GlobalMainContent>
-      {result && (
+      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
         <ResultSection
           summary
           setOpenModal={setOpenScoreModal}
           setOpenScoreModal={setOpenScoreModal}
           result={result}
+          setAiResult={setAiResult}
         />
       )}
       <TranscriptModal
@@ -95,7 +98,7 @@ function Page() {
         setOpen={setOpenTranscriptModal}
       />
       <MultipleChoiceAiModal
-        result={result}
+        result={aiResult}
         data={data}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
