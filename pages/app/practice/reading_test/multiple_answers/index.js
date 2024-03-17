@@ -14,29 +14,30 @@ import DashboardLayout from "../../../layout";
 import TextBlock from "../../../../../components/global/TextBlock";
 
 function Page() {
+  const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-  console.log("result", result);
 
   // get data
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/multi_choice_reading/${id}/answer`;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/multi_choice/reading/" + id);
       setData(data);
     };
     const getResult = async () => {
-      const { data } = await axios(`/multi_choice/${id}/answer`);
+      const { data } = await axios(answerApi);
       setResult(data);
     };
     if (id) {
       getData();
       getResult();
     }
-  }, [id, reFetch]);
+  }, [id, reFetch, answerApi]);
 
   //sideModal Data
   const SideModalData = {
@@ -61,20 +62,20 @@ function Page() {
           setReFetch={setReFetch}
           answers={data?.options}
           result={result}
-          api={`/multi_choice_reading/${id}/answer`}
+          api={answerApi}
         />
       </GlobalMainContent>
-      {result?.self?.user ||
-        (result?.all?.user && (
-          <ResultSection
-            summary
-            setOpenModal={setOpenScoreModal}
-            setOpenScoreModal={setOpenScoreModal}
-            result={result}
-          />
-        ))}
+      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
+        <ResultSection
+          summary
+          setOpenModal={setOpenScoreModal}
+          setOpenScoreModal={setOpenScoreModal}
+          result={result}
+          setAiResult={setAiResult}
+        />
+      )}
       <MultipleChoiceAiModal
-        result={result}
+        result={aiResult}
         data={data}
         open={openScoreModal}
         setOpen={setOpenScoreModal}

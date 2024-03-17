@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-const TypingBlock = ({ result, setReFetch, api, isReady }) => {
+const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
   // remaining time function
-  const initialMinutes = 10;
+  const initialMinutes = typingTime;
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
@@ -39,6 +39,7 @@ const TypingBlock = ({ result, setReFetch, api, isReady }) => {
       try {
         const res = await axios.post(api, {
           answer: textAnswer,
+          time_taken: `${initialMinutes - minutes}:${seconds}`,
         });
         toast.success(res?.data?.massage || "Answer Submitted Successfully");
         setIsLoading(false);
@@ -59,7 +60,7 @@ const TypingBlock = ({ result, setReFetch, api, isReady }) => {
     setTextAnswer("");
     setMinutes(initialMinutes);
     setSeconds(0);
-  }, [id]);
+  }, [id, initialMinutes]);
 
   return (
     <>
@@ -92,7 +93,7 @@ const TypingBlock = ({ result, setReFetch, api, isReady }) => {
       <div className="flex items-center gap-x-4">
         {result?.self?.[0]?.user ? (
           <button
-            disabled={isLoading}
+            disabled={isLoading || isReady || timerExpired}
             onClick={handleSubmit}
             className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-primary text-white font-semibold text-sm md:text-lg"
           >

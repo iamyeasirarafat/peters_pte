@@ -1,17 +1,21 @@
 import { useState } from "react";
+import { LoaderIcon } from "react-hot-toast";
 
 function SingleChoiceAnswer({ answers, result, api, setReFetch }) {
+  const [loading, setLoading] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  console.log("selectedAnswer", [selectedAnswer]);
   //submit data
   const handelSubmit = async () => {
     try {
+      setLoading(true);
       const res = await axios.post(api, {
-        answer: [selectedAnswer],
+        answers: [selectedAnswer],
       });
       toast.success(res.data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
@@ -35,10 +39,12 @@ function SingleChoiceAnswer({ answers, result, api, setReFetch }) {
         <div className="flex items-center justify-between mt-4">
           <button
             onClick={handelSubmit}
-            className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
-            type="submit"
+            disabled={loading}
+            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
           >
-            {result ? "Re-Submit" : "Submit"}
+            {" "}
+            {loading && <LoaderIcon />}
+            {result?.self?.[0]?.user ? "Re-Submit" : "Submit"}
           </button>
         </div>
       </div>
