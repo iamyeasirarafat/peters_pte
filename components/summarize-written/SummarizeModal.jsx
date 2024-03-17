@@ -8,11 +8,11 @@ import ReusableModal from "../global/ReusableModal";
 const SummarizeModal = ({ open, setOpen, result }) => {
   const params = useSearchParams();
   const id = params.get("que_no");
-  const totalScore = result?.Overall || 0;
-  const content = result?.Content || 0;
-  const grammar = result?.Grammar || 0;
-  const pronunciation = result?.Form || 0;
-  const vocabulary = result?.Vocabulary || 0;
+  const totalScore = result?.overall || 0;
+  const content = result?.content || 0;
+  const grammar = result?.grammar || 0;
+  const pronunciation = result?.form || 0;
+  const vocabulary = result?.vocabulary || 0;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">

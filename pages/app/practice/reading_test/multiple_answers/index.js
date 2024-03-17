@@ -1,65 +1,49 @@
 "use client";
 import GlobalMainContent from "@/components/global/GlobalMainContent";
-import ListenBlock from "@/components/global/ListenBlock";
 import MultipleChoiceAiModal from "@/components/global/MultipleChoiceAiModal";
 import MultipleChoiceAnswer from "@/components/global/MultipleChoiceAnswer";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
 import SideModal from "@/components/global/SideModal";
-import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
 import { RxShuffle } from "react-icons/rx";
 import DashboardLayout from "../../../layout";
+import TextBlock from "../../../../../components/global/TextBlock";
 
 function Page() {
-  const [givenAnswer, setGivenAnswer] = useState([]);
-  const { register, handleSubmit } = useForm();
+  const [reFetch, setReFetch] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
-  const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
-  const [apiData, setData] = useState({});
+  const [data, setData] = useState({});
   const [result, setResult] = useState(null);
+  console.log("result", result);
 
   // get data
   const router = useRouter();
   const id = router.query.que_no;
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios("/multi_choice/" + id);
+      const { data } = await axios("/multi_choice/reading/" + id);
       setData(data);
     };
-    getData();
-  }, [id]);
+    const getResult = async () => {
+      const { data } = await axios(`/multi_choice/${id}/answer`);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      getResult();
+    }
+  }, [id, reFetch]);
 
   //sideModal Data
   const SideModalData = {
-    title: "Multiple Choices",
-    api: "/multi_choices",
+    title: "Multiple Answers",
+    api: "/multi_choices/reading",
   };
 
-  //submit data
-  const onSubmit = async (data) => {
-    // filtering answer data
-    let ans = [];
-    let given = [];
-    Object.keys(data).forEach((i) => {
-      if (data[i] === true) {
-        given.push(i);
-        ans.push(apiData?.options[i]);
-      }
-    });
-    setGivenAnswer(given);
-    console.log(given);
-    //submitting data
-    const result = await axios.post("/multi_choice/answer", {
-      multi_choice: id,
-      answers: ans,
-    });
-    setResult(result.data);
-  };
   return (
     <DashboardLayout>
       {/* Side Modal */}
@@ -69,44 +53,31 @@ function Page() {
         Listen to the recording and answer the question by selecting all the
         correct responses. You will need to select more than one response.
       </p>
-      <GlobalMainContent data={apiData}>
+      <GlobalMainContent data={data}>
         {/* text block */}
-        <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
+        <TextBlock data={data} />
         {/* Multiple Choice Answer */}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <MultipleChoiceAnswer
-            register={register}
-            answers={apiData?.options}
-          />
-          <div className="flex items-center justify-between mt-4">
-            <button
-              className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
-              type="submit"
-            >
-              {result ? "Re-Submit" : "Submit"}
-            </button>
-            <GlobalPagination />
-          </div>
-        </form>
-      </GlobalMainContent>
-      {result && (
-        <ResultSection
-          summary
-          setOpenModal={setOpenScoreModal}
-          setOpenScoreModal={setOpenScoreModal}
+        <MultipleChoiceAnswer
+          setReFetch={setReFetch}
+          answers={data?.options}
           result={result}
+          api={`/multi_choice_reading/${id}/answer`}
         />
-      )}
+      </GlobalMainContent>
+      {result?.self?.user ||
+        (result?.all?.user && (
+          <ResultSection
+            summary
+            setOpenModal={setOpenScoreModal}
+            setOpenScoreModal={setOpenScoreModal}
+            result={result}
+          />
+        ))}
       <MultipleChoiceAiModal
         result={result}
-        myAnswer={givenAnswer}
-        apiData={apiData}
+        data={data}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
-      />
-      <TranscriptModal
-        open={openTranscriptModal}
-        setOpen={setOpenTranscriptModal}
       />
     </DashboardLayout>
   );
