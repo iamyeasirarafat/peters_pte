@@ -25,7 +25,10 @@ const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
             S
           </p>
           <p className="text-base lg:text-xl text-gray">
-            {result?.scores?.overall || result?.scores?.Overall}/10
+            {result?.scores?.overall ||
+              result?.scores?.Overall ||
+              result?.scores}
+            /10
           </p>
         </button>
         {!summary && (

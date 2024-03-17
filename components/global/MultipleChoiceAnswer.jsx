@@ -1,16 +1,56 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 
-function MultipleChoiceAnswer({ answers, result, api, setReFetch }) {
+function MultipleChoiceAnswer({
+  answers,
+  result,
+  api,
+  setReFetch,
+  isReady,
+  typingTime,
+}) {
+  const router = useRouter();
+  const id = router.query.que_no;
   const [loading, setLoading] = useState(false);
   const [answerData, setAnswerData] = useState([]);
+  const initialMinutes = typingTime;
+  const [minutes, setMinutes] = useState(initialMinutes);
+  const [seconds, setSeconds] = useState(0);
+  const [timerExpired, setTimerExpired] = useState(false);
+
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      } else {
+        if (minutes === 0) {
+          setTimerExpired(true);
+          clearInterval(countdownInterval);
+        } else {
+          setMinutes(minutes - 1);
+          setSeconds(59);
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(countdownInterval);
+  }, [minutes, seconds]);
+
+  // reset time
+  useEffect(() => {
+    setMinutes(initialMinutes);
+    setSeconds(0);
+  }, [id, initialMinutes]);
+
   //submit data
   const handelSubmit = async () => {
     try {
       setLoading(true);
       const res = await axios.post(api, {
         answers: answerData,
+        time_taken: `${initialMinutes - minutes}:${seconds}`,
       });
       toast.success(res.data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
@@ -24,10 +64,17 @@ function MultipleChoiceAnswer({ answers, result, api, setReFetch }) {
   return (
     <>
       <div className="p-5 rounded-[15px] border border-primary">
-        <p className="text-lg text-center">
-          Based on the audio, which of the following is a true statement about
-          short story writing?
-        </p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-lg text-center">
+            Based on the audio, which of the following is a true statement about
+            short story writing?
+          </p>
+          <p className="text-gray text-xs">
+            <i>
+              Time Remaining {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+            </i>
+          </p>
+        </div>
         <div className="space-y-2 mt-2">
           {answers?.map((answer, i) => (
             <Answer
@@ -42,7 +89,7 @@ function MultipleChoiceAnswer({ answers, result, api, setReFetch }) {
       <div className="flex items-center justify-between mt-4">
         <button
           onClick={handelSubmit}
-          disabled={loading}
+          disabled={loading || timerExpired || isReady}
           className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
         >
           {loading && <LoaderIcon />}
