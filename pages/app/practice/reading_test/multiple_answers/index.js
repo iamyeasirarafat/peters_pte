@@ -62,6 +62,8 @@ function Page() {
           setReFetch={setReFetch}
           answers={data?.options}
           result={result}
+          isReady={data?.id ? false : true}
+          typingTime={5}
           api={answerApi}
         />
       </GlobalMainContent>
@@ -76,7 +78,6 @@ function Page() {
       )}
       <MultipleChoiceAiModal
         result={aiResult}
-        data={data}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
       />

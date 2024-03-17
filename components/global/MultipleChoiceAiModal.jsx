@@ -3,6 +3,7 @@ import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import LineProgressBar from "./LineProgressBar";
 import ReusableModal from "./ReusableModal";
+import { useRouter } from "next/router";
 
 const MultipleChoiceAiModal = ({
   open,
@@ -12,6 +13,8 @@ const MultipleChoiceAiModal = ({
   result,
   single,
 }) => {
+  const router = useRouter();
+  const id = router.query.que_no;
   const obj = {
     0: "A",
     1: "B",
@@ -37,13 +40,12 @@ const MultipleChoiceAiModal = ({
       rightIndex.push(index);
     }
   }
-  const value = (result?.score / result?.max_score) * 100;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
         {/* modal header */}
         <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
-          <p className="text-white text-2xl">#15425454</p>
+          <p className="text-white text-2xl">#{id}</p>
           <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
           <div className="flex items-center gap-x-4">
             <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
@@ -75,9 +77,10 @@ const MultipleChoiceAiModal = ({
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={value}
-                    text={result?.score}
+                    value={result?.scores}
+                    text={result?.scores}
                     strokeWidth={15}
+                    maxValue={10}
                     styles={buildStyles({
                       textColor: "gray",
                       textSize: "20px",
@@ -86,9 +89,7 @@ const MultipleChoiceAiModal = ({
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">
-                  Out of {result?.max_score}
-                </p>
+                <p className="text-gray text-xl mt-1">Out of 10</p>
               </div>
             </div>
             {/* Time Taken */}
@@ -98,8 +99,7 @@ const MultipleChoiceAiModal = ({
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
-                {/* <p className="text-[60px] text-gray">02:23</p> */}
-                <p className="text-[60px] text-gray">N/A</p>
+                <p className="text-[60px] text-gray">0{result?.time_taken}</p>
               </div>
             </div>
             {/* Correct answer */}
@@ -140,13 +140,15 @@ const MultipleChoiceAiModal = ({
             </div>
             <div className="px-7 py-5">
               <div className="w-full flex items-center justify-between gap-x-5">
-                <p className="text-gray text-xl w-3/6 text-start">Listening</p>
-                <LineProgressBar
-                  height={30}
-                  lineColor={"cream"}
-                  strokeWidth={50}
-                />
-                <p className="text-gray text-xl">0/2</p>
+                <p className="text-gray text-xl w-3/12 text-start">Reading</p>
+                <div className="w-8/12">
+                  <LineProgressBar
+                    height={30}
+                    lineColor={"cream"}
+                    strokeWidth={result?.scores * 50}
+                  />
+                </div>
+                <p className="text-gray w-1/12 text-xl">{result?.scores}/2</p>
               </div>
             </div>
           </div>
@@ -164,8 +166,9 @@ export default MultipleChoiceAiModal;
 const WordValue = ({ word, wrong }) => {
   return (
     <p
-      className={`text-[60px] text-gray ${wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
-        } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
+      className={`text-[60px] text-gray ${
+        wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
+      } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
     >
       {word}
     </p>
