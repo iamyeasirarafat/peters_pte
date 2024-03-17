@@ -3,7 +3,7 @@ import { BsPlusCircle } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { formatDateTime } from "@/utils/formatDateTime";
 
-const Score = ({ result, setOpenModal, summary, others }) => {
+const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
   return (
     <div className="flex items-center justify-between border border-primary rounded-[15px] p-2">
       {/* profile  Mobile view*/}
@@ -40,7 +40,10 @@ const Score = ({ result, setOpenModal, summary, others }) => {
           </button>
         )}
         <button
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+            setOpenModal(true);
+            setAiResult(result?.scores);
+          }}
           className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3"
         >
           <p className="text-base w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-blue">

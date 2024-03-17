@@ -28,6 +28,7 @@ const ResultSection = ({
   setOpenModal,
   summary,
   setOpenScoreModal,
+  setAiResult,
 }) => {
   const [pageTab, setPageTab] = useState("My Score");
   return (
@@ -60,6 +61,7 @@ const ResultSection = ({
               setOpenModal={setOpenModal}
               result={item}
               setOpenScoreModal={setOpenScoreModal}
+              setAiResult={setAiResult}
             />
           ))}
         </div>
@@ -73,6 +75,7 @@ const ResultSection = ({
               result={item}
               setOpenScoreModal={setOpenScoreModal}
               others
+              setAiResult={setAiResult}
             />
           ))}
         </div>

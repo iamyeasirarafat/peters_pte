@@ -12,6 +12,7 @@ import DashboardLayout from "../../../layout";
 import axios from "axios";
 
 const Index = () => {
+  const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
@@ -66,9 +67,14 @@ const Index = () => {
       </GlobalMainContent>
       {/* result section */}
       {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection summary result={result} setOpenModal={setOpen} />
+        <ResultSection
+          setAiResult={setAiResult}
+          summary
+          result={result}
+          setOpenModal={setOpen}
+        />
       )}
-      <WriteEssayModal result={result} open={open} setOpen={setOpen} />
+      <WriteEssayModal result={aiResult} open={open} setOpen={setOpen} />
     </DashboardLayout>
   );
 };

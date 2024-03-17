@@ -13,6 +13,7 @@ import { Toaster } from "react-hot-toast";
 import DashboardLayout from "../../../layout";
 
 const Index = () => {
+  const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({});
@@ -40,6 +41,7 @@ const Index = () => {
     title: "Summarize Text",
     api: "/summarizes",
   };
+  console.log("result", result);
   return (
     <DashboardLayout>
       {/* Toast component  */}
@@ -68,9 +70,14 @@ const Index = () => {
       </GlobalMainContent>
       {/* result section */}
       {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection summary result={result} setOpenModal={setOpen} />
+        <ResultSection
+          setAiResult={setAiResult}
+          summary
+          result={result}
+          setOpenModal={setOpen}
+        />
       )}
-      <SummarizeModal result={result} open={open} setOpen={setOpen} />
+      <SummarizeModal result={aiResult} open={open} setOpen={setOpen} />
       {/*<DiscursionSection /> */}
     </DashboardLayout>
   );
