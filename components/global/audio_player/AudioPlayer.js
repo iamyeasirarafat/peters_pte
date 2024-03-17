@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 
 // import components
+import getBlobDuration from "../../../utils/getBlobDuration";
 import Controls from "./Controls";
 import ProgressBar from "./ProgressBar";
 
 const AudioPlayer = ({ data }) => {
+  console.log("sssYeasir", data.audio);
   // states
   const [currentTrack, setCurrentTrack] = useState(null);
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    if (data?.audio) {
-      setCurrentTrack(data?.audio);
+    if (data) {
+      setCurrentTrack(data);
     }
   }, [data]);
 
@@ -20,12 +22,20 @@ const AudioPlayer = ({ data }) => {
   const audioRef = useRef();
   const progressBarRef = useRef();
 
-  const onLoadedMetadata = () => {
-    const seconds = audioRef.current.duration;
+  const onLoadedMetadata = async () => {
+    const seconds = await getBlobDuration(data);
     setDuration(seconds);
     progressBarRef.current.max = seconds;
   };
 
+  useEffect(() => {
+    if (currentTrack instanceof Blob) {
+      const audioUrl = URL.createObjectURL(currentTrack);
+      audioRef.current.src = audioUrl;
+      audioRef.current.load();
+    }
+  }, [currentTrack]);
+  console.log(duration);
   return (
     <div className="h-[180px] w-full">
       <div className={`audio-player ${duration || "hidden"}`}>
