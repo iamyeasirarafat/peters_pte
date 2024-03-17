@@ -1,10 +1,15 @@
-"use client";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
+// import { ReactMic } from "react-mic";
+import dynamic from "next/dynamic";
 import Pagination from "../global/Pagination";
 import AudioPlayer from "../global/audio_player/AudioPlayer";
+const DynamicReactMic = dynamic(() => import('react-mic').then(module => module.ReactMic), {
+  ssr: false
+});
 
 const RecordBlock = ({ setResult }) => {
   // countdown function
@@ -76,7 +81,6 @@ const RecordBlock = ({ setResult }) => {
 
   //progressbar width
   const progressBarWidth = (recordingTime / 35000) * 100;
-
   // handle submit function
   const router = useRouter();
   const id = router.query.que_no;
@@ -118,33 +122,37 @@ const RecordBlock = ({ setResult }) => {
   return (
     <>
       <div className="border border-primary rounded-[15px] mt-3 p-4 flex flex-col items-center justify-center">
-        <button
-          onClick={() => {
-            if (isRecording) {
-              handleStopRecording();
-            } else {
-              handleStartRecording();
-            }
-          }}
-          className="w-10 h-10 md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center"
-        >
-          <BsFillMicFill className="text-white text-2xl md:text-5xl" />
-        </button>
-        {/* //!warning */}
-        {/* <ReactMic
-          className="hidden"
-          record={isRecording}
-          onStop={handleAudioStop}
-          mimeType="audio/wav"
-        /> */}
-        <p className="text-base text-gray">
-          Click To {isRecording ? "Stop" : "Start"}
-        </p>
-        {!isRecording && !audioData && (
-          <p className="text-sm text-accent">
-            <i>Beginning in {timeLeft.seconds} Sec...</i>
-          </p>
-        )}
+        {
+          !audioData && <>
+            <button
+              onClick={() => {
+                if (isRecording) {
+                  handleStopRecording();
+                } else {
+                  handleStartRecording();
+                }
+              }}
+              className="w-10 h-10 md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center"
+            >
+              <BsFillMicFill className="text-white text-2xl md:text-5xl" />
+            </button>
+            {/* //!warning */}
+            <DynamicReactMic
+              className="hidden"
+              record={isRecording}
+              onStop={handleAudioStop}
+              mimeType="audio/wav"
+            />
+            <p className="text-base text-gray">
+              Click To {isRecording ? "Stop" : "Start"}
+            </p>
+            {!isRecording && !audioData && (
+              <p className="text-sm text-accent">
+                <i>Beginning in {timeLeft.seconds} Sec...</i>
+              </p>
+            )}
+          </>
+        }
         {audioData && <AudioPlayer data={audioData} />}
         {isRecording && (
           <div className="w-full">

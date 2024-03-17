@@ -4,6 +4,7 @@ import ResultSection from "@/components/global/ResultSection";
 import SideModal from "@/components/global/SideModal";
 import TextBlock from "@/components/global/TextBlock";
 import ReadAloudModal from "@/components/read-aloud/ReadAloudModal";
+import RecordBlock from "@/components/read-aloud/RecordBlock";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -34,7 +35,6 @@ const Index = () => {
     // get Discussion data
     const getDiscussion = async () => {
       const { data } = await axios(`/read_aloud /${id}/discussions`);
-      
     };
   }, [id]);
 
@@ -62,7 +62,7 @@ const Index = () => {
         <TextBlock data={data} />
         {/* recording Block */}
         <div className="hidden md:block">
-          {/* <RecordBlock setResult={setResult} /> */}
+          <RecordBlock setResult={setResult} />
         </div>
       </GlobalMainContent>
       {/* // result tab */}
