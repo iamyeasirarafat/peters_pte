@@ -1,4 +1,3 @@
-"use client";
 import GlobalMainContent from "@/components/global/GlobalMainContent";
 import MultipleChoiceAiModal from "@/components/global/MultipleChoiceAiModal";
 import MultipleChoiceAnswer from "@/components/global/MultipleChoiceAnswer";
@@ -19,11 +18,10 @@ function Page() {
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-
-  // get data
   const router = useRouter();
   const id = router.query.que_no;
   const answerApi = `/multi_choice_reading/${id}/answer`;
+  // get data
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/multi_choice/reading/" + id);
