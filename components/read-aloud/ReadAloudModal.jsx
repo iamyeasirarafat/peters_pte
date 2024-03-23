@@ -156,7 +156,7 @@ const ReadAloudModal = ({ open, setOpen, result }) => {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-gray text-lg font-medium">
-              Total: {result?.scores?.word_highlight.length} words
+              Total: {result?.scores?.word_highlight?.length || 0} words
             </p>
             <p className="text-[#858736] text-lg font-medium">
               Good: {wordCount(result?.scores?.word_highlight, "correct")} words

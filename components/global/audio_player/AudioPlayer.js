@@ -5,36 +5,39 @@ import getBlobDuration from "../../../utils/getBlobDuration";
 import Controls from "./Controls";
 import ProgressBar from "./ProgressBar";
 
-const AudioPlayer = ({ data }) => {
-  console.log("sssYeasir", data.audio);
+const AudioPlayer = ({ apiAudio, data }) => {
   // states
   const [currentTrack, setCurrentTrack] = useState(null);
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    if (data) {
+    if (data && apiAudio) {
+      setCurrentTrack(data?.audio);
+    } else {
       setCurrentTrack(data);
     }
-  }, [data]);
+  }, [data, apiAudio]);
 
   // reference
   const audioRef = useRef();
   const progressBarRef = useRef();
 
   const onLoadedMetadata = async () => {
-    const seconds = await getBlobDuration(data);
+    const seconds = apiAudio
+      ? audioRef.current.duration
+      : await getBlobDuration(data);
     setDuration(seconds);
     progressBarRef.current.max = seconds;
   };
 
   useEffect(() => {
-    if (currentTrack instanceof Blob) {
+    if (currentTrack instanceof Blob && !apiAudio) {
       const audioUrl = URL.createObjectURL(currentTrack);
       audioRef.current.src = audioUrl;
       audioRef.current.load();
     }
-  }, [currentTrack]);
+  }, [currentTrack, apiAudio]);
 
   return (
     <div className="h-[150px] w-full">
