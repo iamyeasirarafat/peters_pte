@@ -2,14 +2,14 @@ import GlobalMainContent from "@/components/global/GlobalMainContent";
 import ListenBlock from "@/components/global/ListenBlock";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
+import SideModal from "@/components/global/SideModal";
 import TypingBlock from "@/components/global/TypingBlock";
 import SpokenTextModal from "@/components/spoken_text/SpokenTextModal";
 import TranscriptModal from "@/components/spoken_text/TranscriptModal";
-import SideModal from "@/components/global/SideModal";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../../layout";
-import { useRouter } from "next/router";
-import axios from "axios";
 
 const Page = () => {
   const [aiResult, setAiResult] = useState(null);
@@ -49,7 +49,7 @@ const Page = () => {
         naturally and clearly as possible. You have 35 seconds to read aloud.
       </p>
       {/* main content */}
-      <GlobalMainContent>
+      <GlobalMainContent data={data}>
         <ListenBlock setOpen={setOpen} data={data} />
         <TypingBlock
           result={result}

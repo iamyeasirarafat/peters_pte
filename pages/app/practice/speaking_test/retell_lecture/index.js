@@ -1,17 +1,16 @@
-import GlobalMainContent from "../../../../../components/global/GlobalMainContent";
-import PageHeader from "../../../../../components/global/PageHeader";
-import ResultSection from "../../../../../components/global/ResultSection";
-import SideModal from "../../../../../components/global/SideModal";
-import TextBlock from "../../../../../components/global/TextBlock";
-import SpeakingTestModal from "../../../../../components/Speaking_test/SpeakingTestModal";
+import GlobalMainContent from "@/components/global/GlobalMainContent";
+import PageHeader from "@/components/global/PageHeader";
+import ResultSection from "@/components/global/ResultSection";
+import SideModal from "@/components/global/SideModal";
+import ReadAloudModal from "@/components/read-aloud/ReadAloudModal";
+import RecordBlock from "@/components/read-aloud/RecordBlock";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { useMediaQuery } from "react-responsive";
+import AudioPlayer from "../../../../../components/global/audio_player/AudioPlayer";
 import DashboardLayout from "../../../layout";
-import RecordBlock from "../../../../../components/Speaking_test/RecordBlock"
-import RecordBlockMobile from "../../../../../components/Speaking_test/RecordBlockMobile"
-import AudioPlayer from "../../../../../components/global/audio_player/AudioPlayer"
 // const MainContent = dynamic(
 //   () => import("@/components/read-aloud/MainContent"),
 //   {
@@ -23,27 +22,41 @@ const Index = () => {
   const [openModal, setOpenModal] = useState(false);
   const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-console.log(result)
+  const [aiResult, setAiResult] = useState(null);
+  const [refetch, setReFetch] = useState(1);
   const router = useRouter();
+
+  const isTablet = useMediaQuery({
+    query: "(max-width: 765px)",
+  });
   const id = router.query.que_no;
+  const answerApi = `/retell_sentence/${id}/answer`;
   useEffect(() => {
     // get read aloud
     const getData = async () => {
-      const { data } = await axios("/practice/retell_lecture/" + id);
+      const { data } = await axios("/retell_sentence/" + id);
       setData(data);
     };
     getData();
 
     // get Discussion data
     const getDiscussion = async () => {
-      const { data } = await axios(`/retell_lecture/${id}/discussions`);
+      const { data } = await axios(`/read_aloud /${id}/discussions`);
     };
   }, [id]);
+
+  useEffect(() => {
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    getResult();
+  }, [refetch, id, answerApi]);
 
   //sideModal Data
   const SideModalData = {
     title: "Retell Lecture",
-    api: "/practice/retell_lecture",
+    api: "/retell_sentences",
   };
   return (
     <DashboardLayout>
@@ -53,31 +66,41 @@ console.log(result)
       </div>
       {/* toast */}
       <Toaster />
-      {/* Repeat Sentence */}
+      {/* Read Aloud top */}
       <PageHeader title="Retell Lecture" />
       <p className="text-gray text-xs md:text-base mt-2 text-center">
-      You will hear a lecture. After listening to the lecture, in 7 seconds, please speak into the microphone and retell what you have just heard from the lecture in your own words. You will have 40 seconds to give your response.
+        Listen the audio below. In 35 seconds, you must read this text aloud as
+        naturally and clearly as possible. You have 35 seconds to Retell
+        lecture.
       </p>
       <GlobalMainContent data={data}>
         {/* text block */}
-        {/* <TextBlock data={data} /> */}
-        <div className="border border-primary rounded-[15px]">
-        <AudioPlayer />
+        <div className="border border-primary p-4 rounded-[15px]">
+          <AudioPlayer data={data} apiAudio />
         </div>
         {/* recording Block */}
-        <div className="hidden md:block">
-          {/* <RecordBlock setResult={setResult} /> */}
-          
-        </div>
+
+        {isTablet || <RecordBlock api={answerApi} setReFetch={setReFetch} />}
       </GlobalMainContent>
       {/* // result tab */}
-      {result && <ResultSection setOpenModal={setOpenModal} result={result} />}
-      <div className="block md:hidden">
-        {/* <RecordBlockMobile setResult={setResult} /> */}
-      </div>
-      { result && (
-        <SpeakingTestModal
+      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+        <ResultSection
+          setAiResult={setAiResult}
           result={result}
+          setOpenModal={setOpenModal}
+        />
+      )}
+      {isTablet && (
+        <>
+          <div className="block md:hidden h-[220px]" />
+          <div className="block absolute bottom-0 w-full left-0  md:hidden">
+            <RecordBlock api={answerApi} setReFetch={setReFetch} />
+          </div>
+        </>
+      )}
+      {result && (
+        <ReadAloudModal
+          result={aiResult}
           open={openModal}
           setOpen={setOpenModal}
         />

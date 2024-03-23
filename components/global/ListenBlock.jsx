@@ -5,7 +5,7 @@ const ListenBlock = ({ setOpen, data }) => {
     <div className="p-5 border border-primary rounded-[15px] relative">
       <div className="flex items-center justify-center">
         <div className="flex flex-col items-center w-full gap-y-2">
-          {data?.id && <AudioPlayer data={data} />}
+          {data?.id && <AudioPlayer apiAudio data={data} />}
         </div>
       </div>
       {data?.id && (
