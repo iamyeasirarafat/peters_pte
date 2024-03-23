@@ -1,7 +1,7 @@
+import { formatDateTime } from "@/utils/formatDateTime";
 import { BiSolidTrashAlt } from "react-icons/bi";
 import { BsPlusCircle } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
-import { formatDateTime } from "@/utils/formatDateTime";
 
 const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
   return (
@@ -24,12 +24,12 @@ const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
           <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
             S
           </p>
-          <p className="text-base lg:text-xl text-gray">
+          {/* <p className="text-base lg:text-xl text-gray">
             {result?.scores?.overall ||
               result?.scores?.Overall ||
               result?.scores}
             /10
-          </p>
+          </p> */}
         </button>
         {!summary && (
           <button className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3">

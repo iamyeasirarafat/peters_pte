@@ -1,10 +1,15 @@
-"use client";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
+// import { ReactMic } from "react-mic";
+import dynamic from "next/dynamic";
 import Pagination from "../global/Pagination";
 import AudioPlayer from "../global/audio_player/AudioPlayer";
+const DynamicReactMic = dynamic(() => import('react-mic').then(module => module.ReactMic), {
+  ssr: false
+});
 
 const RecordBlockMobile = ({ setResult }) => {
   // countdown function
@@ -76,7 +81,6 @@ const RecordBlockMobile = ({ setResult }) => {
 
   //progressbar width
   const progressBarWidth = (recordingTime / 35000) * 100;
-
   // handle submit function
   const router = useRouter();
   const id = router.query.que_no;
@@ -86,7 +90,7 @@ const RecordBlockMobile = ({ setResult }) => {
       try {
         const formData = new FormData();
         formData.append("audio", audioData, "recorded.wav"); // Append the audioData as is
-        formData.append("read_aloud", id);
+        // formData.append("read_aloud", id);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
@@ -94,7 +98,7 @@ const RecordBlockMobile = ({ setResult }) => {
         };
 
         const { data } = await axios.post(
-          "/practice/read_alouds/answer",
+          `/read_aloud/${id}/answer`,
           formData,
           config
         );
@@ -116,64 +120,71 @@ const RecordBlockMobile = ({ setResult }) => {
     setAudioData(null);
   }, [id]);
   return (
-    <>
-      {/* <div className="border-t-2 border-primary absolute w-full left-0 -top-6" /> */}
-      <div className="border border-primary rounded-[15px] mt-10 p-4 pt-7 flex flex-col items-center justify-center relative">
-        <button
-          onClick={() => {
-            if (isRecording) {
-              handleStopRecording();
-            } else {
-              handleStartRecording();
-            }
-          }}
-          className="w-[60px] h-[60px] bg-primary rounded-full flex items-center justify-center absolute -top-8 left-1/2 -translate-x-1/2"
-        >
-          <BsFillMicFill className="text-white text-2xl md:text-5xl" />
-        </button>
-        {/* //!Warning */}
-        {/* <ReactMic
-          className="hidden"
-          record={isRecording}
-          onStop={handleAudioStop}
-          mimeType="audio/wav"
-        /> */}
-        <p className="text-base text-gray">
-          Click To {isRecording ? "Stop" : "Start"}
-        </p>
-        {!isRecording && !audioData && (
-          <p className="text-sm text-accent">
-            <i>Beginning in {timeLeft.seconds} Sec...</i>
-          </p>
-        )}
-        {audioData && <AudioPlayer data={audioData} />}
-        {isRecording && (
-          <div className="w-full">
-            <div className="flex w-full items-center justify-between">
-              <p className="text-base text-gray">
-                0:{Math.floor(recordingTime / 1000)}
-              </p>
-              <p className="text-base text-gray">0:35</p>
-            </div>
-            <div className="relative bg-secondary w-full h-2 rounded-[13px]">
-              <div
-                style={{
-                  width: `${progressBarWidth}%`,
+    <div >
+      <div className="whiteGd h-[50px]"></div>
+      <div className="border-t-2 border-primary bg-white  w-full left-0 pb-4 " />
+      <div className="bg-white px-6">
+        <div className="border border-primary  rounded-[15px]  p-4 pt-7 flex flex-col items-center justify-center relative">
+          {!audioData &&
+            <>
+              <button
+                onClick={() => {
+                  if (isRecording) {
+                    handleStopRecording();
+                  } else {
+                    handleStartRecording();
+                  }
                 }}
-                className={`h-full absolute left-0 top-0 bg-primary rounded-[13px]`}
-              ></div>
+                className="w-[60px] h-[60px] bg-primary rounded-full flex items-center justify-center absolute -top-8 left-1/2 -translate-x-1/2"
+              >
+                <BsFillMicFill className="text-white text-2xl md:text-5xl" />
+              </button>
+              {/* //!Warning */}
+              <DynamicReactMic
+                className="hidden"
+                record={isRecording}
+                onStop={handleAudioStop}
+                mimeType="audio/wav"
+              />
+              <p className="text-base text-gray">
+                Click To {isRecording ? "Stop" : "Start"}
+              </p>
+              {!isRecording && !audioData && (
+                <p className="text-sm text-accent">
+                  <i>Beginning in {timeLeft.seconds} Sec...</i>
+                </p>
+              )}
+            </>
+          }
+          {audioData && <AudioPlayer data={audioData} />}
+          {isRecording && (
+            <div className="w-full">
+              <div className="flex w-full items-center justify-between">
+                <p className="text-base text-gray">
+                  0:{Math.floor(recordingTime / 1000)}
+                </p>
+                <p className="text-base text-gray">0:35</p>
+              </div>
+              <div className="relative bg-secondary w-full h-2 rounded-[13px]">
+                <div
+                  style={{
+                    width: `${progressBarWidth}%`,
+                  }}
+                  className={`h-full absolute left-0 top-0 bg-primary rounded-[13px]`}
+                ></div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        {/* Pagination */}
+        <Pagination
+          isLoading={isLoading}
+          handleStartRecording={handleStartRecording}
+          audioData={audioData}
+          HandleSubmit={HandleSubmit}
+        />
       </div>
-      {/* Pagination */}
-      <Pagination
-        isLoading={isLoading}
-        handleStartRecording={handleStartRecording}
-        audioData={audioData}
-        HandleSubmit={HandleSubmit}
-      />
-    </>
+    </div>
   );
 };
 export default RecordBlockMobile;
