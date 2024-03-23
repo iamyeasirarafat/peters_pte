@@ -1,22 +1,21 @@
 import wordCount from "@/utils/wordCount";
+import { useRouter } from "next/router";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { AiOutlineSound } from "react-icons/ai";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { VscDebugStart } from "react-icons/vsc";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 import WordHighlight from "../global/WordHighlight";
-import { useRouter } from "next/router";
 
 const ReadAloudModal = ({ open, setOpen, result }) => {
   const router = useRouter();
   const id = router.query.que_no;
-  const speakingScore = Math.round(result?.speaking_score) || 0;
-  const readingScore = Math.round(result?.reading_score) || 0;
-  const content = Math.round(result?.reading_score) || 0;
-  const fluency = Math.round(result?.fluency_score) || 0;
-  const pronunciation = Math.round(result?.pronunciation_score) || 0;
+  const speakingScore = Math.round(result?.scores?.speaking) || 0;
+  const readingScore = Math.round(result?.scores?.reading) || 0;
+  const content = Math.round(result?.scores?.content) || 0;
+  const fluency = Math.round(result?.scores?.fluency) || 0;
+  const pronunciation = Math.round(result?.scores?.pronunciation) || 0;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -50,12 +49,12 @@ const ReadAloudModal = ({ open, setOpen, result }) => {
             </button>
           </div>
           {/* sound */}
-          <div className="flex items-center justify-end gap-x-2 mt-3">
+          {/* <div className="flex items-center justify-end gap-x-2 mt-3">
             <AiOutlineSound className="text-lg" />
             <div className="w-[114px] h-1 rounded-[13px] bg-[#BED3CC] relative">
               <div className="absolute top-1 left-[30%] w-3 h-3 rounded-full bg-primary cursor-pointer"></div>
             </div>
-          </div>
+          </div> */}
           {/* score */}
           <div className="grid grid-cols-12 gap-x-6 mt-12">
             {/* Speaking Score */}
@@ -115,9 +114,9 @@ const ReadAloudModal = ({ open, setOpen, result }) => {
                 <div className="w-full flex items-center justify-between gap-x-5">
                   <p className="text-gray text-xl w-3/6 text-start">Content</p>
                   <LineProgressBar
-                    height={45}
+                    height={35}
                     lineColor={"cream"}
-                    strokeWidth={content}
+                    strokeWidth={content + 10}
                   />
                   <p className="text-gray text-xl">{content}/90</p>
                 </div>
@@ -125,9 +124,9 @@ const ReadAloudModal = ({ open, setOpen, result }) => {
                 <div className="w-full flex items-center justify-between gap-x-5">
                   <p className="text-gray text-xl w-3/6 text-start">Fluency</p>
                   <LineProgressBar
-                    height={45}
+                    height={35}
                     lineColor={"primary"}
-                    strokeWidth={fluency}
+                    strokeWidth={fluency + 10}
                   />
                   <p className="text-gray text-xl">{fluency}/90</p>
                 </div>
@@ -137,9 +136,9 @@ const ReadAloudModal = ({ open, setOpen, result }) => {
                     Pronunciation
                   </p>
                   <LineProgressBar
-                    height={45}
+                    height={35}
                     lineColor={"blue"}
-                    strokeWidth={pronunciation}
+                    strokeWidth={pronunciation + 10}
                   />
                   <p className="text-gray text-xl">{pronunciation}/90</p>
                 </div>
@@ -152,18 +151,18 @@ const ReadAloudModal = ({ open, setOpen, result }) => {
               <p className="text-gray text-xl">AI Speech to Text</p>
             </div>
             <div className="px-7 py-5">
-              <WordHighlight words={result?.word_highlight} />
+              <WordHighlight words={result?.scores?.word_highlight} />
             </div>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-gray text-lg font-medium">
-              Total: {result?.word_highlight.length} words
+              Total: {result?.scores?.word_highlight.length} words
             </p>
             <p className="text-[#858736] text-lg font-medium">
-              Good: {wordCount(result?.word_highlight, "correct")} words
+              Good: {wordCount(result?.scores?.word_highlight, "correct")} words
             </p>
             <p className="text-red text-lg font-medium">
-              Bad/Missed: {wordCount(result?.word_highlight, "missing")} words
+              Bad/Missed: {wordCount(result?.scores?.word_highlight, "missing")} words
             </p>
           </div>
           <p className="text-center mt-3 text-lightGray">

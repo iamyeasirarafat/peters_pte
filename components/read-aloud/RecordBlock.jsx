@@ -11,7 +11,7 @@ const DynamicReactMic = dynamic(() => import('react-mic').then(module => module.
   ssr: false
 });
 
-const RecordBlock = ({ setResult }) => {
+const RecordBlock = ({ setReFetch, api }) => {
   // countdown function
   const targetDate = new Date().getTime() + 35000;
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -47,7 +47,6 @@ const RecordBlock = ({ setResult }) => {
     setIsRecording(true);
     timerId = setTimeout(handleStopRecording, 35000);
     setAudioData(null);
-    setResult(null);
   };
 
   const handleStopRecording = () => {
@@ -90,7 +89,7 @@ const RecordBlock = ({ setResult }) => {
       try {
         const formData = new FormData();
         formData.append("audio", audioData, "recorded.wav"); // Append the audioData as is
-        formData.append("read_aloud", id);
+        // formData.append("read_aloud", id);
         const config = {
           headers: {
             "content-type": "multipart/form-data", // Use lowercase for header keys
@@ -98,12 +97,13 @@ const RecordBlock = ({ setResult }) => {
         };
 
         const { data } = await axios.post(
-          "/practice/read_alouds/answer",
+          api,
           formData,
           config
         );
-        setResult(data);
+        data && setReFetch(prev => !prev)
         setIsLoading(false);
+        setAudioData(null)
       } catch (error) {
         console.error("Error sending audio:", error);
         toast.error("Something went wrong, try again later.");
@@ -120,67 +120,71 @@ const RecordBlock = ({ setResult }) => {
     setAudioData(null);
   }, [id]);
   return (
-    <>
-      <div className="border border-primary rounded-[15px] mt-3 p-4 flex flex-col items-center justify-center">
-        {
-          !audioData && <>
-            <button
-              onClick={() => {
-                if (isRecording) {
-                  handleStopRecording();
-                } else {
-                  handleStartRecording();
-                }
-              }}
-              className="w-10 h-10 md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center"
-            >
-              <BsFillMicFill className="text-white text-2xl md:text-5xl" />
-            </button>
-            {/* //!warning */}
-            <DynamicReactMic
-              className="hidden"
-              record={isRecording}
-              onStop={handleAudioStop}
-              mimeType="audio/wav"
-            />
-            <p className="text-base text-gray">
-              Click To {isRecording ? "Stop" : "Start"}
-            </p>
-            {!isRecording && !audioData && (
-              <p className="text-sm text-accent">
-                <i>Beginning in {timeLeft.seconds} Sec...</i>
-              </p>
-            )}
-          </>
-        }
-        {audioData && <AudioPlayer data={audioData} />}
-        {isRecording && (
-          <div className="w-full">
-            <div className="flex w-full items-center justify-between">
-              <p className="text-base text-gray">
-                0:{Math.floor(recordingTime / 1000)}
-              </p>
-              <p className="text-base text-gray">0:35</p>
-            </div>
-            <div className="relative bg-secondary w-full h-2 rounded-[13px]">
-              <div
-                style={{
-                  width: `${progressBarWidth}%`,
+    <div>
+      <div className="whiteGd h-[50px] block md:hidden"></div>
+      <div className="border-t-2 border-primary bg-white  w-full left-0 pb-4 block md:hidden " />
+      <div className="bg-white md:bg-transparent px-6 md:px-0" >
+        <div className="border border-primary rounded-[15px] md:mt-3 pt-7 md:pt-4 p-4 flex flex-col items-center justify-center relative">
+          {
+            !audioData && <>
+              <button
+                onClick={() => {
+                  if (isRecording) {
+                    handleStopRecording();
+                  } else {
+                    handleStartRecording();
+                  }
                 }}
-                className={`h-full absolute left-0 top-0 bg-primary rounded-[13px]`}
-              ></div>
+                className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center absolute md:static -top-8 left-1/2 -translate-x-1/2 md:translate-x-0"
+              >
+                <BsFillMicFill className="text-white text-2xl md:text-5xl" />
+              </button>
+              {/* //!warning */}
+              <DynamicReactMic
+                className="hidden"
+                record={isRecording}
+                onStop={handleAudioStop}
+                mimeType="audio/wav"
+              />
+              <p className="text-base text-gray">
+                Click To {isRecording ? "Stop" : "Start"}
+              </p>
+              {!isRecording && !audioData && (
+                <p className="text-sm text-accent">
+                  <i>Beginning in {timeLeft.seconds} Sec...</i>
+                </p>
+              )}
+            </>
+          }
+          {audioData && <AudioPlayer data={audioData} />}
+          {isRecording && (
+            <div className="w-full">
+              <div className="flex w-full items-center justify-between">
+                <p className="text-base text-gray">
+                  0:{Math.floor(recordingTime / 1000)}
+                </p>
+                <p className="text-base text-gray">0:35</p>
+              </div>
+              <div className="relative bg-secondary w-full h-2 rounded-[13px]">
+                <div
+                  style={{
+                    width: `${progressBarWidth}%`,
+                  }}
+                  className={`h-full absolute left-0 top-0 bg-primary rounded-[13px]`}
+                ></div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        {/* Pagination */}
+        <Pagination
+          isLoading={isLoading}
+          handleStartRecording={handleStartRecording}
+          audioData={audioData}
+          HandleSubmit={HandleSubmit}
+        />
       </div>
-      {/* Pagination */}
-      <Pagination
-        isLoading={isLoading}
-        handleStartRecording={handleStartRecording}
-        audioData={audioData}
-        HandleSubmit={HandleSubmit}
-      />
-    </>
+    </div>
   );
 };
 

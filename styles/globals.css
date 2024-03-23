@@ -52,7 +52,8 @@
 }
 
 .nav-scrollbar::-webkit-scrollbar-thumb {
-  background: #e0e0e0;
+  /* background: #e0e0e0; */
+  background: #fffdfd2d;
   border-radius: 1rem;
 }
 
@@ -128,4 +129,14 @@
 /* user dashboard scrollbar hide */
 .no-scrollbar {
   scrollbar-width: none;
+}
+
+.whiteGd {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    360deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.7) 55%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
 }

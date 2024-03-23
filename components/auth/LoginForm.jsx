@@ -30,7 +30,7 @@ const Login = () => {
           maxAge: 60 * 60 * 24,
         });
       }
-      router.replace("/auth");
+      router.refresh()
     } catch (e) {
       setIsLoading(false);
       if (e?.response?.data?.error) {
@@ -52,9 +52,8 @@ const Login = () => {
       <div className="p-4 space-y-2 bg-[#FFF4EB] rounded-[32px] w-full">
         <div className="w-full">
           <input
-            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${
-              errors.email ? "border-red" : "border-[#B9B9B9] "
-            } rounded-[16px] outline-none`}
+            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${errors.email ? "border-red" : "border-[#B9B9B9] "
+              } rounded-[16px] outline-none`}
             {...register("email", {
               required: "Password is required",
             })}
@@ -64,9 +63,8 @@ const Login = () => {
         </div>
         <div className="relative w-full">
           <input
-            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${
-              errors.password ? "border-red" : "border-[#B9B9B9] "
-            } rounded-[16px] outline-none`}
+            className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 border ${errors.password ? "border-red" : "border-[#B9B9B9] "
+              } rounded-[16px] outline-none`}
             {...register("password", {
               required: "Password is required",
             })}

@@ -35,9 +35,9 @@ const AudioPlayer = ({ data }) => {
       audioRef.current.load();
     }
   }, [currentTrack]);
-  console.log(duration);
+
   return (
-    <div className="h-[180px] w-full">
+    <div className="h-[150px] w-full">
       <div className={`audio-player ${duration || "hidden"}`}>
         <div className="inner flex flex-col justify-center w-full">
           <audio
