@@ -8,7 +8,7 @@ import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 import WordHighlight from "../global/WordHighlight";
 
-const ReadAloudModal = ({ open, setOpen, result, describe_image }) => {
+const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture, answer_question }) => {
   const router = useRouter();
   const id = router.query.que_no;
   const speakingScore = Math.round(result?.scores?.speaking) || 0;
@@ -58,28 +58,30 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image }) => {
           {/* score */}
           <div className="grid grid-cols-12 gap-x-6 mt-12">
             {/* Speaking Score */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
-              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Speaking Score</p>
-              </div>
-              {/* score point*/}
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-36 h-36">
-                  <CircularProgressbar
-                    value={speakingScore}
-                    text={speakingScore}
-                    strokeWidth={15}
-                    styles={buildStyles({
-                      textColor: "gray",
-                      textSize: "25px",
-                      pathColor: "#ff8412",
-                      trailColor: "#f1f1f1",
-                    })}
-                  />
+            {
+              !answer_question && <div className="col-span-3 w-full border border-primary rounded-[13px]">
+                <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                  <p className="text-gray text-xl">Speaking Score</p>
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 90</p>
+                {/* score point*/}
+                <div className="flex flex-col items-center justify-center p-4">
+                  <div className="w-36 h-36">
+                    <CircularProgressbar
+                      value={speakingScore}
+                      text={speakingScore}
+                      strokeWidth={15}
+                      styles={buildStyles({
+                        textColor: "gray",
+                        textSize: "25px",
+                        pathColor: "#ff8412",
+                        trailColor: "#f1f1f1",
+                      })}
+                    />
+                  </div>
+                  <p className="text-gray text-xl mt-1">Out of 90</p>
+                </div>
               </div>
-            </div>
+            }
             {/* wrighting Score */}
             {
               !describe_image && <div className="col-span-3 w-full border border-primary rounded-[13px]">
@@ -106,7 +108,7 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image }) => {
               </div>
             }
             {/* Enabling Skill  */}
-            <div className={`${describe_image ? "col-span-9" : "col-span-6"} w-full border border-primary rounded-[13px]`}>
+            <div className={`${describe_image ? answer_question ? "col-span-12" : "col-span-9" : "col-span-6"} w-full border border-primary rounded-[13px]`}>
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
               </div>
@@ -148,25 +150,29 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image }) => {
             </div>
           </div>
           {/* AI Speech to Text */}
-          <div className="w-full border border-primary rounded-[13px] mt-5">
-            <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-              <p className="text-gray text-xl">AI Speech to Text</p>
-            </div>
-            <div className="px-7 py-5">
-              <WordHighlight words={result?.scores?.word_highlight} />
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <p className="text-gray text-lg font-medium">
-              Total: {result?.scores?.word_highlight?.length || 0} words
-            </p>
-            <p className="text-[#858736] text-lg font-medium">
-              Good: {wordCount(result?.scores?.word_highlight, "correct")} words
-            </p>
-            <p className="text-red text-lg font-medium">
-              Bad/Missed: {wordCount(result?.scores?.word_highlight, "missing")} words
-            </p>
-          </div>
+          {
+            (describe_image || retell_lecture) || <>
+              <div className="w-full border border-primary rounded-[13px] mt-5">
+                <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                  <p className="text-gray text-xl">AI Speech to Text</p>
+                </div>
+                <div className="px-7 py-5">
+                  <WordHighlight words={result?.scores?.word_highlight} />
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="text-gray text-lg font-medium">
+                  Total: {result?.scores?.word_highlight?.length || 0} words
+                </p>
+                <p className="text-[#858736] text-lg font-medium">
+                  Good: {wordCount(result?.scores?.word_highlight, "correct")} words
+                </p>
+                <p className="text-red text-lg font-medium">
+                  Bad/Missed: {wordCount(result?.scores?.word_highlight, "missing")} words
+                </p>
+              </div>
+            </>
+          }
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023
           </p>

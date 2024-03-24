@@ -27,8 +27,10 @@ const ResultSection = ({
   result,
   setOpenModal,
   summary,
+  answer_question,
   setOpenScoreModal,
   setAiResult,
+  describe_image
 }) => {
   const [pageTab, setPageTab] = useState("My Score");
   return (
@@ -56,6 +58,8 @@ const ResultSection = ({
         <div className="space-y-2">
           {result?.self?.map((item, index) => (
             <Score
+              describe_image={describe_image}
+              answer_question={answer_question}
               key={index}
               summary={summary}
               setOpenModal={setOpenModal}
@@ -69,6 +73,8 @@ const ResultSection = ({
         <div className="space-y-2">
           {result?.other?.map((item, index) => (
             <Score
+              describe_image={describe_image}
+              answer_question={answer_question}
               key={index}
               summary={summary}
               setOpenModal={setOpenModal}
