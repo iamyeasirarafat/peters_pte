@@ -67,11 +67,10 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <PageHeader title="Retell Lecture" />
+      <PageHeader title="Repeat Sentence" />
       <p className="text-gray text-xs md:text-base mt-2 text-center">
-        Listen the audio below. In 35 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 35 seconds to Retell
-        lecture.
+        You will hear a sentence. Please repeat the sentence exactly as you hear
+        it. You will hear the sentence only once.
       </p>
       <GlobalMainContent data={data}>
         {/* text block */}

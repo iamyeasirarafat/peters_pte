@@ -102,6 +102,7 @@ const Index = () => {
       )}
       {result && (
         <ReadAloudModal
+          retell_lecture
           result={aiResult}
           open={openModal}
           setOpen={setOpenModal}
