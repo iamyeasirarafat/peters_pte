@@ -85,6 +85,7 @@ const Index = () => {
       {/* // result tab */}
       {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
+          describe_image
           summary
           setAiResult={setAiResult}
           result={result}

@@ -3,7 +3,7 @@ import { BiSolidTrashAlt } from "react-icons/bi";
 import { BsPlusCircle } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
 
-const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
+const Score = ({ result, setOpenModal, summary, others, setAiResult, answer_question, describe_image }) => {
   return (
     <div className="border border-primary rounded-[15px] p-2">
       <div className="flex items-center justify-between ">
@@ -21,21 +21,23 @@ const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
         </div>
         {/* mark */}
         <div className="md:flex  hidden items-center gap-x-2">
-          <button className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3">
-            <p className="lg:text-base text-3xl lg:w-5 lg:h-5 w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
-              S
-            </p>
-            <p className="text-base lg:text-xl text-gray">
-              {/* {result?.scores?.overall ||
+          {
+            !answer_question && <button className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3">
+              <p className="lg:text-base text-3xl lg:w-5 lg:h-5 w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
+                S
+              </p>
+              <p className="text-base lg:text-xl text-gray">
+                {/* {result?.scores?.overall ||
               result?.scores?.Overall ||
               result?.scores} */}
-              {
-                typeof result?.scores == "object" ? result?.scores?.speaking || result?.scores?.overall ||
-                  result?.scores?.Overall : result?.scores
-              }
-            </p>
-          </button>
-          {!summary && (
+                {
+                  typeof result?.scores == "object" ? result?.scores?.speaking || result?.scores?.overall ||
+                    result?.scores?.Overall : result?.scores
+                }
+              </p>
+            </button>
+          }
+          {!summary && !answer_question && !describe_image && (
             <button className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3">
               <p className="lg:text-base text-3xl lg:w-5 lg:h-5 w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-cream">
                 R
