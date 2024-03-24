@@ -5,11 +5,11 @@ import SideModal from "@/components/global/SideModal";
 import TextBlock from "@/components/global/TextBlock";
 import TypingBlock from "@/components/global/TypingBlock";
 import WriteEssayModal from "@/components/write_essay/WriteEssayModal";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import DashboardLayout from "../../../layout";
-import axios from "axios";
 
 const Index = () => {
   const [aiResult, setAiResult] = useState(null);
@@ -67,7 +67,7 @@ const Index = () => {
         />
       </GlobalMainContent>
       {/* result section */}
-      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
           setAiResult={setAiResult}
           summary

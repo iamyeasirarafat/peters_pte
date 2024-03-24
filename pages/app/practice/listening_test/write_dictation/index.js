@@ -3,14 +3,14 @@ import GlobalMainContent from "@/components/global/GlobalMainContent";
 import ListenBlock from "@/components/global/ListenBlock";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
+import SideModal from "@/components/global/SideModal";
 import TypingBlock from "@/components/global/TypingBlock";
 import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import WriteDictationModal from "@/components/write_dictation/WriteDictationModal";
-import SideModal from "@/components/global/SideModal";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../../layout";
-import { useRouter } from "next/router";
-import axios from "axios";
 
 const Page = () => {
   const [reFetch, setReFetch] = useState(false);
@@ -54,7 +54,7 @@ const Page = () => {
           isReady={data?.id ? false : true}
         />
       </GlobalMainContent>
-      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
           summary
           result={result}

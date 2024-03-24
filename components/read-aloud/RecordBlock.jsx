@@ -11,7 +11,7 @@ const DynamicReactMic = dynamic(() => import('react-mic').then(module => module.
   ssr: false
 });
 
-const RecordBlock = ({ setReFetch, api }) => {
+const RecordBlock = ({ setReFetch, api, data }) => {
   // countdown function
   const targetDate = new Date().getTime() + 35000;
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -27,11 +27,13 @@ const RecordBlock = ({ setReFetch, api }) => {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    if (data?.id) {
+      const interval = setInterval(() => {
+        setTimeLeft(calculateTimeLeft());
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [data]);
 
   //recording function...
   const [isRecording, setIsRecording] = useState(false);

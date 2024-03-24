@@ -22,7 +22,7 @@ const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
         {/* mark */}
         <div className="md:flex  hidden items-center gap-x-2">
           <button className="border border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3">
-            <p className="text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
+            <p className="lg:text-base text-3xl lg:w-5 lg:h-5 w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
               S
             </p>
             <p className="text-base lg:text-xl text-gray">
@@ -42,8 +42,8 @@ const Score = ({ result, setOpenModal, summary, others, setAiResult }) => {
               </p>
               <p className="text-base lg:text-xl text-gray">
                 {
-                  typeof result?.scores == "object" ? result?.scores?.reading || result?.scores?.Reading
-                    : result?.scores
+                  typeof result?.scores == "object" ? result?.scores?.reading || result?.scores?.Reading || 0
+                    : result?.scores || 0
                 }
               </p>
             </button>
