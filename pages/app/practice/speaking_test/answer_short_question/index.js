@@ -30,7 +30,7 @@ const Index = () => {
     query: "(max-width: 765px)",
   });
   const id = router.query.que_no;
-  const answerApi = /short_question/${id}/answer;
+  const answerApi = `/short_question/${id}/answer`;
   useEffect(() => {
     // get read aloud
     const getData = async () => {
@@ -41,7 +41,7 @@ const Index = () => {
 
     // get Discussion data
     const getDiscussion = async () => {
-      const { data } = await axios(/short_question /${id}/discussions);
+      const { data } = await axios(`/short_question /${id}/discussions`);
     };
   }, [id]);
 

@@ -98,7 +98,7 @@ export const navItems = {
       bg: "cream",
     },
   ],
-  "Listing Test": [
+  "Listening Test": [
     {
       name: "Summarize Spoken Text",
       path: "/app/practice/listening_test/spoken_text",
@@ -166,11 +166,9 @@ const SideNav = ({ dashboard }) => {
   };
   return (
     <div
-      className={`${
-        sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
-      } flex-shrink-0 ${
-        !topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
-      } transition-all relative duration-300 ease-linear bg-secondary hidden lg:block`}
+      className={`${sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
+        } flex-shrink-0 ${!topNav ? "h-screen" : "h-[calc(100vh-5.5rem)]"
+        } transition-all relative duration-300 ease-linear bg-secondary hidden lg:block`}
     >
       {/* side Nav container */}
       <SideMenuContainer topNav={topNav} />
@@ -202,9 +200,8 @@ const TodoPanel = () => {
 const SideMenuContainer = ({ topNav }) => {
   return (
     <div
-      className={`w-full transition-all relative duration-300 ease-linear overflow-y-auto  nav-scrollbar  ${
-        topNav ? "h-[calc(100%-9.5rem)]" : "h-[calc(100%-11rem)]"
-      }`}
+      className={`w-full transition-all relative duration-300 ease-linear overflow-y-auto  nav-scrollbar  ${topNav ? "h-[calc(100%-9.5rem)]" : "h-[calc(100%-11rem)]"
+        }`}
     >
       {/* menu items */}
       {Object.keys(navItems).map((item) => (
@@ -222,17 +219,15 @@ const SideMenu = ({ data }) => {
       <div className="pb-2 mb-1 border-b border-primary">
         <div className="pl-9 w-full  flex items-center justify-between pr-3">
           <h1
-            className={`font-avantt font-semibold text-gray ${
-              sideNav ? "text-xl" : "text-base"
-            }`}
+            className={`font-avantt font-semibold text-gray ${sideNav ? "text-xl" : "text-base"
+              }`}
           >
             {sideNav ? data : data.split(" ")[0]}
           </h1>
           <button onClick={() => setIsOpen(!isOpen)}>
             <IoIosArrowDown
-              className={`text-gray text-base duration-200 ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`text-gray text-base duration-200 ${isOpen ? "rotate-180" : ""
+                }`}
             />
           </button>
         </div>
