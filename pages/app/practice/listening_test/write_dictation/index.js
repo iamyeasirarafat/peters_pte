@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../../layout";
 
 const Page = () => {
+  const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
   const [result, setResult] = useState(null);
   const [openScoreModal, setOpenScoreModal] = useState(false);
@@ -32,7 +33,7 @@ const Page = () => {
     };
     if (id) {
       getData();
-      // getResult();
+      getResult();
     }
   }, [id, answerApi, reFetch]);
   // sideModal Data
@@ -48,6 +49,7 @@ const Page = () => {
       <GlobalMainContent>
         <ListenBlock data={data} setOpen={setOpen} />
         <TypingBlock
+          typingTime={10}
           result={result}
           setReFetch={setReFetch}
           api={answerApi}
@@ -56,13 +58,18 @@ const Page = () => {
       </GlobalMainContent>
       {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
+          setAiResult={setAiResult}
           summary
           result={result}
           setOpenModal={setOpenScoreModal}
         />
       )}
       <TranscriptModal open={open} setOpen={setOpen} />
-      <WriteDictationModal open={openScoreModal} setOpen={setOpenScoreModal} />
+      <WriteDictationModal
+        result={aiResult}
+        open={openScoreModal}
+        setOpen={setOpenScoreModal}
+      />
     </DashboardLayout>
   );
 };

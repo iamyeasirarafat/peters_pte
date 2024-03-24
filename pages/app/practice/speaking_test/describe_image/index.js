@@ -37,7 +37,7 @@ const Index = () => {
       const { data } = await axios("/describe_image/" + id);
       setData(data);
     };
-    getData();
+    id && getData();
 
     // get Discussion data
     const getDiscussion = async () => {
@@ -50,7 +50,7 @@ const Index = () => {
       const { data } = await axios(answerApi);
       setResult(data);
     };
-    getResult();
+    id && getResult();
   }, [refetch, id, answerApi]);
 
   //sideModal Data

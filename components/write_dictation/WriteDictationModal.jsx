@@ -3,21 +3,25 @@ import ReusableModal from "../global/ReusableModal";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { GrClose } from "react-icons/gr";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import LineProgressBar from "../global/LineProgressBar";
+import { useRouter } from "next/router";
+import WordHighlight from "../global/WordHighlight";
+import wordCount from "@/utils/wordCount";
 
-const WriteDictationModal = ({ open, setOpen }) => {
-  const totalScore = 50;
-  const content = 20;
-  const grammar = 30;
-  const form = 40;
-  const spelling = 50;
-  const vocabulary = 60;
+const WriteDictationModal = ({ open, setOpen, result }) => {
+  const router = useRouter();
+  const id = router.query.que_no;
+  const {
+    overall: totalScore,
+    word_highlights,
+    num_matching_words,
+  } = result?.scores || {};
+
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
         {/* modal header */}
         <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
-          <p className="text-white text-2xl">#15425454</p>
+          <p className="text-white text-2xl">#{id}</p>
           <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
           <div className="flex items-center gap-x-4">
             <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
@@ -41,7 +45,7 @@ const WriteDictationModal = ({ open, setOpen }) => {
           {/* score */}
           <div className="grid grid-cols-12 gap-x-6">
             {/* Total Score */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-4 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Total Score</p>
               </div>
@@ -52,6 +56,7 @@ const WriteDictationModal = ({ open, setOpen }) => {
                     value={totalScore}
                     text={totalScore}
                     strokeWidth={15}
+                    maxValue={10}
                     styles={buildStyles({
                       textColor: "gray",
                       textSize: "20px",
@@ -64,44 +69,25 @@ const WriteDictationModal = ({ open, setOpen }) => {
               </div>
             </div>
             {/* Time Taken */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-4 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Time Taken</p>
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
-                <p className="text-[60px] text-gray">02:23</p>
+                <p className="text-[60px] text-gray">{result?.time_taken}</p>
               </div>
             </div>
-            {/* Total Score */}
-            <div className="col-span-6 w-full border border-primary rounded-[13px]">
+            {/* Correct word */}
+            <div className="col-span-4 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Enabling Skill</p>
+                <p className="text-gray text-xl">Matching Words</p>
               </div>
-              {/* progress bar */}
-              <div className="space-y-2 p-4">
-                {/* Listening */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">
-                    Listening
-                  </p>
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"cream"}
-                    strokeWidth={content}
-                  />
-                  <p className="text-gray text-xl">0/4.5</p>
-                </div>
-                {/* Writing */}
-                <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Writing</p>
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"primary"}
-                    strokeWidth={grammar}
-                  />
-                  <p className="text-gray text-xl">0/4.5</p>
-                </div>
+              {/* score point*/}
+              <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
+                <p className="text-[60px] text-gray">
+                  {wordCount(word_highlights, "correct")}
+                </p>
               </div>
             </div>
           </div>
@@ -111,28 +97,22 @@ const WriteDictationModal = ({ open, setOpen }) => {
               <p className="text-gray text-xl">Your Answer</p>
             </div>
             <div className="px-7 py-5">
-              <p className="text-left text-xl">
-                A report on inequality in the UK said last week that girls had
-                better educational results than boys at 16, went to university
-                in greater numbers and achieved better degrees once they got
-                there.{" "}
-                <q>
-                  More women now have higher education qualifications than men
-                  in every age group up to age 44,
-                </q>{" "}
-                the report said.
-              </p>
+              <WordHighlight words={word_highlights} />
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <p className="text-gray text-lg font-medium">Correct Word</p>
-            <p className="text-cream text-lg font-medium">Missed Word</p>
+            <p className="text-gray text-lg font-medium">
+              Total: {word_highlights?.length || 0} words
+            </p>
+            <p className="text-green-700 text-lg font-medium">
+              Matching: {wordCount(word_highlights, "correct")} words
+            </p>
             <p className="text-red text-lg font-medium">
-              Misspelled/Wrong Word
+              Missed: {wordCount(word_highlights, "missing")} words
             </p>
           </div>
           {/* Correct Answer */}
-          <div className="w-full border border-primary rounded-[13px] mt-4">
+          {/* <div className="w-full border border-primary rounded-[13px] mt-4">
             <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
               <p className="text-gray text-xl">Correct Answer</p>
             </div>
@@ -141,7 +121,7 @@ const WriteDictationModal = ({ open, setOpen }) => {
                 Nature is defined as a specific chemical compound.
               </p>
             </div>
-          </div>
+          </div> */}
           <p className="text-center mt-2 text-lightGray">
             This score will disappear on 02/08/2023
           </p>
