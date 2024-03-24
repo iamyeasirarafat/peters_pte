@@ -7,8 +7,16 @@ import { VscDebugStart } from "react-icons/vsc";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 import WordHighlight from "../global/WordHighlight";
+import AudioVisualizer from "../AudioVisualizer";
 
-const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture, answer_question }) => {
+const ReadAloudModal = ({
+  open,
+  setOpen,
+  result,
+  describe_image,
+  retell_lecture,
+  answer_question,
+}) => {
   const router = useRouter();
   const id = router.query.que_no;
   const speakingScore = Math.round(result?.scores?.speaking) || 0;
@@ -47,6 +55,9 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture,
             <button className="w-[50px] h-[50px] rounded-full bg-primary flex items-center justify-center">
               <VscDebugStart className="text-white text-2xl" />
             </button>
+            <div className="w-full">
+              <AudioVisualizer selectedFile={result?.audio} />
+            </div>
           </div>
           {/* sound */}
           {/* <div className="flex items-center justify-end gap-x-2 mt-3">
@@ -58,8 +69,8 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture,
           {/* score */}
           <div className="grid grid-cols-12 gap-x-6 mt-12">
             {/* Speaking Score */}
-            {
-              !answer_question && <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            {!answer_question && (
+              <div className="col-span-3 w-full border border-primary rounded-[13px]">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                   <p className="text-gray text-xl">Speaking Score</p>
                 </div>
@@ -81,10 +92,10 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture,
                   <p className="text-gray text-xl mt-1">Out of 90</p>
                 </div>
               </div>
-            }
+            )}
             {/* wrighting Score */}
-            {
-              !describe_image && <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            {!describe_image && (
+              <div className="col-span-3 w-full border border-primary rounded-[13px]">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                   <p className="text-gray text-xl">Reading Score</p>
                 </div>
@@ -106,9 +117,17 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture,
                   <p className="text-gray text-xl mt-1">Out of 90</p>
                 </div>
               </div>
-            }
+            )}
             {/* Enabling Skill  */}
-            <div className={`${describe_image ? answer_question ? "col-span-12" : "col-span-9" : "col-span-6"} w-full border border-primary rounded-[13px]`}>
+            <div
+              className={`${
+                describe_image
+                  ? answer_question
+                    ? "col-span-12"
+                    : "col-span-9"
+                  : "col-span-6"
+              } w-full border border-primary rounded-[13px]`}
+            >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
               </div>
@@ -150,8 +169,8 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture,
             </div>
           </div>
           {/* AI Speech to Text */}
-          {
-            (describe_image || retell_lecture) || <>
+          {describe_image || retell_lecture || (
+            <>
               <div className="w-full border border-primary rounded-[13px] mt-5">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                   <p className="text-gray text-xl">AI Speech to Text</p>
@@ -165,14 +184,16 @@ const ReadAloudModal = ({ open, setOpen, result, describe_image, retell_lecture,
                   Total: {result?.scores?.word_highlight?.length || 0} words
                 </p>
                 <p className="text-[#858736] text-lg font-medium">
-                  Good: {wordCount(result?.scores?.word_highlight, "correct")} words
+                  Good: {wordCount(result?.scores?.word_highlight, "correct")}{" "}
+                  words
                 </p>
                 <p className="text-red text-lg font-medium">
-                  Bad/Missed: {wordCount(result?.scores?.word_highlight, "missing")} words
+                  Bad/Missed:{" "}
+                  {wordCount(result?.scores?.word_highlight, "missing")} words
                 </p>
               </div>
             </>
-          }
+          )}
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023
           </p>
