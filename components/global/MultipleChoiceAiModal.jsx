@@ -1,45 +1,14 @@
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
-import LineProgressBar from "./LineProgressBar";
 import ReusableModal from "./ReusableModal";
 import { useRouter } from "next/router";
 
-const MultipleChoiceAiModal = ({
-  open,
-  setOpen,
-  apiData,
-  myAnswer,
-  result,
-  single,
-}) => {
+const MultipleChoiceAiModal = ({ open, setOpen, result }) => {
   const router = useRouter();
   const id = router.query.que_no;
-  const obj = {
-    0: "A",
-    1: "B",
-    2: "C",
-    3: "D",
-    4: "E",
-    5: "F",
-    6: "G",
-  };
+  console.log("result", result);
 
-  // getting the right answers index
-  const rightIndex = [];
-  if (!single) {
-    result?.right_options?.forEach((element) => {
-      const index = apiData?.options.indexOf(element);
-      if (index !== -1) {
-        rightIndex.push(index);
-      }
-    });
-  } else {
-    const index = apiData?.options?.indexOf(result?.right_option);
-    if (index !== -1) {
-      rightIndex.push(index);
-    }
-  }
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -77,8 +46,8 @@ const MultipleChoiceAiModal = ({
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={result?.scores}
-                    text={result?.scores}
+                    value={result?.scores?.score}
+                    text={result?.scores?.score}
                     strokeWidth={15}
                     maxValue={10}
                     styles={buildStyles({
@@ -109,9 +78,9 @@ const MultipleChoiceAiModal = ({
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                {rightIndex?.map((item) => {
+                {/* {rightIndex?.map((item) => {
                   return <WordValue key={item} word={obj[item]} />;
-                })}
+                })} */}
               </div>
             </div>
             {/* Your Answer */}
@@ -121,7 +90,7 @@ const MultipleChoiceAiModal = ({
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                {myAnswer?.map((item, i) => {
+                {/* {myAnswer?.map((item, i) => {
                   let wrong = true;
                   rightIndex.forEach((i) => {
                     if (i === parseInt(item)) {
@@ -129,12 +98,12 @@ const MultipleChoiceAiModal = ({
                     }
                   });
                   return <WordValue key={i} word={obj[item]} wrong={wrong} />;
-                })}
+                })} */}
               </div>
             </div>
           </div>
           {/* Your Response */}
-          <div className="w-full border border-primary rounded-[13px] mt-4">
+          {/* <div className="w-full border border-primary rounded-[13px] mt-4">
             <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
               <p className="text-gray text-xl">Enabling Skill</p>
             </div>
@@ -145,13 +114,15 @@ const MultipleChoiceAiModal = ({
                   <LineProgressBar
                     height={30}
                     lineColor={"cream"}
-                    strokeWidth={result?.scores * 50}
+                    strokeWidth={result?.scores?.score * 50}
                   />
                 </div>
-                <p className="text-gray w-1/12 text-xl">{result?.scores}/2</p>
+                <p className="text-gray w-1/12 text-xl">
+                  {result?.scores?.score}/2
+                </p>
               </div>
             </div>
-          </div>
+          </div> */}
           <p className="text-center mt-2 text-lightGray">
             This score will disappear on 02/08/2023
           </p>

@@ -45,6 +45,8 @@ const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
         setIsLoading(false);
         setReFetch((prev) => !prev);
         setTextAnswer("");
+        setMinutes(initialMinutes);
+        setSeconds(0);
       } catch (error) {
         toast.error(error?.massage || "Something went wrong");
         setIsLoading(false);

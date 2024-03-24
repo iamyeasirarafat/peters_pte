@@ -37,7 +37,8 @@ const Index = () => {
       const { data } = await axios("/practice/read_aloud/" + id);
       setData(data);
     };
-    getData();
+
+    id && getData();
 
     // get Discussion data
     const getDiscussion = async () => {
@@ -50,7 +51,7 @@ const Index = () => {
       const { data } = await axios(answerApi);
       setResult(data);
     };
-    getResult();
+    id && getResult();
   }, [refetch, id, answerApi]);
 
   //sideModal Data

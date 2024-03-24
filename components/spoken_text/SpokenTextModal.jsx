@@ -10,19 +10,19 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
   const router = useRouter();
   const id = router.query.que_no;
   const {
-    Content,
-    Grammar,
-    Form,
-    Spelling,
-    Vocabulary,
-    Overall: totalScore,
+    content,
+    grammar,
+    form,
+    spelling,
+    vocabulary,
+    overall: totalScore,
   } = result?.scores || {};
   const formateData = [
-    { color: "cream", value: Content, name: "Content" },
-    { color: "primary", value: Grammar, name: "Grammar" },
-    { color: "blue", value: Form, name: "Form" },
-    { color: "cream", value: Spelling, name: "Spelling" },
-    { color: "primary", value: Vocabulary, name: "Vocabulary" },
+    { color: "cream", value: content, name: "Content" },
+    { color: "primary", value: grammar, name: "Grammar" },
+    { color: "blue", value: form, name: "Form" },
+    { color: "cream", value: spelling, name: "Spelling" },
+    { color: "primary", value: vocabulary, name: "Vocabulary" },
   ];
   return (
     <ReusableModal open={open} setOpen={setOpen}>

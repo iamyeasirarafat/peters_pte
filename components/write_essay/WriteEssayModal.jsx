@@ -9,28 +9,28 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
   const router = useRouter();
   const id = router.query.que_no;
   const {
-    Content,
-    Grammar,
-    Spelling,
-    Structure,
-    Linguistic,
-    Form,
-    Vocabulary,
-    Overall: totalScore,
+    content,
+    grammar,
+    spelling,
+    structure,
+    linguistic,
+    form,
+    vocabulary,
+    overall: totalScore,
   } = result?.scores || {};
 
   const formateData = [
-    { color: "cream", value: Content, name: "Content" },
-    { color: "primary", value: Grammar, name: "Grammar" },
-    { color: "blue", value: Spelling, name: "Spellings" },
+    { color: "cream", value: content, name: "Content" },
+    { color: "primary", value: grammar, name: "Grammar" },
+    { color: "blue", value: spelling, name: "Spellings" },
     {
       color: "cream",
-      value: Structure,
+      value: structure,
       name: "Development, Structure and Coherence",
     },
-    { color: "primary", value: Linguistic, name: "General Linguistic Range" },
-    { color: "blue", value: Form, name: "Form" },
-    { color: "cream", value: Vocabulary, name: "Vocabulary" },
+    { color: "primary", value: linguistic, name: "General Linguistic Range" },
+    { color: "blue", value: form, name: "Form" },
+    { color: "cream", value: vocabulary, name: "Vocabulary" },
   ];
   return (
     <ReusableModal open={open} setOpen={setOpen}>

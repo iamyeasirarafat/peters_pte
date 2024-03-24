@@ -63,7 +63,7 @@ function Page() {
     title: "Single Answers",
     api: "/multi_choices/reading/single-answer",
   };
-
+  console.log("data sg", data);
   return (
     <DashboardLayout>
       {/* Side Modal */}
@@ -78,7 +78,7 @@ function Page() {
         <TextBlock data={data} />
         {/* Multiple Choice Answer */}
         <SingleChoiceAnswer
-          answers={answers}
+          answers={data?.options || []}
           result={result}
           setReFetch={setReFetch}
           api={answerApi}

@@ -35,7 +35,6 @@ const Index = () => {
       getResult();
     }
   }, [id, answerApi, reFetch]);
-  console.log(data);
   // sideModal Data
   const SideModalData = {
     title: "Summarize Text",

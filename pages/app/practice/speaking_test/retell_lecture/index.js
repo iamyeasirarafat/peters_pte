@@ -37,7 +37,7 @@ const Index = () => {
       const { data } = await axios("/retell_sentence/" + id);
       setData(data);
     };
-    getData();
+    id && getData();
 
     // get Discussion data
     const getDiscussion = async () => {
@@ -48,7 +48,7 @@ const Index = () => {
   useEffect(() => {
     const getResult = async () => {
       const { data } = await axios(answerApi);
-      setResult(data);
+      id && setResult(data);
     };
     getResult();
   }, [refetch, id, answerApi]);
