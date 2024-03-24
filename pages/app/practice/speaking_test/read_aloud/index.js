@@ -77,10 +77,12 @@ const Index = () => {
         <TextBlock data={data} />
         {/* recording Block */}
 
-        {isTablet || <RecordBlock api={answerApi} setReFetch={setReFetch} />}
+        {isTablet || (
+          <RecordBlock data={data} api={answerApi} setReFetch={setReFetch} />
+        )}
       </GlobalMainContent>
       {/* // result tab */}
-      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
           setAiResult={setAiResult}
           result={result}
@@ -91,7 +93,7 @@ const Index = () => {
         <>
           <div className="block md:hidden h-[220px]" />
           <div className="block absolute bottom-0 w-full left-0  md:hidden">
-            <RecordBlock api={answerApi} setReFetch={setReFetch} />
+            <RecordBlock data={data} api={answerApi} setReFetch={setReFetch} />
           </div>
         </>
       )}

@@ -8,7 +8,7 @@ import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 import WordHighlight from "../global/WordHighlight";
 
-const ReadAloudModal = ({ open, setOpen, result }) => {
+const ReadAloudModal = ({ open, setOpen, result, describe_image }) => {
   const router = useRouter();
   const id = router.query.que_no;
   const speakingScore = Math.round(result?.scores?.speaking) || 0;
@@ -81,30 +81,32 @@ const ReadAloudModal = ({ open, setOpen, result }) => {
               </div>
             </div>
             {/* wrighting Score */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
-              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Reading Score</p>
-              </div>
-              {/* score point*/}
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-36 h-36">
-                  <CircularProgressbar
-                    value={readingScore}
-                    text={readingScore}
-                    strokeWidth={15}
-                    styles={buildStyles({
-                      textColor: "gray",
-                      textSize: "25px",
-                      pathColor: "#00ff38",
-                      trailColor: "#f1f1f1",
-                    })}
-                  />
+            {
+              !describe_image && <div className="col-span-3 w-full border border-primary rounded-[13px]">
+                <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                  <p className="text-gray text-xl">Reading Score</p>
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 90</p>
+                {/* score point*/}
+                <div className="flex flex-col items-center justify-center p-4">
+                  <div className="w-36 h-36">
+                    <CircularProgressbar
+                      value={readingScore}
+                      text={readingScore}
+                      strokeWidth={15}
+                      styles={buildStyles({
+                        textColor: "gray",
+                        textSize: "25px",
+                        pathColor: "#00ff38",
+                        trailColor: "#f1f1f1",
+                      })}
+                    />
+                  </div>
+                  <p className="text-gray text-xl mt-1">Out of 90</p>
+                </div>
               </div>
-            </div>
+            }
             {/* Enabling Skill  */}
-            <div className="col-span-6 w-full border border-primary rounded-[13px]">
+            <div className={`${describe_image ? "col-span-9" : "col-span-6"} w-full border border-primary rounded-[13px]`}>
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
               </div>

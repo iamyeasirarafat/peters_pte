@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import TabButton from "./TabButton";
-import Score from "./Score";
 import CommentSection from "./CommentSection";
+import Score from "./Score";
+import TabButton from "./TabButton";
 const sectionTabButton = [
   {
     name: "My Score",
@@ -67,7 +67,7 @@ const ResultSection = ({
         </div>
       ) : pageTab === "Community Score" ? (
         <div className="space-y-2">
-          {result?.others?.map((item, index) => (
+          {result?.other?.map((item, index) => (
             <Score
               key={index}
               summary={summary}

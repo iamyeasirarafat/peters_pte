@@ -69,7 +69,7 @@ const Index = () => {
         />
       </GlobalMainContent>
       {/* result section */}
-      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
           setAiResult={setAiResult}
           summary

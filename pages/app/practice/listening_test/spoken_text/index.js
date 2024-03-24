@@ -59,7 +59,7 @@ const Page = () => {
           isReady={data?.id ? false : true}
         />
       </GlobalMainContent>
-      {(result?.others?.[0]?.user || result?.self?.[0]?.user) && (
+      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
           summary
           result={result}
