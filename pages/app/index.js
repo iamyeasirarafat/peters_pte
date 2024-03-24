@@ -12,16 +12,19 @@ import StudyMaterial from "../../components/UserDashboard/StudyMaterial/StudyMat
 import HelpAndsupport from "../../components/UserDashboard/Help&support/HelpAndsupport";
 import PracticeSlider from "../../components/UserDashboard/PracticeSlider/PracticeSlider";
 import PracticeProgress from "../../components/UserDashboard/PracticeProgress/PracticeProgress";
+import { useSelector } from "react-redux";
 
 const Index = () => {
   const [toggleProgress, setToggleProgress] = useState(true);
+  const user = useSelector((state) => state?.user?.user);
+  console.log("user", user);
 
   return (
     <DashboardLayout dashboard>
       <div className="p-3">
         <div className="w-full flex flex-col md:flex-row justify-between items-center">
           <p className="text-[#949494] text-[26px] lg:text-[36px]">
-            Welcome, <span className="text-black">Tushar</span>
+            Welcome, <span className="text-black">{user?.full_name}</span>
           </p>
           {/* Exam Count Down */}
           <HeaderCounter />
@@ -70,7 +73,11 @@ const Index = () => {
             </button>
           </div>
           <div className="text-right ">
-            <select className="border border-[#CF8800] mb-2 text-[12px] md:text-[16px]" name="" id="">
+            <select
+              className="border border-[#CF8800] mb-2 text-[12px] md:text-[16px]"
+              name=""
+              id=""
+            >
               <option value="all">All Time</option>
               <option value="speaking">Speaking</option>
               <option value="writing">Writing</option>

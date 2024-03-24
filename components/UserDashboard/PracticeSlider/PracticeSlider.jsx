@@ -94,7 +94,7 @@ const navItems = {
       bg: "#7DD8FF",
     },
   ],
-  "Listing Test": [
+  "Listening Test": [
     {
       name: "Summarize Spoken Text",
       path: "/app/practice/listening_test/spoken_text?que_no=1",
@@ -173,7 +173,7 @@ const PracticeSlider = () => {
         onClick={() => moveCarousel("left")}
         className="absolute top-1/2 -left-7 cursor-pointer pr-[5px] z-2"
       >
-        <BsArrowLeftCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full"/>
+        <BsArrowLeftCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full" />
       </button>
       {/* all items of carousel bar */}
       <div ref={carouselRef} className="flex gap-10 overflow-auto no-scrollbar">
@@ -181,10 +181,7 @@ const PracticeSlider = () => {
           Object.keys(navItems)?.map((item, index) => {
             return (
               <Suspense key={index} fallback={<div>Loading...</div>}>
-                <div
-                  ref={carouselItemRef}
-                  className="carousel-item"
-                >
+                <div ref={carouselItemRef} className="carousel-item">
                   <h4 className="text-[21px] font-semibold text-[#616161] capitalize">
                     {item}
                   </h4>
@@ -193,21 +190,19 @@ const PracticeSlider = () => {
                     {navItems[item]?.map((subItem, index) => {
                       return (
                         <Link key={index} href={subItem?.path}>
-                        <button
-                          style={{ backgroundColor: subItem.bg }}
-                          
-                          className={`relative w-[55px] h-[55px] rounded-[13px] text-white`}
-                        
-                        >
-                          {subItem?.ai && (
-                            <span className="absolute -top-1 -right-1 text-[16px] font-normal w-[23px] h-[23px] bg-[#4399FF] rounded-full">
-                              AI
+                          <button
+                            style={{ backgroundColor: subItem.bg }}
+                            className={`relative w-[55px] h-[55px] rounded-[13px] text-white`}
+                          >
+                            {subItem?.ai && (
+                              <span className="absolute -top-1 -right-1 text-[16px] font-normal w-[23px] h-[23px] bg-[#4399FF] rounded-full">
+                                AI
+                              </span>
+                            )}
+                            <span className="text-[20px] font-semibold">
+                              {subItem?.icon}
                             </span>
-                          )}
-                          <span className="text-[20px] font-semibold">
-                            {subItem?.icon}
-                          </span>
-                        </button>
+                          </button>
                         </Link>
                       );
                     })}
@@ -221,7 +216,7 @@ const PracticeSlider = () => {
         onClick={() => moveCarousel("right")}
         className="absolute top-1/2 -right-7 cursor-pointer pl-[5px] z-2"
       >
-        <BsArrowRightCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full"/>
+        <BsArrowRightCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full" />
       </button>
     </div>
   );
