@@ -1,36 +1,36 @@
+import { useRouter } from "next/router";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
-import { useRouter } from "next/router";
 
 const WriteEssayModal = ({ open, setOpen, result }) => {
   const router = useRouter();
   const id = router.query.que_no;
   const {
-    content,
-    grammar,
-    spelling,
-    structure,
-    linguistic,
-    form,
-    vocabulary,
-    overall: totalScore,
+    Content,
+    Grammar,
+    Spelling,
+    Structure,
+    Linguistic,
+    Form,
+    Vocabulary,
+    Overall: totalScore,
   } = result?.scores || {};
-
+  console.log(result, "result");
   const formateData = [
-    { color: "cream", value: content, name: "Content" },
-    { color: "primary", value: grammar, name: "Grammar" },
-    { color: "blue", value: spelling, name: "Spellings" },
+    { color: "cream", value: Content, name: "Content" },
+    { color: "primary", value: Grammar, name: "Grammar" },
+    { color: "blue", value: Spelling, name: "Spellings" },
     {
       color: "cream",
-      value: structure,
+      value: Structure,
       name: "Development, Structure and Coherence",
     },
-    { color: "primary", value: linguistic, name: "General Linguistic Range" },
-    { color: "blue", value: form, name: "Form" },
-    { color: "cream", value: vocabulary, name: "Vocabulary" },
+    { color: "primary", value: Linguistic, name: "General Linguistic Range" },
+    { color: "blue", value: Form, name: "Form" },
+    { color: "cream", value: Vocabulary, name: "Vocabulary" },
   ];
   return (
     <ReusableModal open={open} setOpen={setOpen}>
@@ -71,7 +71,7 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
                   <CircularProgressbar
                     value={totalScore}
                     text={`${totalScore}`}
-                    maxValue={10}
+                    maxValue={15}
                     strokeWidth={15}
                     styles={buildStyles({
                       textColor: "gray",
@@ -81,7 +81,7 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 10.00</p>
+                <p className="text-gray text-xl mt-1">Out of 15.00</p>
               </div>
             </div>
             {/* Enabling Skill  */}
@@ -91,24 +91,31 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
               </div>
               {/* progress bar */}
               <div className="space-y-0 p-5">
-                {formateData?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="w-full flex items-center justify-between gap-x-5"
-                  >
-                    <p className="text-gray text-lg w-6/12 text-start">
-                      {item?.name}
-                    </p>
-                    <div className="w-5/12">
-                      <LineProgressBar
-                        height={25}
-                        lineColor={`${item?.color}`}
-                        strokeWidth={item?.value * 50}
-                      />
+                {formateData?.map((item, index) => {
+                  let outOf = 2
+                  if (item?.name === "Content") {
+                    outOf = 3
+                  }
+                  return (
+                    <div
+                      key={index}
+                      className="w-full flex items-center justify-between gap-x-5"
+                    >
+                      <p className="text-gray text-lg w-6/12 text-start">
+                        {item?.name}
+                      </p>
+                      <div className="w-5/12">
+                        <LineProgressBar
+                          height={25}
+                          lineColor={`${item?.color}`}
+                          strokeWidth={item?.value * 50}
+                        />
+                      </div>
+                      <p className="text-gray w-1/12 text-lg">{item?.value}/{outOf}</p>
                     </div>
-                    <p className="text-gray w-1/12 text-lg">{item?.value}/2</p>
-                  </div>
-                ))}
+                  )
+                }
+                )}
               </div>
             </div>
           </div>

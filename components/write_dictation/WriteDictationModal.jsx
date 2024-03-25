@@ -1,11 +1,11 @@
-import React from "react";
-import ReusableModal from "../global/ReusableModal";
-import { MdOutlineFileDownload } from "react-icons/md";
-import { GrClose } from "react-icons/gr";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { useRouter } from "next/router";
-import WordHighlight from "../global/WordHighlight";
 import wordCount from "@/utils/wordCount";
+import { useRouter } from "next/router";
+import React from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { GrClose } from "react-icons/gr";
+import { MdOutlineFileDownload } from "react-icons/md";
+import ReusableModal from "../global/ReusableModal";
+import WordHighlight from "../global/WordHighlight";
 
 const WriteDictationModal = ({ open, setOpen, result }) => {
   const router = useRouter();
@@ -53,10 +53,10 @@ const WriteDictationModal = ({ open, setOpen, result }) => {
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={totalScore}
-                    text={totalScore}
+                    value={wordCount(word_highlights, "correct")}
+                    text={wordCount(word_highlights, "correct")}
                     strokeWidth={15}
-                    maxValue={10}
+                    maxValue={totalScore}
                     styles={buildStyles({
                       textColor: "gray",
                       textSize: "20px",
@@ -65,7 +65,7 @@ const WriteDictationModal = ({ open, setOpen, result }) => {
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 10.00</p>
+                <p className="text-gray text-xl mt-1">Out of {totalScore}</p>
               </div>
             </div>
             {/* Time Taken */}
