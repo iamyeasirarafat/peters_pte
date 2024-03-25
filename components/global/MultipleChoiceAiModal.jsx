@@ -1,14 +1,16 @@
+import { useRouter } from "next/router";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import ReusableModal from "./ReusableModal";
-import { useRouter } from "next/router";
 
-const MultipleChoiceAiModal = ({ open, setOpen, result }) => {
+const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
   const router = useRouter();
   const id = router.query.que_no;
   console.log("result", result);
-
+  const rightOptions = result?.scores?.score_details?.right_options || []
+  const rightAnswer = result?.scores?.score_details?.right_answers || []
+  const wrongAnswer = result?.scores?.score_details?.wrong_answers || []
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -49,7 +51,7 @@ const MultipleChoiceAiModal = ({ open, setOpen, result }) => {
                     value={result?.scores?.score}
                     text={result?.scores?.score}
                     strokeWidth={15}
-                    maxValue={10}
+                    maxValue={outOf || 10}
                     styles={buildStyles({
                       textColor: "gray",
                       textSize: "20px",
@@ -58,7 +60,7 @@ const MultipleChoiceAiModal = ({ open, setOpen, result }) => {
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 10</p>
+                <p className="text-gray text-xl mt-1">Out of {outOf || 0}</p>
               </div>
             </div>
             {/* Time Taken */}
@@ -78,9 +80,9 @@ const MultipleChoiceAiModal = ({ open, setOpen, result }) => {
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                {/* {rightIndex?.map((item) => {
-                  return <WordValue key={item} word={obj[item]} />;
-                })} */}
+                {
+                  rightOptions.map((item, i) => <WordValue key={i} word={item} />)
+                }
               </div>
             </div>
             {/* Your Answer */}
@@ -90,15 +92,13 @@ const MultipleChoiceAiModal = ({ open, setOpen, result }) => {
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                {/* {myAnswer?.map((item, i) => {
-                  let wrong = true;
-                  rightIndex.forEach((i) => {
-                    if (i === parseInt(item)) {
-                      wrong = false;
-                    }
-                  });
-                  return <WordValue key={i} word={obj[item]} wrong={wrong} />;
-                })} */}
+                {/*  */}
+                {
+                  rightAnswer.map((item, i) => <WordValue key={i} word={item} />)
+                }
+                {
+                  wrongAnswer.map((item, i) => <WordValue wrong={true} key={i} word={item} />)
+                }
               </div>
             </div>
           </div>
@@ -137,9 +137,8 @@ export default MultipleChoiceAiModal;
 const WordValue = ({ word, wrong }) => {
   return (
     <p
-      className={`text-[60px] text-gray ${
-        wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
-      } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
+      className={`text-[60px] text-gray ${wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
+        } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
     >
       {word}
     </p>

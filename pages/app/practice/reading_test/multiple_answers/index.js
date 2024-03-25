@@ -9,8 +9,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { RxShuffle } from "react-icons/rx";
-import DashboardLayout from "../../../layout";
 import TextBlock from "../../../../../components/global/TextBlock";
+import DashboardLayout from "../../../layout";
 
 function Page() {
   const [aiResult, setAiResult] = useState(null);
@@ -75,6 +75,7 @@ function Page() {
         />
       )}
       <MultipleChoiceAiModal
+        outOf = {aiResult?.scores?.score_details?.right_options?.length || 0}
         result={aiResult}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
