@@ -86,6 +86,7 @@ const Index = () => {
       {/* // result tab */}
       {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
+          answer_question
           setAiResult={setAiResult}
           result={result}
           setOpenModal={setOpenModal}
@@ -101,6 +102,7 @@ const Index = () => {
       )}
       {result && (
         <ReadAloudModal
+          describe_image
           result={aiResult}
           open={openModal}
           setOpen={setOpenModal}
