@@ -100,6 +100,7 @@ const Index = () => {
       )}
       {result && (
         <ReadAloudModal
+          readAloud
           result={aiResult}
           open={openModal}
           setOpen={setOpenModal}

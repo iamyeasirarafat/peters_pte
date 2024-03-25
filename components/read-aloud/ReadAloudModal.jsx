@@ -3,11 +3,10 @@ import { useRouter } from "next/router";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
-import { VscDebugStart } from "react-icons/vsc";
+import AudioVisualizer from "../AudioVisualizer";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 import WordHighlight from "../global/WordHighlight";
-import AudioVisualizer from "../AudioVisualizer";
 
 const ReadAloudModal = ({
   open,
@@ -16,6 +15,7 @@ const ReadAloudModal = ({
   describe_image,
   retell_lecture,
   answer_question,
+  readAloud
 }) => {
   const router = useRouter();
   const id = router.query.que_no;
@@ -24,6 +24,7 @@ const ReadAloudModal = ({
   const content = Math.round(result?.scores?.content) || 0;
   const fluency = Math.round(result?.scores?.fluency) || 0;
   const pronunciation = Math.round(result?.scores?.pronunciation) || 0;
+  console.log(result, "ssssssss")
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -52,9 +53,6 @@ const ReadAloudModal = ({
         <div className="px-8 pt-4 pb-2">
           {/* audio */}
           <div className="border border-primary rounded-xl flex items-center justify-between p-2">
-            <button className="w-[50px] h-[50px] rounded-full bg-primary flex items-center justify-center">
-              <VscDebugStart className="text-white text-2xl" />
-            </button>
             <div className="w-full">
               <AudioVisualizer selectedFile={result?.audio} />
             </div>
@@ -120,13 +118,12 @@ const ReadAloudModal = ({
             )}
             {/* Enabling Skill  */}
             <div
-              className={`${
-                describe_image
-                  ? answer_question
-                    ? "col-span-12"
-                    : "col-span-9"
-                  : "col-span-6"
-              } w-full border border-primary rounded-[13px]`}
+              className={`${describe_image
+                ? answer_question
+                  ? "col-span-12"
+                  : "col-span-9"
+                : "col-span-6"
+                } w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
@@ -135,9 +132,9 @@ const ReadAloudModal = ({
               <div className="space-y-4 p-5">
                 {/* Content */}
                 <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Content</p>
+                  <p className="text-gray text-lg w-3/6 text-start">Content</p>
                   <LineProgressBar
-                    height={35}
+                    height={20}
                     lineColor={"cream"}
                     strokeWidth={content + 10}
                   />
@@ -145,9 +142,9 @@ const ReadAloudModal = ({
                 </div>
                 {/* Fluency */}
                 <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">Fluency</p>
+                  <p className="text-gray text-lg w-3/6 text-start">Fluency</p>
                   <LineProgressBar
-                    height={35}
+                    height={20}
                     lineColor={"primary"}
                     strokeWidth={fluency + 10}
                   />
@@ -155,16 +152,44 @@ const ReadAloudModal = ({
                 </div>
                 {/* Pronunciation */}
                 <div className="w-full flex items-center justify-between gap-x-5">
-                  <p className="text-gray text-xl w-3/6 text-start">
+                  <p className="text-gray text-lg w-3/6 text-start">
                     Pronunciation
                   </p>
                   <LineProgressBar
-                    height={35}
+                    height={20}
                     lineColor={"blue"}
                     strokeWidth={pronunciation + 10}
                   />
                   <p className="text-gray text-xl">{pronunciation}/90</p>
                 </div>
+                {
+                  readAloud && (
+                    <>
+                      <div className="w-full flex items-center justify-between gap-x-5">
+                        <p className="text-gray text-lg w-3/6 text-start">
+                          Speed
+                        </p>
+                        <LineProgressBar
+                          height={20}
+                          lineColor={"red"}
+                          strokeWidth={Math.round(result?.scores?.speed) || 0}
+                        />
+                        <p className="text-gray text-xl">{Math.round(result?.scores?.speed) || 0}</p>
+                      </div>
+                      <div className="w-full flex items-center justify-between gap-x-5">
+                        <p className="text-gray text-lg w-3/6 text-start">
+                          Stress
+                        </p>
+                        <LineProgressBar
+                          height={20}
+                          lineColor={"cream"}
+                          strokeWidth={Math.round(result?.scores?.stress) || 0}
+                        />
+                        <p className="text-gray text-xl">{Math.round(result?.scores?.stress) || 0}</p>
+                      </div>
+                    </>
+                  )
+                }
               </div>
             </div>
           </div>
@@ -192,6 +217,7 @@ const ReadAloudModal = ({
                   {wordCount(result?.scores?.word_highlight, "missing")} words
                 </p>
               </div>
+
             </>
           )}
           <p className="text-center mt-3 text-lightGray">
