@@ -10,56 +10,44 @@ import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { IoIosArrowBack } from "react-icons/io";
 import { RxShuffle } from "react-icons/rx";
 import DashboardLayout from "../../../layout";
 
 function Page() {
-  const [givenAnswer, setGivenAnswer] = useState([]);
-  const { register, handleSubmit } = useForm();
+  const [aiResult, setAiResult] = useState(null);
+  const [reFetch, setReFetch] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
-  const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
-  const [apiData, setData] = useState({});
+  const [data, setData] = useState({});
   const [result, setResult] = useState(null);
+  const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
 
   // get data
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/multi_choice/${id}/answer`;
+  // get data
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/multi_choice/" + id);
       setData(data);
     };
-    getData();
-  }, [id]);
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      getResult();
+    }
+  }, [id, reFetch, answerApi]);
 
   //sideModal Data
   const SideModalData = {
-    title: "Multiple Choices",
+    title: "Multiple Answers",
     api: "/multi_choices",
   };
 
-  //submit data
-  const onSubmit = async (data) => {
-    // filtering answer data
-    let ans = [];
-    let given = [];
-    Object.keys(data).forEach((i) => {
-      if (data[i] === true) {
-        given.push(i);
-        ans.push(apiData?.options[i]);
-      }
-    });
-    setGivenAnswer(given);
-    console.log(given);
-    //submitting data
-    const result = await axios.post("/multi_choice/answer", {
-      multi_choice: id,
-      answers: ans,
-    });
-    setResult(result.data);
-  };
   return (
     <DashboardLayout>
       {/* Side Modal */}
@@ -69,38 +57,31 @@ function Page() {
         Listen to the recording and answer the question by selecting all the
         correct responses. You will need to select more than one response.
       </p>
-      <GlobalMainContent data={apiData}>
+      <GlobalMainContent data={data}>
         {/* text block */}
-        <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
+        <ListenBlock setOpen={setOpenTranscriptModal} data={data} />
         {/* Multiple Choice Answer */}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <MultipleChoiceAnswer
-            register={register}
-            answers={apiData?.options}
-          />
-          <div className="flex items-center justify-between mt-4">
-            <button
-              className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
-              type="submit"
-            >
-              {result ? "Re-Submit" : "Submit"}
-            </button>
-            <GlobalPagination />
-          </div>
-        </form>
+        <MultipleChoiceAnswer
+          setReFetch={setReFetch}
+          answers={data?.options}
+          result={result}
+          isReady={data?.id ? false : true}
+          typingTime={5}
+          api={answerApi}
+        />
       </GlobalMainContent>
-      {!result && (
+      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
         <ResultSection
           summary
           setOpenModal={setOpenScoreModal}
           setOpenScoreModal={setOpenScoreModal}
           result={result}
+          setAiResult={setAiResult}
         />
       )}
       <MultipleChoiceAiModal
-        result={result}
-        myAnswer={givenAnswer}
-        apiData={apiData}
+        outOf={aiResult?.scores?.score_details?.right_options?.length || 0}
+        result={aiResult}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
       />
