@@ -1,4 +1,3 @@
-"use client";
 import GlobalMainContent from "@/components/global/GlobalMainContent";
 import ListenBlock from "@/components/global/ListenBlock";
 import MultipleChoiceAiModal from "@/components/global/MultipleChoiceAiModal";
@@ -10,70 +9,59 @@ import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import DashboardLayout from "../../../layout";
-import { GlobalPagination } from "../../reading_test/multiple_answers";
-// import { GlobalPagination } from "../multiple_answers/page";
 const answers = [
   {
-    serial: "A",
+    index: "A",
     answer:
       "Listen to the recording and answer the question by selecting all the tortoise",
   },
   {
-    serial: "B",
+    index: "B",
     answer:
       "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
   },
   {
-    serial: "C",
+    index: "C",
     answer:
       "Listen to the recording and answer the question by selecting all the question color fact on global earth",
   },
   {
-    serial: "D",
+    index: "D",
     answer:
       "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
   },
-  {
-    serial: "E",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
 ];
 function Page() {
+  const [aiResult, setAiResult] = useState(null);
+  const [reFetch, setReFetch] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
   const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
-  const { register, handleSubmit } = useForm();
-  const [apiData, setData] = useState({});
+  const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
-  const [givenAnswer, setGivenAnswer] = useState([]);
   // get data
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/multi_choice/${id}/answer`;
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/multi_choice/" + id);
       setData(data);
     };
-    getData();
-  }, [id]);
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      getResult();
+    }
+  }, [id, reFetch, answerApi]);
 
   //sideModal Data
   const SideModalData = {
-    title: "Single Answer",
+    title: "Single Answers",
     api: "/multi_choices/single-answer",
-  };
-
-  //submit data
-  const onSubmit = async () => {
-    //submitting data
-    const result = await axios.post("/multi_choice/answer", {
-      multi_choice: id,
-      answers: [selectedAnswer],
-    });
-    setResult(result.data);
   };
   return (
     <DashboardLayout>
@@ -84,35 +72,26 @@ function Page() {
         Listen to the recording and answer the multiple-choice question by
         selecting the correct response. Only one response is correct.
       </p>
-      <GlobalMainContent data={apiData}>
+      <GlobalMainContent data={data}>
         {/* text block */}
-        <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
+        <ListenBlock setOpen={setOpenTranscriptModal} data={data} />
         {/* Multiple Choice Answer */}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <SingleChoiceAnswer
-            setGivenAnswer={setGivenAnswer}
-            selectedAnswer={selectedAnswer}
-            setSelectedAnswer={setSelectedAnswer}
-            register={register}
-            answers={apiData?.options}
-          />
-          <div className="flex items-center justify-between mt-4">
-            <button
-              className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
-              type="submit"
-            >
-              {result ? "Re-Submit" : "Submit"}
-            </button>
-            <GlobalPagination />
-          </div>
-        </form>
+        <SingleChoiceAnswer
+          isReady={data?.id ? false : true}
+          typingTime={5}
+          answers={data?.options || []}
+          result={result}
+          setReFetch={setReFetch}
+          api={answerApi}
+        />
       </GlobalMainContent>
-      {result && (
+      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
         <ResultSection
           summary
           setOpenModal={setOpenScoreModal}
           setOpenScoreModal={setOpenScoreModal}
           result={result}
+          setAiResult={setAiResult}
         />
       )}
       <TranscriptModal
@@ -120,9 +99,9 @@ function Page() {
         setOpen={setOpenTranscriptModal}
       />
       <MultipleChoiceAiModal
-        result={result}
-        myAnswer={givenAnswer}
-        apiData={apiData}
+        outOf={1}
+        result={aiResult}
+        data={data}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
       />

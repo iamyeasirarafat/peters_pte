@@ -8,8 +8,8 @@ import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import DashboardLayout from "../../../layout";
 import TextBlock from "../../../../../components/global/TextBlock";
+import DashboardLayout from "../../../layout";
 const answers = [
   {
     index: "A",
@@ -63,7 +63,6 @@ function Page() {
     title: "Single Answers",
     api: "/multi_choices/reading/single-answer",
   };
-  console.log("data sg", data);
   return (
     <DashboardLayout>
       {/* Side Modal */}
@@ -78,6 +77,8 @@ function Page() {
         <TextBlock data={data} />
         {/* Multiple Choice Answer */}
         <SingleChoiceAnswer
+          isReady={data?.id ? false : true}
+          typingTime={5}
           answers={data?.options || []}
           result={result}
           setReFetch={setReFetch}
@@ -98,6 +99,7 @@ function Page() {
         setOpen={setOpenTranscriptModal}
       />
       <MultipleChoiceAiModal
+        outOf={1}
         result={aiResult}
         data={data}
         open={openScoreModal}

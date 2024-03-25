@@ -75,7 +75,7 @@ function Page() {
         />
       )}
       <MultipleChoiceAiModal
-        outOf = {aiResult?.scores?.score_details?.right_options?.length || 0}
+        outOf={aiResult?.scores?.score_details?.right_options?.length || 0}
         result={aiResult}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
