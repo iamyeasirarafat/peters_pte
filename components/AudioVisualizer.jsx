@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { VscDebugPause, VscDebugStart } from "react-icons/vsc";
 import WaveSurfer from "wavesurfer.js";
-import { AiOutlinePauseCircle, AiOutlinePlayCircle } from "react-icons/ai";
 
 function AudioVisualizer({ selectedFile }) {
   const waveformRef = useRef(null);
@@ -53,13 +53,13 @@ function AudioVisualizer({ selectedFile }) {
 
   return (
     <div>
-      <div className="flex justify-between border">
+      <div className="flex items-center justify-between">
         <button
           type="button"
-          className="w-10 text-[1.7rem]  font-bold flex justify-center items-center mx-2"
+          className=" text-[1.7rem] w-[60px] h-[50px] rounded-full bg-primary font-bold flex justify-center items-center mx-2"
           onClick={handlePlayPause}
         >
-          {isPlaying ? <AiOutlinePauseCircle /> : <AiOutlinePlayCircle />}
+          {isPlaying ? <VscDebugPause /> : <VscDebugStart className="text-white" />}
         </button>
         <div className="w-full">
           <div ref={waveformRef} />
