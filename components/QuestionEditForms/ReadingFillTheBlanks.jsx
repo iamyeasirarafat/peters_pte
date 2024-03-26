@@ -43,7 +43,7 @@ const ReadingFillTheBlanks = () => {
     if (item) {
       const getDetails = async (id) => {
         try {
-          const response = await axios.get(`/reading_blank/${id}`);
+          const response = await axios.get(`/read-write/blank/${id}`);
           if (response?.data) {
             setFormData(response?.data);
             setOptions(response?.data?.options);
@@ -162,7 +162,7 @@ const ReadingFillTheBlanks = () => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `/reading_blank/${itemObj.id}/update`,
+        `/read-write/blank/${itemObj.id}/update`,
         formData
       );
       toast.success("Update question successfully");

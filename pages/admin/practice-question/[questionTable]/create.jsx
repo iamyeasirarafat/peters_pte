@@ -71,9 +71,9 @@ const AllForms = () => {
   } else if (questionTable == "reorder-paragraph") {
     content = <ReOrderParagraph />;
   } else if (questionTable == "reading-blank") {
-    content = <ReadingFillTheBlanks />;
-  } else if (questionTable == "reading-writing-blank") {
     content = <FibReading />;
+  } else if (questionTable == "reading-writing-blank") {
+    content = <ReadingFillTheBlanks />;
   } else {
     content = <h2>this is new question from</h2>;
   }

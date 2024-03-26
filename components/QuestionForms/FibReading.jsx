@@ -117,7 +117,7 @@ const FibReading = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.post("/read-write/blank", formData);
+      const response = await axios.post("/reading_blank", formData);
       toast.success("Create question successfully");
       if (response?.data) {
         router.back();
