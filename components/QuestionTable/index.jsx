@@ -15,7 +15,6 @@ export const convertToCamelCase = (inputString) => {
   return camelCaseString;
 };
 const Students = ({ items, student, setReFetch }) => {
-  const [valueAll, setValueAll] = useState(false);
   const [deleteUserList, setDeleteUserList] = useState([]);
   const [openMultiActions, setOpenMultiActions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -27,24 +26,18 @@ const Students = ({ items, student, setReFetch }) => {
       <thead className="overflow-x-scroll">
         <tr>
           <th className="th-custom">
-            <Checkbox
-              value={valueAll}
-              onChange={() => setValueAll(!valueAll)}
-            />
-          </th>
-          <th className="th-custom">
             <Sorting title="Question Name" />
           </th>
-          <th className="">
+          <th className="th-custom text-center">
             <Sorting title="Question Id" />
           </th>
-          <th className="th-custom">
+          <th className="th-custom text-center">
             <Sorting title="Appeared No." />
           </th>
-          <th className="">
+          <th className="th-custom text-center">
             <Sorting title="Prediction" />
           </th>
-          <th className="">
+          <th className="th-custom text-center">
             <Sorting title="Upload Date" />
           </th>
           <th className="td-custom text-right">

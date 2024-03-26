@@ -76,7 +76,7 @@ const CardItems = () => {
       title: "Reading & Writing: FIB",
       items: itemNumber?.read_write_blank,
       bg: "#4399FF",
-      link: "r-w-blank",
+      link: "reading-writing-blank",
       text: "FIB",
     },
     {

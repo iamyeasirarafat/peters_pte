@@ -38,45 +38,43 @@ const Row = ({
   return (
     <tr className="">
       <td className="td-custom">
-        <Checkbox
-          value={value}
-          onChange={() => {
-            setValue(!value);
-            if (!value) {
-              setDeleteUserList((prev) => [...prev, item.id]);
-            } else {
-              setDeleteUserList((prev) => prev.filter((i) => i !== item.id));
-            }
-          }}
-        />
-      </td>
-      <td className="td-custom">
-        <div className="flex items-center ">
+        <div className="flex items-center gap-x-4">
+          <Checkbox
+            value={value}
+            onChange={() => {
+              setValue(!value);
+              if (!value) {
+                setDeleteUserList((prev) => [...prev, item.id]);
+              } else {
+                setDeleteUserList((prev) => prev.filter((i) => i !== item.id));
+              }
+            }}
+          />
           <p className="text-sm font-semibold">{item?.title || item?.word}</p>
         </div>
       </td>
-      <td className="td-custom">
-        <div className="label-stroke min-w-[7.25rem]">#0000{item?.id}</div>
+      <td className="td-custom text-center">
+        <div className="label-stroke min-w-[7.25rem]">#{item?.id}</div>
       </td>
-      <td className="td-custom ">{item?.appeared}</td>
-      <td className="td-custom">
+      <td className="td-custom text-center">{item?.appeared}</td>
+      <td className="td-custom text-center">
         {item.prediction ? (
-          <p className="text-orange-300 border-[1.5px] border-orange-300  flex justify-center py-1 rounded-1">
+          <p className="text-orange-400 border-[1.5px] border-orange-400  flex justify-center py-1 rounded-1">
             prediction
           </p>
         ) : (
-          <p className="text-slate-300 border-[1.5px] border-slate-300 flex justify-center py-1 rounded-1">
+          <p className="text-slate-400 border-[1.5px] border-slate-400 flex justify-center py-1 rounded-1">
             none
           </p>
         )}
       </td>
-      <td className="td-custom">
+      <td className="td-custom text-center">
         <div className="label-stroke min-w-[7.25rem]">
           {item?.date ? item.date : new Date().toLocaleDateString()}
         </div>
       </td>
       <td className="td-custom text-right">
-        <div className="flex justify-center bg-gray-100 ">
+        <div className="flex justify-end bg-gray-100 ">
           <div
             className="relative inline-block text-left"
             onClick={() => setIsOpen(isOpen === item?.id ? null : item?.id)}
@@ -105,12 +103,7 @@ const Row = ({
 
 export default Row;
 
-export const StudentRow = ({
-  item,
-  setDeleteUserList,
-  deleteUserList,
-  setReFetch,
-}) => {
+export const StudentRow = ({ item, setDeleteUserList, deleteUserList }) => {
   const [value, setValue] = useState(false);
   useEffect(() => {
     if (deleteUserList && deleteUserList.includes(item.id)) {
@@ -212,42 +205,42 @@ const MoreButton = ({ handleUpdateClick, item, setReFetch }) => {
 
   return (
     <div
-      className={`bg-secondary origin-top-right font-semibold absolute right-full z-3 mt-1 w-[230px] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+      className={`bg-secondary origin-top-right font-semibold absolute right-full top-1/2 z-3 mt-1 w-[230px] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
     >
       <div role="none">
         <div
           onClick={() => handleUpdateClick(item)}
-          className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          className="cursor-pointer block px-4 py-2 hover:text-gray duration-200 text-sm text-gray-700"
         >
           <Icon name="settings" /> Edit Question
         </div>
         <button
           onClick={() => handelAction(pageName, "increase", "appeared")}
-          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          className="block px-4 py-2 hover:text-gray duration-200 text-sm text-gray-700"
         >
           <Icon name="plus" /> Increase Appeared by 1
         </button>
         <button
           onClick={() => handelAction(pageName, "decrease", "appeared")}
-          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          className="block px-4 py-2 hover:text-gray duration-200 text-sm text-gray-700"
         >
           <Icon name="plus" /> Decrease Appeared by 1
         </button>
         <button
           onClick={() => handelAction(pageName, "on", "prediction")}
-          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+          className="block px-4 py-2 hover:text-gray duration-200 text-sm text-gray-700"
         >
           <Icon name="prediction" /> Prediction On
         </button>
         <button
           onClick={() => handelAction(pageName, "off", "prediction")}
-          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+          className="block px-4 py-2 hover:text-gray duration-200 text-sm text-gray-700"
         >
           <Icon name="predictionOff" /> Prediction Off
         </button>
         <button
           onClick={() => handelAction(pageName)}
-          className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
+          className="block px-4 py-2 hover:text-red duration-200 text-sm text-gray-700"
         >
           <Icon name="cross" /> Remove
         </button>
