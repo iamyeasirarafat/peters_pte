@@ -67,7 +67,7 @@ const ReadAloudModal = ({
           {/* score */}
           <div className="grid grid-cols-12 gap-x-6 mt-12">
             {/* Speaking Score */}
-            {!answer_question && (
+            {!answer_question && !describe_image && (
               <div className="col-span-3 w-full border border-primary rounded-[13px]">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                   <p className="text-gray text-xl">Speaking Score</p>
@@ -119,9 +119,9 @@ const ReadAloudModal = ({
             {/* Enabling Skill  */}
             <div
               className={`${describe_image
-                ? answer_question
-                  ? "col-span-12"
-                  : "col-span-9"
+                || answer_question
+                ? "col-span-12"
+                // : "col-span-9"
                 : "col-span-6"
                 } w-full border border-primary rounded-[13px]`}
             >
