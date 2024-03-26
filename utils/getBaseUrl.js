@@ -32,7 +32,7 @@ const getBaseUrl = (questionTable) => {
     url = "multi_choices/single-answer";
   } else if (questionTable === "summarize-spoken") {
     url = "spoken/summarizes";
-  } else if (questionTable === "r-w-blank") {
+  } else if (questionTable === "reading-writing-blank") {
     url = "read-write/blanks";
   } else if (questionTable === "spelling-bee") {
     url = "games/spelling_bees";
