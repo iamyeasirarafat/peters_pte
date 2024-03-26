@@ -120,7 +120,7 @@ const FibReading = () => {
   useEffect(() => {
     const getDetails = async (id) => {
       try {
-        const response = await axios.get(`/read-write/blank/${id}`);
+        const response = await axios.get(`/reading_blank/${id}`);
         if (response?.data) {
           // Set button counter based on the last index in the answers array
           const lastAnswerIndex = response?.data?.answers.length
@@ -161,7 +161,7 @@ const FibReading = () => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `/read-write/blank/${formData?.id}/update`,
+        `/reading_blank/${formData?.id}/update`,
         formData
       );
       toast.success("Question Edit successfully");
