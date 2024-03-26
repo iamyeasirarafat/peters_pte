@@ -1,7 +1,4 @@
 import Layout from "@/components/Layout";
-// import Select from "@/components/AddStudentSelect";
-import MockTestSelect from "@/components/MockTestSelect";
-import MockTestSelectMulti from "@/components/MockTestSelectMulti";
 import Field from "@/components/Field";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

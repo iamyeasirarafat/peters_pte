@@ -12,6 +12,8 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import { MultiActions } from "@/components/Students_list";
 import toast, { LoaderIcon } from "react-hot-toast";
 import TablePagination from "@/components/TablePagination";
+import { FiEdit } from "react-icons/fi";
+import { PiTrash } from "react-icons/pi";
 
 function Index() {
   const [status, setStatus] = useState(false);
@@ -27,12 +29,17 @@ function Index() {
   const [mockTestList, setMockTestList] = useState([]);
   useEffect(() => {
     const getMockTest = async () => {
-      setIsLoading(true);
-      const res = await axios.get(
-        `/${mocktest_List}?limit=${pageLimit}&page=${pageNumber}`
-      );
-      setMockTestList(res?.data);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await axios.get(
+          `/${mocktest_List}?limit=${pageLimit}&page=${pageNumber}`
+        );
+        setMockTestList(res?.data);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        toast.error(error?.response?.data?.message || "Something went wrong");
+      }
     };
     router.isReady && getMockTest();
   }, [mocktest_List, router.isReady, status, pageNumber]);
@@ -118,9 +125,9 @@ const MocktestList = ({
             <th className="th-custom text-right">
               <Sorting title="Upload Date" />
             </th>
-            <th className="th-custom text-center">
+            <th className="th-custom relative">
               {deleteUserList?.length > 0 && (
-                <div className="relative">
+                <div className="absolute right-5 top-1/2 -translate-y-1/2">
                   <button
                     onClick={() => setOpenMultiActions(!openMultiActions)}
                     className="btn-transparent-dark btn-small btn-square"
@@ -199,19 +206,19 @@ const MocktestListRow = ({
       <td className="td-custom text-right">
         <p className="text-sm">{formatDateTime(item?.created_at, "date")}</p>
       </td>
-      <td className="td-custom text-center">
+      <td className="td-custom text-right relative">
         <button
           onClick={() => setShowDot(showDot === item?.id ? null : item?.id)}
           disabled={deleteUserList?.length > 0}
-          className={`btn-transparent-dark btn-small btn-square relative ${
+          className={`btn-transparent-dark btn-small btn-square ${
             deleteUserList?.length > 0 && "cursor-not-allowed opacity-20"
           }`}
         >
           <Icon name="dots" />
-          {showDot === item?.id && (
-            <ActionDialog setStatus={setStatus} id={item?.id} />
-          )}
         </button>
+        {showDot === item?.id && (
+          <ActionDialog setStatus={setStatus} id={item?.id} />
+        )}
       </td>
     </tr>
   );
@@ -272,24 +279,24 @@ const ActionDialog = ({ setStatus, id }) => {
     }
   };
   return (
-    <div className="bg-secondary p-4 z-50  rounded-md shadow absolute right-8 top-1/2 space-y-2">
+    <div className="bg-secondary py-2 px-4 z-50  rounded-md shadow absolute left-1/3 top-1/2 space-y-2 text-left">
       <button
         onClick={(e) => {
           e.stopPropagation();
           router.push(`/admin/mocktest/add-mocktest/${mocktest_List}?id=${id}`);
         }}
-        className="text-black hover:text-purple-1 test-base duration-200"
+        className="text-black hover:text-gray flex items-center gap-x-2 text-base duration-200"
       >
-        Edit
+        <FiEdit /> Edit
       </button>
       <button
         onClick={(e) => {
           e.stopPropagation();
           handelDelete();
         }}
-        className="text-black flex items-center gap-x-3 test-base hover:text-red duration-200"
+        className="text-black flex items-center gap-x-2 text-base hover:text-red duration-200"
       >
-        {isLoading && <LoaderIcon />} Delete
+        {isLoading ? <LoaderIcon /> : <PiTrash />} Delete
       </button>
     </div>
   );

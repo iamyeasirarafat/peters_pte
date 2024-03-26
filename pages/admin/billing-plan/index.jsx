@@ -38,7 +38,7 @@ function BillingPayment() {
   ];
   return (
     <Layout title="Billing & Payment">
-      <div className="grid grid-cols-12 gap-5">
+      <div className="grid grid-cols-12 gap-5 h-full">
         {/* left side content */}
         <div className="md:col-span-8 flex flex-col justify-between col-span-12 p-5 bg-white dark:bg-black">
           <div>
@@ -184,7 +184,8 @@ const Switch = ({ className, value, setValue }) => (
       <span
         aria-hidden="true"
         className={twMerge(
-          `pointer-events-none inline-block w-4 h-4 transition-all ${value ? "translate-x-4 bg-primary" : "translate-x-0 bg-n-1"
+          `pointer-events-none inline-block w-4 h-4 transition-all ${
+            value ? "translate-x-4 bg-primary" : "translate-x-0 bg-n-1"
           }`
         )}
       />

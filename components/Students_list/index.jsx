@@ -5,9 +5,9 @@ import Item from "./Item";
 import StudentRow from "./Row";
 import { useState } from "react";
 import Icon from "@/components/Icon";
-import { BsTrash3 } from "react-icons/bs";
 import { multiDeleteList } from "@/utils/multiDeleteList";
 import toast, { LoaderIcon } from "react-hot-toast";
+import { PiTrash } from "react-icons/pi";
 
 const Students = ({ items, setStatus, admin }) => {
   const [deleteUserList, setDeleteUserList] = useState([]);
@@ -128,58 +128,65 @@ export const MultiActions = ({
   };
 
   return (
-    <div className="absolute top-1/2 right-[70%] bg-secondary p-1 rounded-md w-[230px]">
-      <div role="none">
-        {onlyDelete && (
-          <>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleMultiDelete("increase", "appeared");
-              }}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
-            >
-              <Icon name="plus" /> Increase Appeared by 1
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleMultiDelete("decrease", "appeared");
-              }}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
-            >
-              <Icon name="plus" /> Decrease Appeared by 1
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleMultiDelete("on", "prediction");
-              }}
-              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
-            >
-              <Icon name="prediction" /> Prediction On
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleMultiDelete("off", "prediction");
-              }}
-              className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
-            >
-              <Icon name="predictionOff" /> Prediction Off
-            </button>
-          </>
-        )}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            handleMultiDelete();
-          }}
-          className="flex items-center gap-x-2 px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-red"
-        >
-          <Icon name="cross" /> {loadingDelete && <LoaderIcon />} Remove
-        </button>
-      </div>
+    <div
+      className={`absolute top-1/2 right-[70%] bg-secondary p-1 rounded-md ${
+        onlyDelete ? "w-[230px]" : "w-[120px]"
+      }  z-50`}
+    >
+      {onlyDelete && (
+        <>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleMultiDelete("increase", "appeared");
+            }}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
+          >
+            <Icon name="plus" /> Increase Appeared by 1
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleMultiDelete("decrease", "appeared");
+            }}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
+          >
+            <Icon name="plus" /> Decrease Appeared by 1
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleMultiDelete("on", "prediction");
+            }}
+            className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
+          >
+            <Icon name="prediction" /> Prediction On
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleMultiDelete("off", "prediction");
+            }}
+            className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
+          >
+            <Icon name="predictionOff" /> Prediction Off
+          </button>
+        </>
+      )}
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleMultiDelete();
+        }}
+        className="flex items-center gap-x-2 px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-red"
+      >
+        {loadingDelete ? <LoaderIcon /> : <PiTrash />} Remove
+      </button>
     </div>
   );
 };
