@@ -10,9 +10,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { default as toast } from "react-hot-toast";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { IoFilterSharp } from "react-icons/io5";
-import { RiGraduationCapFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import Students from "../../components/Students_list";
 
