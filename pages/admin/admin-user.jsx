@@ -1,4 +1,3 @@
-import Checkbox from "@/components/Checkbox";
 import Field from "@/components/Field";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
@@ -11,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useMediaQuery } from "react-responsive";
+import { PhoneNumberInput } from "@/components/Students_list/Row";
 
 const AdminUser = () => {
   const { mounted } = useHydrated();
@@ -48,44 +48,43 @@ const AdminUser = () => {
 export default AdminUser;
 
 const AdminUserList = ({ data, setStatus }) => {
-  const [value, setValue] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="bg-white dark:bg-black w-full">
       <div className="flex items-center justify-between p-3">
         <div className="w-full flex items-center gap-x-2">
-          <Checkbox value={value} onChange={() => setValue(!value)} />
           <Sorting title="User name" />
         </div>
-        <div className="w-full flex items-center gap-x-6 justify-between">
+        <div className="w-full flex items-center gap-x-6 justify-between pr-14">
           <Sorting title="User Id" />
           <Sorting title="User mail" />
         </div>
       </div>
       <div>
         {data.map((item) => (
-          <AdminUserRow setStatus={setStatus} key={item.id} data={item} />
+          <AdminUserRow
+            setStatus={setStatus}
+            key={item.id}
+            data={item}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-const AdminUserRow = ({ data, setStatus }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useState(false);
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+const AdminUserRow = ({ data, setStatus, isOpen, setIsOpen }) => {
   return (
     <div className="flex items-center justify-between p-3">
-      <div className="w-full flex items-center gap-x-2">
-        <Checkbox value={value} onChange={() => setValue(!value)} />
+      <div className="w-full flex items-center gap-x-4">
         <Image
           className="w-9 h-9 rounded-full"
           src={data.picture || "/images/img-2.jpg"}
           width={50}
           height={50}
-          alt=""
+          alt="profile image"
         />
         <p className="text-sm font-bold">{data?.full_name}</p>
       </div>
@@ -96,30 +95,14 @@ const AdminUserRow = ({ data, setStatus }) => {
           <div className="flex justify-center bg-gray-100 ">
             <div
               className="relative inline-block text-left"
-              onClick={toggleDropdown}
-              // onBlur={closeDropdown}
+              onClick={() => setIsOpen(isOpen === data.id ? null : data.id)}
             >
               <button className="btn-transparent-dark btn-small btn-square">
                 <Icon name="dots" />
               </button>
-              <div
-                style={{ backgroundColor: "#FAF4F0" }}
-                className={`${
-                  isOpen ? "block" : "hidden"
-                } origin-top-right font-semibold absolute right-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-              >
-                <div role="none">
-                  <button
-                    onClick={async () => {
-                      await axios.delete("/adminuser/" + data.id);
-                      setStatus(Math.random());
-                    }}
-                    className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                  >
-                    <Icon name="cross" /> Remove
-                  </button>
-                </div>
-              </div>
+              {isOpen === data.id && (
+                <MoreButton data={data} setStatus={setStatus} />
+              )}
             </div>
           </div>
         </div>
@@ -168,6 +151,7 @@ export const AddAdminUser = ({ visible, setVisible, setStatus }) => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({});
 
@@ -229,18 +213,32 @@ export const AddAdminUser = ({ visible, setVisible, setStatus }) => {
           register={register}
           name="email"
         />
-        <Field
-          errors={errors}
-          className="mb-6"
+        <PhoneNumberInput
           label="Phone"
-          placeholder="Enter Phone"
-          type="tel"
-          required
-          register={register}
           name="phone"
+          control={control}
+          errors={errors}
         />
-        <button className="btn-purple  w-full">Confirm</button>
+        <button className="btn-purple  w-full mt-6">Confirm</button>
       </form>
     </Modal>
+  );
+};
+
+const MoreButton = ({ data, setStatus }) => {
+  return (
+    <div
+      className={`py-2 px-3 bg-secondary dark:bg-black dark:border border-secondary absolute right-full top-1/2 rounded-md `}
+    >
+      <button
+        onClick={async () => {
+          await axios.delete("/adminuser/" + data.id);
+          setStatus(Math.random());
+        }}
+        className="flex items-center gap-x-2 font-medium text-base hover:text-red duration-200"
+      >
+        <Icon name="remove" /> Remove
+      </button>
+    </div>
   );
 };
