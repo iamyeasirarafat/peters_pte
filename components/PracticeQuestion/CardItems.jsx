@@ -8,7 +8,7 @@ const CardItems = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get("/superadmin/test/counts");
-        setItemNumber(res.data);
+        setItemNumber(res?.data);
       } catch (error) {
         console.log(error);
       }

@@ -42,73 +42,11 @@ const AuthBanner = () => {
               <p className="text-base font-medium mt-7">
                 - Tia Giamory, Scored 82 in PTE Exam
               </p>
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 w-[500px] h-[650px]">
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 w-full h-2/3">
                 <div className="w-full h-full relative">
                   <Image
                     className="object-cover"
-                    src="/auth-image.png"
-                    fill
-                    alt="auth image"
-                  />
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              {/* star icon */}
-              <div className="flex items-center gap-x-1">
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-              </div>
-              {/* text */}
-              <p className="text-3xl mt-3">
-                As an international student planning to pursue higher education,
-                I knew I had to take the PTE exam to prove my English language
-                proficiency. To prepare for this crucial test, I decided to try
-                out Peters PTE mock test software, and I can confidently say it
-                has been an invaluable asset in my preparation journey.
-              </p>
-              <p className="text-base font-medium mt-7">
-                - Tia Giamory, Scored 82 in PTE Exam
-              </p>
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 w-[500px] h-[650px]">
-                <div className="w-full h-full relative">
-                  <Image
-                    className="object-cover"
-                    src="/auth-image.png"
-                    fill
-                    alt="auth image"
-                  />
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              {/* star icon */}
-              <div className="flex items-center gap-x-1">
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-                <BsStarFill className="text-xl" />
-              </div>
-              {/* text */}
-              <p className="text-3xl mt-3">
-                As an international student planning to pursue higher education,
-                I knew I had to take the PTE exam to prove my English language
-                proficiency. To prepare for this crucial test, I decided to try
-                out Peters PTE mock test software, and I can confidently say it
-                has been an invaluable asset in my preparation journey.
-              </p>
-              <p className="text-base font-medium mt-7">
-                - Tia Giamory, Scored 82 in PTE Exam
-              </p>
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 w-[500px] h-[650px]">
-                <div className="w-full h-full relative">
-                  <Image
-                    className="object-cover"
-                    src="/auth-image.png"
+                    src="/man.png"
                     fill
                     alt="auth image"
                   />

@@ -19,8 +19,8 @@ const Index = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
 
+  const url = getBaseUrl(questionTable);
   useEffect(() => {
-    const url = getBaseUrl(questionTable);
     setBaseUrl(url);
     //init render or no searching text
     const fetchData = async () => {
@@ -35,6 +35,7 @@ const Index = () => {
         setLoading(false);
       }
     };
+
     //if there any searching text in input
     const queryData = async () => {
       try {
@@ -48,12 +49,12 @@ const Index = () => {
         setLoading(false);
       }
     };
-    if (searchText) {
+    if (searchText && url) {
       queryData();
-    } else {
+    } else if (url) {
       fetchData();
     }
-  }, [questionTable, pageNumber, reFetch, searchText === ""]);
+  }, [questionTable, pageNumber, reFetch, searchText, url]);
 
   const handleSearch = async () => {
     setPageNumber(1);
@@ -87,8 +88,9 @@ const Index = () => {
             type="search"
             placeholder="Search"
             onChange={(e) => setSearchText(e.target.value)}
-            className={`${searchInput ? "translate-x-0 w-auto " : "translate-x-[5rem] w-0"
-              }  duration-300 ease-in border-none outline-none focus:outline-none focus:ring-0`}
+            className={`${
+              searchInput ? "translate-x-0 w-auto " : "translate-x-[5rem] w-0"
+            }  duration-300 ease-in border-none outline-none focus:outline-none focus:ring-0`}
           />
           <button
             onClick={() => {

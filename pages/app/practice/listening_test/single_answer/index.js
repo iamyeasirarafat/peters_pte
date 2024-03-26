@@ -10,28 +10,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../../layout";
-const answers = [
-  {
-    index: "A",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    index: "B",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    index: "C",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-  {
-    index: "D",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-];
+
 function Page() {
   const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);

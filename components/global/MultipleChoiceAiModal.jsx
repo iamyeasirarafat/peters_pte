@@ -7,10 +7,9 @@ import ReusableModal from "./ReusableModal";
 const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
   const router = useRouter();
   const id = router.query.que_no;
-  console.log("result", result);
-  const rightOptions = result?.scores?.score_details?.right_options || []
-  const rightAnswer = result?.scores?.score_details?.right_answers || []
-  const wrongAnswer = result?.scores?.score_details?.wrong_answers || []
+  const rightOptions = result?.scores?.score_details?.right_options || [];
+  const rightAnswer = result?.scores?.score_details?.right_answers || [];
+  const wrongAnswer = result?.scores?.score_details?.wrong_answers || [];
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -80,9 +79,9 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                {
-                  rightOptions.map((item, i) => <WordValue key={i} word={item} />)
-                }
+                {rightOptions.map((item, i) => (
+                  <WordValue key={i} word={item} />
+                ))}
               </div>
             </div>
             {/* Your Answer */}
@@ -93,12 +92,12 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
                 {/*  */}
-                {
-                  rightAnswer.map((item, i) => <WordValue key={i} word={item} />)
-                }
-                {
-                  wrongAnswer.map((item, i) => <WordValue wrong={true} key={i} word={item} />)
-                }
+                {rightAnswer.map((item, i) => (
+                  <WordValue key={i} word={item} />
+                ))}
+                {wrongAnswer.map((item, i) => (
+                  <WordValue wrong key={i} word={item} />
+                ))}
               </div>
             </div>
           </div>
@@ -137,8 +136,9 @@ export default MultipleChoiceAiModal;
 const WordValue = ({ word, wrong }) => {
   return (
     <p
-      className={`text-[60px] text-gray ${wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
-        } capitalize leading-none py-3 px-2.5 rounded-[15px] border border-primary`}
+      className={`text-[35px] text-gray ${
+        wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
+      } capitalize leading-none  p-2.5 rounded-[10px] border border-primary`}
     >
       {word}
     </p>
