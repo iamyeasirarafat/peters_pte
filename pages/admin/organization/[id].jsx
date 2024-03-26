@@ -36,10 +36,10 @@ function OrgDetails() {
   return (
     <Layout title="Organizations Details" back>
       <div className={` grid grid-cols-12 gap-x-20 gap-y-5`}>
-        <div className={`md:col-span-12 col-span-4`}>
+        <div className={`col-span-12 md:col-span-4`}>
           <StudentProfileInfo data={orgData} setReFetch={setReFetch} />
         </div>
-        <div className={`md:col-span-12 col-span-8  `}>
+        <div className={`col-span-12 md:col-span-8  `}>
           <StudentDetailsRight data={orgData} />
         </div>
       </div>
@@ -361,7 +361,7 @@ const EditOrgModal = ({ visible, setVisible, editData, setReFetch }) => {
   );
 };
 
-const AccountPlan = ({ data, isOpen, setIsOpen,setFetchGroup }) => {
+const AccountPlan = ({ data, isOpen, setIsOpen, setFetchGroup }) => {
   return (
     <div>
       <table className="bg-white dark:bg-black w-full">
@@ -394,15 +394,16 @@ const AccountPlan = ({ data, isOpen, setIsOpen,setFetchGroup }) => {
                 {/* remove */}
                 <div
                   className="relative inline-block text-left"
-
                   onClick={() =>
                     setIsOpen(isOpen === group.id ? null : group.id)
                   }
                 >
-                  <button  className="btn-transparent-dark btn-small btn-square disabled:cursor-not-allowed">
+                  <button className="btn-transparent-dark btn-small btn-square disabled:cursor-not-allowed">
                     <Icon name="dots" />
                   </button>
-                  {isOpen === group.id && <OrgMore item={group} setFetchGroup={setFetchGroup} />}
+                  {isOpen === group.id && (
+                    <OrgMore item={group} setFetchGroup={setFetchGroup} />
+                  )}
                 </div>
               </td>
             </tr>
@@ -413,7 +414,7 @@ const AccountPlan = ({ data, isOpen, setIsOpen,setFetchGroup }) => {
   );
 };
 
-const OrgMore = ({ item,setFetchGroup }) => {
+const OrgMore = ({ item, setFetchGroup }) => {
   return (
     <div
       className={`bg-secondary dark:bg-black font-semibold absolute right-full dark:border-white border border-transparent top-0 z-3 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
@@ -421,9 +422,8 @@ const OrgMore = ({ item,setFetchGroup }) => {
       <div role="none">
         <button
           onClick={async () => {
-            await axios.delete(`/group/${item.id}` );
+            await axios.delete(`/group/${item.id}`);
             setFetchGroup((prev) => !prev);
-            
           }}
           className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
         >
