@@ -19,7 +19,7 @@ const Header = ({ back, title }: HeaderProps) => {
 
   return (
     <header
-      className={`${
+      className={`px-1 ${
         headerStyle ? "md:bg-background dark:bg-n-2 bg-transparent" : ""
       }`}
     >

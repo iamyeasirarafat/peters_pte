@@ -16,7 +16,7 @@ const Index = () => {
     {
       id: 1,
       name: "Full Mocktest",
-      icon: "MT",
+      icon: "FMT",
       Items: testCount?.full || 0,
       url: "/admin/mocktest/full_mocktests",
     },
@@ -50,7 +50,7 @@ const Index = () => {
     },
   ];
   return (
-    <Layout title="Mocktest">
+    <Layout title="Mock Test">
       <p className="text-lg font-extrabold">Mock Test Type</p>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-5 mt-3">
         {mocktest?.map((item, i) => (
