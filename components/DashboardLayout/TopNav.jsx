@@ -194,12 +194,14 @@ const UserDropdown = () => {
               <p className="text-gray text-base capitalize">
                 {user?.full_name}
               </p>
-              <p className="text-gray text-base">{user?.email}</p>
+              <p className="text-gray text-base whitespace-nowrap">
+                {user?.email}
+              </p>
             </div>
           </div>
           <hr className="border-t border-gray" />
           <div className="py-2 px-7">
-            <button className="text-gray text-lg font-medium flex items-center px-3 py-1 gap-x-2">
+            <button className="text-gray hover:scale-105 duration-200 hover:text-stone-600 text-lg font-medium flex items-center px-3 py-1 gap-x-2">
               Become Premium
               <Image
                 className="object-cover"
@@ -209,12 +211,12 @@ const UserDropdown = () => {
                 alt="icon"
               />
             </button>
-            <button className="text-gray text-lg font-medium flex items-center px-3 py-1 gap-x-2">
+            <button className="text-gray hover:scale-105 duration-200 hover:text-stone-600 text-lg font-medium flex items-center px-3 py-1 gap-x-2">
               Profile Center <FiUser className="text-xl" />
             </button>
             <button
               onClick={() => Logout()}
-              className="text-gray text-lg font-medium flex items-center px-3 py-1 gap-x-2"
+              className="text-gray hover:scale-105 duration-200 hover:text-stone-600 text-lg font-medium flex items-center px-3 py-1 gap-x-2"
             >
               Log Out <MdLogout className="text-xl" />
             </button>
