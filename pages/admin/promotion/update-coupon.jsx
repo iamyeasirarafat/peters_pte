@@ -59,7 +59,7 @@ export default function CreateCoupon() {
                     </div>
                     <input
                         placeholder="7 Days Premium Access"
-                        className="w-full border-none py-4 px-5 text-sm "
+                        className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
                         id="title"
                         type="text"
                         {...register("title", { required: "Title is required" })}
@@ -72,7 +72,7 @@ export default function CreateCoupon() {
                     </label>
                     <input
                         placeholder="BX550"
-                        className="w-full border-none py-4 px-5 text-sm "
+                        className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
                         id="code"
                         type="text"
                         {...register("code", { required: "code is required" })}
@@ -84,7 +84,7 @@ export default function CreateCoupon() {
                         {options?.map((option, i) => (
                             <div key={i}>
                                 <label
-                                    className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                                    className={`className="group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12 dark:bg-white/20 "`}
                                 >
                                     <input
                                         className="absolute top-0 left-0 opacity-0 invisible"
@@ -122,7 +122,7 @@ export default function CreateCoupon() {
                     </label>
                     <input
                         placeholder="25"
-                        className="w-full border-none py-4 px-5 text-sm "
+                        className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
                         id="amount"
                         type="text"
                         {...register("amount", { required: "amount is required" })}
@@ -135,7 +135,7 @@ export default function CreateCoupon() {
                     </label>
                     <input
                         placeholder="25"
-                        className="w-full border-none py-4 px-5 text-sm "
+                        className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
                         id="max_use"
                         type="text"
                         {...register("max_use", { required: "usage amount is required" })}
@@ -149,7 +149,7 @@ export default function CreateCoupon() {
                         </label>
                         <input
                             placeholder="25"
-                            className="w-full border-none py-4 px-5 text-sm "
+                            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
                             id="start_date"
                             type="date"
                             {...register("start_date", { required: "starting date is required" })}
@@ -162,7 +162,7 @@ export default function CreateCoupon() {
                         </label>
                         <input
                             placeholder="25"
-                            className="w-full border-none py-4 px-5 text-sm "
+                            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
                             id="end_date"
                             type="date"
                             {...register("end_date", { required: "ending date is required" })}

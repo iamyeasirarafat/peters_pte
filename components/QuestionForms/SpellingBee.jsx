@@ -49,7 +49,7 @@ const SpellingBee = () => {
           <input
             {...register("title", { required: true })}
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
             type="text"
           />
         </div>

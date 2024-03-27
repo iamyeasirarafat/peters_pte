@@ -72,7 +72,7 @@ const ListeningFrenzy = () => {
           </div>
           <input
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
             id="name"
             type="text"
             onChange={({ target }) =>

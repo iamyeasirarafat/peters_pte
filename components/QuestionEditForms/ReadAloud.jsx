@@ -60,7 +60,7 @@ const ReadAloud = () => {
           </div>
           <input
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20"
             id="title"
             type="text"
             value={formData.title}
@@ -76,7 +76,7 @@ const ReadAloud = () => {
             required
             rows={5}
             placeholder="Start Typing..."
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20"
             id="content"
             type="text"
             value={formData.content}
@@ -85,12 +85,12 @@ const ReadAloud = () => {
         </div>
         <div className="flex justify-between gap-6">
           <EditCounter
-            className="bg-white w-1/2"
+            className="bg-white w-1/2 dark:bg-white/20"
             title="Appeared Times"
             value={formData?.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
-          <div className="w-1/2 bg-white flex items-center pl-4">
+          <div className="w-1/2 bg-white dark:bg-white/20 flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"

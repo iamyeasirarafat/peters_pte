@@ -110,7 +110,7 @@ const AnswerShotQues = () => {
           </div>
           <input
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20"
             id="title"
             type="text"
             {...register("title", { required: "Title is required" })}
@@ -123,7 +123,7 @@ const AnswerShotQues = () => {
           <textarea
             rows={5}
             placeholder="Start Typing..."
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20"
             id="reference_text"
             type="text"
             {...register("reference_text", {
@@ -188,12 +188,12 @@ const AnswerShotQues = () => {
 
         <div className="flex justify-between gap-6">
           <EditCounter
-            className="bg-white w-1/2"
+            className="bg-white dark:bg-white/20 w-1/2"
             title="Appeared Times"
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 bg-white flex items-center pl-4">
+          <div className="w-1/2 bg-white dark:bg-white/20 flex items-center pl-4">
             <input
               id="prediction"
               type="checkbox"
