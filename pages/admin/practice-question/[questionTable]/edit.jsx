@@ -33,7 +33,7 @@ const EditForms = () => {
     content = <ReadAloud />;
   } else if (questionTable == "repeat-sentence") {
     content = <RepeatSentence />;
-  } else if (questionTable == "retell-sentence") {
+  } else if (questionTable == "retell-lecture") {
     content = <ReTelLecture />;
   } else if (questionTable == "short-question") {
     content = <AnswerShotQues />;
