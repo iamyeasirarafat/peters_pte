@@ -14,6 +14,7 @@ function DiscussionList() {
   const [status, setStatus] = useState(false);
   const [data, setData] = useState([]);
   const { mounted } = useHydrated();
+  const [isOpen, setIsOpen] = useState(null);
   const isTablet = useMediaQuery({
     query: "(max-width: 1023px)",
   });
@@ -29,11 +30,16 @@ function DiscussionList() {
   return (
     <Layout title="Promotion" back>
       {/* Tab */}
-      <DiscussionTab />
+      <PromotionTab />
       {mounted && isTablet ? (
-        <DiscussionTableMobile data={data} />
+        <PromotionTableMobile
+          data={data}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setStatus={setStatus}
+        />
       ) : (
-        <DiscussionTable data={data} setStatus={setStatus} />
+        <PromotionTable data={data} setStatus={setStatus} />
       )}
     </Layout>
   );
@@ -41,7 +47,7 @@ function DiscussionList() {
 
 export default DiscussionList;
 
-const DiscussionTab = ({}) => {
+const PromotionTab = ({}) => {
   const router = useRouter();
 
   return (
@@ -66,17 +72,16 @@ const DiscussionTab = ({}) => {
   );
 };
 
-const DiscussionTable = ({ data, setStatus }) => {
-  const [value, setValue] = useState(false);
+const PromotionTable = ({ data, setStatus }) => {
   const [deleteUserList, setDeleteUserList] = useState([]);
   const [openMultiActions, setOpenMultiActions] = useState(false);
+  const [isOpen, setIsOpen] = useState(null);
   return (
     <div className="mt-4">
       <table className="bg-white dark:bg-black w-full">
         <thead>
           <tr>
             <th className="th-custom flex items-center gap-x-4">
-              <Checkbox value={value} onChange={() => setValue(!value)} />
               <Sorting title="Coupon Name" />
             </th>
             <th className="th-custom text-center">
@@ -91,9 +96,9 @@ const DiscussionTable = ({ data, setStatus }) => {
             <th className="th-custom text-center ">
               <Sorting title="Created In" />
             </th>
-            <th className="th-custom text-center">
+            <th className="th-custom text-right relative">
               {deleteUserList?.length > 0 && (
-                <div className="relative">
+                <div className="absolute right-5 top-1/2 -translate-y-1/2">
                   <button
                     onClick={() => setOpenMultiActions(!openMultiActions)}
                     className="btn-transparent-dark btn-small btn-square"
@@ -116,12 +121,14 @@ const DiscussionTable = ({ data, setStatus }) => {
         </thead>
         <tbody>
           {data?.map((item) => (
-            <DiscussionRow
+            <PromotionRow
               data={item}
               key={item.id}
               deleteUserList={deleteUserList}
               setDeleteUserList={setDeleteUserList}
               setStatus={setStatus}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
             />
           ))}
         </tbody>
@@ -130,18 +137,15 @@ const DiscussionTable = ({ data, setStatus }) => {
   );
 };
 
-const DiscussionRow = ({
+const PromotionRow = ({
   data,
   setDeleteUserList,
   deleteUserList,
   setStatus,
+  isOpen,
+  setIsOpen,
 }) => {
   const [value, setValue] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
   useEffect(() => {
     if (deleteUserList && deleteUserList.includes(data.id)) {
       setValue(true);
@@ -181,11 +185,11 @@ const DiscussionRow = ({
         </p>
       </td>
 
-      <td className="td-custom  text-center ">
-        <div className="flex justify-center bg-gray-100 ">
+      <td className="td-custom text-right">
+        <div className="flex justify-end bg-gray-100">
           <div
             className="relative inline-block text-left"
-            onClick={toggleDropdown}
+            onClick={() => setIsOpen(isOpen === data?.id ? null : data?.id)}
           >
             <button
               disabled={deleteUserList?.length > 0}
@@ -195,34 +199,9 @@ const DiscussionRow = ({
             >
               <Icon name="dots" />
             </button>
-            <div
-              style={{ backgroundColor: "#FAF4F0" }}
-              className={`${
-                isOpen ? "block" : "hidden"
-              } origin-top-right font-semibold absolute right-full top-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-            >
-              <div role="none">
-                <button
-                  onClick={() => {
-                    localStorage.setItem("coupon", JSON.stringify(data));
-                    router.push("/admin/promotion/update-coupon");
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="settings" /> Edit Coupon
-                </button>
-                <button
-                  onClick={async () => {
-                    await axios.delete("/coupon/" + data.id);
-                    router.replace("/admin/promotion");
-                    setStatus((prev) => !prev);
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900"
-                >
-                  <Icon name="cross" /> Remove
-                </button>
-              </div>
-            </div>
+            {isOpen === data?.id && (
+              <MoreButtons data={data} setStatus={setStatus} />
+            )}
           </div>
         </div>
       </td>
@@ -230,30 +209,74 @@ const DiscussionRow = ({
   );
 };
 
-const DiscussionTableMobile = () => {
+const PromotionTableMobile = ({ data, isOpen, setIsOpen, setStatus }) => {
   return (
-    <div className="bg-white dark:bg-black p-4 mt-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-x-3">
-          <p className="text-sm">Eshak khan</p>
-          <p className="text-sm font-bold">Discussion</p>
+    <div className="space-y-2">
+      {data?.map((item, i) => (
+        <div className="bg-white dark:bg-black p-4 mt-4 " key={i}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-x-3">
+              <p className="text-sm">{item?.title}</p>
+              <p className="text-sm font-bold">{item.start_date || "N/A"}</p>
+            </div>
+            <div
+              onClick={() => setIsOpen(isOpen === item?.id ? null : item?.id)}
+              className="relative"
+            >
+              <button className="btn-transparent-dark btn-small btn-square">
+                <Icon name="dots" />
+              </button>
+              {isOpen === item?.id && (
+                <MoreButtons data={data} setStatus={setStatus} />
+              )}
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-bold truncate w-[200px]">
+                {item.code || "N/A"}
+              </p>
+              <p className="text-sm">{item.end_date || "N/A"}</p>
+            </div>
+            <div className="space-y-1 text-end">
+              <p className="text-sm">5</p>
+              <p className="text-sm">
+                {" "}
+                {dayjs(item.created_at).format("YYYY-MM-DD") || "N/A"}
+              </p>
+            </div>
+          </div>
         </div>
-        <button className="btn-transparent-dark btn-small btn-square">
-          <Icon name="dots" />
-        </button>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <p className="text-sm font-bold truncate w-[200px]">
-            I am in day 2 of doing Shadowing 2 of doing Shadowing
-          </p>
-          <p className="text-sm">#c782200004582</p>
-        </div>
-        <div className="space-y-1 text-end">
-          <p className="text-sm">5</p>
-          <p className="text-sm">05/10/23</p>
-        </div>
-      </div>
+      ))}
+    </div>
+  );
+};
+
+const MoreButtons = ({ data, setStatus }) => {
+  const router = useRouter();
+  return (
+    <div
+      className={`absolute top-1/2 right-full bg-secondary dark:bg-black dark:border py-2 px-3 rounded-md`}
+    >
+      <button
+        onClick={() => {
+          localStorage.setItem("coupon", JSON.stringify(data));
+          router.push("/admin/promotion/update-coupon");
+        }}
+        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center gap-x-2 whitespace-nowrap"
+      >
+        <Icon name="settings" /> Edit Coupon
+      </button>
+      <button
+        onClick={async () => {
+          await axios.delete("/coupon/" + data.id);
+          router.replace("/admin/promotion");
+          setStatus((prev) => !prev);
+        }}
+        className="px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray-900 flex items-center gap-x-2 whitespace-nowrap"
+      >
+        <Icon name="remove" /> Remove
+      </button>
     </div>
   );
 };
