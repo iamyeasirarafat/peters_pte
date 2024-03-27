@@ -16,7 +16,7 @@ const getBaseUrl = (questionTable) => {
     url = "repeat_sentences";
   } else if (questionTable === "short-question") {
     url = "short_questions";
-  } else if (questionTable === "retell-sentence") {
+  } else if (questionTable === "retell-lecture") {
     url = "retell_sentences";
   } else if (questionTable === "describe-image") {
     url = "describe_images";

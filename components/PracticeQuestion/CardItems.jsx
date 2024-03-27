@@ -51,7 +51,7 @@ const CardItems = () => {
       title: "Re-Tell Lecture",
       items: itemNumber?.retell_sentence,
       bg: "#CF8800",
-      link: "retell-sentence",
+      link: "retell-lecture",
       text: "RL",
     },
   ];

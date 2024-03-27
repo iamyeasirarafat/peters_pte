@@ -32,7 +32,7 @@ const AllForms = () => {
     content = <ReadAloud />;
   } else if (questionTable == "repeat-sentence") {
     content = <RepeatSentence />;
-  } else if (questionTable == "retell-sentence") {
+  } else if (questionTable == "retell-lecture") {
     content = <ReTelLecture />;
   } else if (questionTable == "short-question") {
     content = <AnswerShotQues />;
@@ -85,3 +85,20 @@ const AllForms = () => {
 };
 
 export default AllForms;
+
+export const audioSpeed = [
+  { value: 0.5, label: "Very Slow" },
+  { value: 0.9, label: "Slow" },
+  { value: 1.0, label: "Normal" },
+  { value: 1.1, label: "Fast" },
+  { value: 1.2, label: "Very Fast" },
+];
+export const audioSpeaker = [
+  { value: 3, label: "Scottish Male" },
+  { value: 1200, label: "US Male" },
+  { value: 6861, label: "US Female" },
+  { value: 3465, label: "Canadian Male" },
+  { value: 5729, label: "US Male" },
+  { value: 2333, label: "US Female" },
+  { value: 4597, label: "Indian Male" },
+];
