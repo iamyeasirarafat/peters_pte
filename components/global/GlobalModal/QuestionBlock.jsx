@@ -9,22 +9,12 @@ const QuestionBlock = ({ data, toggleModal }) => {
   const searchParams = useSearchParams();
 
   const addParam = (event = ChangeEvent) => {
-    // now you got a read/write object
-    const current = new URLSearchParams(Array.from(searchParams.entries())); // -> has to use this form
-
-    //setting new question id
+    const current = new URLSearchParams(Array.from(searchParams.entries()));
     current.delete("que_no");
-
     current.set("que_no", data.id);
-
-    // cast to string
     const search = current.toString();
-    // or const query = `${'?'.repeat(search.length && 1)}${search}`;
     const query = search ? `?${search}` : "";
-
     router.push(`${pathname}${query}`);
-
-    //closing Side Modal
     toggleModal();
   };
   return (
@@ -52,7 +42,7 @@ const QuestionBlock = ({ data, toggleModal }) => {
               textColor={"gray"}
             />
           )}
-          {data?.appeared && (
+          {data?.appeared > 0 && (
             <ButtonOutline
               text="Appeared"
               count={`(${data?.appeared})`}

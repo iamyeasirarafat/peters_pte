@@ -28,10 +28,12 @@ const Layout = ({ background, back, title, children }: LayoutProps) => {
       </Head>
       <div className="w-full flex h-screen">
         <Sidebar />
-        <div className="flex flex-col w-full px-2 md:px-9 pt-3">
-          <Header back={back} title={title} />
-          <div className="flex flex-col justify-between h-[calc(100vh-80px)] grow w-full mt-2">
-            <div className="flex-grow content-scrollbar px-1 overflow-y-auto scroll-smooth">
+        <div className="flex flex-col w-full">
+          <div className="px-2 md:px-9 shadow py-2">
+            <Header back={back} title={title} />
+          </div>
+          <div className="flex flex-col justify-between h-[calc(100vh-80px)] grow w-full px-2 md:px-9">
+            <div className="flex-grow content-scrollbar no-scrollbar px-1 pt-2 overflow-y-auto scroll-smooth">
               {children}
             </div>
             <Footer />

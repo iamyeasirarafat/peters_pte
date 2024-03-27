@@ -19,7 +19,7 @@ const Sidebar = ({}: SidebarProps) => {
 
   return (
     <div
-      className={`flex flex-col pt-6 px-8 pb-4.5 bg-n-1 h-screen duration-300 ${
+      className={`flex flex-col pt-6 px-8 pb-4.5 bg-n-1 h-screen overflow-auto content-scrollbar no-scrollbar duration-300 ${
         visible ? "w-[18.75rem]" : "w-20"
       }`}
     >

@@ -31,6 +31,18 @@
 * {
   scroll-behavior: smooth;
 }
+/* body scrollbar */
+
+body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #fff4eb;
+  border-radius: 1rem;
+}
+body::-webkit-scrollbar-thumb {
+  background: #f2b277;
+  border-radius: 1rem;
+}
 
 /* scrollbar  */
 .content-scrollbar::-webkit-scrollbar {
@@ -43,6 +55,15 @@
 .content-scrollbar::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 1rem;
+}
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* navigation scrollbar  */

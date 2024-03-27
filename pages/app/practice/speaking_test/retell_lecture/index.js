@@ -61,9 +61,7 @@ const Index = () => {
   return (
     <DashboardLayout>
       {/* Side Modal */}
-      <div className="hidden lg:block">
-        <SideModal data={SideModalData} />
-      </div>
+      <SideModal data={SideModalData} />
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}

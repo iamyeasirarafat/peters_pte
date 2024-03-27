@@ -114,7 +114,7 @@ const GlobalModal = () => {
                           BookMarked
                         </button>
                       </div>
-                      <div className="space-y-2 h-[450px] pr-2 overflow-auto content-scrollbar">
+                      <div className="space-y-2 h-[calc(100vh-28rem)] pr-2 overflow-auto content-scrollbar">
                         {/* Question */}
                         {filteredData?.map((item, i) => (
                           <QuestionBlock
