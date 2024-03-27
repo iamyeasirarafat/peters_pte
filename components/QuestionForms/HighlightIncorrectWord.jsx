@@ -179,7 +179,7 @@ const HighlightIncorrectWord = () => {
           </div>
           <input
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
             id="title"
             type="text"
             value={formData.title}
@@ -231,7 +231,7 @@ const HighlightIncorrectWord = () => {
         </div>
 
         {/* counter */}
-        <div className="flex items-center h-16 p-5 bg-white my-3 border-n-1 rounded-sm dark:border-white">
+        <div className="flex items-center h-16 p-5 bg-white my-3 border-n-1 rounded-sm dark:border-white dark:bg-white/20 ">
           <div className="mr-auto text-sm font-bold">Incorrect word Number</div>
           <div className="flex items-center shrink-0 ml-4">
             <div className="min-w-[2.5rem] text-center text-xs font-bold">
@@ -276,7 +276,7 @@ const HighlightIncorrectWord = () => {
                 value={option.value}
                 onChange={(e) => handleTextAreaChange(option.index, e)}
                 placeholder="write your text"
-                className="border-none py-4"
+                className="border-none py-4 dark:bg-white/20 "
               />
             </div>
           ))}
@@ -284,12 +284,12 @@ const HighlightIncorrectWord = () => {
 
         <div className="flex justify-between gap-6">
           <Counter
-            className="bg-white w-1/2"
+            className="bg-white w-1/2 dark:bg-white/20 "
             title="Appeared Times"
             value={formData.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
-          <div className="w-1/2  bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4 dark:bg-white/20 ">
             <input
               id="prediction"
               type="checkbox"

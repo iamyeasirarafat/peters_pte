@@ -109,7 +109,7 @@ const SummerizeSpoken = () => {
           </div>
           <input
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
             id="title"
             type="text"
             {...register("title", { required: "Title is required" })}
@@ -122,7 +122,7 @@ const SummerizeSpoken = () => {
           <textarea
             rows={5}
             placeholder="Start Typing..."
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
             id="reference_text"
             type="text"
             {...register("reference_text", {
@@ -187,12 +187,12 @@ const SummerizeSpoken = () => {
 
         <div className="flex justify-between gap-6">
           <Counter
-            className="bg-white w-1/2"
+            className="bg-white w-1/2 dark:bg-white/20 "
             title="Appeared Times"
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4">
+          <div className="w-1/2 border bg-white flex items-center pl-4 dark:bg-white/20 ">
             <input
               id="prediction"
               type="checkbox"

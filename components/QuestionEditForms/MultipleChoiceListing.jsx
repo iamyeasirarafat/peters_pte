@@ -167,7 +167,7 @@ const MultipleChoiceListing = () => {
           </div>
           <input
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
             id="title"
             type="text"
             value={formData.title}
@@ -220,17 +220,17 @@ const MultipleChoiceListing = () => {
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
           <EditCounter
-            className="bg-white w-1/2"
+            className="bg-white w-1/2 dark:bg-white/20 "
             title="Option Number"
             value={optionNumber}
             setValue={(value) => setOptionNumber(value)}
           />
-          <div className="w-1/2  bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4 dark:bg-white/20 ">
             <div className="grid grid-cols-4">
               {options?.map((option, i) => (
                 <div key={i}>
                   <label
-                    className={`group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12`}
+                    className={`className="group relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white  py-3 pl-3 pr-12 dark:bg-white/20 "`}
                   >
                     <input
                       className="absolute top-0 left-0 opacity-0 invisible"
@@ -240,18 +240,16 @@ const MultipleChoiceListing = () => {
                       checked={selectedOptions.includes(option.value)} // Use 'in' operator to check if the key exists
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                        selectedOptions.includes(option.value)
-                          ? "bg-green-1 border-green-1 dark:!border-green-1"
-                          : "bg-transparent border-n-1 dark:border-white"
-                      }`}
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions.includes(option.value)
+                        ? "bg-green-1 border-green-1 dark:!border-green-1"
+                        : "bg-transparent border-n-1 dark:border-white"
+                        }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${
-                          selectedOptions.includes(option.value)
-                            ? "opacity-100"
-                            : "opacity-0"
-                        }`}
+                        className={`fill-white transition-opacity ${selectedOptions.includes(option.value)
+                          ? "opacity-100"
+                          : "opacity-0"
+                          }`}
                         name="check"
                       />
                     </span>
@@ -274,7 +272,7 @@ const MultipleChoiceListing = () => {
               <textarea
                 rows={5}
                 placeholder="Start Typing..."
-                className="w-full border-none py-4 px-5 text-sm "
+                className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
                 id="paragraph"
                 type="text"
                 value={option?.value}
@@ -286,12 +284,12 @@ const MultipleChoiceListing = () => {
 
         <div className="flex justify-between gap-6">
           <EditCounter
-            className="bg-white w-1/2"
+            className="bg-white w-1/2 dark:bg-white/20 "
             title="Appeared Times"
             value={formData.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
-          <div className="w-1/2  bg-white flex items-center pl-4">
+          <div className="w-1/2  bg-white flex items-center pl-4 dark:bg-white/20 ">
             <input
               id="prediction"
               type="checkbox"

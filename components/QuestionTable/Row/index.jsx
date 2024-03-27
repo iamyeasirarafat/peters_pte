@@ -205,7 +205,7 @@ const MoreButton = ({ handleUpdateClick, item, setReFetch }) => {
 
   return (
     <div
-      className={`bg-secondary origin-top-right font-semibold absolute right-full top-1/2 z-3 mt-1 w-[230px] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+      className={`bg-secondary dark:bg-black dark:border origin-top-right font-semibold absolute right-full top-1/2 z-3 mt-1 w-[230px] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
     >
       <div role="none">
         <div

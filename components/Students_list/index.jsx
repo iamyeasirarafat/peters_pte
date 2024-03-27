@@ -129,9 +129,8 @@ export const MultiActions = ({
 
   return (
     <div
-      className={`absolute top-1/2 right-[70%] bg-secondary p-1 rounded-md ${
-        onlyDelete ? "w-[230px]" : "w-[120px]"
-      }  z-50`}
+      className={`absolute top-1/2 right-[70%] bg-secondary dark:bg-black p-1 rounded-md ${onlyDelete ? "w-[230px]" : "w-[120px]"
+        }  z-50`}
     >
       {onlyDelete && (
         <>
@@ -141,7 +140,7 @@ export const MultiActions = ({
               e.stopPropagation();
               handleMultiDelete("increase", "appeared");
             }}
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
+            className="block px-4 py-2 text-sm text-gray-700  dark:text-gray-700 hover:bg-gray-100 hover:text-gray"
           >
             <Icon name="plus" /> Increase Appeared by 1
           </button>

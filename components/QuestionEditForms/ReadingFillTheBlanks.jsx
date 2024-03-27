@@ -65,7 +65,7 @@ const ReadingFillTheBlanks = () => {
             // Set button counter based on the last index in the options array
             const lastOptionsIndex = response?.data?.options.length
               ? response?.data?.options[response?.data?.options.length - 1]
-                  .index
+                .index
               : "A"; // Default to 'A' if there are no options
             setButtonCounter(lastOptionsIndex.charCodeAt(0) + 1);
             console.log(response.data);
@@ -195,9 +195,9 @@ const ReadingFillTheBlanks = () => {
         prevOptions.map((option) =>
           option.index === index
             ? {
-                ...option,
-                options: [...option.options, ""],
-              }
+              ...option,
+              options: [...option.options, ""],
+            }
             : option
         )
       );
@@ -207,9 +207,9 @@ const ReadingFillTheBlanks = () => {
         prevOptions.map((option) =>
           option.index === index
             ? {
-                ...option,
-                options: option.options.slice(0, -1),
-              }
+              ...option,
+              options: option.options.slice(0, -1),
+            }
             : option
         )
       );
@@ -228,14 +228,14 @@ const ReadingFillTheBlanks = () => {
           </div>
           <input
             placeholder="Bill On The Hill"
-            className="w-full border-none py-4 px-5 text-sm "
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
             id="title"
             type="text"
             value={formData.title}
             onChange={handleInputChange}
           />
         </div>
-        <div className="flex items-center h-16 p-5 bg-white my-3 border-n-1 rounded-sm dark:border-white">
+        <div className="flex items-center h-16 p-5 bg-white my-3 border-n-1 rounded-sm dark:border-white dark:bg-white/20 ">
           <div className="mr-auto text-sm font-bold">Blanks Number</div>
           <div className="flex items-center shrink-0 ml-4">
             <div className="min-w-[2.5rem] text-center text-xs font-bold">
@@ -281,7 +281,7 @@ const ReadingFillTheBlanks = () => {
                 {option?.options.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between  items-center bg-white"
+                    className="flex justify-between  items-center bg-white dark:bg-white/20 "
                   >
                     <label
                       className={`group ml-3 relative inline-flex items-start select-none cursor-pointer tap-highlight-color bg-white `}
@@ -294,18 +294,16 @@ const ReadingFillTheBlanks = () => {
                         checked={option.answer === item && option.answer !== ""}
                       />
                       <span
-                        className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
-                          option.answer === item && option.answer !== ""
-                            ? "bg-green-1 border-green-1 dark:!border-green-1"
-                            : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                        className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${option.answer === item && option.answer !== ""
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                          }`}
                       >
                         <Icon
-                          className={`fill-white transition-opacity ${
-                            option.answer === item && option.answer !== ""
-                              ? "opacity-100"
-                              : "opacity-0"
-                          }`}
+                          className={`fill-white transition-opacity ${option.answer === item && option.answer !== ""
+                            ? "opacity-100"
+                            : "opacity-0"
+                            }`}
                           name="check"
                         />
                       </span>
@@ -319,7 +317,7 @@ const ReadingFillTheBlanks = () => {
                         handleTextAreaChange(option.index, idx, e)
                       }
                       placeholder="write your text"
-                      className="border-none py-4"
+                      className="border-none py-4 dark:bg-white/20 "
                     />
                   </div>
                 ))}
@@ -337,12 +335,12 @@ const ReadingFillTheBlanks = () => {
 
         <div className="flex justify-between gap-6">
           <EditCounter
-            className="bg-white w-1/2"
+            className="bg-white w-1/2 dark:bg-white/20 "
             title="Appeared Times"
             value={formData.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
           />
-          <div className="w-1/2 bg-white flex items-center pl-4">
+          <div className="w-1/2 bg-white flex items-center pl-4 dark:bg-white/20 ">
             <input
               id="prediction"
               type="checkbox"
