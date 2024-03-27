@@ -6,20 +6,15 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { LoaderIcon } from "react-hot-toast";
-import audioToText from "../../utils/audioToText";
 import useTextToAudio from "../../utils/textToAudio";
 import AudioVisualizer from "../AudioVisualizer";
-import { Listbox, Transition } from "@headlessui/react";
-import { twMerge } from "tailwind-merge";
 const AnswerShotQues = () => {
   const router = useRouter();
   const [appeared, setAppeared] = useState(0);
   const [audioSrc, setAudioSrc] = useState(null);
   const [audio, setAudio] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [getText, aiLoading, error] = audioToText();
   const { register, handleSubmit, watch, setError, formState } = useForm();
-  console.log(aiLoading, "aiLoading");
   const onsubmit = async (data) => {
     if (audio) {
       try {
@@ -71,7 +66,7 @@ const AnswerShotQues = () => {
     }
   }, [watch()])
 
-  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError
+  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError, SelectSpeedCompo
   } = useTextToAudio();
   useEffect(() => {
     if (generatedAudio) {
@@ -84,27 +79,6 @@ const AnswerShotQues = () => {
     }
   }, [audioError, generatedAudio, generatedAudioSrc])
 
-  const audioSpeed = [
-    { value: 0.5, label: "Very Slow" },
-    { value: 0.9, label: "Slow" },
-    { value: 1.0, label: "Normal" },
-    { value: 1.1, label: "Fast" },
-    { value: 1.2, label: "Very Fast" },
-  ]
-  const [selectedAudioSpeed, setSelectedAudioSpeed] = useState()
-
-  const audioSpeaker = [
-    { value: 3, label: "Scottish Male" },
-    { value: 1200, label: "US Male" },
-    { value: 6861, label: "US Female" },
-    { value: 3465, label: "Canadian Male" },
-    { value: 5729, label: "US Male" },
-    { value: 2333, label: "US Female" },
-    { value: 4597, label: "Indian Male" },
-  ];
-  const [selectedAudioSpeaker, setSelectedAudioSpeaker] = useState()
-
-  console.log(selectedAudioSpeed, selectedAudioSpeaker)
 
   return (
     <div>
@@ -182,25 +156,19 @@ const AnswerShotQues = () => {
             </div>
           )}
           {/* select speaker and select speed drop down */}
+          <SelectSpeedCompo />
 
-          <div className="w-1/2 flex gap-2 my-4">
-            <Dropdown defaultValue="Speaker" selectItem={selectedAudioSpeaker} setSelectItem={setSelectedAudioSpeaker} ListItem={audioSpeaker} />
-            <Dropdown defaultValue="Speed" selectItem={selectedAudioSpeed} setSelectItem={setSelectedAudioSpeed} ListItem={audioSpeed} />
+          <button
+            onClick={async (e) => {
+              e.preventDefault()
+              await getAudio(watch().reference_text)
+            }}
+            disabled={!enableGenerateBtn}
+            className="mr-3 flex items-center  text-white h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+          </button>
 
-          </div>
-          {
-            selectedAudioSpeed && selectedAudioSpeaker &&
-            <button
-              onClick={async (e) => {
-                e.preventDefault()
-                await getAudio(watch().reference_text)
-              }}
-              disabled={!enableGenerateBtn}
-              className="mr-3 flex items-center  text-white h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
-              <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
-              {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
-            </button>
-          }
 
         </div>
 
@@ -242,49 +210,3 @@ const AnswerShotQues = () => {
 export default AnswerShotQues;
 
 
-const Dropdown = ({ selectItem, setSelectItem, ListItem, defaultValue }) => {
-  return (
-    <div className={`relative`}>
-      <Listbox value={selectItem} onChange={setSelectItem}>
-        {({ open }) => (
-          <>
-            <Listbox.Button className={twMerge(
-              `flex items-center w-full h-16 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-n-1 dark:border-white dark:text-white  ${open ? "border-purple-1 dark:border-purple-1" : ""
-              } `
-            )}>
-              <span className="mr-auto truncate">
-                {selectItem ? (
-                  selectItem.label
-                ) : (
-                  <span className="text-n-2 dark:text-white/75">
-                    {defaultValue}
-                  </span>
-                )}
-              </span>
-              <Icon
-                className={`shrink-0 icon-20 ml-6 -mr-0.5 transition-transform dark:fill-white  ${open ? "rotate-180" : ""} `}
-                name="arrow-bottom"
-              />
-            </Listbox.Button>
-            <Listbox.Options
-              className={twMerge(
-                `absolute left-0 right-0 w-full mt-1 p-2 bg-white h-40 overflow-y-auto  border-n-3 rounded-sm shadow-lg dark:bg-n-1 dark:border-white  ${open ? "z-10" : ""
-                } `
-              )}
-            >
-              {ListItem.map((item, idx) => (
-                <Listbox.Option
-                  className={`flex items-start px-3 py-2 rounded-sm capitalize text-sm font-bold text-n-3 transition-colors cursor-pointer hover:text-n-1 ui-selected:!bg-n-3/20 ui-selected:!text-n-1 tap-highlight-color dark:text-white/50 dark:hover:text-white dark:ui-selected:!text-white  `}
-                  key={idx}
-                  value={item}
-                >
-                  {item.label}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </>
-        )}
-      </Listbox>
-    </div>
-  )
-}
