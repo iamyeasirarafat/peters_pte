@@ -61,13 +61,19 @@ const RepeatSentence = () => {
   const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
   useEffect(() => {
     if (watch().reference_text !== "") {
-      setEnableGenerateBtn(true)
+      setEnableGenerateBtn(true);
     } else {
-      setEnableGenerateBtn(false)
+      setEnableGenerateBtn(false);
     }
-  }, [watch()])
+  }, [watch()]);
 
-  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError, SelectSpeedCompo
+  const {
+    getAudio,
+    generatedAudio,
+    generatedAudioSrc,
+    audioLoading,
+    audioError,
+    SelectSpeedCompo,
   } = useTextToAudio();
   useEffect(() => {
     if (generatedAudio) {
@@ -75,10 +81,10 @@ const RepeatSentence = () => {
       setAudioSrc(generatedAudioSrc);
     }
     if (audioError) {
-      toast.error('Failed to fetch audio from API');
-      console.error('Error fetching audio from API:', audioError);
+      toast.error("Failed to fetch audio from API");
+      console.error("Error fetching audio from API:", audioError);
     }
-  }, [audioError, generatedAudio, generatedAudioSrc])
+  }, [audioError, generatedAudio, generatedAudioSrc]);
 
   return (
     <div>
@@ -98,8 +104,6 @@ const RepeatSentence = () => {
             {...register("title", { required: "Title is required" })}
           />
         </div>
-
-
 
         <div className="flex flex-col gap-2 my-5">
           <label for="reference_text" className="font-bold text-sm">
@@ -210,11 +214,12 @@ const RepeatSentence = () => {
           <SelectSpeedCompo />
           <button
             onClick={async (e) => {
-              e.preventDefault()
-              await getAudio(watch().reference_text)
+              e.preventDefault();
+              await getAudio(watch().reference_text);
             }}
             disabled={!enableGenerateBtn}
-            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
+            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20"
+          >
             <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
             {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
           </button>
@@ -226,7 +231,7 @@ const RepeatSentence = () => {
             value={appeared}
             setValue={setAppeared}
           />
-          <div className="w-1/2 border bg-white flex items-center pl-4 dark:bg-white/20 ">
+          <div className="w-1/2 bg-white flex items-center pl-4 dark:bg-white/20 ">
             <input
               id="prediction"
               type="checkbox"
