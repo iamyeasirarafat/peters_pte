@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { Suspense, useRef } from "react";
 import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
 // import { navItems } from "../../DashboardLayout/SideNav";
 
@@ -7,7 +7,7 @@ const navItems = {
   "Speaking Test": [
     {
       name: "Read Aloud",
-      path: "/app/practice/speaking_test/read_aloud?que_no=1",
+      path: "/app/practice/speaking_test/read_aloud",
       ai: true,
       icon: "RA",
       bg: "#CF8800",
@@ -44,7 +44,7 @@ const navItems = {
   "Writing Test": [
     {
       name: "Summarize Written Text",
-      path: "/app/practice/writing_test/summarize_written?que_no=1",
+      path: "/app/practice/writing_test/summarize_written",
       ai: true,
       icon: "SWT",
       bg: "#F2B277",
@@ -67,7 +67,7 @@ const navItems = {
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "/app/practice/reading_test/multiple_answers?que_no=3",
+      path: "/app/practice/reading_test/multiple_answers",
       ai: false,
       icon: "MCM",
       bg: "#7DD8FF",
@@ -81,14 +81,14 @@ const navItems = {
     },
     {
       name: "Reading Fill in the Blanks",
-      path: "/app/practice/reading_test/fill_blanks?que_no=6",
+      path: "/app/practice/reading_test/fill_blanks",
       ai: false,
       icon: "FIB",
       bg: "#7DD8FF",
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/reading_test/single_answer?que_no=5",
+      path: "/app/practice/reading_test/single_answer",
       ai: false,
       icon: "MCS",
       bg: "#7DD8FF",
@@ -97,41 +97,42 @@ const navItems = {
   "Listening Test": [
     {
       name: "Summarize Spoken Text",
-      path: "/app/practice/listening_test/spoken_text?que_no=1",
+      path: "/app/practice/listening_test/spoken_text",
       ai: true,
       icon: "SST",
+      bg: "#949494",
     },
     {
       name: "Multiple Choice (Multiple)",
-      path: "/app/practice/listening_test/multiple_answers?que_no=1",
+      path: "/app/practice/listening_test/multiple_answers",
       ai: false,
       icon: "MCM",
       bg: "#949494",
     },
     {
       name: "Fill in the Blanks",
-      path: "/app/practice/listening_test/fill_blanks?que_no=1",
+      path: "/app/practice/listening_test/fill_blanks",
       ai: false,
       icon: "FIB",
       bg: "#949494",
     },
     {
       name: "Highlight Correct Summary",
-      path: "/app/practice/listening_test/highlight_summary?que_no=1",
+      path: "/app/practice/listening_test/highlight_summary",
       ai: false,
       icon: "HCS",
       bg: "#949494",
     },
     {
       name: "Multiple Choice (Single)",
-      path: "/app/practice/listening_test/single_answer?que_no=2",
+      path: "/app/practice/listening_test/single_answer",
       ai: false,
       icon: "MCS",
       bg: "#949494",
     },
     {
       name: "Select Missing Word",
-      path: "/app/practice/listening_test/missing_word?que_no=1",
+      path: "/app/practice/listening_test/missing_word",
       ai: false,
       icon: "SMW",
       bg: "#949494",
@@ -158,7 +159,7 @@ const PracticeSlider = () => {
   const carouselItemRef = useRef(null);
 
   const moveCarousel = (direction) => {
-    const scrollAmount = carouselItemRef.current.offsetWidth + 10; // Adjust 10 for gap
+    const scrollAmount = carouselItemRef.current.offsetWidth + 10;
     if (direction === "left") {
       carouselRef.current.scrollLeft -= scrollAmount;
     } else if (direction === "right") {
@@ -171,9 +172,9 @@ const PracticeSlider = () => {
       {/* here row carousel bar goes */}
       <button
         onClick={() => moveCarousel("left")}
-        className="absolute top-1/2 -left-7 cursor-pointer pr-[5px] z-2"
+        className="absolute top-1/2 -left-10 cursor-pointer pr-[5px] z-2"
       >
-        <BsArrowLeftCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full" />
+        <BsArrowLeftCircle className="h-7 w-7 md:h-8 md:w-8 bg-white/50 rounded-full" />
       </button>
       {/* all items of carousel bar */}
       <div ref={carouselRef} className="flex gap-10 overflow-auto no-scrollbar">
@@ -214,9 +215,9 @@ const PracticeSlider = () => {
       </div>
       <button
         onClick={() => moveCarousel("right")}
-        className="absolute top-1/2 -right-7 cursor-pointer pl-[5px] z-2"
+        className="absolute top-1/2 -right-10  cursor-pointer pl-[5px] z-2"
       >
-        <BsArrowRightCircle className="h-7 w-7 md:h-10 md:w-10 bg-white/50 rounded-full" />
+        <BsArrowRightCircle className="h-7 w-7 md:h-8 md:w-8 bg-white/50 rounded-full" />
       </button>
     </div>
   );
