@@ -67,7 +67,7 @@ const RepeatSentence = () => {
     }
   }, [watch()])
 
-  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError
+  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError, SelectSpeedCompo
   } = useTextToAudio();
   useEffect(() => {
     if (generatedAudio) {
@@ -116,7 +116,7 @@ const RepeatSentence = () => {
             })}
           />
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audio && !audioSrc && (
             <label className=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
@@ -156,23 +156,68 @@ const RepeatSentence = () => {
                 </div>
               )
             }
-            <div className="w-full">
-              {
-                audioSrc && audio && <AudioVisualizer selectedFile={audioSrc} />
-              }
-              <button
-                onClick={async (e) => {
-                  e.preventDefault()
-                  await getAudio(watch().reference_text)
-                }}
-                disabled={!enableGenerateBtn}
-                className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
-                <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
-                {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
-              </button>
-            </div>
+
           </div>
 
+        </div> */}
+        <div>
+          <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
+          {!audio?.name && !audioSrc ? (
+            <label className=" border w-28 flex flex-col items-center px-4 py-6  cursor-pointe">
+              <Icon
+                className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                name="upload"
+              />
+              <span className="mt-2 text-base leading-normal">Upload</span>
+              <input
+                type="file"
+                className="hidden"
+                accept="audio/*"
+                onChange={handleFileChange}
+              />
+            </label>
+          ) : (
+            <div className="flex gap-5">
+              <div className="border relative w-28 flex flex-col items-center  cursor-pointer">
+                <div
+                  onClick={handleDeleteAudio}
+                  className="absolute top-0 right-0"
+                >
+                  <Icon
+                    className="icon-20 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                    name="cross"
+                  />
+                </div>
+                <Icon
+                  className="icon-20 mt-5 fill-n-1 transition-colors dark:fill-white group-hover:fill-purple-1"
+                  name="pause"
+                />
+                <span className="mt-2 px-3 pb-2 max-w-full overflow-hidden truncate whitespace-no-wrap">
+                  {audio?.name}
+                </span>
+              </div>
+              <div className="w-full">
+                <AudioVisualizer selectedFile={audioSrc} />
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="w-full mb-2">
+          {/* {
+                audioSrc && audio && <AudioVisualizer selectedFile={audioSrc} />
+              } */}
+          {/* select speaker and select speed drop down */}
+          <SelectSpeedCompo />
+          <button
+            onClick={async (e) => {
+              e.preventDefault()
+              await getAudio(watch().reference_text)
+            }}
+            disabled={!enableGenerateBtn}
+            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+          </button>
         </div>
         <div className="flex justify-between gap-6">
           <Counter

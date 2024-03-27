@@ -78,7 +78,7 @@ const Dictation = () => {
     }
   }, [watch()])
 
-  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError
+  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError, SelectSpeedCompo
   } = useTextToAudio();
   useEffect(() => {
     if (generatedAudio) {
@@ -168,6 +168,8 @@ const Dictation = () => {
             </div>
           )}
         </div>
+        {/* select speaker and select speed drop down */}
+        <SelectSpeedCompo />
         <button
           onClick={async (e) => {
             e.preventDefault()
