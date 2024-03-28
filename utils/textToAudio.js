@@ -20,29 +20,7 @@ const useTextToAudio = () => {
   const [audio, setAudio] = useState(null);
   const [audioSrc, setAudioSrc] = useState(null);
 
-  //Speeder component staff
-  // const audioSpeed = [
-  //   { value: 0.5, label: "Very Slow" },
-  //   { value: 0.9, label: "Slow" },
-  //   { value: 1.0, label: "Normal" },
-  //   { value: 1.1, label: "Fast" },
-  //   { value: 1.2, label: "Very Fast" },
-  // ];
-  const [selectedAudioSpeed, setSelectedAudioSpeed] = useState({
-    value: 1.0,
-    label: "Normal",
-  });
-
-  // const audioSpeaker = [
-  //   { value: 3, label: "Speaker 1" },
-  //   { value: 1200, label: "Speaker 2" },
-  //   { value: 6861, label: "Speaker 3" },
-  //   { value: 3465, label: "Speaker 4" },
-  //   { value: 5729, label: "Speaker 5" },
-  //   { value: 2333, label: "Speaker 6" },
-  //   { value: 4597, label: "Speaker 7" },
-  // ];
-
+  // Speeder component staff
   const audioSpeed = [
     { value: 0.5, label: "Very Slow" },
     { value: 0.9, label: "Slow" },
@@ -51,18 +29,21 @@ const useTextToAudio = () => {
     { value: 1.2, label: "Very Fast" },
   ];
   const audioSpeaker = [
-    { value: 3, label: "Scottish Male" },
-    { value: 1200, label: "US Male" },
-    { value: 6861, label: "US Female" },
-    { value: 3465, label: "Canadian Male" },
-    { value: 5729, label: "US Male" },
-    { value: 2333, label: "US Female" },
-    { value: 4597, label: "Indian Male" },
+    { value: 3, label: "Speaker 1" },
+    { value: 1200, label: "Speaker 2" },
+    { value: 6861, label: "Speaker 3" },
+    { value: 3465, label: "Speaker 4" },
+    { value: 5729, label: "Speaker 5" },
+    { value: 2333, label: "Speaker 6" },
+    { value: 4597, label: "Speaker 7" },
   ];
-
+  const [selectedAudioSpeed, setSelectedAudioSpeed] = useState({
+    value: 1.0,
+    label: "Normal",
+  });
   const [selectedAudioSpeaker, setSelectedAudioSpeaker] = useState({
-    value: 1200,
-    label: "US Male",
+    value: 3,
+    label: "Speaker 1",
   });
   // Main function to get audio from text
   const getAudio = async (text) => {
