@@ -10,121 +10,83 @@ import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import DashboardLayout from "../../../layout";
-import { GlobalPagination } from "../../reading_test/multiple_answers";
-const answers = [
-  {
-    serial: "A",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "B",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "C",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-  {
-    serial: "D",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    serial: "E",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-];
+
 function Page() {
+  const [aiResult, setAiResult] = useState(null);
+  const [reFetch, setReFetch] = useState(false);
   const [openScoreModal, setOpenScoreModal] = useState(false);
-  const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
-  const { register, handleSubmit } = useForm();
-  const [apiData, setData] = useState({});
+  const [data, setData] = useState({});
   const [result, setResult] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
-  const [givenAnswer, setGivenAnswer] = useState([]);
+  const [openTranscriptModal, setOpenTranscriptModal] = useState(false);
+
   // get data
   const router = useRouter();
   const id = router.query.que_no;
+  const answerApi = `/missing_word/${id}/answer`;
+  // get data
   useEffect(() => {
     const getData = async () => {
       const { data } = await axios("/missing_word/" + id);
       setData(data);
     };
-    getData();
-  }, [id]);
+    const getResult = async () => {
+      const { data } = await axios(answerApi);
+      setResult(data);
+    };
+    if (id) {
+      getData();
+      getResult();
+    }
+  }, [id, reFetch, answerApi]);
 
   //sideModal Data
   const SideModalData = {
-    title: "Missing Word",
+    title: "Missing Words",
     api: "/missing_words",
   };
 
-  //submit data
-  const onSubmit = async () => {
-    //submitting data
-    const result = await axios.post("/missing_word/answer", {
-      missing_word: id,
-      answers: [selectedAnswer],
-    });
-    setResult(result.data);
-  };
   return (
     <DashboardLayout>
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Select Missing Word" />
+      <PageHeader title="Multiple Choice, Multiple Answers" />
       <p className="text-gray text-base mt-2 text-center">
         You will hear a recording. At the end of the recording the last word or
         group of words has been replaced by a beep. Select the correct option to
         complete the recording.
       </p>
-      <GlobalMainContent data={apiData}>
+      <GlobalMainContent data={data}>
         {/* text block */}
-        <ListenBlock setOpen={setOpenTranscriptModal} data={apiData} />
+        <ListenBlock setOpen={setOpenTranscriptModal} data={data} />
         {/* Multiple Choice Answer */}
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <SingleChoiceAnswer
-            setGivenAnswer={setGivenAnswer}
-            selectedAnswer={selectedAnswer}
-            setSelectedAnswer={setSelectedAnswer}
-            register={register}
-            answers={apiData?.options}
-          />
-          <div className="flex items-center justify-between mt-4">
-            <button
-              className="py-2 px-6 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-lg"
-              type="submit"
-            >
-              {result ? "Re-Submit" : "Submit"}
-            </button>
-            <GlobalPagination />
-          </div>
-        </form>
+        <SingleChoiceAnswer
+          isReady={data?.id ? false : true}
+          typingTime={5}
+          answers={data?.options || []}
+          result={result}
+          setReFetch={setReFetch}
+          api={answerApi}
+        />
       </GlobalMainContent>
-      {result && (
+      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
         <ResultSection
           summary
           setOpenModal={setOpenScoreModal}
           setOpenScoreModal={setOpenScoreModal}
           result={result}
+          setAiResult={setAiResult}
         />
       )}
+      <MultipleChoiceAiModal
+        outOf={aiResult?.scores?.score_details?.right_options?.length || 0}
+        result={aiResult}
+        open={openScoreModal}
+        setOpen={setOpenScoreModal}
+      />
       <TranscriptModal
         open={openTranscriptModal}
         setOpen={setOpenTranscriptModal}
-      />
-      <MultipleChoiceAiModal
-        result={result}
-        myAnswer={givenAnswer}
-        apiData={apiData}
-        open={openScoreModal}
-        setOpen={setOpenScoreModal}
       />
     </DashboardLayout>
   );
