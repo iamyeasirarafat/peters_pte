@@ -8,6 +8,7 @@ import { useState } from "react";
 import { MdLogout } from "react-icons/md";
 import { useSelector } from "react-redux";
 import Menu from "./Menu";
+import { FaUserCog } from "react-icons/fa";
 
 type SidebarProps = {};
 
@@ -74,7 +75,7 @@ export default Sidebar;
 const UserDialog = ({ setShowUserDialog }: any) => {
   const router = useRouter();
   return (
-    <div className=" bg-white dark:bg-black rounded-md py-2 px-7 absolute bottom-10 left-0 w-full">
+    <div className=" bg-white dark:bg-black dark:border rounded-md py-2 px-7 absolute bottom-10 left-0 w-full">
       <Link
         onClick={() => setShowUserDialog(false)}
         href={
@@ -84,7 +85,7 @@ const UserDialog = ({ setShowUserDialog }: any) => {
         }
         className="flex items-center gap-x-3 py-2 hover:text-primary duration-200"
       >
-        <Icon name="settings" />
+        <FaUserCog />
         <span className="text-sm font-bold">Profile Settings</span>
       </Link>
       <button

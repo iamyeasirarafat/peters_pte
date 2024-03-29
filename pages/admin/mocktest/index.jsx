@@ -29,10 +29,10 @@ const Index = () => {
     },
     {
       id: 3,
-      name: "Listening Mocktest",
-      icon: "LMT",
+      name: "Reading Mocktest",
+      icon: "RMT",
       Items: testCount?.listening || 0,
-      url: "/admin/mocktest/listening_mocktests",
+      url: "/admin/mocktest/reading_mocktests",
     },
     {
       id: 4,
@@ -43,10 +43,10 @@ const Index = () => {
     },
     {
       id: 5,
-      name: "Reading Mocktest",
-      icon: "RMT",
+      name: "Listening Mocktest",
+      icon: "LMT",
       Items: testCount?.reading || 0,
-      url: "/admin/mocktest/reading_mocktests",
+      url: "/admin/mocktest/listening_mocktests",
     },
   ];
   return (

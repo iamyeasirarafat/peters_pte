@@ -84,6 +84,7 @@ const MultipleChoiceReading = () => {
       const newForm = new FormData();
       newForm.append("title", formData?.title);
       newForm.append("content", formData?.content);
+      newForm.append("text_content", formData?.text_content);
       newForm.append("options", optionsJson);
       formData.right_options.forEach((item) =>
         newForm.append("right_options", item)
@@ -148,6 +149,21 @@ const MultipleChoiceReading = () => {
             onChange={handleInputChange}
           />
         </div>
+        {/* question line */}
+        <div className="flex flex-col gap-2 my-5">
+          <label for="text_content" className="font-bold text-sm">
+            Question Line
+          </label>
+          <textarea
+            rows={2}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20"
+            id="text_content"
+            type="text"
+            value={formData.text_content}
+            onChange={handleInputChange}
+          />
+        </div>
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
@@ -172,16 +188,18 @@ const MultipleChoiceReading = () => {
                       checked={selectedOptions.includes(option.index)} // Use 'in' operator to check if the key exists
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions.includes(option.index)
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions.includes(option.index)
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${selectedOptions.includes(option.index)
-                          ? "opacity-100"
-                          : "opacity-0"
-                          }`}
+                        className={`fill-white transition-opacity ${
+                          selectedOptions.includes(option.index)
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
                         name="check"
                       />
                     </span>
@@ -216,7 +234,7 @@ const MultipleChoiceReading = () => {
 
         <div className="flex justify-between gap-6">
           <Counter
-            className="bg-white w-1/2 dark:bg-white/20 "
+            className="bg-white w-1/2 dark:bg-white/20"
             title="Appeared Times"
             value={formData.appeared}
             setValue={(value) => setFormData({ ...formData, appeared: value })}
