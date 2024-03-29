@@ -1,16 +1,17 @@
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
-import ReusableModal from "../global/ReusableModal";
 import LineProgressBar from "../global/LineProgressBar";
+import ReusableModal from "../global/ReusableModal";
 
-const FillBlanksModal = ({ open, setOpen }) => {
+const FillBlanksModal = ({ data, open, setOpen }) => {
+  console.log(data);
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
         {/* modal header */}
         <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
-          <p className="text-white text-2xl">#15425454</p>
+          <p className="text-white text-2xl">#{data?.id || 0}</p>
           <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
           <div className="flex items-center gap-x-4">
             <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
@@ -42,8 +43,9 @@ const FillBlanksModal = ({ open, setOpen }) => {
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={20}
-                    text={"6"}
+                    value={data?.scores.score || 0}
+                    text={data?.scores.score || 0}
+                    maxValue={data?.scores.max_score || 0}
                     strokeWidth={15}
                     styles={buildStyles({
                       textColor: "gray",
@@ -53,7 +55,9 @@ const FillBlanksModal = ({ open, setOpen }) => {
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of 6.00</p>
+                <p className="text-gray text-xl mt-1">
+                  Out of {data?.scores.max_score || 0}
+                </p>
               </div>
             </div>
             {/* Time Taken */}
@@ -63,7 +67,9 @@ const FillBlanksModal = ({ open, setOpen }) => {
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
-                <p className="text-[60px] text-gray">02:23</p>
+                <p className="text-[60px] text-gray">
+                  {data?.time_taken || "0.00"}
+                </p>
               </div>
             </div>
             {/* Correct answer */}
@@ -74,7 +80,13 @@ const FillBlanksModal = ({ open, setOpen }) => {
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
                 <p className="text-gray text-xl text-center">
-                  Hello Text Form Time Timer Misuse
+                  {data?.scores?.score_details.map((item, index) => {
+                    return (
+                      <span key={index} className="block">
+                        {item.right_option}
+                      </span>
+                    );
+                  })}
                 </p>
               </div>
             </div>
@@ -86,9 +98,18 @@ const FillBlanksModal = ({ open, setOpen }) => {
               {/* score point*/}
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
                 <p className="text-gray text-xl text-center">
-                  <span className="text-red block">Hello Text Form</span> -
-                  <span className="block">Cyphar</span>
-                  <span className="block">Cyphar</span>
+                  {data?.scores?.score_details.map((item, index) => {
+                    return (
+                      <span
+                        key={index}
+                        className={`block ${
+                          item?.correct ? "text-green-500" : "text-red"
+                        }`}
+                      >
+                        {item.user_option ? item.user_option : "-"}
+                      </span>
+                    );
+                  })}
                 </p>
               </div>
             </div>
@@ -104,12 +125,16 @@ const FillBlanksModal = ({ open, setOpen }) => {
                 <LineProgressBar
                   height={30}
                   lineColor={"cream"}
-                  strokeWidth={30}
+                  strokeWidth={
+                    data?.scores.score * (100 / data?.scores.max_score) || 0
+                  }
                 />
-                <p className="text-gray text-xl">0/4</p>
+                <p className="text-gray text-xl">
+                  {data?.scores.score || 0}/{data?.scores.max_score || 0}
+                </p>
               </div>
               <div className="w-full flex items-center justify-between gap-x-5">
-                <p className="text-gray text-xl w-3/6 text-start">Reading</p>
+                <p className="text-gray text-xl w-3/6 text-start">Writing</p>
                 <LineProgressBar
                   height={30}
                   lineColor={"primary"}

@@ -1,6 +1,6 @@
 import AudioPlayer from "./audio_player/AudioPlayer";
 
-const ListenBlock = ({ setOpen, data }) => {
+const ListenBlock = ({ setOpen, data, blank }) => {
   return (
     <div className="p-5 border border-primary rounded-[15px] relative">
       <div className="flex items-center justify-center">
@@ -8,7 +8,7 @@ const ListenBlock = ({ setOpen, data }) => {
           {data?.id && <AudioPlayer apiAudio data={data} />}
         </div>
       </div>
-      {data?.id && (
+      {data?.id && !blank && (
         <button
           onClick={(e) => {
             e.stopPropagation();

@@ -35,13 +35,18 @@ function SingleChoiceAnswer({ answers, result, api, setReFetch, isReady, typingT
     setMinutes(initialMinutes);
     setSeconds(0);
   }, [id, initialMinutes]);
+  const initialSeconds = initialMinutes * 60;
+  const remainingSeconds = minutes * 60 + seconds;
+  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
+    2
+  );
   //submit data
   const handelSubmit = async () => {
     try {
       setLoading(true);
       const res = await axios.post(api, {
         answers: [selectedAnswer],
-        time_taken: `${initialMinutes - minutes}:${seconds}`,
+        time_taken: timeTakenInMinutes,
       });
       toast.success(res.data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
