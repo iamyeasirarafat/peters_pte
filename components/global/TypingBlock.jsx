@@ -27,7 +27,11 @@ const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
 
     return () => clearInterval(countdownInterval);
   }, [minutes, seconds]);
-
+  const initialSeconds = initialMinutes * 60;
+  const remainingSeconds = minutes * 60 + seconds;
+  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
+    2
+  );
   //handle submit functionalities
   const [textAnswer, setTextAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +43,7 @@ const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
       try {
         const res = await axios.post(api, {
           answer: textAnswer,
-          time_taken: `${initialMinutes - minutes}:${seconds}`,
+          time_taken: timeTakenInMinutes,
         });
         toast.success(res?.data?.massage || "Answer Submitted Successfully");
         setIsLoading(false);
