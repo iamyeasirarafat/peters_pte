@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 const ReOrderParagraph = () => {
   const [formData, setFormData] = useState({
     title: "",
-    paragraph: "",
+    // paragraph: "",
     options: [],
     appeared: 0,
     prediction: false,
@@ -104,7 +104,7 @@ const ReOrderParagraph = () => {
             onChange={handleInputChange}
           />
         </div>
-        <div className="flex flex-col gap-2 my-5">
+        {/* <div className="flex flex-col gap-2 my-5">
           <label for="paragraph" className="font-bold text-sm">
             Question Paragraph
           </label>
@@ -117,7 +117,7 @@ const ReOrderParagraph = () => {
             value={formData.paragraph}
             onChange={handleInputChange}
           />
-        </div>
+        </div> */}
 
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">

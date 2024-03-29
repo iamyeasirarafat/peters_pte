@@ -168,22 +168,22 @@ const CardItems = () => {
   ];
   const MiniGame = [
     {
-      title: "spelling-bee",
-      items: "233",
+      title: "Spelling Bee",
+      items: itemNumber?.spelling_bee || 0,
       bg: "#AE7AFF",
       link: "spelling-bee",
       text: "SB",
     },
     {
       title: "Speaking Spell",
-      items: "233",
+      items: itemNumber?.speaking_spell || 0,
       bg: "#AE7AFF",
       link: "speaking-spell",
       text: "SP",
     },
     {
       title: "Listening Frenzy",
-      items: "233",
+      items: itemNumber?.listening_frenzy || 0,
       bg: "#AE7AFF",
       link: "listening-frenzy",
       text: "LF",

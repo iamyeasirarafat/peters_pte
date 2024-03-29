@@ -13,6 +13,7 @@ const MultipleSingleReading = () => {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
+    text_content: "",
     options: [],
     right_options: [],
     appeared: 0,
@@ -112,6 +113,22 @@ const MultipleSingleReading = () => {
           />
         </div>
 
+        {/* question line */}
+        <div className="flex flex-col gap-2 my-5">
+          <label for="text_content" className="font-bold text-sm">
+            Question Line
+          </label>
+          <textarea
+            rows={2}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
+            id="text_content"
+            type="text"
+            value={formData.text_content}
+            onChange={handleInputChange}
+          />
+        </div>
+
         {/* more field */}
         <div className="flex justify-between gap-6 mt-5">
           <Counter
@@ -135,16 +152,18 @@ const MultipleSingleReading = () => {
                       checked={selectedOptions == option.index}
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions == option.index
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions == option.index
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${selectedOptions == option.index
-                          ? "opacity-100"
-                          : "opacity-0"
-                          }`}
+                        className={`fill-white transition-opacity ${
+                          selectedOptions == option.index
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
                         name="check"
                       />
                     </span>

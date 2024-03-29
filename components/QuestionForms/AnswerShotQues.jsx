@@ -23,6 +23,7 @@ const AnswerShotQues = () => {
         formData.append("title", data?.title);
         formData.append("reference_text", data?.reference_text);
         formData.append("prediction", data?.prediction);
+        formData.append("right_answer", data?.right_answer);
         formData.append("audio", audio);
         formData.append("appeared", appeared);
         const config = { headers: { "content-type": "multipart/form-data" } };
@@ -60,13 +61,19 @@ const AnswerShotQues = () => {
   const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
   useEffect(() => {
     if (watch().reference_text !== "") {
-      setEnableGenerateBtn(true)
+      setEnableGenerateBtn(true);
     } else {
-      setEnableGenerateBtn(false)
+      setEnableGenerateBtn(false);
     }
-  }, [watch()])
+  }, [watch()]);
 
-  const { getAudio, generatedAudio, generatedAudioSrc, audioLoading, audioError, SelectSpeedCompo
+  const {
+    getAudio,
+    generatedAudio,
+    generatedAudioSrc,
+    audioLoading,
+    audioError,
+    SelectSpeedCompo,
   } = useTextToAudio();
   useEffect(() => {
     if (generatedAudio) {
@@ -74,11 +81,10 @@ const AnswerShotQues = () => {
       setAudioSrc(generatedAudioSrc);
     }
     if (audioError) {
-      toast.error('Failed to fetch audio from API');
-      console.error('Error fetching audio from API:', audioError);
+      toast.error("Failed to fetch audio from API");
+      console.error("Error fetching audio from API:", audioError);
     }
-  }, [audioError, generatedAudio, generatedAudioSrc])
-
+  }, [audioError, generatedAudio, generatedAudioSrc]);
 
   return (
     <div>
@@ -151,7 +157,6 @@ const AnswerShotQues = () => {
               </div>
               <div className="w-full">
                 <AudioVisualizer selectedFile={audioSrc} />
-
               </div>
             </div>
           )}
@@ -160,18 +165,28 @@ const AnswerShotQues = () => {
 
           <button
             onClick={async (e) => {
-              e.preventDefault()
-              await getAudio(watch().reference_text)
+              e.preventDefault();
+              await getAudio(watch().reference_text);
             }}
             disabled={!enableGenerateBtn}
-            className="mr-3 flex items-center  text-white h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20">
+            className="mr-3 flex items-center  text-white h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20"
+          >
             <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
             {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
           </button>
-
-
         </div>
-
+        <div className="mt-3">
+          <label className="font-bold text-sm" htmlFor="right_answer">
+            Answer
+          </label>
+          <input
+            placeholder="Answer"
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
+            id="right_answer"
+            type="text"
+            {...register("right_answer", { required: "Answer is required" })}
+          />
+        </div>
 
         <div className="flex  mt-2 justify-between gap-6">
           <Counter
@@ -208,5 +223,3 @@ const AnswerShotQues = () => {
 };
 
 export default AnswerShotQues;
-
-
