@@ -64,7 +64,7 @@ export const navItems = {
   "Reading Test": [
     {
       name: "Reading & Writing Fill in the blanks",
-      path: "/app/practice/reading_test/fill_blanks",
+      path: "/app/practice/reading_test/read_write_blanks",
       ai: false,
       icon: "FIB",
       bg: "cream",

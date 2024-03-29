@@ -1,7 +1,6 @@
 "use client";
 import FillBlanksModal from "@/components/fill_blanks/FillBlanksModal";
 import GlobalMainContent from "@/components/global/GlobalMainContent";
-import ListenBlock from "@/components/global/ListenBlock";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
 import SideModal from "@/components/global/SideModal";
@@ -21,11 +20,11 @@ const Page = () => {
   // get data
   const router = useRouter();
   const id = router.query.que_no;
-  const answerApi = `/blank/${id}/answer`;
+  const answerApi = `/read_write_blank/${id}/answer`;
   // get data
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios("/blank/" + id);
+      const { data } = await axios("/read-write/blank/" + id);
       setData(data);
     };
     const getResult = async () => {
@@ -40,8 +39,8 @@ const Page = () => {
 
   //sideModal Data
   const SideModalData = {
-    title: "Fill in the Blanks",
-    api: "/blanks",
+    title: "Read & Write Blanks",
+    api: "/read-write/blanks",
   };
 
   return (
@@ -52,13 +51,14 @@ const Page = () => {
       <PageHeader title="Fill In The Blanks" />
       {/* main content */}
       <GlobalMainContent data={data}>
-        <ListenBlock data={data} blank />
+        {/* <ListenBlock data={data} blank /> */}
         <FillBlanksBlock
           typingTime={2}
           result={result}
           setReFetch={setReFetch}
           api={answerApi}
           sentence={data?.sentence}
+          option_list={data?.option_list || []}
         />
       </GlobalMainContent>
       {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
@@ -81,7 +81,14 @@ const Page = () => {
 
 export default Page;
 
-const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
+const FillBlanksBlock = ({
+  typingTime,
+  result,
+  setReFetch,
+  api,
+  sentence,
+  option_list,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [answers, setAnswers] = useState([]);
   const initialMinutes = typingTime;
@@ -157,9 +164,38 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+
+  const abc = {
+    1: "A",
+    2: "B",
+    3: "C",
+    4: "D",
+    5: "E",
+    6: "F",
+    7: "G",
+    8: "H",
+    9: "I",
+    10: "J",
+    11: "K",
+    12: "L",
+    13: "M",
+    14: "N",
+    15: "O",
+    16: "P",
+    17: "Q",
+    18: "R",
+    19: "S",
+    20: "T",
+    21: "U",
+    22: "V",
+    23: "W",
+    24: "X",
+    25: "Y",
+    26: "Z",
+  };
   return (
     <>
-      <div className="p-5 border border-primary rounded-[15px] relative">
+      <div className=" p-2">
         <p className="text-xl font-medium">
           {Array.isArray(sentence) &&
             sentence.map((word, index) => {
@@ -168,6 +204,11 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
                   {word}
                   {
                     <FillBlankInput
+                      options={
+                        option_list.filter(
+                          (item) => item.index === abc[index + 1]
+                        )[0]?.options
+                      }
                       onChange={(e) => updateAnswer(index, e.target.value)}
                     />
                   }
@@ -202,15 +243,21 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
     </>
   );
 };
-const FillBlankInput = ({ onChange }) => {
+const FillBlankInput = ({ onChange, options }) => {
   return (
     <div className="px-2 inline-block">
-      <input
+      <select
         onBlur={onChange}
         // onChange={onChange}
-        className="w-[150px] text-gray text-lg text-center border border-x-0 border-t-0 border-b-gray outline-none focus:ring-transparent focus:border-gray p-0 m-0"
-        type="text"
-      />
+        className="w-40 text-gray  text-center border border-x-0 border-t-0 border-b-gray outline-none focus:ring-transparent focus:border-gray p-0 m-0"
+      >
+        <option value="">Select Answer</option>
+        {options?.map((item, index) => (
+          <option key={index} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
