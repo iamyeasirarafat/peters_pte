@@ -56,7 +56,7 @@ const Modal = ({
           leaveFrom={`opacity-100 ${!video && "scale-100"}`}
           leaveTo={`opacity-0 ${!video && "scale-95"}`}
         >
-          <Dialog.Panel className="relative z-10 max-w-[30.625rem] w-full m-auto bg-white dark:bg-n-1">
+          <Dialog.Panel className="relative z-10 max-w-[30.625rem] w-full m-auto bg-white dark:bg-white/20">
             {children}
             <button
               className={twMerge(

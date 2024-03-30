@@ -47,7 +47,7 @@ const Create = ({}) => {
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-95 opacity-0"
       >
-        <Menu.Items className="absolute top-full right-0 w-[14.69rem] mt-2.5 py-2 border border-n-1 rounded-sm bg-white shadow-primary-4 dark:bg-n-1 dark:border-white">
+        <Menu.Items className="absolute top-full right-0 w-[14.69rem] mt-2.5 py-2 border border-n-1 rounded-sm bg-white shadow-primary-4 dark:bg-white/20 dark:border-white">
           {router?.asPath?.includes("admin")
             ? adminButton.map((button) => (
                 <Menu.Item
