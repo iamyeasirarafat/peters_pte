@@ -22,7 +22,7 @@ const Filters = ({}: FiltersProps) => {
           className={`${
             tab?.name === activeTab
               ? "bg-primary text-white dark:bg-[#2c2620]"
-              : "bg-white text-black dark:bg-black dark:text-white"
+              : "bg-white text-black dark:bg-white/20 dark:text-white"
           } py-3 px-5 text-xs font-bold`}
         >
           {tab?.name}

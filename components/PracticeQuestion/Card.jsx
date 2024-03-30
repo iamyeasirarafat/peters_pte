@@ -14,7 +14,7 @@ const Card = ({ title, items, bg, link, text }) => {
   return (
     <Link
       href={title ? `/admin/practice-question/${link}` : "/#"}
-      className="bg-white dark:bg-black rounded-sm flex justify-start items-center p-5 gap-x-4"
+      className="bg-white dark:bg-white/20 rounded-sm flex justify-start items-center p-5 gap-x-4"
     >
       <div
         className={`w-[2.88rem] h-[2.88rem] flex justify-center items-center`}

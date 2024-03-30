@@ -162,7 +162,7 @@ const FileForm = ({
       </div>
       <input
         {...register("title", { required: "File name is required" })}
-        className="bg-white dark:bg-black dark:placeholder:text-gray px-5 py-6 w-full outline-none border-0 focus:ring-0  placeholder:text-[#5F646D] rounded-1"
+        className="bg-white dark:bg-white/20 dark:placeholder:text-gray px-5 py-6 w-full outline-none border-0 focus:ring-0  placeholder:text-[#5F646D] rounded-1"
         placeholder="Bill On The Hill"
         type="text"
       />

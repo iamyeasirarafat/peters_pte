@@ -110,7 +110,7 @@ const MocktestList = ({
   const [openMultiActions, setOpenMultiActions] = useState(false);
   return (
     <div className="mt-4">
-      <table className="bg-white dark:bg-black w-full">
+      <table className="bg-white dark:bg-white/20 w-full">
         <thead>
           <tr>
             <th className="th-custom">
@@ -228,7 +228,7 @@ const MocktestLisMobile = ({ data }) => {
   const [showDot, setShowDot] = useState("");
   return (
     <div
-      className={`bg-white dark:bg-black p-4 mt-4 ${
+      className={`bg-white dark:bg-white/20 p-4 mt-4 ${
         data?.results?.length > 0 && "space-y-3"
       }`}
     >

@@ -128,7 +128,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
 const StudentDetailsRight = ({ data }) => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
   return (
-    <div className="bg-white dark:bg-black p-5 mt-4 space-y-2">
+    <div className="bg-white dark:bg-white/20 p-5 mt-4 space-y-2">
       <div className="w-full flex items-center justify-between">
         <p className="text-lg font-extrabold">Security</p>
         <button

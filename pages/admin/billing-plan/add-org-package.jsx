@@ -145,7 +145,7 @@ const AddOrgQ = ({ packData }) => {
       />
       {/* Variation */}
       <div className="flex items-center justify-between gap-x-5">
-        <div className="bg-white dark:bg-black p-5 w-full flex items-center justify-between">
+        <div className="bg-white dark:bg-white/20 p-5 w-full flex items-center justify-between">
           <p className="text-sm font-bold">Variation Number</p>
           <div className="flex items-center gap-x-4">
             <FiMinusCircle
@@ -162,7 +162,7 @@ const AddOrgQ = ({ packData }) => {
           </div>
         </div>
         {/* Access */}
-        <div className="w-full bg-white dark:bg-black p-5 flex items-center gap-x-8">
+        <div className="w-full bg-white dark:bg-white/20 p-5 flex items-center gap-x-8">
           <p className="text-sm font-bold">Access</p>
           {/*  Premium Practice */}
           <div className="space-x-2">

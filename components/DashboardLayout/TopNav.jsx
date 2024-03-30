@@ -134,7 +134,10 @@ const MenuItem = () => {
         </div>
       </li>
       <li>
-        <Link className="text-base md:text-lg xl:text-xl" href="/about">
+        <Link
+          className="text-base md:text-lg xl:text-xl"
+          href="/app/practice/mock_test"
+        >
           Mock Test
         </Link>
       </li>

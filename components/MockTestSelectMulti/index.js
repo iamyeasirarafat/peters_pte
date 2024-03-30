@@ -52,7 +52,7 @@ const MockTestSelect = ({
             <div className="relative text-black dark:text-white">
               <span className="inline-block w-full rounded-md shadow-sm">
                 <Listbox.Button
-                  className="cursor-pointer relative w-full bg-white dark:bg-black rounded-sm p-5 text-left transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                  className="cursor-pointer relative w-full bg-white dark:bg-white/20 rounded-sm p-5 text-left transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                   onClick={() => setIsOpen(!isOpen)}
                   open={isOpen}
                 >
@@ -84,7 +84,7 @@ const MockTestSelect = ({
                 leave="transition ease-in duration-100"
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
-                className="absolute mt-1 w-full rounded-md bg-secondary dark:bg-black z-50 shadow-md"
+                className="absolute mt-1 w-full rounded-md bg-secondary dark:bg-white/20 z-50 shadow-md"
               >
                 <Listbox.Options
                   onMouseLeave={() => setIsOpen(false)}

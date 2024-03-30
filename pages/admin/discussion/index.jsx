@@ -192,7 +192,7 @@ const DiscussionCart = ({ item }) => {
   return (
     <Link
       href={`${item?.url}`}
-      className="bg-white dark:bg-black rounded-sm flex justify-start items-center gap-5 p-6"
+      className="bg-white dark:bg-white/20 rounded-sm flex justify-start items-center gap-5 p-6"
     >
       <div
         style={{ backgroundColor: item?.bg }}

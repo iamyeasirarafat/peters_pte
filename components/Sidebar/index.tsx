@@ -75,7 +75,7 @@ export default Sidebar;
 const UserDialog = ({ setShowUserDialog }: any) => {
   const router = useRouter();
   return (
-    <div className=" bg-white dark:bg-black dark:border rounded-md py-2 px-7 absolute bottom-10 left-0 w-full">
+    <div className=" bg-white dark:bg-white/20 dark:border rounded-md py-2 px-7 absolute bottom-10 left-0 w-full">
       <Link
         onClick={() => setShowUserDialog(false)}
         href={

@@ -22,7 +22,7 @@ const Students = ({ items, student, setReFetch }) => {
   const { questionTable } = router.query;
   const pageName = convertToCamelCase(questionTable);
   return (
-    <table className="bg-white dark:bg-black w-full">
+    <table className="bg-white dark:bg-white/20 w-full">
       <thead className="overflow-x-scroll">
         <tr>
           <th className="th-custom">

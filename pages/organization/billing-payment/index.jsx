@@ -25,7 +25,7 @@ function BillingPayment() {
     <Layout title="Billing & Payment">
       <div className="grid grid-cols-12 gap-5">
         {/* left side content */}
-        <div className="col-span-8 md:col-span-12 p-5 bg-white dark:bg-black flex flex-col justify-between">
+        <div className="col-span-8 md:col-span-12 p-5 bg-white dark:bg-white/20 flex flex-col justify-between">
           <div>
             <p className="text-lg font-extrabold">Purchase Bluk Account</p>
             <p className="text-xs font-bold my-5">Click to Purchase</p>
@@ -158,7 +158,7 @@ const CountCart = () => {
       {data?.map((item, i) => (
         <div
           key={i}
-          className="py-6 px-5 bg-white dark:bg-black flex items-center gap-x-5"
+          className="py-6 px-5 bg-white dark:bg-white/20 flex items-center gap-x-5"
         >
           <p className="p-3.5 border border-black dark:border-white rounded-sm">
             {item?.icon}

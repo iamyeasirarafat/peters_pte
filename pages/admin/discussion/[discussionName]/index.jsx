@@ -82,7 +82,7 @@ const DiscussionTable = ({ list }) => {
   const [value, setValue] = useState(false);
   return (
     <div className="mt-4">
-      <table className="bg-white dark:bg-black w-full">
+      <table className="bg-white dark:bg-white/20 w-full">
         <thead>
           <tr>
             <th className="th-custom flex items-center gap-x-4">
@@ -153,7 +153,7 @@ const DiscussionRow = ({ data }) => {
 
 const DiscussionTableMobile = () => {
   return (
-    <div className="bg-white dark:bg-black p-4 mt-4">
+    <div className="bg-white dark:bg-white/20 p-4 mt-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-3">
           <p className="text-sm">Eshak khan</p>

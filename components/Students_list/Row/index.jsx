@@ -164,7 +164,7 @@ const StudentMoreButton = ({
 }) => {
   return (
     <div
-      className={`origin-top-right font-semibold absolute right-8 top-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary dark:bg-black dark:border border-white`}
+      className={`origin-top-right font-semibold absolute right-8 top-0 z-3 mt-1 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary dark:bg-white/20 dark:border border-white`}
     >
       <div role="none">
         <button

@@ -180,7 +180,7 @@ const StudentDetailsRight = ({ data }) => {
         </div>
       </div>
       {/* Group Settings */}
-      <div className="bg-white dark:bg-black p-5 mt-9">
+      <div className="bg-white dark:bg-white/20 p-5 mt-9">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Group Settings</p>
           <button
@@ -216,7 +216,7 @@ const StudentDetailsRight = ({ data }) => {
       />
 
       {/* Security */}
-      <div className="bg-white dark:bg-black p-5 mt-4">
+      <div className="bg-white dark:bg-white/20 p-5 mt-4">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Security</p>
           <div className="flex items-center gap-4">
@@ -364,7 +364,7 @@ const EditOrgModal = ({ visible, setVisible, editData, setReFetch }) => {
 const AccountPlan = ({ data, isOpen, setIsOpen, setFetchGroup }) => {
   return (
     <div>
-      <table className="bg-white dark:bg-black w-full">
+      <table className="bg-white dark:bg-white/20 w-full">
         <thead>
           <tr>
             <th className="py-2 pr-3 text-start">
@@ -417,7 +417,7 @@ const AccountPlan = ({ data, isOpen, setIsOpen, setFetchGroup }) => {
 const OrgMore = ({ item, setFetchGroup }) => {
   return (
     <div
-      className={`bg-secondary dark:bg-black font-semibold absolute right-full dark:border-white border border-transparent top-0 z-3 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+      className={`bg-secondary dark:bg-white/20 font-semibold absolute right-full dark:border-white border border-transparent top-0 z-3 w-52 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
     >
       <div role="none">
         <button

@@ -247,7 +247,7 @@ const StudentDetailsRight = ({ data }) => {
       </div>
       {/* Exam Count Down */}
       <div className="flex items-center justify-between mt-2.5">
-        <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
+        <div className="p-1.5 bg-white dark:bg-white/20 rounded-[50px] flex items-center gap-x-2 border border-primary">
           <button
             disabled={router?.asPath?.startsWith("/admin")}
             onClick={() => setOpenExamCountDown({ state: true, uid: data?.id })}
@@ -264,7 +264,7 @@ const StudentDetailsRight = ({ data }) => {
           </div>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
-        <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
+        <div className="p-1.5 bg-white dark:bg-white/20 rounded-[50px] flex items-center gap-x-2 border border-primary">
           <button
             disabled={router?.asPath?.startsWith("/admin")}
             onClick={() => setOpenTargetScore({ state: true, uid: data?.id })}
@@ -289,7 +289,7 @@ const StudentDetailsRight = ({ data }) => {
         />
       </div>
       {/* Account Plan History */}
-      <div className="bg-white dark:bg-black p-5 mt-9">
+      <div className="bg-white dark:bg-white/20 p-5 mt-9">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Account Plan History</p>
           <button
@@ -320,7 +320,7 @@ const StudentDetailsRight = ({ data }) => {
       <TablePagination />
 
       {/* Security */}
-      <div className="bg-white dark:bg-black p-5 mt-4">
+      <div className="bg-white dark:bg-white/20 p-5 mt-4">
         <div className="flex items-center justify-between">
           <p className="text-lg font-extrabold">Security</p>
           <button
@@ -354,7 +354,7 @@ const StudentDetailsRight = ({ data }) => {
 const AccountPlan = ({ data }) => {
   return (
     <div>
-      <table className="bg-white dark:bg-black w-full">
+      <table className="bg-white dark:bg-white/20 w-full">
         <thead>
           <tr>
             <th className="py-2 pr-3 text-start">

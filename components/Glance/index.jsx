@@ -51,7 +51,7 @@ const Glance = ({ studentSCounts }) => {
       {data?.map((item, i) => (
         <div
           key={i}
-          className="py-6 px-5 bg-white dark:bg-black flex items-center gap-x-5"
+          className="py-6 px-5 bg-white dark:bg-white/20 flex items-center gap-x-5"
         >
           <p className="p-3.5 border border-black dark:border-white rounded-sm">
             {item?.icon}
