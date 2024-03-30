@@ -29,21 +29,24 @@ const useTextToAudio = () => {
     { value: 1.2, label: "Very Fast" },
   ];
   const audioSpeaker = [
-    { value: 3, label: "Speaker 1" },
-    { value: 1200, label: "Speaker 2" },
-    { value: 6861, label: "Speaker 3" },
-    { value: 3465, label: "Speaker 4" },
-    { value: 5729, label: "Speaker 5" },
-    { value: 2333, label: "Speaker 6" },
-    { value: 4597, label: "Speaker 7" },
+    { value: "US_Male.wav", label: "US Male" },
+    { value: "US_Female.wav", label: "US Female" },
+    { value: "UK_Male.wav", label: "UK Male" },
+    { value: "UK_Female.wav", label: "UK Female" },
+    { value: "IN_Male.wav", label: "Indian Male" },
+    { value: "IN_Female.wav", label: "Indian Female" },
+    { value: "AU_Male.wav", label: "Australian Male" },
+    { value: "AU_Female.wav", label: "Australian Female" },
+    { value: "CN_Male.wav", label: "Canadian Male" },
+    { value: "CN_Female.wav", label: "Canadian Female" },
   ];
   const [selectedAudioSpeed, setSelectedAudioSpeed] = useState({
     value: 1.0,
     label: "Normal",
   });
   const [selectedAudioSpeaker, setSelectedAudioSpeaker] = useState({
-    value: 3,
-    label: "Speaker 1",
+    value: "US_Male.wav",
+    label: "US Male",
   });
   // Main function to get audio from text
   const getAudio = async (text) => {
