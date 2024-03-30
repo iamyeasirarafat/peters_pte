@@ -34,7 +34,7 @@ const AdminUser = () => {
         Add Admin User
       </button>
       {mounted && isTablet ? (
-        <div className="bg-white dark:bg-black">
+        <div className="bg-white dark:bg-white/20">
           <AdminUserMobile data={data} />
         </div>
       ) : (
@@ -50,7 +50,7 @@ export default AdminUser;
 const AdminUserList = ({ data, setStatus }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="bg-white dark:bg-black w-full">
+    <div className="bg-white dark:bg-white/20 w-full">
       <div className="flex items-center justify-between p-3">
         <div className="w-full flex items-center gap-x-2">
           <Sorting title="User name" />
@@ -228,7 +228,7 @@ export const AddAdminUser = ({ visible, setVisible, setStatus }) => {
 const MoreButton = ({ data, setStatus }) => {
   return (
     <div
-      className={`py-2 px-3 bg-secondary dark:bg-black dark:border border-secondary absolute right-full top-1/2 rounded-md `}
+      className={`py-2 px-3 bg-secondary dark:bg-white/20 dark:border border-secondary absolute right-full top-1/2 rounded-md `}
     >
       <button
         onClick={async () => {

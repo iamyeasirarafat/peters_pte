@@ -33,13 +33,13 @@ const TransactionsHistoryTable = ({ data }) => {
     query: "(max-width: 1023px)",
   });
   return mounted && isTablet ? (
-    <div className="bg-white dark:bg-black">
+    <div className="bg-white dark:bg-white/20">
       {data?.map((item, index) => (
         <MobileTRTable key={index} data={item} />
       ))}
     </div>
   ) : (
-    <table className="bg-white dark:bg-black w-full">
+    <table className="bg-white dark:bg-white/20 w-full">
       <thead>
         <tr>
           <th className="th-custom">

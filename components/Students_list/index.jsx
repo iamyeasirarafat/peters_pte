@@ -19,7 +19,7 @@ const Students = ({ items, setStatus, admin }) => {
   });
 
   return mounted && isTablet ? (
-    <div className="bg-white dark:bg-black w-full">
+    <div className="bg-white dark:bg-white/20 w-full">
       {items?.map((product, i) => (
         <Item
           item={product}
@@ -31,7 +31,7 @@ const Students = ({ items, setStatus, admin }) => {
       ))}
     </div>
   ) : (
-    <table className="bg-white dark:bg-black w-full">
+    <table className="bg-white dark:bg-white/20 w-full">
       <thead>
         <tr>
           <th className="th-custom">
@@ -129,8 +129,9 @@ export const MultiActions = ({
 
   return (
     <div
-      className={`absolute top-1/2 right-[70%] bg-secondary dark:bg-black p-1 rounded-md ${onlyDelete ? "w-[230px]" : "w-[120px]"
-        }  z-50`}
+      className={`absolute top-1/2 right-[70%] bg-secondary dark:bg-white/20 p-1 rounded-md ${
+        onlyDelete ? "w-[230px]" : "w-[120px]"
+      }  z-50`}
     >
       {onlyDelete && (
         <>

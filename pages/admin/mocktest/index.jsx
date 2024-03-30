@@ -67,7 +67,7 @@ const MocktestCart = ({ item }) => {
   return (
     <Link
       href={item?.url}
-      className="bg-white dark:bg-black rounded-sm flex justify-start items-center gap-5 p-6"
+      className="bg-white dark:bg-white/20 rounded-sm flex justify-start items-center gap-5 p-6"
     >
       <div
         className={`w-[2.88rem] h-[2.88rem] rounded-sm flex justify-center items-center bg-red text-white`}

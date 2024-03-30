@@ -40,7 +40,7 @@ function StudyMaterial() {
             className={`${
               tab?.name === activeTab
                 ? "bg-black dark:bg-[#2b2c2c] text-white"
-                : "bg-white text-black dark:bg-black dark:text-white"
+                : "bg-white text-black dark:bg-white/20 dark:text-white"
             } py-2 px-3 text-xs font-bold`}
           >
             {tab?.name}
@@ -89,7 +89,7 @@ export const handlePdfDownload = (name) => {
 };
 export const StudyFile = ({ data }) => {
   return (
-    <div className="px-5 py-6 bg-white dark:bg-black flex items-center justify-between">
+    <div className="px-5 py-6 bg-white dark:bg-white/20 flex items-center justify-between">
       <p className="text-sm font-bold">
         {data?.title} {formatDateTime(data?.uploaded_at, "date")}
       </p>

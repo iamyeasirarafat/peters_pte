@@ -17,7 +17,7 @@ const OrganizationList = ({ items, setStatus, admin }) => {
   });
 
   return mounted && isTablet ? (
-    <div className="bg-white dark:bg-black w-full">
+    <div className="bg-white dark:bg-white/20 w-full">
       {items.map((product, i) => (
         <Item
           item={product}
@@ -29,7 +29,7 @@ const OrganizationList = ({ items, setStatus, admin }) => {
       ))}
     </div>
   ) : (
-    <table className="bg-white dark:bg-black w-full">
+    <table className="bg-white dark:bg-white/20 w-full">
       <thead>
         <tr>
           <th className="th-custom">

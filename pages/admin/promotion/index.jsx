@@ -78,7 +78,7 @@ const PromotionTable = ({ data, setStatus }) => {
   const [isOpen, setIsOpen] = useState(null);
   return (
     <div className="mt-4">
-      <table className="bg-white dark:bg-black w-full">
+      <table className="bg-white dark:bg-white/20 w-full">
         <thead>
           <tr>
             <th className="th-custom flex items-center gap-x-4">
@@ -213,7 +213,7 @@ const PromotionTableMobile = ({ data, isOpen, setIsOpen, setStatus }) => {
   return (
     <div className="space-y-2">
       {data?.map((item, i) => (
-        <div className="bg-white dark:bg-black p-4 mt-4 " key={i}>
+        <div className="bg-white dark:bg-white/20 p-4 mt-4 " key={i}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-x-3">
               <p className="text-sm">{item?.title}</p>
@@ -256,7 +256,7 @@ const MoreButtons = ({ data, setStatus }) => {
   const router = useRouter();
   return (
     <div
-      className={`absolute top-1/2 right-full bg-secondary dark:bg-black dark:border py-2 px-3 rounded-md`}
+      className={`absolute top-1/2 right-full bg-secondary dark:bg-white/20 dark:border py-2 px-3 rounded-md`}
     >
       <button
         onClick={() => {

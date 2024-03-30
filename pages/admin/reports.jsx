@@ -141,7 +141,7 @@ const Reports = () => {
       {/* Mocktest Report */}
       <div className="mt-10">
         <p className="text-lg font-extrabold mb-2">Mocktest Report</p>
-        <div className="bg-white dark:bg-black mb-5">
+        <div className="bg-white dark:bg-white/20 mb-5">
           <div className="card-head border-0 justify-stretch">
             <div className="mr-auto text-h6">At a Glance</div>
             <div className="flex items-center mr-6 lg:flex-col lg:items-stretch">

@@ -12,13 +12,13 @@ const Students = ({ items, student }) => {
   });
 
   return mounted && isTablet ? (
-    <div className="bg-white dark:bg-black w-full">
+    <div className="bg-white dark:bg-white/20 w-full">
       {items?.map((item, i) => (
         <Item item={item} key={i} />
       ))}
     </div>
   ) : (
-    <table className="bg-white dark:bg-black w-full">
+    <table className="bg-white dark:bg-white/20 w-full">
       <thead>
         <tr>
           <th className="th-custom">

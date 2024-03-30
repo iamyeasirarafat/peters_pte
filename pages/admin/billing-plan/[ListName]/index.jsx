@@ -64,13 +64,13 @@ const ListTable = ({ data }) => {
     query: "(max-width: 1023px)",
   });
   return mounted && isTablet ? (
-    <div className="bg-white dark:bg-black">
+    <div className="bg-white dark:bg-white/20">
       {data?.map((item, index) => (
         <MobileTRTable key={index} data={item} ListName={ListName} />
       ))}
     </div>
   ) : (
-    <table className="bg-white dark:bg-black w-full">
+    <table className="bg-white dark:bg-white/20 w-full">
       <thead>
         <tr>
           <th className="th-custom">
@@ -191,7 +191,7 @@ const PackMore = ({ id }) => {
   const router = useRouter();
   const { ListName } = router.query || {};
   return (
-    <div className="bg-secondary dark:bg-black p-1 rounded-md absolute top-0 right-full">
+    <div className="bg-secondary dark:bg-white/20 p-1 rounded-md absolute top-0 right-full">
       <button
         onClick={() =>
           router.push({

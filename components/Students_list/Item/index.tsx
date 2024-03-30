@@ -41,7 +41,7 @@ const Item = ({ item, isOpen, setIsOpen, setStatus }: ItemProps) => {
                 <Icon name="dots" />
               </button>
               {isOpen === item.id && (
-                <div className="origin-top-right font-semibold absolute right-8 top-0 z-3 mt-1 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary dark:bg-black dark:border border-white">
+                <div className="origin-top-right font-semibold absolute right-8 top-0 z-3 mt-1 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary dark:bg-white/20 dark:border border-white">
                   <button
                     onClick={async () => {
                       await axios.delete("/student/" + item.id);

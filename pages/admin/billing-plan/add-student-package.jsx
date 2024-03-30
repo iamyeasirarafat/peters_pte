@@ -149,7 +149,7 @@ const StudentPackForm = ({ packData }) => {
           name="validity"
         />
         {/* Access */}
-        <div className="w-full bg-white dark:bg-black p-5 flex items-center gap-x-8">
+        <div className="w-full bg-white dark:bg-white/20 p-5 flex items-center gap-x-8">
           <p className="text-sm font-bold">Access</p>
           {/*  Premium Practice */}
           <div className="space-x-2">
@@ -205,7 +205,7 @@ const StudentPackForm = ({ packData }) => {
             name="pre_price"
           />
         </div>
-        <div className="bg-white dark:bg-black p-5 w-full flex items-center justify-between mt-5">
+        <div className="bg-white dark:bg-white/20 p-5 w-full flex items-center justify-between mt-5">
           <p className="text-sm font-bold">Text Line Number</p>
           <div className="flex items-center gap-x-4">
             <FiMinusCircle

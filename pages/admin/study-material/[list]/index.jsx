@@ -93,7 +93,7 @@ export const PredictionList = ({ data, setRefetch, list }) => {
   const [value, setValue] = useState(false);
   const [openItemId, setOpenItemId] = useState(null);
   return (
-    <table className="bg-white dark:bg-black w-full">
+    <table className="bg-white dark:bg-white/20 w-full">
       <thead>
         <tr>
           <th className="th-custom flex items-center gap-x-4">
@@ -229,7 +229,7 @@ const PredictionListRow = ({
 export const PredictionListMobile = ({ data, setRefetch }) => {
   const [showDelete, setShowDelete] = useState(null);
   return (
-    <div className="bg-white dark:bg-black">
+    <div className="bg-white dark:bg-white/20">
       {data?.map((item) => (
         <div key={item?.id} className="p-4 space-y-4">
           <div className="flex items-center justify-between">

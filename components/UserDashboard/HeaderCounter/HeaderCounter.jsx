@@ -13,7 +13,7 @@ export default function HeaderCounter() {
   return (
     <>
       <div className="flex flex-col md:flex-row items-center justify-between gap-1.5 mt-2.5">
-        <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary ">
+        <div className="p-1.5 bg-white dark:bg-white/20 rounded-[50px] flex items-center gap-x-2 border border-primary ">
           <button
             // disabled={router?.asPath?.startsWith("/admin")}
             onClick={() => setOpenEModal(true)}
@@ -31,7 +31,7 @@ export default function HeaderCounter() {
           </div>
           <RiSettings2Fill className="text-xl text-cream" />
         </div>
-        <div className="p-1.5 bg-white dark:bg-black rounded-[50px] flex items-center gap-x-2 border border-primary">
+        <div className="p-1.5 bg-white dark:bg-white/20 rounded-[50px] flex items-center gap-x-2 border border-primary">
           <button
             // disabled={router?.asPath?.startsWith("/admin")}
             onClick={() => setOpenTModal(true)}
