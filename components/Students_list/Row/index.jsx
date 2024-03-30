@@ -444,7 +444,7 @@ export const PhoneNumberInput = ({ name, control, errors, label }) => {
               defaultCountry="BD"
               id={name}
               className={twMerge(
-                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-n-1  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${
+                `w-full h-16 px-5 bg-white border-none  rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-primary dark:bg-white/20  dark:text-white dark:focus:border-primary dark:placeholder:text-white/75  ${
                   error ? "pr-15 !border-pink-1" : ""
                 }`
               )}

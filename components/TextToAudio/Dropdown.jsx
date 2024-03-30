@@ -19,7 +19,7 @@ const Dropdown = ({
           <>
             <Listbox.Button
               className={twMerge(
-                `flex items-center w-full h-14 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-n-1 dark:border-white dark:text-white  ${
+                `flex items-center w-full h-14 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-white/20 dark:border-white dark:text-white  ${
                   open ? "border-purple-1 dark:border-purple-1" : ""
                 } `
               )}
@@ -42,7 +42,7 @@ const Dropdown = ({
             </Listbox.Button>
             <Listbox.Options
               className={twMerge(
-                `absolute left-0 right-0 w-full mt-1 p-2 bg-white h-40 overflow-y-auto  border-n-3 rounded-sm shadow-lg dark:bg-n-1 dark:border-white  ${
+                `absolute left-0 right-0 w-full mt-1 p-2 bg-white h-40 overflow-y-auto  border-n-3 rounded-sm shadow-lg dark:bg-white/20 dark:border-white  ${
                   open ? "z-10" : ""
                 } `
               )}

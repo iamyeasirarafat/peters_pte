@@ -259,7 +259,7 @@ module.exports = {
           "@apply label border-n-1 bg-n-1 text-white dark:bg-white/10": {},
         },
         ".table-custom": {
-          "@apply table w-full  bg-white dark:bg-n-1 dark:border-none": {},
+          "@apply table w-full  bg-white dark:bg-white/20 dark:border-none": {},
         },
         ".table-select": {
           "@apply table-custom [&>thead>tr>*:nth-child(2)]:pl-0 [&>thead>tr>*:nth-child(1)]:w-13 [&>thead>tr>*:nth-child(1)]:px-0 [&>thead>tr>*:nth-child(1)]:text-0 [&>thead>tr>*:nth-child(1)]:text-center [&>tbody>tr>*:nth-child(2)]:pl-0 [&>tbody>tr>*:nth-child(1)]:w-13 [&>tbody>tr>*:nth-child(1)]:px-0 [&>tbody>tr>*:nth-child(1)]:text-center [&>tbody>tr>*:nth-child(1)]:text-0":
@@ -274,7 +274,8 @@ module.exports = {
             {},
         },
         ".card": {
-          "@apply bg-white border border-n-1 dark:bg-n-1 dark:border-white": {},
+          "@apply bg-white border border-n-1 dark:bg-white/20 dark:border-white":
+            {},
         },
         ".card-head": {
           "@apply flex justify-between items-center min-h-[4rem] px-5 py-3 border-b border-n-1 dark:border-white":

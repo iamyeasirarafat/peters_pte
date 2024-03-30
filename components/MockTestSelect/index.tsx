@@ -38,7 +38,7 @@ const MockTestSelect = ({
         <>
           <Listbox.Button
             className={twMerge(
-              `flex items-center w-full h-16 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-n-1 dark:border-white dark:text-white ${
+              `flex items-center w-full h-16 px-5 bg-white border-none rounded-sm text-sm text-n-1 font-bold outline-none transition-colors tap-highlight-color dark:bg-white/20 dark:border-white dark:text-white ${
                 small ? "h-6 px-4 text-xs" : ""
               } ${
                 open ? "border-purple-1 dark:border-purple-1" : ""
@@ -68,7 +68,7 @@ const MockTestSelect = ({
           >
             <Listbox.Options
               className={twMerge(
-                `absolute left-0 right-0 w-full mt-1 p-2 bg-white  border-n-3 rounded-sm shadow-lg dark:bg-n-1 dark:border-white ${
+                `absolute left-0 right-0 w-full mt-1 p-2 bg-white  border-n-3 rounded-sm shadow-lg dark:bg-white/20 dark:border-white ${
                   small ? "p-0" : ""
                 } ${up ? "top-auto bottom-full mt-0 mb-1" : ""} ${
                   open ? "z-10" : ""
