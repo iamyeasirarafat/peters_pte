@@ -3,13 +3,15 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
-// import { ReactMic } from "react-mic";
 import dynamic from "next/dynamic";
 import Pagination from "../global/Pagination";
 import AudioPlayer from "../global/audio_player/AudioPlayer";
-const DynamicReactMic = dynamic(() => import('react-mic').then(module => module.ReactMic), {
-  ssr: false
-});
+const DynamicReactMic = dynamic(
+  () => import("react-mic").then((module) => module.ReactMic),
+  {
+    ssr: false,
+  }
+);
 
 const RecordBlock = ({ setReFetch, api, data }) => {
   // countdown function
@@ -98,14 +100,10 @@ const RecordBlock = ({ setReFetch, api, data }) => {
           },
         };
 
-        const { data } = await axios.post(
-          api,
-          formData,
-          config
-        );
-        data && setReFetch(prev => !prev)
+        const { data } = await axios.post(api, formData, config);
+        data && setReFetch((prev) => !prev);
         setIsLoading(false);
-        setAudioData(null)
+        setAudioData(null);
       } catch (error) {
         console.error("Error sending audio:", error);
         toast.error("Something went wrong, try again later.");
@@ -125,10 +123,10 @@ const RecordBlock = ({ setReFetch, api, data }) => {
     <div>
       <div className="whiteGd h-[50px] block md:hidden"></div>
       <div className="border-t-2 border-primary bg-white  w-full left-0 pb-4 block md:hidden " />
-      <div className="bg-white md:bg-transparent px-6 md:px-0" >
+      <div className="bg-white md:bg-transparent px-6 md:px-0">
         <div className="border border-primary rounded-[15px] md:mt-3 pt-7 md:pt-4 p-4 flex flex-col items-center justify-center relative">
-          {
-            !audioData && <>
+          {!audioData && (
+            <>
               <button
                 onClick={() => {
                   if (isRecording) {
@@ -157,7 +155,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
                 </p>
               )}
             </>
-          }
+          )}
           {audioData && <AudioPlayer data={audioData} />}
           {isRecording && (
             <div className="w-full">

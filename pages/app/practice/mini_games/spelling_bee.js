@@ -1,27 +1,66 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../layout";
-import { LoaderIcon } from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import axios from "axios";
+import GameScore from "./GameScore";
 
 function SpellingBee() {
   const [loading, setLoading] = useState(false);
   const [rightAnswer, setRightAnswer] = useState({ id: null, answer: "" });
   const [question, setQuestion] = useState({});
-  const { options } = question;
+  const [aid, setAid] = useState("");
+  const [isCorrect, setIsCorrect] = useState(true);
+  const [tryAgain, setTryAgain] = useState(false);
+
   useEffect(() => {
     // fetch question
     const getQuestion = async () => {
       try {
-        const res = await axios.get("/games/spelling_bee/1");
+        const res = await axios.get(
+          `/games/spelling_bee/answer${aid && `/${aid}`}`
+        );
         setQuestion(res?.data);
       } catch (error) {
         console.log(error);
       }
     };
     getQuestion();
-  }, []);
-  const handelSubmit = () => {
-    console.log("Answer", rightAnswer);
+  }, [tryAgain]);
+  // set question answers id
+  useEffect(() => {
+    setAid(question?.aid ? question.aid : "");
+  }, [question?.aid]);
+
+  // handel submit
+  const handelSubmit = async () => {
+    setLoading(true);
+    const answerData = {
+      id: question?.question?.id,
+      answer: rightAnswer?.answer,
+    };
+    try {
+      const res = await axios.post(
+        `/games/spelling_bee/answer/${aid}`,
+        answerData
+      );
+      if (res?.data?.game_over) {
+        toast.error(res.data.message || "Your answer is not correct try again");
+        setAid("");
+        setIsCorrect(false);
+        setTryAgain(!tryAgain);
+        setRightAnswer({ id: null, answer: "" });
+      } else {
+        toast.success(res.data.message || "Congratulations");
+        setRightAnswer({ id: null, answer: "" });
+        setIsCorrect(true);
+        setTryAgain(!tryAgain);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setTryAgain(!tryAgain);
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
   };
 
   return (
@@ -30,15 +69,20 @@ function SpellingBee() {
         <div className="w-full bg-[url('/mini_game/spelling_bee.png')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center">
           <div className="w-[60%]">
             <p className="text-white text-center text-xl font-semibold">
-              Choose the correct spelling is Correct?
+              {isCorrect
+                ? "Choose the correct spelling is Correct?"
+                : "Wrong Answer: Game Over"}
             </p>
             <div className="grid grid-cols-2 gap-3 mt-4">
-              {options?.map((item, index) => (
+              {question?.question?.options?.map((item, index) => (
                 <label
                   key={index}
-                  className={`group relative inline-flex items-center gap-2 select-none cursor-pointer tap-highlight-color bg-white  py-4 px-4`}
+                  className={`group ${
+                    !isCorrect && "opacity-50 cursor-auto"
+                  } relative inline-flex items-center gap-2 select-none cursor-pointer tap-highlight-color bg-white  py-4 px-4`}
                 >
                   <input
+                    disabled={!isCorrect}
                     onChange={() =>
                       setRightAnswer({
                         id: index,
@@ -53,23 +97,27 @@ function SpellingBee() {
                 </label>
               ))}
             </div>
-            <button
-              onClick={handelSubmit}
-              disabled={loading}
-              className="py-2 px-3 disabled:opacity-50 bg-primary hover:bg-secondary duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
-            >
-              {loading && <LoaderIcon />} Submit
-            </button>
-            <div className="mt-15 flex items-center gap-x-5">
-              <div className="w-full py-3 px-5 bg-white text-center">
-                <p className="text-lg font-semibold">Your Current Score</p>
-                <p className="text-5xl font-semibold">50</p>
-              </div>
-              <div className="w-full py-3 px-5 bg-blue text-white text-center">
-                <p className="text-lg font-semibold">Your Highest Score</p>
-                <p className="text-5xl font-semibold">80</p>
-              </div>
-            </div>
+            {isCorrect ? (
+              <button
+                onClick={handelSubmit}
+                disabled={loading}
+                className="py-2 px-3 disabled:opacity-70 bg-primary hover:bg-secondary font-semibold duration-200 text-white hover:text-black flex items-center justify-center gap-x-2 w-full mt-5"
+              >
+                {loading && <LoaderIcon />} Submit
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setAid("");
+                  setIsCorrect(true);
+                  setTryAgain(!tryAgain);
+                }}
+                className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
+              >
+                Try again
+              </button>
+            )}
+            <GameScore data={question} />
           </div>
         </div>
       </div>
