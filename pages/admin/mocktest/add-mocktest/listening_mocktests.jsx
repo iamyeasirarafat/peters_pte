@@ -67,8 +67,8 @@ const ReadingTestForm = ({ id }) => {
     };
     try {
       const res = id
-        ? await axios.put(`reading_mocktest/${id}`, formData)
-        : await axios.post("/reading_mocktest", formData);
+        ? await axios.put(`listening_mocktest/${id}`, formData)
+        : await axios.post("/listening_mocktest", formData);
       toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
@@ -89,7 +89,7 @@ const ReadingTestForm = ({ id }) => {
     if (id) {
       const getMocktest = async () => {
         try {
-          const { data } = await axios.get(`/reading_mocktest/${id}`);
+          const { data } = await axios.get(`/listening_mocktest/${id}`);
           reset(data);
         } catch (error) {
           toast.error(error?.response?.data?.message || "Something went wrong");
