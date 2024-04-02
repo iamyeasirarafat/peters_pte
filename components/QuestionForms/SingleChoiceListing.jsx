@@ -14,6 +14,7 @@ const SingleChoiceListing = () => {
   const { register, watch } = useForm();
   const [formData, setFormData] = useState({
     title: "",
+    text_content: "",
     content: "",
     options: [],
     right_options: [],
@@ -117,6 +118,7 @@ const SingleChoiceListing = () => {
         const newForm = new FormData();
         newForm.append("audio", formData.audio || audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
+        newForm.append("text_content", formData?.text_content);
         newForm.append("options", optionsJson);
         formData.right_options.forEach((item) =>
           newForm.append("right_options", item)
@@ -260,6 +262,22 @@ const SingleChoiceListing = () => {
             <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
             {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
           </button>
+        </div>
+
+        {/* question line */}
+        <div className="flex flex-col gap-2 my-5">
+          <label for="text_content" className="font-bold text-sm">
+            Question Line
+          </label>
+          <textarea
+            rows={2}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20"
+            id="text_content"
+            type="text"
+            value={formData.text_content}
+            onChange={handleInputChange}
+          />
         </div>
 
         {/* more field */}
