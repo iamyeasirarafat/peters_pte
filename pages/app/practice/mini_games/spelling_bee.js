@@ -127,7 +127,7 @@ function SpellingBee() {
                 Ply again
               </button>
             )}
-            <GameScore data={question} />
+            <GameScore data={gameScore} />
           </div>
         </div>
       </div>
