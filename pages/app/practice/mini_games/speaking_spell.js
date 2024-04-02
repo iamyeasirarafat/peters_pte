@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import DashboardLayout from "../../layout";
 import { LoaderIcon } from "react-hot-toast";
+import DashboardLayout from "../../layout";
 import GameScore from "./GameScore";
-import GameRecorder from "./GameRecorder";
 
 function SpeakingSpell() {
   const [loading, setLoading] = useState(false);
@@ -52,11 +51,11 @@ function SpeakingSpell() {
               ))}
             </div> */}
             <div className="bg-white rounded-[15px]">
-              <GameRecorder
+              {/* <GameRecorder
                 data={data}
                 api={answerApi}
                 setReFetch={setReFetch}
-              />
+              /> */}
             </div>
             <button
               // onClick={handelSubmit}

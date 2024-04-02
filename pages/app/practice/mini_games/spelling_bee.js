@@ -8,6 +8,7 @@ function SpellingBee() {
   const [loading, setLoading] = useState(false);
   const [rightAnswer, setRightAnswer] = useState({ id: null, answer: "" });
   const [question, setQuestion] = useState({});
+  const [gameScore, setGameScore] = useState({});
   const [aid, setAid] = useState("");
   const [isCorrect, setIsCorrect] = useState(true);
   const [tryAgain, setTryAgain] = useState(false);
@@ -20,11 +21,12 @@ function SpellingBee() {
           `/games/spelling_bee/answer${aid && `/${aid}`}`
         );
         setQuestion(res?.data);
+        setGameScore({ current: res?.data?.score, max: res?.data?.max_score });
       } catch (error) {
         console.log(error);
       }
     };
-    getQuestion();
+    isCorrect && getQuestion();
   }, [tryAgain]);
   // set question answers id
   useEffect(() => {
@@ -43,12 +45,17 @@ function SpellingBee() {
         `/games/spelling_bee/answer/${aid}`,
         answerData
       );
-      if (res?.data?.game_over) {
-        toast.error(res.data.message || "Your answer is not correct try again");
+      if (res?.data?.game_over || res?.data?.wrong_answer) {
+        toast.error(
+          res.data.message || res?.data?.game_over
+            ? "Your game is over"
+            : "Your answer is not correct try again"
+        );
         setAid("");
         setIsCorrect(false);
         setTryAgain(!tryAgain);
         setRightAnswer({ id: null, answer: "" });
+        setGameScore({ current: res?.data?.score, max: res?.data?.max_score });
       } else {
         toast.success(res.data.message || "Congratulations");
         setRightAnswer({ id: null, answer: "" });
@@ -66,8 +73,11 @@ function SpellingBee() {
   return (
     <DashboardLayout dashboard>
       <div className="pt-2.5 pb-15">
-        <div className="w-full bg-[url('/mini_game/spelling_bee.png')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center">
-          <div className="w-[60%]">
+        <div className="w-full bg-[url('/mini_game/spelling_bee.png')] bg-cover bg-center bg-no-repeat h-full flex items-center justify-center relative">
+          <p className=" text-lg text-white font-semibold absolute top-7 left-7">
+            Spelling Bee
+          </p>
+          <div className="w-[60%] pt-32 pb-20">
             <p className="text-white text-center text-xl font-semibold">
               {isCorrect
                 ? "Choose the correct spelling is Correct?"
@@ -114,10 +124,10 @@ function SpellingBee() {
                 }}
                 className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
               >
-                Try again
+                Ply again
               </button>
             )}
-            <GameScore data={question} />
+            <GameScore data={gameScore} />
           </div>
         </div>
       </div>

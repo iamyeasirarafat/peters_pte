@@ -2,15 +2,17 @@ import Counter from "@/components/Counter";
 import Icon from "@/components/Icon";
 import { useEffect, useRef, useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
-
 import LoadingButton from "@/components/LoadingButton";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import axios from "axios";
-
 import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import useTextToAudio from "../../utils/textToAudio";
 const HighlightIncorrectWord = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [audio, setAudio] = useState(null);
+  const { register, watch } = useForm();
   const [formData, setFormData] = useState({
     title: "",
     sentence: [],
@@ -19,6 +21,7 @@ const HighlightIncorrectWord = () => {
     audio: null,
     answers: [],
   });
+
   const handleInputChange = (e) => {
     const { id, type, value, checked } = e.target;
     setFormData((prevData) => ({
@@ -71,7 +74,7 @@ const HighlightIncorrectWord = () => {
       const buttonText = String.fromCharCode(buttonCounter);
       setButtonCounter(buttonCounter + 1);
       const buttonElement = document.createElement("button");
-      buttonElement.innerHTML = `<b>${buttonText}</b>`;
+      buttonElement.innerHTML = `<b class="indButton">${buttonText}</b>`;
       buttonElement.className =
         "px-4 bg-orange-400 mb-3 mx-3 disabled:cursor-not-allowed";
       buttonElement.contentEditable = false;
@@ -91,7 +94,7 @@ const HighlightIncorrectWord = () => {
       // Initialize the option in the state as an object with an empty string
       setOptions((prevOptions) => [
         ...prevOptions,
-        { index: buttonText, value: "" },
+        { index: buttonText, value: "", wrong: "" },
       ]);
     }
   };
@@ -101,6 +104,13 @@ const HighlightIncorrectWord = () => {
     setOptions((prevOptions) =>
       prevOptions.map((option) =>
         option.index === index ? { ...option, value: e.target.value } : option
+      )
+    );
+  };
+  const handelWrongAnswerChange = (index, e) => {
+    setOptions((prevOptions) =>
+      prevOptions.map((option) =>
+        option.index === index ? { ...option, wrong: e.target.value } : option
       )
     );
   };
@@ -130,12 +140,12 @@ const HighlightIncorrectWord = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData?.audio) {
+    if (formData?.audio || audio) {
       const answersJson = JSON.stringify(formData?.answers);
       try {
         setLoading(true);
         const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        newForm.append("audio", formData.audio || audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
 
         formData.sentence.forEach((item) => newForm.append("sentence", item));
@@ -167,6 +177,34 @@ const HighlightIncorrectWord = () => {
       toast.error("You need provide data successfuly!");
     }
   };
+  //!generate reference audio staff
+  const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
+  useEffect(() => {
+    if (watch().reference_text !== "") {
+      setEnableGenerateBtn(true);
+    } else {
+      setEnableGenerateBtn(false);
+    }
+  }, [watch()]);
+  // generate text to audio
+  const {
+    getAudio,
+    generatedAudio,
+    generatedAudioSrc,
+    audioLoading,
+    audioError,
+    SelectSpeedCompo,
+  } = useTextToAudio();
+  useEffect(() => {
+    if (generatedAudio) {
+      setAudio(generatedAudio);
+      setAudioSrc(generatedAudioSrc);
+    }
+    if (audioError) {
+      toast.error("Failed to fetch audio from API");
+      console.error("Error fetching audio from API:", audioError);
+    }
+  }, [audioError, generatedAudio, generatedAudioSrc]);
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -186,7 +224,21 @@ const HighlightIncorrectWord = () => {
             onChange={handleInputChange}
           />
         </div>
-
+        <div className="flex flex-col gap-2 my-5">
+          <label for="reference_text" className="font-bold text-sm">
+            Reference Text
+          </label>
+          <textarea
+            rows={5}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
+            id="reference_text"
+            type="text"
+            {...register("reference_text", {
+              required: "reference text is required",
+            })}
+          />
+        </div>
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audioName && !audioSrc ? (
@@ -228,6 +280,19 @@ const HighlightIncorrectWord = () => {
               </div>
             </div>
           )}
+          {/* select speaker and select speed drop down */}
+          <SelectSpeedCompo />
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              await getAudio(watch().reference_text);
+            }}
+            disabled={!enableGenerateBtn}
+            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20"
+          >
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+          </button>
         </div>
 
         {/* counter */}
@@ -237,18 +302,33 @@ const HighlightIncorrectWord = () => {
             <div className="min-w-[2.5rem] text-center text-xs font-bold">
               {options?.length}
             </div>
-            <button
-              className="group"
-              onClick={(e) => {
-                e.preventDefault();
-                handleButtonClick();
-              }}
-            >
-              <Icon
-                className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
-                name="plus-circle"
-              />
-            </button>
+            <div className="flex items-center gap-x-2">
+              <button
+                className="group"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOptions((prevOptions) => prevOptions.slice(0, -1));
+                  setButtonCounter((prev) => prev - 1);
+                }}
+              >
+                <Icon
+                  className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
+                  name="minus-circle"
+                />
+              </button>
+              <button
+                className="group"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleButtonClick();
+                }}
+              >
+                <Icon
+                  className="icon-18 transition-colors group-hover:fill-purple-2 dark:fill-white"
+                  name="plus-circle"
+                />
+              </button>
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-2 my-5">
@@ -265,19 +345,33 @@ const HighlightIncorrectWord = () => {
           />
         </div>
 
-        <div className="grid grid-cols-4 gap-2 my-5 lg:grid-cols-2 md:grid-cols-1 gap-x-5 gap-y-4">
+        <div className="grid grid-cols-2 mb-3 gap-3">
           {options.map((option) => (
-            <div key={option.index}>
-              <h3 className="text-sm font-bold mb-2">
-                Correct {option?.index}
-              </h3>
-              <input
-                type="text"
-                value={option.value}
-                onChange={(e) => handleTextAreaChange(option.index, e)}
-                placeholder="write your text"
-                className="border-none py-4 dark:bg-white/20 "
-              />
+            <div className="flex items-center gap-x-3" key={option.index}>
+              <div className="w-full">
+                <h3 className="text-sm font-bold mb-2">
+                  Correct {option?.index}
+                </h3>
+                <input
+                  type="text"
+                  value={option.value}
+                  onChange={(e) => handleTextAreaChange(option.index, e)}
+                  placeholder="write your text"
+                  className="border-none py-4 dark:bg-white/20 w-full"
+                />
+              </div>
+              <div className="w-full">
+                <h3 className="text-sm font-bold mb-2">
+                  Wrong {option?.index}
+                </h3>
+                <input
+                  type="text"
+                  value={option.wrong}
+                  onChange={(e) => handelWrongAnswerChange(option.index, e)}
+                  placeholder="write your text"
+                  className="border-none py-4 dark:bg-white/20 w-full"
+                />
+              </div>
             </div>
           ))}
         </div>
