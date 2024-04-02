@@ -4,9 +4,11 @@ import Icon from "@/components/Icon";
 import { useEffect } from "react";
 import { useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import useTextToAudio from "../../utils/textToAudio";
 const HighlightSummary = () => {
   const [optionNumber, setOptionNumber] = useState(4);
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,8 @@ const HighlightSummary = () => {
     }))
   );
   const [selectedOptions, setSelectedOptions] = useState("");
+  const [audio, setAudio] = useState(null);
+  const { register, watch } = useForm();
   const [formData, setFormData] = useState({
     title: "",
     audio: null,
@@ -90,12 +94,11 @@ const HighlightSummary = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData?.audio) {
-      console.log(formData);
+    if (formData?.audio || audio) {
       try {
         setLoading(true);
         const formDatas = new FormData();
-        formDatas.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        formDatas.append("audio", formData.audio || audio, "recorded.wav"); // Append the audioData as is
         formDatas.append("title", formData?.title);
         const optionsJson = JSON.stringify(formData?.options);
         formDatas.append("options", optionsJson);
@@ -129,6 +132,35 @@ const HighlightSummary = () => {
     }
   };
 
+  //!generate reference audio staff
+  const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
+  useEffect(() => {
+    if (watch().reference_text !== "") {
+      setEnableGenerateBtn(true);
+    } else {
+      setEnableGenerateBtn(false);
+    }
+  }, [watch()]);
+  // generate text to audio
+  const {
+    getAudio,
+    generatedAudio,
+    generatedAudioSrc,
+    audioLoading,
+    audioError,
+    SelectSpeedCompo,
+  } = useTextToAudio();
+  useEffect(() => {
+    if (generatedAudio) {
+      setAudio(generatedAudio);
+      setAudioSrc(generatedAudioSrc);
+    }
+    if (audioError) {
+      toast.error("Failed to fetch audio from API");
+      console.error("Error fetching audio from API:", audioError);
+    }
+  }, [audioError, generatedAudio, generatedAudioSrc]);
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -148,7 +180,21 @@ const HighlightSummary = () => {
             onChange={handleInputChange}
           />
         </div>
-
+        <div className="flex flex-col gap-2 my-5">
+          <label for="reference_text" className="font-bold text-sm">
+            Reference Text
+          </label>
+          <textarea
+            rows={5}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
+            id="reference_text"
+            type="text"
+            {...register("reference_text", {
+              required: "reference text is required",
+            })}
+          />
+        </div>
         <div>
           <h4 className="text-sm mt-5 mb-2 font-semibold">Sentence Voice</h4>
           {!audioName && !audioSrc ? (
@@ -190,6 +236,19 @@ const HighlightSummary = () => {
               </div>
             </div>
           )}
+          {/* select speaker and select speed drop down */}
+          <SelectSpeedCompo />
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              await getAudio(watch().reference_text);
+            }}
+            disabled={!enableGenerateBtn}
+            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20"
+          >
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+          </button>
         </div>
 
         {/* more field */}
@@ -215,16 +274,18 @@ const HighlightSummary = () => {
                       checked={selectedOptions == option.index} // Use 'in' operator to check if the key exists
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions == option.index
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions == option.index
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${selectedOptions == option.index
-                          ? "opacity-100"
-                          : "opacity-0"
-                          }`}
+                        className={`fill-white transition-opacity ${
+                          selectedOptions == option.index
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
                         name="check"
                       />
                     </span>

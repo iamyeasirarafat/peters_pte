@@ -31,7 +31,7 @@ const Index = () => {
       id: 3,
       name: "Reading Mocktest",
       icon: "RMT",
-      Items: testCount?.listening || 0,
+      Items: testCount?.reading || 0,
       url: "/admin/mocktest/reading_mocktests",
     },
     {
@@ -45,7 +45,7 @@ const Index = () => {
       id: 5,
       name: "Listening Mocktest",
       icon: "LMT",
-      Items: testCount?.reading || 0,
+      Items: testCount?.listening || 0,
       url: "/admin/mocktest/listening_mocktests",
     },
   ];
