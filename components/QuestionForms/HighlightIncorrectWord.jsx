@@ -308,6 +308,7 @@ const HighlightIncorrectWord = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   setOptions((prevOptions) => prevOptions.slice(0, -1));
+                  setButtonCounter((prev) => prev - 1);
                 }}
               >
                 <Icon
