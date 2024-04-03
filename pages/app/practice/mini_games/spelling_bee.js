@@ -78,7 +78,7 @@ function SpellingBee() {
             Spelling Bee
           </p>
           <div className="w-[60%] pt-32 pb-20">
-            <p className="text-white text-center text-xl font-semibold">
+            <p className="text-white text-center text-2xl font-semibold">
               {isCorrect
                 ? "Choose the correct spelling is Correct?"
                 : "Wrong Answer: Game Over"}
