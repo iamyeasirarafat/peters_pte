@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 const Index = () => {
   const [toggleProgress, setToggleProgress] = useState(true);
   const user = useSelector((state) => state?.user?.user);
-
   return (
     <DashboardLayout dashboard>
       <div className="p-3">

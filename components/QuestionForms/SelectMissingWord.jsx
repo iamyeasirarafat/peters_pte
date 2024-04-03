@@ -4,11 +4,15 @@ import Icon from "@/components/Icon";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import AudioVisualizer from "../AudioVisualizer";
+import { useForm } from "react-hook-form";
+import useTextToAudio from "../../utils/textToAudio";
 const SelectMissingWord = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [audio, setAudio] = useState(null);
+  const { register, watch } = useForm();
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -107,13 +111,13 @@ const SelectMissingWord = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData?.audio) {
+    if (formData?.audio || audio) {
       const optionsJson = JSON.stringify(formData?.options);
       const rightOptionsJson = JSON.stringify(formData?.right_options);
       try {
         setLoading(true);
         const newForm = new FormData();
-        newForm.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
+        newForm.append("audio", formData.audio || audio, "recorded.wav"); // Append the audioData as is
         newForm.append("title", formData?.title);
         newForm.append("options", optionsJson);
         newForm.append("right_options", formData?.right_options);
@@ -140,7 +144,34 @@ const SelectMissingWord = () => {
       toast.error("You need provide data successfuly!");
     }
   };
-
+  //!generate reference audio staff
+  const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
+  useEffect(() => {
+    if (watch().reference_text !== "") {
+      setEnableGenerateBtn(true);
+    } else {
+      setEnableGenerateBtn(false);
+    }
+  }, [watch()]);
+  // generate text to audio
+  const {
+    getAudio,
+    generatedAudio,
+    generatedAudioSrc,
+    audioLoading,
+    audioError,
+    SelectSpeedCompo,
+  } = useTextToAudio();
+  useEffect(() => {
+    if (generatedAudio) {
+      setAudio(generatedAudio);
+      setAudioSrc(generatedAudioSrc);
+    }
+    if (audioError) {
+      toast.error("Failed to fetch audio from API");
+      console.error("Error fetching audio from API:", audioError);
+    }
+  }, [audioError, generatedAudio, generatedAudioSrc]);
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -158,6 +189,21 @@ const SelectMissingWord = () => {
             type="text"
             value={formData.title}
             onChange={handleInputChange}
+          />
+        </div>
+        <div className="flex flex-col gap-2 my-5">
+          <label for="reference_text" className="font-bold text-sm">
+            Reference Text
+          </label>
+          <textarea
+            rows={5}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
+            id="reference_text"
+            type="text"
+            {...register("reference_text", {
+              required: "reference text is required",
+            })}
           />
         </div>
         <div>
@@ -201,6 +247,19 @@ const SelectMissingWord = () => {
               </div>
             </div>
           )}
+          {/* select speaker and select speed drop down */}
+          <SelectSpeedCompo />
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              await getAudio(watch().reference_text);
+            }}
+            disabled={!enableGenerateBtn}
+            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20"
+          >
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+          </button>
         </div>
 
         {/* more field */}
@@ -226,16 +285,18 @@ const SelectMissingWord = () => {
                       checked={selectedOptions == option.index}
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions == option.index
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions == option.index
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${selectedOptions == option.index
-                          ? "opacity-100"
-                          : "opacity-0"
-                          }`}
+                        className={`fill-white transition-opacity ${
+                          selectedOptions == option.index
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
                         name="check"
                       />
                     </span>
