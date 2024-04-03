@@ -230,14 +230,14 @@ const FillBlanksBlock = ({
               return (
                 <span key={index}>
                   {word}
-                  {
+                  {index !== sentence.length - 1 && (
                     <FillBlankInput
                       index={index}
                       setAnswer={updateAnswer}
                       handleDragStart={handleDragStart}
                       setIsDragging={setIsDragging}
                     />
-                  }
+                  )}
                 </span>
               );
             })}

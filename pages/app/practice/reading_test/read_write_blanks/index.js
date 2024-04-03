@@ -202,7 +202,7 @@ const FillBlanksBlock = ({
               return (
                 <span key={index}>
                   {word}
-                  {
+                  {index !== sentence.length - 1 && (
                     <FillBlankInput
                       options={
                         option_list.filter(
@@ -211,7 +211,7 @@ const FillBlanksBlock = ({
                       }
                       onChange={(e) => updateAnswer(index, e.target.value)}
                     />
-                  }
+                  )}
                 </span>
               );
             })}

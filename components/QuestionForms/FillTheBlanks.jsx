@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
 
 import LoadingButton from "@/components/LoadingButton";
-import toast from "react-hot-toast";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import { useRouter } from "next/router";
 const FillTheBlanks = () => {
@@ -107,11 +107,8 @@ const FillTheBlanks = () => {
 
   /////////////////// sentence and options in form data ///////////////////////
   useEffect(() => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-
     // Extract text content from parsed document, excluding button text
-    const paragraphs = Array.from(doc.body.childNodes)
+    const paragraphs = Array.from(contentEditableRef.current.childNodes)
       .map((node) => {
         if (node.nodeName === "BUTTON") {
           return ""; // Exclude button text
