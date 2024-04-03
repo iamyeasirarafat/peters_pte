@@ -48,7 +48,7 @@ const Page = () => {
       <Toaster />
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Fill In The Blanks" />
+      <PageHeader title="Read & Write Blanks" />
       {/* main content */}
       <GlobalMainContent data={data}>
         {/* <ListenBlock data={data} blank /> */}
@@ -195,7 +195,7 @@ const FillBlanksBlock = ({
   };
   return (
     <>
-      <div className=" p-2">
+      <div className="border border-primary rounded-lg p-2">
         <p className="text-xl font-medium">
           {Array.isArray(sentence) &&
             sentence.map((word, index) => {
