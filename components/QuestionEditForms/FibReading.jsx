@@ -1,12 +1,10 @@
-import LoadingButton from "@/components/LoadingButton";
 import EditCounter from "@/components/EditCounter";
-import { useState } from "react";
 import Icon from "@/components/Icon";
-import { useRef } from "react";
-import { useEffect } from "react";
-import toast from "react-hot-toast";
+import LoadingButton from "@/components/LoadingButton";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 const FibReading = () => {
   const router = useRouter();
   const { item } = router.query;
@@ -81,11 +79,8 @@ const FibReading = () => {
     );
   };
   useEffect(() => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-
     // Extract text content from parsed document, excluding button text
-    const paragraphs = Array.from(doc.body.childNodes)
+    const paragraphs = Array.from(contentEditableRef.current.childNodes)
       .map((node) => {
         if (node.nodeName === "BUTTON") {
           return ""; // Exclude button text

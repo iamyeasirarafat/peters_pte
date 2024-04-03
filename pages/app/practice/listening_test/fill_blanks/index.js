@@ -166,11 +166,11 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
               return (
                 <span key={index}>
                   {word}
-                  {
+                  {index !== sentence.length - 1 && (
                     <FillBlankInput
                       onChange={(e) => updateAnswer(index, e.target.value)}
                     />
-                  }
+                  )}
                 </span>
               );
             })}
