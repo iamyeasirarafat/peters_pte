@@ -286,6 +286,7 @@ const StudentDetailsRight = ({ data }) => {
           openTargetScore={openTargetScore}
           setOpenTargetScore={setOpenTargetScore}
           setRefetch={setRefetch}
+          prevScores={score}
         />
       </div>
       {/* Account Plan History */}
@@ -884,15 +885,28 @@ const ExamCountDown = ({
   );
 };
 
-const TargetScore = ({ openTargetScore, setOpenTargetScore, setRefetch }) => {
+const TargetScore = ({
+  openTargetScore,
+  setOpenTargetScore,
+  setRefetch,
+  prevScores,
+}) => {
   const scores = [
-    { id: null, name: "None" },
+    // { id: null, name: "None" },
     { id: 1, name: "35" },
     { id: 2, name: "55" },
     { id: 3, name: "75" },
     { id: 4, name: "90" },
   ];
-  const [score, setScore] = useState(scores[0]);
+  const [score, setScore] = useState();
+
+  useEffect(() => {
+    setScore({
+      id: 0,
+      name: prevScores?.score ? `${prevScores?.score}` : "None",
+    });
+  }, [prevScores?.score]);
+
   const [loading, setLoading] = useState(false);
   const { handleSubmit, reset } = useForm();
   const onSubmit = () => {

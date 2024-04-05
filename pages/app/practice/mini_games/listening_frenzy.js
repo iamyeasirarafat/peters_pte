@@ -34,8 +34,6 @@ function ListeningFrenzy() {
     setAid(question?.aid ? question.aid : "");
   }, [question?.aid]);
 
-  console.log("answerText", answerText);
-  console.log("question", question);
   const handelSubmit = async () => {
     setLoading(true);
     const answerData = {

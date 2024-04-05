@@ -1,13 +1,17 @@
 import Icon from "@/components/Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AudioVisualizer from "../AudioVisualizer";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/router";
+import useTextToAudio from "../../utils/textToAudio";
 const ListeningFrenzy = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [audio, setAudio] = useState(null);
+  const [refText, setRefText] = useState("");
+  const { handleSubmit, register, watch } = useForm();
   const [formDataState, setFormDataState] = useState({
     title: "",
     audio: null,
@@ -37,11 +41,11 @@ const ListeningFrenzy = () => {
     setAudioSrc(null);
     setAudioName(null);
   };
-  const { handleSubmit } = useForm();
   const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append("word", formDataState?.title);
-    formData.append("audio", formDataState?.audio);
+    formData.append("title", formDataState?.title);
+    formData.append("audio", formDataState?.audio || audio);
+    formData.append("word", refText);
     try {
       setLoading(true);
       const res = await axios.post("/games/listening_frenzy", formData);
@@ -60,6 +64,35 @@ const ListeningFrenzy = () => {
       setLoading(false);
     }
   };
+
+  //!generate reference audio staff
+  const [enableGenerateBtn, setEnableGenerateBtn] = useState(false);
+  useEffect(() => {
+    if (watch().reference_text !== "") {
+      setEnableGenerateBtn(true);
+    } else {
+      setEnableGenerateBtn(false);
+    }
+  }, [watch()]);
+  // generate text to audio
+  const {
+    getAudio,
+    generatedAudio,
+    generatedAudioSrc,
+    audioLoading,
+    audioError,
+    SelectSpeedCompo,
+  } = useTextToAudio();
+  useEffect(() => {
+    if (generatedAudio) {
+      setAudio(generatedAudio);
+      setAudioSrc(generatedAudioSrc);
+    }
+    if (audioError) {
+      toast.error("Failed to fetch audio from API");
+      console.error("Error fetching audio from API:", audioError);
+    }
+  }, [audioError, generatedAudio, generatedAudioSrc]);
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -81,6 +114,22 @@ const ListeningFrenzy = () => {
                 title: target.value,
               }))
             }
+          />
+        </div>
+
+        <div className="flex flex-col gap-2 my-5">
+          <label for="reference_text" className="font-bold text-sm">
+            Reference Text
+          </label>
+          <textarea
+            rows={5}
+            placeholder="Start Typing..."
+            className="w-full border-none py-4 px-5 text-sm dark:bg-white/20 "
+            id="reference_text"
+            type="text"
+            {...register("reference_text", {
+              required: "reference text is required",
+            })}
           />
         </div>
 
@@ -125,7 +174,22 @@ const ListeningFrenzy = () => {
               </div>
             </div>
           )}
+          {/* select speaker and select speed drop down */}
+          <SelectSpeedCompo />
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              setRefText(watch().reference_text);
+              await getAudio(watch().reference_text);
+            }}
+            disabled={!enableGenerateBtn}
+            className="mr-3 flex items-center  text-white mt-4 h-10 px-6 text-sm font-bold last:mb-0 bg-yellow-600 transition-colors hover:bg-yellow-800 disabled:bg-yellow-300 dark:hover:bg-white/20"
+          >
+            <Icon className="-mt-0.25 mr-3 fill-white" name="bolt" />
+            {audioLoading ? <LoaderIcon /> : "Generate Reference audio"}
+          </button>
         </div>
+
         <button
           type="submit"
           disabled={loading}
