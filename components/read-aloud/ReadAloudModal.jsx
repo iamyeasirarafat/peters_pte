@@ -15,7 +15,7 @@ const ReadAloudModal = ({
   describe_image,
   retell_lecture,
   answer_question,
-  readAloud
+  readAloud,
 }) => {
   const router = useRouter();
   const id = router.query.que_no;
@@ -24,7 +24,7 @@ const ReadAloudModal = ({
   const content = Math.round(result?.scores?.content) || 0;
   const fluency = Math.round(result?.scores?.fluency) || 0;
   const pronunciation = Math.round(result?.scores?.pronunciation) || 0;
-  console.log(result, "ssssssss")
+  console.log(result, "ssssssss");
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -118,11 +118,9 @@ const ReadAloudModal = ({
             )}
             {/* Enabling Skill  */}
             <div
-              className={`${answer_question
-                ? "col-span-12"
-                : "col-span-9"
-                // : "col-span-6"
-                } w-full border border-primary rounded-[13px]`}
+              className={`${
+                answer_question ? "col-span-6" : "col-span-6"
+              } w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
@@ -161,34 +159,36 @@ const ReadAloudModal = ({
                   />
                   <p className="text-gray text-xl">{pronunciation}/90</p>
                 </div>
-                {
-                  readAloud && (
-                    <>
-                      <div className="w-full flex items-center justify-between gap-x-5">
-                        <p className="text-gray text-lg w-3/6 text-start">
-                          Speed
-                        </p>
-                        <LineProgressBar
-                          height={20}
-                          lineColor={"red"}
-                          strokeWidth={Math.round(result?.scores?.speed) || 0}
-                        />
-                        <p className="text-gray text-xl">{Math.round(result?.scores?.speed) || 0}</p>
-                      </div>
-                      <div className="w-full flex items-center justify-between gap-x-5">
-                        <p className="text-gray text-lg w-3/6 text-start">
-                          Stress
-                        </p>
-                        <LineProgressBar
-                          height={20}
-                          lineColor={"cream"}
-                          strokeWidth={Math.round(result?.scores?.stress) || 0}
-                        />
-                        <p className="text-gray text-xl">{Math.round(result?.scores?.stress) || 0}</p>
-                      </div>
-                    </>
-                  )
-                }
+                {readAloud && (
+                  <>
+                    <div className="w-full flex items-center justify-between gap-x-5">
+                      <p className="text-gray text-lg w-3/6 text-start">
+                        Speed
+                      </p>
+                      <LineProgressBar
+                        height={20}
+                        lineColor={"red"}
+                        strokeWidth={Math.round(result?.scores?.speed) || 0}
+                      />
+                      <p className="text-gray text-xl">
+                        {Math.round(result?.scores?.speed) || 0}
+                      </p>
+                    </div>
+                    <div className="w-full flex items-center justify-between gap-x-5">
+                      <p className="text-gray text-lg w-3/6 text-start">
+                        Stress
+                      </p>
+                      <LineProgressBar
+                        height={20}
+                        lineColor={"cream"}
+                        strokeWidth={Math.round(result?.scores?.stress) || 0}
+                      />
+                      <p className="text-gray text-xl">
+                        {Math.round(result?.scores?.stress) || 0}
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -216,7 +216,6 @@ const ReadAloudModal = ({
                   {wordCount(result?.scores?.word_highlight, "missing")} words
                 </p>
               </div>
-
             </>
           )}
           <p className="text-center mt-3 text-lightGray">
