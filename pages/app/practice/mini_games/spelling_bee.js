@@ -11,6 +11,7 @@ function SpellingBee() {
   const [gameScore, setGameScore] = useState({});
   const [aid, setAid] = useState("");
   const [isCorrect, setIsCorrect] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
 
   useEffect(() => {
@@ -51,11 +52,18 @@ function SpellingBee() {
             ? "Your game is over"
             : "Your answer is not correct try again"
         );
-        setAid("");
-        setIsCorrect(false);
-        setTryAgain(!tryAgain);
-        setRightAnswer({ id: null, answer: "" });
-        setGameScore({ current: res?.data?.score, max: res?.data?.max_score });
+        if (res?.data?.game_over) {
+          setGameOver(true);
+        } else {
+          setIsCorrect(false);
+          setAid("");
+          setTryAgain(!tryAgain);
+          setRightAnswer({ id: null, answer: "" });
+        }
+        setGameScore({
+          current: res?.data?.score,
+          max: res?.data?.max_score,
+        });
       } else {
         toast.success(res.data.message || "Congratulations");
         setRightAnswer({ id: null, answer: "" });
