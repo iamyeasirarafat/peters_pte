@@ -56,6 +56,7 @@ function Page() {
         <ListenBlock setOpen={setOpenTranscriptModal} data={data} />
         {/* Multiple Choice Answer */}
         <SingleChoiceAnswer
+          text_content={data?.text_content || ""}
           isReady={data?.id ? false : true}
           typingTime={5}
           answers={data?.options || []}

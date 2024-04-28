@@ -4,8 +4,7 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 
-const FillBlanksModal = ({ data, open, setOpen }) => {
-  console.log(data);
+const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -120,28 +119,54 @@ const FillBlanksModal = ({ data, open, setOpen }) => {
               <p className="text-gray text-xl">Enabling Skill</p>
             </div>
             <div className="px-7 py-5 space-y-3">
-              <div className="w-full flex items-center justify-between gap-x-5">
-                <p className="text-gray text-xl w-3/6 text-start">Listening</p>
-                <LineProgressBar
-                  height={30}
-                  lineColor={"cream"}
-                  strokeWidth={
-                    data?.scores.score * (100 / data?.scores.max_score) || 0
-                  }
-                />
-                <p className="text-gray text-xl">
-                  {data?.scores.score || 0}/{data?.scores.max_score || 0}
-                </p>
-              </div>
-              <div className="w-full flex items-center justify-between gap-x-5">
-                <p className="text-gray text-xl w-3/6 text-start">Writing</p>
-                <LineProgressBar
-                  height={30}
-                  lineColor={"primary"}
-                  strokeWidth={60}
-                />
-                <p className="text-gray text-xl">0/2</p>
-              </div>
+              {reading_fill_banks ? (
+                <>
+                  <div className="w-full flex items-center justify-between gap-x-5">
+                    <p className="text-gray text-xl w-3/6 text-start">
+                      Reading
+                    </p>
+                    <LineProgressBar
+                      height={30}
+                      lineColor={"primary"}
+                      strokeWidth={
+                        (data?.scores.score * 100) / data?.scores.max_score || 0
+                      }
+                    />
+                    <p className="text-gray text-xl">
+                      {data?.scores.score || 0}/{data?.scores.max_score || 0}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="w-full flex items-center justify-between gap-x-5">
+                    <p className="text-gray text-xl w-3/6 text-start">
+                      Listening
+                    </p>
+                    <LineProgressBar
+                      height={30}
+                      lineColor={"cream"}
+                      strokeWidth={
+                        data?.scores.score * (100 / data?.scores.max_score) || 0
+                      }
+                    />
+                    <p className="text-gray text-xl">
+                      {data?.scores.score || 0}/{data?.scores.max_score || 0}
+                    </p>
+                  </div>
+                  <div className="w-full flex items-center justify-between gap-x-5">
+                    <p className="text-gray text-xl w-3/6 text-start">
+                      Writing
+                    </p>
+                    <LineProgressBar
+                      height={30}
+                      lineColor={"primary"}
+                      strokeWidth={60}
+                    />
+                    <p className="text-gray text-xl">0/2</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <p className="text-center mt-2 text-lightGray">
