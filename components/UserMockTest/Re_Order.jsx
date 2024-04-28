@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import Image from "next/image";
+import React, { useState } from "react";
 export default function Re_Order() {
   const qData = [
     {
@@ -27,7 +27,9 @@ export default function Re_Order() {
   return (
     <div>
       <p className="font-semibold mb-6">
-        The text boxes in the left panel have been placed in random order. Restore the original order by dragging the text boxes from the left panel to the right panel.
+        The text boxes in the left panel have been placed in random order.
+        Restore the original order by dragging the text boxes from the left
+        panel to the right panel.
       </p>
       <ReOrderBlock
         data={sortingValue}
@@ -38,8 +40,6 @@ export default function Re_Order() {
     </div>
   );
 }
-
-
 
 const ReOrderBlock = ({ data, answerData, setAnswerData, setQuestionData }) => {
   return (

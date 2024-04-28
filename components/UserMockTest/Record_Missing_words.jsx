@@ -1,12 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import RecordBlock from "./RecordBlock";
 
 export default function Record_Missing_words() {
   return (
     <div>
       <p className="font-semibold mb-6">
-        You will hear a recording. Please listen to the recording and type the missing words in each blank.
+        You will hear a recording. Please listen to the recording and type the
+        missing words in each blank.
       </p>
       <div className="mb-6">
         <RecordBlock />
@@ -54,5 +55,5 @@ const AppropriateChoiceBlock = () => {
       />{" "}
       inventore? Dolor.
     </div>
-  )
-}
+  );
+};

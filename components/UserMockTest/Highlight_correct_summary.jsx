@@ -9,18 +9,18 @@ export default function Highlight_correct_summary() {
 
   return (
     <div className="">
-
       {/* header */}
       <div>
         <p className="font-semibold">
-          You will hear a recording. Choose the paragraph that best relates to the recording.
+          You will hear a recording. Choose the paragraph that best relates to
+          the recording.
         </p>
 
         <div className="flex flex-col">
           <div>
             {/* audio player  */}
-            <div className='py-2 w-full'>
-              <audio controls className='w-full'>
+            <div className="py-2 w-full">
+              <audio controls className="w-full">
                 <source src="horse.ogg" type="audio/ogg" />
                 <source src="horse.mp3" type="audio/mpeg" />
                 Your browser does not support the audio element.
@@ -39,7 +39,10 @@ export default function Highlight_correct_summary() {
               />
               <label htmlFor="option1">
                 {/* paragraph 1 */}
-                Charlemagne was a great king of the Franks. He was crowned Emperor of the Romans in 800. He was a great warrior and expanded his empire through conquest. He was a descendent of Frankish kings.
+                Charlemagne was a great king of the Franks. He was crowned
+                Emperor of the Romans in 800. He was a great warrior and
+                expanded his empire through conquest. He was a descendent of
+                Frankish kings.
               </label>
             </div>
             <div className="flex items-center gap-2">
@@ -53,7 +56,10 @@ export default function Highlight_correct_summary() {
               />
               <label htmlFor="option2">
                 {/* paragraph 2 */}
-                Charlemagne was a great king of the Franks. He was crowned Emperor of the Romans in 800. He was a great warrior and expanded his empire through conquest. He received ambassadors from other countries.
+                Charlemagne was a great king of the Franks. He was crowned
+                Emperor of the Romans in 800. He was a great warrior and
+                expanded his empire through conquest. He received ambassadors
+                from other countries.
               </label>
             </div>
             <div className="flex items-center gap-2">
@@ -67,7 +73,10 @@ export default function Highlight_correct_summary() {
               />
               <label htmlFor="option3">
                 {/* paragraph 3 */}
-                Charlemagne was a great king of the Franks. He was crowned Emperor of the Romans in 800. He was a great warrior and expanded his empire through conquest. He built a new capital city.
+                Charlemagne was a great king of the Franks. He was crowned
+                Emperor of the Romans in 800. He was a great warrior and
+                expanded his empire through conquest. He built a new capital
+                city.
               </label>
             </div>
             <div className="flex items-center gap-2">
@@ -81,7 +90,10 @@ export default function Highlight_correct_summary() {
               />
               <label htmlFor="option4">
                 {/* paragraph 4 */}
-                Charlemagne was a great king of the Franks. He was crowned Emperor of the Romans in 800. He was a great warrior and expanded his empire through conquest. He waged war and expanded his empire.
+                Charlemagne was a great king of the Franks. He was crowned
+                Emperor of the Romans in 800. He was a great warrior and
+                expanded his empire through conquest. He waged war and expanded
+                his empire.
               </label>
             </div>
           </div>

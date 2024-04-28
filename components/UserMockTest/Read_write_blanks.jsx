@@ -4,7 +4,8 @@ function Read_write_blanks() {
   return (
     <>
       <p className="font-semibold mb-6">
-        Below is a text with blanks. Click on each blank, a list of choices will appear. Select the appropriate answer choice for each blank.
+        Below is a text with blanks. Click on each blank, a list of choices will
+        appear. Select the appropriate answer choice for each blank.
       </p>
       <div>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab iure
@@ -17,7 +18,6 @@ function Read_write_blanks() {
           >
             <option value="">Select Answer</option>
             <option value="Dolor">Dolor</option>
-
           </select>
         </div>
         atque animi dicta et a praesentium ducimus incidunt quibusdam doloremque
@@ -31,7 +31,6 @@ function Read_write_blanks() {
           >
             <option value="">Select Answer</option>
             <option value="Dolor">Dolor</option>
-
           </select>
         </div>
         accusantium, dignissimos error dolorem autem iste provident non
@@ -45,7 +44,6 @@ function Read_write_blanks() {
           >
             <option value="">Select Answer</option>
             <option value="Dolor">Dolor</option>
-
           </select>
         </div>
         sit inventore consectetur incidunt corrupti ipsum debitis totam? Fugit,
@@ -58,7 +56,6 @@ function Read_write_blanks() {
           >
             <option value="">Select Answer</option>
             <option value="Dolor">Dolor</option>
-
           </select>
         </div>
         doloribus ut rerum consectetur velit excepturi voluptatem, eius
@@ -71,7 +68,6 @@ function Read_write_blanks() {
           >
             <option value="">Select Answer</option>
             <option value="Dolor">Dolor</option>
-
           </select>
         </div>
         exercitationem provident repellat autem nam neque voluptas accusantium,

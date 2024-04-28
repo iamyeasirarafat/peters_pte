@@ -4,9 +4,11 @@ export default function Summarize_written() {
   return (
     <div>
       <p className="font-semibold mb-6">
-        Read the passage below and summarize it using one sentence. Type your response in the box at the
-        bottom of the screen. You have 10 minutes to finish this task. Your response will be judged on the
-        quality of your writing and on how well your response presents the key points in the passage.
+        Read the passage below and summarize it using one sentence. Type your
+        response in the box at the bottom of the screen. You have 10 minutes to
+        finish this task. Your response will be judged on the quality of your
+        writing and on how well your response presents the key points in the
+        passage.
       </p>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus

@@ -1,4 +1,3 @@
-"use client";
 import FillBlanksModal from "@/components/fill_blanks/FillBlanksModal";
 import GlobalMainContent from "@/components/global/GlobalMainContent";
 import ListenBlock from "@/components/global/ListenBlock";
