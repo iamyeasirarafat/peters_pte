@@ -28,7 +28,8 @@ export default function Multiple_choice_single() {
       {/* header */}
       <div>
         <p className="font-semibold">
-          Read the text and answer the multiple choice question by selecting the correct response. Only one response is correct.
+          Read the text and answer the multiple choice question by selecting the
+          correct response. Only one response is correct.
         </p>
 
         <div className="flex flex-col">
@@ -45,7 +46,9 @@ export default function Multiple_choice_single() {
                 checked={selectedOption === "option1"}
                 onChange={() => handleOptionChange("option1")}
               />
-              <label htmlFor="option1">He waged war and expanded his empire.</label>
+              <label htmlFor="option1">
+                He waged war and expanded his empire.
+              </label>
             </div>
             <div className="flex items-center gap-2">
               <input
@@ -67,7 +70,9 @@ export default function Multiple_choice_single() {
                 checked={selectedOption === "option3"}
                 onChange={() => handleOptionChange("option3")}
               />
-              <label htmlFor="option3">He received ambassadors from other countries.</label>
+              <label htmlFor="option3">
+                He received ambassadors from other countries.
+              </label>
             </div>
             <div className="flex items-center gap-2">
               <input
@@ -78,7 +83,9 @@ export default function Multiple_choice_single() {
                 checked={selectedOption === "option4"}
                 onChange={() => handleOptionChange("option4")}
               />
-              <label htmlFor="option4">He was a descendent of Frankish kings.</label>
+              <label htmlFor="option4">
+                He was a descendent of Frankish kings.
+              </label>
             </div>
           </div>
         </div>

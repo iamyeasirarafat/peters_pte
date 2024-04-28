@@ -10,6 +10,7 @@ function MultipleChoiceAnswer({
   setReFetch,
   isReady,
   typingTime,
+  text_content,
 }) {
   const router = useRouter();
   const id = router.query.que_no;
@@ -69,10 +70,9 @@ function MultipleChoiceAnswer({
     <>
       <div className="p-5 rounded-[15px] border border-primary">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-lg text-center">
-            Based on the audio, which of the following is a true statement about
-            short story writing?
-          </p>
+          {text_content && (
+            <p className="text-gray text-base">{text_content}</p>
+          )}
           <p className="text-gray text-xs">
             <i>
               Time Remaining {minutes}:{seconds < 10 ? `0${seconds}` : seconds}

@@ -58,7 +58,7 @@ const Page = () => {
           setReFetch={setReFetch}
           api={answerApi}
           sentence={data?.sentence}
-          option_list={data?.option_list || []}
+          option_list={data?.options || []}
         />
       </GlobalMainContent>
       {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
@@ -98,11 +98,11 @@ const FillBlanksBlock = ({
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
 
-  useEffect(() => {
-    if (sentence) {
-      setAnswers(sentence.map((_, index) => ({ index, value: "" })));
-    }
-  }, [sentence]);
+  // useEffect(() => {
+  //   if (sentence) {
+  //     setAnswers(sentence.map((_, index) => ({ index, value: "" })));
+  //   }
+  // }, [sentence]);
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -150,10 +150,16 @@ const FillBlanksBlock = ({
   );
   //*submit function
   const handelSubmit = async () => {
+    console.log(
+      answers.map((item) => item.value),
+      "answers"
+    );
     try {
       setIsLoading(true);
       const res = await axios.post(api, {
-        answers: [...answers.map((item) => item.value)],
+        answers: [
+          ...answers.map((item) => (item.value ? item.value : undefined)),
+        ],
         time_taken: timeTakenInMinutes,
       });
       toast.success(res.data.message || "Submitted Successfully");

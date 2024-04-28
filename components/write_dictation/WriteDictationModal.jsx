@@ -53,8 +53,8 @@ const WriteDictationModal = ({ open, setOpen, result }) => {
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={wordCount(word_highlights, "correct")}
-                    text={wordCount(word_highlights, "correct")}
+                    value={num_matching_words}
+                    text={num_matching_words}
                     strokeWidth={15}
                     maxValue={totalScore}
                     styles={buildStyles({
@@ -85,9 +85,7 @@ const WriteDictationModal = ({ open, setOpen, result }) => {
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
-                <p className="text-[60px] text-gray">
-                  {wordCount(word_highlights, "correct")}
-                </p>
+                <p className="text-[60px] text-gray">{num_matching_words}</p>
               </div>
             </div>
           </div>

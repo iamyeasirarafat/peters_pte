@@ -10,28 +10,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import TextBlock from "../../../../../components/global/TextBlock";
 import DashboardLayout from "../../../layout";
-const answers = [
-  {
-    index: "A",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    index: "B",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-  {
-    index: "C",
-    answer:
-      "Listen to the recording and answer the question by selecting all the question color fact on global earth",
-  },
-  {
-    index: "D",
-    answer:
-      "Listen to the recording and answer the question by selecting all the tortoise and Listen to the recording and answer the question by selecting all the tortoise",
-  },
-];
+
 function Page() {
   const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
@@ -77,6 +56,7 @@ function Page() {
         <TextBlock data={data} />
         {/* Multiple Choice Answer */}
         <SingleChoiceAnswer
+          text_content={data?.text_content}
           isReady={data?.id ? false : true}
           typingTime={5}
           answers={data?.options || []}

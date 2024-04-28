@@ -5,22 +5,28 @@ export default function Missing_words() {
   return (
     <div>
       <p className="font-semibold mb-6">
-        In the text below some words are missing. Drag words from the options below to the appropriate place in the text. To undo an answer choice, drag it back to the options.
+        In the text below some words are missing. Drag words from the options
+        below to the appropriate place in the text. To undo an answer choice,
+        drag it back to the options.
       </p>
       <div className="border border-gray/10 flex flex-col gap-3">
         <AppropriateChoiceBlock />
         {/* options */}
         <div className="bg-gray/20 flex items-center justify-center gap-2 py-2">
-          <span className="flex gap-2 items-center border border-gray/30 cursor-move py-1 px-3"><MdDragIndicator /> Success</span>
-          <span className="flex gap-2 items-center border border-gray/30 cursor-move py-1 px-3"><MdDragIndicator /> Vitality</span>
-          <span className="flex gap-2 items-center border border-gray/30 cursor-move py-1 px-3"><MdDragIndicator /> Choose</span>
+          <span className="flex gap-2 items-center border border-gray/30 cursor-move py-1 px-3">
+            <MdDragIndicator /> Success
+          </span>
+          <span className="flex gap-2 items-center border border-gray/30 cursor-move py-1 px-3">
+            <MdDragIndicator /> Vitality
+          </span>
+          <span className="flex gap-2 items-center border border-gray/30 cursor-move py-1 px-3">
+            <MdDragIndicator /> Choose
+          </span>
         </div>
       </div>
-
     </div>
   );
 }
-
 
 const AppropriateChoiceBlock = () => {
   return (
@@ -60,5 +66,5 @@ const AppropriateChoiceBlock = () => {
       />{" "}
       inventore? Dolor.
     </div>
-  )
-}
+  );
+};

@@ -57,6 +57,7 @@ function Page() {
         <TextBlock data={data} />
         {/* Multiple Choice Answer */}
         <MultipleChoiceAnswer
+          text_content={data?.text_content}
           setReFetch={setReFetch}
           answers={data?.options}
           result={result}

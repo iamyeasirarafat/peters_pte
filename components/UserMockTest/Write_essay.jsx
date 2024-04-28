@@ -4,9 +4,10 @@ export default function Write_essay() {
   return (
     <div>
       <p className="font-semibold mb-6">
-        You will have 20min to plan, write and revise an essay about the topic below. Your response will be
-        judged on how well you develop a position, organize your ideas, present supporting details, and control
-        the elements of standard written English. You should write 200-300 words.
+        You will have 20min to plan, write and revise an essay about the topic
+        below. Your response will be judged on how well you develop a position,
+        organize your ideas, present supporting details, and control the
+        elements of standard written English. You should write 200-300 words.
       </p>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus

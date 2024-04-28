@@ -92,7 +92,7 @@ const ReadAloudModal = ({
               </div>
             )}
             {/* wrighting Score */}
-            {!describe_image && (
+            {!describe_image && !answer_question && (
               <div className="col-span-3 w-full border border-primary rounded-[13px]">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                   <p className="text-gray text-xl">Reading Score</p>
@@ -119,7 +119,7 @@ const ReadAloudModal = ({
             {/* Enabling Skill  */}
             <div
               className={`${
-                answer_question ? "col-span-6" : "col-span-6"
+                answer_question ? "col-span-12" : "col-span-6"
               } w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
@@ -200,7 +200,11 @@ const ReadAloudModal = ({
                   <p className="text-gray text-xl">AI Speech to Text</p>
                 </div>
                 <div className="px-7 py-5">
-                  <WordHighlight words={result?.scores?.word_highlight} />
+                  {answer_question ? (
+                    <p>{result?.scores?.user_speech}</p>
+                  ) : (
+                    <WordHighlight words={result?.scores?.word_highlight} />
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between">
