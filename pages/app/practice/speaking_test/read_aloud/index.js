@@ -66,7 +66,10 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <PageHeader title="Read Aloud" />
+      <PageHeader
+        tips_link="https://peterspte.com/speaking-test/mastering-the-pte-read-aloud-a-comprehensive-guide-and-tips/"
+        title="Read Aloud"
+      />
       <p className="text-gray text-xs md:text-base mt-2 text-center">
         Look at the text below. In 35 seconds, you must read this text aloud as
         naturally and clearly as possible. You have 35 seconds to read aloud.

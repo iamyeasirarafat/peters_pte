@@ -100,7 +100,8 @@ const Index = () => {
       )}
       {result && (
         <ReadAloudModal
-          describe_image
+          // describe_image
+          repeat_sentence
           result={aiResult}
           open={openModal}
           setOpen={setOpenModal}

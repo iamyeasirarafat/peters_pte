@@ -62,7 +62,7 @@ const Page = () => {
           result={result}
           setReFetch={setReFetch}
           api={answerApi}
-          sentence={data?.sentence}
+          data={data}
         />
       </GlobalMainContent>
       {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
@@ -85,7 +85,7 @@ const Page = () => {
 
 export default Page;
 
-const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
+const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [answers, setAnswers] = useState([]);
   const initialMinutes = typingTime;
@@ -94,12 +94,64 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
+  const [sentence, setSentence] = useState([]);
+  const [apiAnswers, setApiAnswers] = useState([]);
+  const [finalSentence, setFinalSentence] = useState("");
+  const [selectedWords, setSelectedWords] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setSentence([data?.sentence]);
+      setApiAnswers([data?.answers]);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (sentence) {
-      setAnswers(sentence.map((_, index) => ({ index, value: "" })));
+      constructSentence();
     }
   }, [sentence]);
+  console.log(apiAnswers, "sssssssssssssssssyy");
+  const constructSentence = () => {
+    let result = [];
+    let answerIndex = 0;
+
+    for (let i = 0; i < sentence.length - 1; i++) {
+      result.push(sentence[i]);
+      result.push(apiAnswers[answerIndex].wrong);
+      console.log(apiAnswers[answerIndex].wrong, "apiAnswers[answerIndex]");
+      answerIndex = (answerIndex + 1) % apiAnswers.length;
+    }
+
+    result.push(sentence[sentence.length - 1]);
+
+    const finalSentence = result.join("");
+    setFinalSentence(finalSentence);
+  };
+
+  const handleWordClick = (word) => {
+    const index = selectedWords.indexOf(word);
+    if (index === -1) {
+      setSelectedWords([...selectedWords, word]);
+    } else {
+      setSelectedWords(selectedWords.filter((item) => item !== word));
+    }
+  };
+  console.log(selectedWords, "sss");
+  const renderClickableSentence = () => {
+    const words = finalSentence.split(" ");
+    return words.map((word, index) => (
+      <span
+        className={`cursor-pointer ${
+          selectedWords.includes(word) ? "text-primary" : "text-inherit"
+        } `}
+        key={index}
+        onClick={() => handleWordClick(word)}
+      >
+        {word}{" "}
+      </span>
+    ));
+  };
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -125,21 +177,6 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
     setSeconds(0);
   }, [id, initialMinutes]);
 
-  //!Updating answer state
-  const updateAnswer = (index, value) => {
-    const existingIndex = answers.findIndex((item) => item.index === index);
-    if (existingIndex !== -1) {
-      // If index exists, update its value
-      setAnswers((prev) => [
-        ...prev.slice(0, existingIndex),
-        { index, value },
-        ...prev.slice(existingIndex + 1),
-      ]);
-    } else {
-      // If index does not exist, add a new entry
-      setAnswers((prev) => [...prev, { index, value }]);
-    }
-  };
   const initialSeconds = initialMinutes * 60;
   const remainingSeconds = minutes * 60 + seconds;
   const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
@@ -150,7 +187,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
     try {
       setIsLoading(true);
       const res = await axios.post(api, {
-        answers: [...answers.map((item) => item.value)],
+        answers: selectedWords,
         time_taken: timeTakenInMinutes,
       });
       toast.success(res.data.message || "Submitted Successfully");
@@ -164,21 +201,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
   return (
     <>
       <div className="p-5 border border-primary rounded-[15px] relative">
-        <p className="text-xl font-medium">
-          {Array.isArray(sentence) &&
-            sentence.map((word, index) => {
-              return (
-                <span key={index}>
-                  {word}
-                  {index !== sentence.length - 1 && (
-                    <FillBlankInput
-                      onChange={(e) => updateAnswer(index, e.target.value)}
-                    />
-                  )}
-                </span>
-              );
-            })}
-        </p>
+        <p className="text-xl font-medium">{renderClickableSentence()}</p>
       </div>
       <button
         disabled={isLoading || timerExpired}

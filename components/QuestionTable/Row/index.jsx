@@ -1,13 +1,13 @@
 import Checkbox from "@/components/Checkbox";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
+import axios from "axios";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { convertToCamelCase } from "..";
 import toast from "react-hot-toast";
-import axios from "axios";
+import { convertToCamelCase } from "..";
 
 const Row = ({
   item,
@@ -70,7 +70,7 @@ const Row = ({
       </td>
       <td className="td-custom text-center">
         <div className="label-stroke min-w-[7.25rem]">
-          {item?.date ? item.date : new Date().toLocaleDateString()}
+          {dayjs(item?.created_at).format("DD/MM/YYYY")}
         </div>
       </td>
       <td className="td-custom text-right">
