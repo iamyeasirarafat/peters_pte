@@ -37,8 +37,10 @@ const Score = ({
               <p className="text-base lg:text-xl text-gray">
                 {typeof result?.scores == "object"
                   ? result?.scores?.speaking ||
-                  result?.scores?.overall ||
-                  result?.scores?.Overall || result.scores.score
+                    result?.scores?.num_matching_words ||
+                    result?.scores?.overall ||
+                    result?.scores?.Overall ||
+                    result.scores.score
                   : result?.scores}
               </p>
             </button>
@@ -89,8 +91,9 @@ const Score = ({
             <p className="text-base lg:text-xl text-gray">
               {typeof result?.scores == "object"
                 ? result?.scores?.speaking ||
-                result?.scores?.overall ||
-                result?.scores?.Overall || result.scores.score
+                  result?.scores?.overall ||
+                  result?.scores?.Overall ||
+                  result.scores.score
                 : result?.scores}
             </p>
           </button>

@@ -71,6 +71,7 @@ const Page = () => {
         />
       )}
       <FillBlanksModal
+        reading_fill_banks
         data={aiResult}
         open={openScoreModal}
         setOpen={setOpenScoreModal}
@@ -91,9 +92,9 @@ const FillBlanksBlock = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [answers, setAnswers] = useState([]);
-  const initialMinutes = typingTime;
   const router = useRouter();
   const id = router.query.que_no;
+  const initialMinutes = typingTime;
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);

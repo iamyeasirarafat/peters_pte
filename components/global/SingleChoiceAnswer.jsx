@@ -3,7 +3,15 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 
-function SingleChoiceAnswer({ answers, result, api, setReFetch, isReady, typingTime }) {
+function SingleChoiceAnswer({
+  answers,
+  result,
+  api,
+  setReFetch,
+  isReady,
+  typingTime,
+  text_content,
+}) {
   const [loading, setLoading] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const initialMinutes = typingTime;
@@ -58,10 +66,7 @@ function SingleChoiceAnswer({ answers, result, api, setReFetch, isReady, typingT
   };
   return (
     <div className="p-5 rounded-[15px] border border-primary">
-      <p className="text-lg text-center">
-        Based on the audio, which of the following is a true statement about
-        short story writing?
-      </p>
+      {text_content && <p className="text-lg text-center">{text_content}</p>}
       <div>
         <div className="space-y-2 mt-2">
           {answers?.map((answer, i) => (
@@ -94,8 +99,9 @@ export default SingleChoiceAnswer;
 export const Answer = ({ answer, selectedAnswer, setSelectedAnswer }) => {
   return (
     <label
-      className={`${selectedAnswer === answer?.value ? "bg-secondary" : "bg-white"
-        } rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
+      className={`${
+        selectedAnswer === answer?.value ? "bg-secondary" : "bg-white"
+      } rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
     >
       <input
         className="border-2 border-primary focus:ring-transparent cursor-pointer w-7 h-7 rounded-md text-primary"

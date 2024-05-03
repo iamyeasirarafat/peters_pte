@@ -44,9 +44,10 @@ const Page = () => {
     <DashboardLayout>
       <SideModal data={SideModalData} />
       <PageHeader title="Summarize Spoken Text" />
-      <p className="text-gray text-base mt-2 text-center">
-        Look at the text below. In 35 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 35 seconds to read aloud.
+      <p className="text-gray text-base mt-2 ml-2">
+        You will hear a short lecture. Write a summary for a fellow student who
+        was not present at the lecture. You should write 50 - 70 words. You have
+        10 minutes to finish this task
       </p>
       {/* main content */}
       <GlobalMainContent data={data}>
