@@ -41,43 +41,40 @@ const allTimePerformances = [
 ];
 
 const Performances = () => {
-  const [allTimePerformances, setAllTimePerformances] = useState([])
-  const [data, setData] = useState()
+  const [allTimePerformances, setAllTimePerformances] = useState([]);
+  console.log(allTimePerformances, "allTimePerformances");
+  const [data, setData] = useState();
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios("/progress")
-      setData(data)
-    }
-    getData()
-  }, [])
+      const { data } = await axios("/progress");
+      setData(data);
+      setAllTimePerformances(convertData());
+    };
+    getData();
+  }, []);
   const convertData = () => {
     const newData = [];
     for (const key in data?.all_time) {
-      if (data.hasOwnProperty(key)) {
-        const item = data[key];
-        const title = `${key.charAt(0).toUpperCase()}${key.slice(1).replace(/_/g, " ")}`;
+      console.log(key, data?.all_time);
+      if (data?.all_time.hasOwnProperty(key)) {
+        const item = data?.all_time[key];
+        const title = `${key.charAt(0).toUpperCase()}${key
+          .slice(1)
+          .replace(/_/g, " ")}`;
         const value = `${item.practices}/${item.total}`;
-        const percentage = `${item.percentage}`;
+        const percentage = `${item.percentage}%`;
         const color = "#4399FF";
         newData.push({ title, value, percentage, color });
       }
     }
     newData.push({
       title: "Mock Test Questions",
-      value: "52/475",
-      percentage: "60%",
+      value: "0/0",
+      percentage: "0%",
       color: "#F44141",
     });
     return newData;
   };
-  useState(() => {
-    if (data) {
-      console.log("sss", data.all_time)
-      const newData = convertData();
-      setAllTimePerformances(newData);
-    }
-  }, [data]);
-  console.log(data.all_time)
   return (
     <>
       <div>
