@@ -65,7 +65,10 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Describe Image top */}
-      <PageHeader title="Describe Image" />
+      <PageHeader
+        tips_link="https://peterspte.com/speaking-test/mastering-the-pte-describe-image-a-comprehensive-guide-and-tips/"
+        title="Describe Image"
+      />
       <p className="text-gray text-xs md:text-base mt-2 text-center">
         Look at the image below. In 25 seconds, please speak into the microphone
         and describe in detail what the image is showing. You will have 40

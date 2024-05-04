@@ -30,7 +30,8 @@ const ResultSection = ({
   answer_question,
   setOpenScoreModal,
   setAiResult,
-  describe_image
+  describe_image,
+  repeat_sentence
 }) => {
   const [pageTab, setPageTab] = useState("My Score");
   return (
@@ -58,6 +59,7 @@ const ResultSection = ({
         <div className="space-y-2">
           {result?.self?.map((item, index) => (
             <Score
+              repeat_sentence={repeat_sentence}
               describe_image={describe_image}
               answer_question={answer_question}
               key={index}
@@ -73,6 +75,7 @@ const ResultSection = ({
         <div className="space-y-2">
           {result?.other?.map((item, index) => (
             <Score
+              repeat_sentence={repeat_sentence}
               describe_image={describe_image}
               answer_question={answer_question}
               key={index}

@@ -8,6 +8,8 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { FaCheck } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import DashboardLayout from "../../../layout";
 
 const Page = () => {
@@ -87,7 +89,7 @@ export default Page;
 
 const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState(null);
   const initialMinutes = typingTime;
   const router = useRouter();
   const id = router.query.que_no;
@@ -101,8 +103,8 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
 
   useEffect(() => {
     if (data) {
-      setSentence([data?.sentence]);
-      setApiAnswers([data?.answers]);
+      setSentence(data?.sentence);
+      setApiAnswers(data?.answers);
     }
   }, [data]);
 
@@ -111,14 +113,15 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
       constructSentence();
     }
   }, [sentence]);
-  console.log(apiAnswers, "sssssssssssssssssyy");
   const constructSentence = () => {
     let result = [];
     let answerIndex = 0;
 
     for (let i = 0; i < sentence.length - 1; i++) {
       result.push(sentence[i]);
+      result.push(" ");
       result.push(apiAnswers[answerIndex].wrong);
+      result.push(" ");
       console.log(apiAnswers[answerIndex].wrong, "apiAnswers[answerIndex]");
       answerIndex = (answerIndex + 1) % apiAnswers.length;
     }
@@ -130,6 +133,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
   };
 
   const handleWordClick = (word) => {
+    setAnswers(null);
     const index = selectedWords.indexOf(word);
     if (index === -1) {
       setSelectedWords([...selectedWords, word]);
@@ -137,18 +141,67 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
       setSelectedWords(selectedWords.filter((item) => item !== word));
     }
   };
-  console.log(selectedWords, "sss");
+  // cheching that selected word is correct or not
+  const isValueInArray = (valueToCheck) => {
+    return apiAnswers?.some((item) => item.wrong === valueToCheck);
+  };
   const renderClickableSentence = () => {
+    const getWordColor = (word) => {
+      if (selectedWords.includes(word)) {
+        if (answers) {
+          if (isValueInArray(word)) {
+            return {
+              value: "correct",
+              color: "text-green-600 bg-green-200",
+            };
+          } else {
+            return {
+              value: "wrongSelected",
+              color: "bg-[#FFE0E0]",
+            };
+          }
+        } else {
+          return {
+            value: "selected",
+            color: "text-primary",
+          };
+        }
+      } else if (
+        (answers && isValueInArray(word)) ||
+        selectedWords.includes(word)
+      ) {
+        return {
+          value: "wrong",
+          color: "text-red bg-[#FFE0E0]",
+        };
+      } else {
+        return {
+          value: "nothing",
+          color: "text-inherit",
+        };
+      }
+    };
     const words = finalSentence.split(" ");
     return words.map((word, index) => (
       <span
-        className={`cursor-pointer ${
-          selectedWords.includes(word) ? "text-primary" : "text-inherit"
-        } `}
+        className={`cursor-pointer  ${getWordColor(word).color}`}
         key={index}
         onClick={() => handleWordClick(word)}
       >
+        {getWordColor(word).value === "wrong" ? (
+          <RxCross2 className="inline" />
+        ) : getWordColor(word).value === "correct" ? (
+          <FaCheck className="inline" />
+        ) : (
+          ""
+        )}{" "}
         {word}{" "}
+        {(getWordColor(word).value === "wrong" ||
+          getWordColor(word).value === "correct") && (
+          <span className="text-blue ml-1 bg-white">
+            {apiAnswers.find((i) => i.wrong === word).value}{" "}
+          </span>
+        )}
       </span>
     ));
   };
@@ -191,6 +244,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
         time_taken: timeTakenInMinutes,
       });
       toast.success(res.data.message || "Submitted Successfully");
+      setAnswers(res?.data);
       setReFetch((prev) => !prev);
       setIsLoading(false);
     } catch (error) {
@@ -198,6 +252,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+
   return (
     <>
       <div className="p-5 border border-primary rounded-[15px] relative">

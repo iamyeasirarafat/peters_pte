@@ -121,9 +121,8 @@ const ReadAloudModal = ({
             )}
             {/* Enabling Skill  */}
             <div
-              className={`${
-                answer_question ? "col-span-12" : "col-span-6"
-              } w-full border border-primary rounded-[13px]`}
+              className={`${answer_question ? "col-span-12" : describe_image ? "col-span-9" : "col-span-6"
+                } w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
@@ -224,6 +223,20 @@ const ReadAloudModal = ({
                 </p>
               </div>
             </>
+          )}
+          {describe_image || retell_lecture && (
+
+            <div className="w-full border border-primary rounded-[13px] mt-5">
+              <div className="bg-secondary rounded-t-[13px] py-1 px-2">
+                <p className="text-gray text-xl">User response</p>
+              </div>
+              <div className="px-7 text-left  py-5">
+                {
+                  result?.scores?.user_speech
+                }
+              </div>
+            </div>
+
           )}
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023
