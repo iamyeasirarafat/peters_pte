@@ -11,6 +11,7 @@ const Score = ({
   setAiResult,
   answer_question,
   describe_image,
+  repeat_sentence
 }) => {
   return (
     <div className="border border-primary rounded-[15px] p-2">
@@ -37,10 +38,10 @@ const Score = ({
               <p className="text-base lg:text-xl text-gray">
                 {typeof result?.scores == "object"
                   ? result?.scores?.speaking ||
-                    result?.scores?.num_matching_words ||
-                    result?.scores?.overall ||
-                    result?.scores?.Overall ||
-                    result.scores.score
+                  result?.scores?.num_matching_words ||
+                  result?.scores?.overall ||
+                  result?.scores?.Overall ||
+                  result.scores.score
                   : result?.scores}
               </p>
             </button>
@@ -48,12 +49,14 @@ const Score = ({
           {!summary && !answer_question && !describe_image && (
             <button className="min-w-[120px] cursor-default border border-primary rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
               <p className="lg:text-base text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-cream">
-                R
+                {
+                  repeat_sentence ? 'L' : 'R'
+                }
               </p>
               <p className="text-base lg:text-xl text-gray">
-                {typeof result?.scores == "object"
+                {repeat_sentence ? `${result?.scores?.listening || 0}` : `${typeof result?.scores == "object"
                   ? result?.scores?.reading || result?.scores?.Reading || 0
-                  : result?.scores || 0}
+                  : result?.scores || 0}`}
               </p>
             </button>
           )}
@@ -91,9 +94,9 @@ const Score = ({
             <p className="text-base lg:text-xl text-gray">
               {typeof result?.scores == "object"
                 ? result?.scores?.speaking ||
-                  result?.scores?.overall ||
-                  result?.scores?.Overall ||
-                  result.scores.score
+                result?.scores?.overall ||
+                result?.scores?.Overall ||
+                result.scores.score
                 : result?.scores}
             </p>
           </button>

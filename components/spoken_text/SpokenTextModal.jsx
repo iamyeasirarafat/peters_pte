@@ -1,16 +1,18 @@
-import React from "react";
-import ReusableModal from "../global/ReusableModal";
-import { MdOutlineFileDownload } from "react-icons/md";
-import { GrClose } from "react-icons/gr";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import LineProgressBar from "../global/LineProgressBar";
 import { useRouter } from "next/router";
+import React from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { GrClose } from "react-icons/gr";
+import { MdOutlineFileDownload } from "react-icons/md";
+import LineProgressBar from "../global/LineProgressBar";
+import ReusableModal from "../global/ReusableModal";
 
 const SpokenTextModal = ({ open, setOpen, result }) => {
   const router = useRouter();
   const id = router.query.que_no;
   const {
     content,
+    writing,
+    listening,
     grammar,
     form,
     spelling,
@@ -53,7 +55,7 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
           {/* score */}
           <div className="grid grid-cols-12 gap-x-6">
             {/* Total Score */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-4 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Total Score</p>
               </div>
@@ -76,8 +78,55 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
                 <p className="text-gray text-xl mt-1">Out of 10.00</p>
               </div>
             </div>
+            <div className="col-span-4 w-full border border-primary rounded-[13px]">
+              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                <p className="text-gray text-xl">Listening Score</p>
+              </div>
+              {/* score point*/}
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="w-32 h-w-32">
+                  <CircularProgressbar
+                    value={listening}
+                    text={listening}
+                    strokeWidth={15}
+                    maxValue={90}
+                    styles={buildStyles({
+                      textColor: "gray",
+                      textSize: "20px",
+                      pathColor: "#ff8412",
+                      trailColor: "#f1f1f1",
+                    })}
+                  />
+                </div>
+                <p className="text-gray text-xl mt-1">Out of 90.00</p>
+              </div>
+            </div>
+            <div className="col-span-4 w-full border border-primary rounded-[13px]">
+              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                <p className="text-gray text-xl">Writing Score</p>
+              </div>
+              {/* score point*/}
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="w-32 h-w-32">
+                  <CircularProgressbar
+                    value={writing}
+                    text={writing}
+                    strokeWidth={15}
+                    maxValue={90}
+                    styles={buildStyles({
+                      textColor: "gray",
+                      textSize: "20px",
+                      pathColor: "#ff8412",
+                      trailColor: "#f1f1f1",
+                    })}
+                  />
+                </div>
+                <p className="text-gray text-xl mt-1">Out of 90.00</p>
+              </div>
+            </div>
+
             {/* Total Score */}
-            <div className="col-span-9 w-full border border-primary rounded-[13px]">
+            <div className="col-span-12 w-full border mt-4 border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
               </div>
@@ -122,7 +171,7 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
             </p>
           </div>
           {/* Suggestion */}
-          <div className="w-full border border-primary rounded-[13px] mt-4">
+          {/* <div className="w-full border border-primary rounded-[13px] mt-4">
             <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
               <p className="text-gray text-xl">Suggestion</p>
             </div>
@@ -131,7 +180,7 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
                 {result?.suggestion || "No Suggestion"}
               </p>
             </div>
-          </div>
+          </div> */}
           <p className="text-center mt-2 text-lightGray">
             This score will disappear on 02/08/2023
           </p>

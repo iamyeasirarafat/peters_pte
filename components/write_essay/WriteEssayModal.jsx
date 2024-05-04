@@ -120,6 +120,31 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
             </div>
           </div>
           {/* AI Speech to Text */}
+          {/* <>
+            <div className="w-full border border-primary rounded-[13px] mt-5">
+              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                <p className="text-gray text-xl">AI Speech to Text</p>
+              </div>
+              <div className="px-7 py-5">
+
+                <WordHighlight words={result?.scores?.word_highlight} />
+
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <p className="text-gray text-lg font-medium">
+                Total: {result?.scores?.word_highlight?.length || 0} words
+              </p>
+              <p className="text-[#858736] text-lg font-medium">
+                Good: {wordCount(result?.scores?.word_highlight, "correct")}{" "}
+                words
+              </p>
+              <p className="text-red text-lg font-medium">
+                Bad/Missed:{" "}
+                {wordCount(result?.scores?.word_highlight, "missing")} words
+              </p>
+            </div>
+          </> */}
           <div className="w-full border border-primary rounded-[13px] mt-5">
             <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
               <p className="text-gray text-xl">Your Response</p>
@@ -139,7 +164,7 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
             </p>
           </div>
           {/* Suggestion */}
-          <div className="w-full border border-primary rounded-[13px] mt-4">
+          {/* <div className="w-full border border-primary rounded-[13px] mt-4">
             <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
               <p className="text-gray text-xl">Suggestion</p>
             </div>
@@ -148,7 +173,7 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
                 {result?.suggestion}
               </p>
             </div>
-          </div>
+          </div> */}
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023
           </p>

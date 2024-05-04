@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CircularProgressWidget from '../Cards/CircularProgressWidget'
 
 const speakingPerformances = [
@@ -39,7 +39,30 @@ const speakingPerformances = [
     },
 
 ]
-const Speaking = () => {
+const Speaking = ({ data }) => {
+    const [speakingPerformances, setSpeakingPerformances] = useState([])
+    const convertData = () => {
+        const newData = [];
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const item = data[key];
+                const title = `${key.charAt(0).toUpperCase()}${key.slice(1).replace(/_/g, " ")}`;
+                const value = `${item.practices}/${item.total}`;
+                const percentage = `${item.percentage}`;
+                const strokeColor = "#FF8412";
+                const trailColor = "#F4D1B1";
+                newData.push({ title, value, percentage, strokeColor, trailColor });
+            }
+        }
+        return newData;
+    };
+    useState(() => {
+        if (data) {
+            const newData = convertData();
+            setSpeakingPerformances(newData);
+        }
+    }, [data]);
+
     return (
         <div className="bg-white rounded-[10px] h-full p-[15px] ">
             {/* cards  */}

@@ -1,5 +1,5 @@
-import React from 'react'
-import CircularProgressWidget from '../Cards/CircularProgressWidget'
+import React, { useState } from 'react';
+import CircularProgressWidget from '../Cards/CircularProgressWidget';
 const readingPerformances = [
     {
         title: "Reading:Fill in the Blanks",
@@ -38,7 +38,29 @@ const readingPerformances = [
     },
 
 ]
-function Reading() {
+function Reading({ data }) {
+    const [readingPerformances, setReadingPerformances] = useState([])
+    const convertData = () => {
+        const newData = [];
+        for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+                const item = data[key];
+                const title = `${key.charAt(0).toUpperCase()}${key.slice(1).replace(/_/g, " ")}`;
+                const value = `${item.practices}/${item.total}`;
+                const percentage = `${item.percentage}`;
+                const strokeColor = "#4399FF";
+                const trailColor = "#7DD8FF";
+                newData.push({ title, value, percentage, strokeColor, trailColor });
+            }
+        }
+        return newData;
+    };
+    useState(() => {
+        if (data) {
+            const newData = convertData();
+            setReadingPerformances(newData);
+        }
+    }, [data]);
     return (
         <div className="bg-white rounded-[10px] h-full p-[15px] ">
             {/* cards  */}

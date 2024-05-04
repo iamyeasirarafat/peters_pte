@@ -154,7 +154,7 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
                       {data?.scores.score || 0}/{data?.scores.max_score || 0}
                     </p>
                   </div>
-                  <div className="w-full flex items-center justify-between gap-x-5">
+                  {/* <div className="w-full flex items-center justify-between gap-x-5">
                     <p className="text-gray text-xl w-3/6 text-start">
                       Writing
                     </p>
@@ -164,7 +164,7 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
                       strokeWidth={60}
                     />
                     <p className="text-gray text-xl">0/2</p>
-                  </div>
+                  </div> */}
                 </>
               )}
             </div>

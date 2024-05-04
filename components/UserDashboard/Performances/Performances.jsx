@@ -1,10 +1,11 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import LineProgressWidget from "../Cards/LineProgressWidget";
-import Speaking from "./Speaking";
-import Reading from "./Reading";
 import Listening from "./Listening";
-import Writing from "./Writing";
 import Mocktest from "./Mocktest";
+import Reading from "./Reading";
+import Speaking from "./Speaking";
+import Writing from "./Writing";
 
 const allTimePerformances = [
   {
@@ -40,6 +41,43 @@ const allTimePerformances = [
 ];
 
 const Performances = () => {
+  const [allTimePerformances, setAllTimePerformances] = useState([])
+  const [data, setData] = useState()
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios("/progress")
+      setData(data)
+    }
+    getData()
+  }, [])
+  const convertData = () => {
+    const newData = [];
+    for (const key in data?.all_time) {
+      if (data.hasOwnProperty(key)) {
+        const item = data[key];
+        const title = `${key.charAt(0).toUpperCase()}${key.slice(1).replace(/_/g, " ")}`;
+        const value = `${item.practices}/${item.total}`;
+        const percentage = `${item.percentage}`;
+        const color = "#4399FF";
+        newData.push({ title, value, percentage, color });
+      }
+    }
+    newData.push({
+      title: "Mock Test Questions",
+      value: "52/475",
+      percentage: "60%",
+      color: "#F44141",
+    });
+    return newData;
+  };
+  useState(() => {
+    if (data) {
+      console.log("sss", data.all_time)
+      const newData = convertData();
+      setAllTimePerformances(newData);
+    }
+  }, [data]);
+  console.log(data.all_time)
   return (
     <>
       <div>
@@ -56,18 +94,18 @@ const Performances = () => {
         </div>
         <div className="w-full flex flex-col gap-2 text-[#616161] border border-[#F2B277] p-[15px] rounded-[10px] bg-[#FFF4EB]">
           {/* Speaking */}
-          <Speaking />
+          {data?.speaking && <Speaking data={data?.speaking} />}
           <hr />
           {/* Reading */}
-          <Reading />
+          {data?.reading && <Reading data={data?.reading} />}
           <hr />
           {/* Listening */}
-          <Listening />
+          {data?.listening && <Listening data={data?.listening} />}
           <hr />
           {/* double */}
           <div className="flex flex-col md:flex-row justify-between gap-2">
             {/* Writing  */}
-            <Writing />
+            {data?.writing && <Writing data={data?.writing} />}
             {/* Mocktest */}
             <Mocktest />
           </div>

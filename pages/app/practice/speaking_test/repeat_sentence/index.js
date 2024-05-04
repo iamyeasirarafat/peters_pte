@@ -65,7 +65,10 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <PageHeader title="Repeat Sentence" />
+      <PageHeader
+        tips_link="https://peterspte.com/speaking-test/mastering-the-repeat-sentence-a-detailed-guide-and-tips/"
+        title="Repeat Sentence"
+      />
       <p className="text-gray text-xs md:text-base mt-2 text-center">
         You will hear a sentence. Please repeat the sentence exactly as you hear
         it. You will hear the sentence only once.
@@ -84,7 +87,8 @@ const Index = () => {
       {/* // result tab */}
       {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
-          answer_question
+          repeat_sentence
+          // answer_question
           setAiResult={setAiResult}
           result={result}
           setOpenModal={setOpenModal}
@@ -100,7 +104,8 @@ const Index = () => {
       )}
       {result && (
         <ReadAloudModal
-          describe_image
+          // describe_image
+          repeat_sentence
           result={aiResult}
           open={openModal}
           setOpen={setOpenModal}

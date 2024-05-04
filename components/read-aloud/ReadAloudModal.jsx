@@ -16,6 +16,7 @@ const ReadAloudModal = ({
   retell_lecture,
   answer_question,
   readAloud,
+  repeat_sentence,
 }) => {
   const router = useRouter();
   const id = router.query.que_no;
@@ -24,7 +25,7 @@ const ReadAloudModal = ({
   const content = Math.round(result?.scores?.content) || 0;
   const fluency = Math.round(result?.scores?.fluency) || 0;
   const pronunciation = Math.round(result?.scores?.pronunciation) || 0;
-  console.log(result, "ssssssss");
+  const listening = Math.round(result?.scores?.listening) || 0;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -95,14 +96,16 @@ const ReadAloudModal = ({
             {!describe_image && !answer_question && (
               <div className="col-span-3 w-full border border-primary rounded-[13px]">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                  <p className="text-gray text-xl">Reading Score</p>
+                  <p className="text-gray text-xl">
+                    {repeat_sentence ? "listening" : "Reading"} Score
+                  </p>
                 </div>
                 {/* score point*/}
                 <div className="flex flex-col items-center justify-center p-4">
                   <div className="w-36 h-36">
                     <CircularProgressbar
-                      value={readingScore}
-                      text={readingScore}
+                      value={repeat_sentence ? listening : readingScore}
+                      text={repeat_sentence ? listening : readingScore}
                       strokeWidth={15}
                       styles={buildStyles({
                         textColor: "gray",
@@ -118,9 +121,8 @@ const ReadAloudModal = ({
             )}
             {/* Enabling Skill  */}
             <div
-              className={`${
-                answer_question ? "col-span-12" : "col-span-6"
-              } w-full border border-primary rounded-[13px]`}
+              className={`${answer_question ? "col-span-12" : describe_image ? "col-span-9" : "col-span-6"
+                } w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
@@ -221,6 +223,20 @@ const ReadAloudModal = ({
                 </p>
               </div>
             </>
+          )}
+          {describe_image || retell_lecture && (
+
+            <div className="w-full border border-primary rounded-[13px] mt-5">
+              <div className="bg-secondary rounded-t-[13px] py-1 px-2">
+                <p className="text-gray text-xl">User response</p>
+              </div>
+              <div className="px-7 text-left  py-5">
+                {
+                  result?.scores?.user_speech
+                }
+              </div>
+            </div>
+
           )}
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023

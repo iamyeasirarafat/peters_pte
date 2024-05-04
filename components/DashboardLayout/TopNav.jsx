@@ -20,16 +20,14 @@ const TopNav = ({ dashboard }) => {
   };
   return (
     <div
-      className={`${
-        topNav ? "" : "-mt-16"
-      } transition-all duration-300 ease-linear`}
+      className={`${topNav ? "" : "-mt-16"
+        } transition-all duration-300 ease-linear`}
     >
       <div className="flex h-16 bg-primary w-full p-1.5">
         {/* fake left */}
         <div
-          className={`${
-            sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
-          } flex-shrink-0 transition-all relative duration-300 ease-linear hidden lg:block`}
+          className={`${sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
+            } flex-shrink-0 transition-all relative duration-300 ease-linear hidden lg:block`}
         ></div>
         {/* top nav */}
         <div className="w-full">
@@ -105,7 +103,7 @@ const MenuItem = () => {
                           <Link
                             key={index}
                             href={test?.path}
-                            className="flex gap-x-2 items-center"
+                            className="flex gap-x-2  items-center"
                           >
                             <div className="relative h-14 w-14 flex-shrink-0">
                               <div
@@ -119,7 +117,7 @@ const MenuItem = () => {
                                 </div>
                               )}
                             </div>
-                            <h2 className="font-cabin text-lg leading-tight text-gray">
+                            <h2 className="font-cabin hover:text-primary  duration-300 text-base leading-tight text-gray">
                               {test?.name}
                             </h2>
                           </Link>
@@ -233,9 +231,8 @@ const UserDropdown = () => {
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   return (
     <div
-      className={`w-[250px] h-full bg-secondary absolute top-0  ${
-        mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-      } z-50 pt-14 transition-transform duration-500 ease-in-out`}
+      className={`w-[250px] h-full bg-secondary absolute top-0  ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } z-50 pt-14 transition-transform duration-500 ease-in-out`}
     >
       <RiCloseCircleLine
         onClick={() => setMobileMenuOpen(false)}

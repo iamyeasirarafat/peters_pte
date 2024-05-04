@@ -48,9 +48,9 @@ const Index = () => {
   useEffect(() => {
     const getResult = async () => {
       const { data } = await axios(answerApi);
-      id && setResult(data);
+      setResult(data);
     };
-    getResult();
+    id && getResult();
   }, [refetch, id, answerApi]);
 
   //sideModal Data
@@ -85,6 +85,7 @@ const Index = () => {
       {/* // result tab */}
       {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
         <ResultSection
+          repeat_sentence
           setAiResult={setAiResult}
           result={result}
           setOpenModal={setOpenModal}
@@ -101,6 +102,7 @@ const Index = () => {
       {result && (
         <ReadAloudModal
           // describe_image
+          repeat_sentence
           retell_lecture
           result={aiResult}
           open={openModal}

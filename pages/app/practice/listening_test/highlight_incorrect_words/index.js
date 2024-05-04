@@ -8,6 +8,8 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { FaCheck } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import DashboardLayout from "../../../layout";
 
 const Page = () => {
@@ -62,7 +64,7 @@ const Page = () => {
           result={result}
           setReFetch={setReFetch}
           api={answerApi}
-          sentence={data?.sentence}
+          data={data}
         />
       </GlobalMainContent>
       {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
@@ -85,21 +87,124 @@ const Page = () => {
 
 export default Page;
 
-const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
+const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState(null);
   const initialMinutes = typingTime;
   const router = useRouter();
   const id = router.query.que_no;
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
+  const [sentence, setSentence] = useState([]);
+  const [apiAnswers, setApiAnswers] = useState([]);
+  const [finalSentence, setFinalSentence] = useState("");
+  const [selectedWords, setSelectedWords] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setSentence(data?.sentence);
+      setApiAnswers(data?.answers);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (sentence) {
-      setAnswers(sentence.map((_, index) => ({ index, value: "" })));
+      constructSentence();
     }
   }, [sentence]);
+  const constructSentence = () => {
+    let result = [];
+    let answerIndex = 0;
+
+    for (let i = 0; i < sentence.length - 1; i++) {
+      result.push(sentence[i]);
+      result.push(" ");
+      result.push(apiAnswers[answerIndex].wrong);
+      result.push(" ");
+      console.log(apiAnswers[answerIndex].wrong, "apiAnswers[answerIndex]");
+      answerIndex = (answerIndex + 1) % apiAnswers.length;
+    }
+
+    result.push(sentence[sentence.length - 1]);
+
+    const finalSentence = result.join("");
+    setFinalSentence(finalSentence);
+  };
+
+  const handleWordClick = (word) => {
+    setAnswers(null);
+    const index = selectedWords.indexOf(word);
+    if (index === -1) {
+      setSelectedWords([...selectedWords, word]);
+    } else {
+      setSelectedWords(selectedWords.filter((item) => item !== word));
+    }
+  };
+  // cheching that selected word is correct or not
+  const isValueInArray = (valueToCheck) => {
+    return apiAnswers?.some((item) => item.wrong === valueToCheck);
+  };
+  const renderClickableSentence = () => {
+    const getWordColor = (word) => {
+      if (selectedWords.includes(word)) {
+        if (answers) {
+          if (isValueInArray(word)) {
+            return {
+              value: "correct",
+              color: "text-green-600 bg-green-200",
+            };
+          } else {
+            return {
+              value: "wrongSelected",
+              color: "bg-[#FFE0E0]",
+            };
+          }
+        } else {
+          return {
+            value: "selected",
+            color: "text-primary",
+          };
+        }
+      } else if (
+        (answers && isValueInArray(word)) ||
+        selectedWords.includes(word)
+      ) {
+        return {
+          value: "wrong",
+          color: "text-red bg-[#FFE0E0]",
+        };
+      } else {
+        return {
+          value: "nothing",
+          color: "text-inherit",
+        };
+      }
+    };
+    const words = finalSentence.split(" ");
+    return words.map((word, index) => (
+      <span
+        className={`cursor-pointer  ${getWordColor(word).color}`}
+        key={index}
+        onClick={() => handleWordClick(word)}
+      >
+        {getWordColor(word).value === "wrong" ? (
+          <RxCross2 className="inline" />
+        ) : getWordColor(word).value === "correct" ? (
+          <FaCheck className="inline" />
+        ) : (
+          ""
+        )}{" "}
+        {word}{" "}
+        {(getWordColor(word).value === "wrong" ||
+          getWordColor(word).value === "correct") && (
+          <span className="text-blue ml-1 bg-white">
+            {apiAnswers.find((i) => i.wrong === word).value}{" "}
+          </span>
+        )}
+      </span>
+    ));
+  };
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -125,21 +230,6 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
     setSeconds(0);
   }, [id, initialMinutes]);
 
-  //!Updating answer state
-  const updateAnswer = (index, value) => {
-    const existingIndex = answers.findIndex((item) => item.index === index);
-    if (existingIndex !== -1) {
-      // If index exists, update its value
-      setAnswers((prev) => [
-        ...prev.slice(0, existingIndex),
-        { index, value },
-        ...prev.slice(existingIndex + 1),
-      ]);
-    } else {
-      // If index does not exist, add a new entry
-      setAnswers((prev) => [...prev, { index, value }]);
-    }
-  };
   const initialSeconds = initialMinutes * 60;
   const remainingSeconds = minutes * 60 + seconds;
   const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
@@ -150,10 +240,11 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
     try {
       setIsLoading(true);
       const res = await axios.post(api, {
-        answers: [...answers.map((item) => item.value)],
+        answers: selectedWords,
         time_taken: timeTakenInMinutes,
       });
       toast.success(res.data.message || "Submitted Successfully");
+      setAnswers(res?.data);
       setReFetch((prev) => !prev);
       setIsLoading(false);
     } catch (error) {
@@ -161,24 +252,11 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+
   return (
     <>
       <div className="p-5 border border-primary rounded-[15px] relative">
-        <p className="text-xl font-medium">
-          {Array.isArray(sentence) &&
-            sentence.map((word, index) => {
-              return (
-                <span key={index}>
-                  {word}
-                  {index !== sentence.length - 1 && (
-                    <FillBlankInput
-                      onChange={(e) => updateAnswer(index, e.target.value)}
-                    />
-                  )}
-                </span>
-              );
-            })}
-        </p>
+        <p className="text-xl font-medium">{renderClickableSentence()}</p>
       </div>
       <button
         disabled={isLoading || timerExpired}
