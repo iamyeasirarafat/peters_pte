@@ -24,11 +24,15 @@ const AudioPlayer = ({ apiAudio, data }) => {
   const progressBarRef = useRef();
 
   const onLoadedMetadata = async () => {
-    const seconds = apiAudio
-      ? audioRef.current.duration
-      : await getBlobDuration(data);
-    setDuration(seconds);
-    progressBarRef.current.max = seconds;
+    if (audioRef.current) {
+      const seconds = apiAudio
+        ? audioRef.current.duration
+        : await getBlobDuration(data);
+      setDuration(seconds);
+      if (progressBarRef.current) {
+        progressBarRef.current.max = seconds;
+      }
+    }
   };
 
   useEffect(() => {
