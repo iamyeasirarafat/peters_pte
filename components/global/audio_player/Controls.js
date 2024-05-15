@@ -19,12 +19,13 @@ const Controls = ({ audioRef, progressBarRef, duration, setTimeProgress }) => {
   const repeat = useCallback(() => {
     const currentTime = audioRef?.current?.currentTime;
     setTimeProgress(currentTime);
-    progressBarRef.current.value = currentTime;
-    progressBarRef.current.style.setProperty(
-      "--range-progress",
-      `${(progressBarRef.current?.value / duration) * 100}%`
-    );
-
+    if (progressBarRef.current) {
+      progressBarRef.current.value = currentTime;
+      progressBarRef.current.style.setProperty(
+        "--range-progress",
+        `${(progressBarRef.current.value / duration) * 100}%`
+      );
+    }
     playAnimationRef.current = requestAnimationFrame(repeat);
   }, [audioRef, duration, progressBarRef, setTimeProgress]);
 
