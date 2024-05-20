@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../../../layout";
 import MockTestLayout from "../../../../../../components/UserMockTest/layout";
 import Read_write_blanks from "../../../../../../components/UserMockTest/Read_write_blanks";
@@ -21,6 +21,7 @@ import { CiClock2 } from "react-icons/ci";
 import { FaTimes } from "react-icons/fa";
 import { useRouter } from "next/router";
 import Assigned_Practice from "../../../../../../components/UserMockTest/Assigned_Practice";
+import axios from "axios";
 
 function Index() {
   return (
@@ -32,61 +33,43 @@ function Index() {
 }
 
 export default Index;
-
+// { id: 1, name: "Read Aloud", questionType: "read_aloud" },
+//     { id: 2, name: "Repeat Sentence", questionType: "repeat_sentence" },
 const MockTestForm = () => {
-  const [qustionList, setQuestionList] = React.useState([
-    { id: 1, name: "Read Aloud", questionType: "read_aloud" },
-    { id: 2, name: "Repeat Sentence", questionType: "repeat_sentence" },
-    { id: 3, name: "Describe Image", questionType: "describe_image" },
-    { id: 4, name: "Retell Lecture", questionType: "retell_lecture" },
-    {
-      id: 5,
-      name: "Answer Short Question",
-      questionType: "answer_short_question",
-    },
-    { id: 6, name: "Summarize Written", questionType: "summarize_written" },
-    { id: 7, name: "Write Essay", questionType: "write_essay" },
-    { id: 8, name: "Read Write Blanks", questionType: "read_write_blanks" },
-    { id: 9, name: "Multiple Answers", questionType: "multiple_answers" },
-    { id: 10, name: "Re Order", questionType: "re_order" },
-    { id: 11, name: "Missing Words", questionType: "missing_words" },
-    {
-      id: 12,
-      name: "Record Missing Words",
-      questionType: "record_missing_words",
-    },
-    {
-      id: 13,
-      name: "Multiple Choice Single",
-      questionType: "multiple_choice_single",
-    },
-    {
-      id: 14,
-      name: "Highlight Correct Summary",
-      questionType: "highlight_correct_summary",
-    },
-    {
-      id: 15,
-      name: "Highlight Incorrect Words",
-      questionType: "highlight_incorrect_words",
-    },
-  ]);
+  const [questionList, setQuestionList] = useState({});
+  const router = useRouter();
+  const { mock_type, testId } = router?.query;
+  console.log("questionList", questionList);
 
-  const [currentQuestion, setCurrentQuestion] = React.useState(0);
-  const [isLastQuestion, setIsLastQuestion] = React.useState(false);
-  const [submitModal, setSubmitModal] = React.useState(false);
-  const [progress, setProgress] = React.useState(0);
+  useEffect(() => {
+    const getQuestionData = async () => {
+      try {
+        const res = await axios.get(
+          `/mocktest/${mock_type?.split("_")?.[0]}/${testId}/answer`
+        );
+        setQuestionList(res?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    router?.isReady && getQuestionData();
+  }, [router]);
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isLastQuestion, setIsLastQuestion] = useState(false);
+  const [submitModal, setSubmitModal] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handleStart = () => {
     // set current question from question list if start button is clicked then set id on current question
-    setCurrentQuestion(qustionList[0].id);
+    setCurrentQuestion(questionList?.question[0].id);
   };
 
   const handleNext = () => {
     // if current question is last question then set isLastQuestion to true
-    if (currentQuestion !== qustionList.length) {
+    if (currentQuestion !== questionList?.question?.length) {
       setIsLastQuestion(false);
-      setCurrentQuestion(qustionList[currentQuestion].id);
+      setCurrentQuestion(questionList?.question[currentQuestion].id);
     }
   };
 
@@ -99,11 +82,11 @@ const MockTestForm = () => {
   };
 
   useEffect(() => {
-    if (currentQuestion === qustionList.length) {
+    if (currentQuestion === questionList?.question?.length) {
       setIsLastQuestion(true);
     }
     //set progress bar
-    setProgress((currentQuestion / qustionList.length) * 100);
+    setProgress((currentQuestion / questionList?.question?.length) * 100);
   }, [currentQuestion]);
 
   const handleFinish = () => {
