@@ -44,7 +44,6 @@ const MultipleSingleReading = () => {
       try {
         const response = await axios.get(`/multi_choice/reading/${id}`);
         if (response?.data) {
-          console.log(response.data);
           setFormData(response.data);
           setOptions(response.data?.options);
           setOptionNumber(response.data?.options.length);
@@ -99,7 +98,6 @@ const MultipleSingleReading = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("reading62", formData);
     try {
       const response = await axios.put(
         `/multi_choice/reading/${itemObj.id}/update`,
@@ -172,16 +170,18 @@ const MultipleSingleReading = () => {
                       checked={selectedOptions == option.index}
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions == option.index
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions == option.index
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${selectedOptions == option.index
-                          ? "opacity-100"
-                          : "opacity-0"
-                          }`}
+                        className={`fill-white transition-opacity ${
+                          selectedOptions == option.index
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
                         name="check"
                       />
                     </span>

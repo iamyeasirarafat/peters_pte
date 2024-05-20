@@ -76,7 +76,6 @@ const MultipleChoiceReading = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log("reading", formData);
     const optionsJson = JSON.stringify(formData?.options);
     // const rightOptionsJson = JSON.stringify(formData?.right_options);
     try {

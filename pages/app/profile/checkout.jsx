@@ -69,7 +69,6 @@ function Checkout() {
       setIsLoading(false);
     }
   };
-  console.log(status);
   useEffect(() => {
     if (router.isReady) {
       setOpen(status);

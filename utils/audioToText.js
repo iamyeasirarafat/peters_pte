@@ -4,7 +4,6 @@ const audioToText = () => {
   let loading = false;
   let error = false;
   const getText = async (audio) => {
-    console.log("ss");
     loading = true;
     const formData = new FormData();
     formData.append("audio", audio);

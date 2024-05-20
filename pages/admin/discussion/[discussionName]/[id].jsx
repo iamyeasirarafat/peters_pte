@@ -4,7 +4,6 @@ import CommentSection from "../../../../components/global/CommentSection";
 
 function DiscussionListView() {
   const router = useRouter();
-  console.log(router?.query);
   const { discussionName, id } = router?.query;
   return (
     <Layout title={discussionName?.replace(/_/g, " ") + "/#" + id} back>

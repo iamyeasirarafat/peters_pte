@@ -5,16 +5,13 @@ import toast from "react-hot-toast";
 
 import { useRouter } from "next/router";
 const SpeakingSpell = () => {
-
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       setLoading(true);
       const res = await axios.post("/games/speaking_spell", data);
-      console.log(res);
       toast.success("Question created successfully");
       setLoading(false);
       reset();

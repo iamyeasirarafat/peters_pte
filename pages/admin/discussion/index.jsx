@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 const Index = () => {
   const [count, setCount] = useState({});
-  console.log(count);
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios("/discussion/count");

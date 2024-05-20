@@ -21,7 +21,6 @@ function AddStudyMaterial() {
   const { id } = router.query;
 
   const [dataDetails, setDataDetails] = useState({});
-  console.log("dataDetails", dataDetails);
 
   // getDetails
   useEffect(() => {

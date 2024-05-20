@@ -11,7 +11,6 @@ const HighlightSummary = () => {
   const router = useRouter();
   const { item } = router.query;
   const itemObj = JSON.parse(item);
-  console.log("his", itemObj);
   const [options, setOptions] = useState(
     Array.from({ length: optionNumber }, (_, index) => ({
       index: String.fromCharCode(65 + index),
@@ -100,7 +99,6 @@ const HighlightSummary = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData?.audio) {
-      console.log(formData.options);
       try {
         const formDatas = new FormData();
         formDatas.append("audio", formData.audio, "recorded.wav"); // Append the audioData as is
@@ -219,16 +217,18 @@ const HighlightSummary = () => {
                       checked={selectedOptions == option.index} // Use 'in' operator to check if the key exists
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions == option.index
-                        ? "bg-green-1 border-green-1 dark:!border-green-1"
-                        : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions == option.index
+                          ? "bg-green-1 border-green-1 dark:!border-green-1"
+                          : "bg-transparent border-n-1 dark:border-white"
+                      }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${selectedOptions == option.index
-                          ? "opacity-100"
-                          : "opacity-0"
-                          }`}
+                        className={`fill-white transition-opacity ${
+                          selectedOptions == option.index
+                            ? "opacity-100"
+                            : "opacity-0"
+                        }`}
                         name="check"
                       />
                     </span>

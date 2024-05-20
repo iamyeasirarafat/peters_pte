@@ -11,6 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaCheck } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import DashboardLayout from "../../../layout";
+import GlobalPagination from "../../../../../components/global/GlobalPagination";
 
 const Page = () => {
   const [aiResult, setAiResult] = useState(null);
@@ -122,7 +123,6 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
       result.push(" ");
       result.push(apiAnswers[answerIndex].wrong);
       result.push(" ");
-      console.log(apiAnswers[answerIndex].wrong, "apiAnswers[answerIndex]");
       answerIndex = (answerIndex + 1) % apiAnswers.length;
     }
 
@@ -258,29 +258,31 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
       <div className="p-5 border border-primary rounded-[15px] relative">
         <p className="text-xl font-medium">{renderClickableSentence()}</p>
       </div>
-      <button
-        disabled={isLoading || timerExpired}
-        onClick={handelSubmit}
-        className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
-      >
-        {isLoading ? (
-          <>
-            <div
-              className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-              role="status"
-              aria-label="loading"
-            >
-              <span className="sr-only">Loading...</span>
-            </div>
-            Loading...
-          </>
-        ) : result?.self?.[0]?.user ? (
-          "Re-Submit"
-        ) : (
-          "Submit"
-        )}
-      </button>
-      {/* <Pagination /> */}
+      <div className="flex items-center justify-between">
+        <button
+          disabled={isLoading || timerExpired}
+          onClick={handelSubmit}
+          className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
+        >
+          {isLoading ? (
+            <>
+              <div
+                className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+              Loading...
+            </>
+          ) : result?.self?.[0]?.user ? (
+            "Re-Submit"
+          ) : (
+            "Submit"
+          )}
+        </button>
+        <GlobalPagination />
+      </div>
     </>
   );
 };

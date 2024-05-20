@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import GlobalPagination from "./GlobalPagination";
 
 const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
   // remaining time function
@@ -96,7 +97,7 @@ const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
         </div>
       </div>
       {/* button */}
-      <div className="flex items-center gap-x-4">
+      <div className="flex items-center justify-between gap-x-4">
         {result?.self?.[0]?.user ? (
           <button
             disabled={isLoading || isReady || timerExpired}
@@ -140,6 +141,7 @@ const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
             )}
           </button>
         )}
+        <GlobalPagination />
       </div>
     </>
   );

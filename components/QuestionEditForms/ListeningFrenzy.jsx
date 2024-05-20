@@ -1,6 +1,6 @@
 import axios from "axios";
 import Icon from "@/components/Icon";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import AudioVisualizer from "../AudioVisualizer";
 
 import toast from "react-hot-toast";
@@ -10,12 +10,11 @@ const ListeningFrenzy = () => {
   const { item } = router.query;
   const itemObj = JSON.parse(item);
 
- 
   const [formData, setFormData] = useState({
     title: "",
     audio: null,
   });
- 
+
   const [audioSrc, setAudioSrc] = useState(null);
   const [audioName, setAudioName] = useState(null);
   const handleFileChange = (e) => {
@@ -46,20 +45,17 @@ const ListeningFrenzy = () => {
     // Set initial form values based on itemObj
     if (itemObj) {
       setFormData({
-        title:itemObj?.word,
-        audio:itemObj?.audio
-      })
-      
+        title: itemObj?.word,
+        audio: itemObj?.audio,
+      });
+
       setAudioSrc(itemObj?.audio);
     }
   }, [item]);
 
-  console.log(formData)
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.audio) {
-      console.log(formData)
       try {
         const newForm = new FormData();
         newForm.append("word", formData?.title);
@@ -68,13 +64,15 @@ const ListeningFrenzy = () => {
         }
         const config = { headers: { "content-type": "multipart/form-data" } };
 
-        console.log(formData);
-        const response = await axios.put(`/games/listening_frenzy/${itemObj?.id}/update`, newForm, config);
+        const response = await axios.put(
+          `/games/listening_frenzy/${itemObj?.id}/update`,
+          newForm,
+          config
+        );
         toast.success("update question successfully");
         if (response?.data) {
           router.back();
         }
-
       } catch (error) {
         console.error("Error create question:", error);
         toast.error("Something went wrong, try again later.");

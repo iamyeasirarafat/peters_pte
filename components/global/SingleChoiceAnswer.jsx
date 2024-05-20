@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
+import GlobalPagination from "./GlobalPagination";
 
 function SingleChoiceAnswer({
   answers,
@@ -88,6 +89,7 @@ function SingleChoiceAnswer({
             {loading && <LoaderIcon />}
             {result?.self?.[0]?.user ? "Re-Submit" : "Submit"}
           </button>
+          <GlobalPagination />
         </div>
       </div>
     </div>
