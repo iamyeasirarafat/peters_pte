@@ -39,7 +39,6 @@ const MockTestForm = () => {
   const [questionList, setQuestionList] = useState({});
   const router = useRouter();
   const { mock_type, testId } = router?.query;
-  console.log("questionList", questionList);
 
   useEffect(() => {
     const getQuestionData = async () => {

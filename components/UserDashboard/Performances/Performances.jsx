@@ -42,7 +42,6 @@ const allTimePerformances = [
 
 const Performances = () => {
   const [allTimePerformances, setAllTimePerformances] = useState([]);
-  console.log(allTimePerformances, "allTimePerformances");
   const [data, setData] = useState();
   useEffect(() => {
     const getData = async () => {
@@ -55,7 +54,6 @@ const Performances = () => {
   const convertData = () => {
     const newData = [];
     for (const key in data?.all_time) {
-      console.log(key, data?.all_time);
       if (data?.all_time.hasOwnProperty(key)) {
         const item = data?.all_time[key];
         const title = `${key.charAt(0).toUpperCase()}${key

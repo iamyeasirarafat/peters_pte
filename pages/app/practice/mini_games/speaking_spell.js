@@ -14,7 +14,6 @@ function SpeakingSpell() {
   const [aid, setAid] = useState("");
   const [isCorrect, setIsCorrect] = useState(true);
   const [tryAgain, setTryAgain] = useState(false);
-  console.log("question", question);
 
   useEffect(() => {
     // fetch question

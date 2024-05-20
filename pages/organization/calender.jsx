@@ -8,7 +8,6 @@ const Calender = () => {
   useEffect(() => {
     const getData = async () => {
       const res = await axios.get("/exam_calender");
-      console.log(res?.data);
       setData(res?.data);
     };
     getData();

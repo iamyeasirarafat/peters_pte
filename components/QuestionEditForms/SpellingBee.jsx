@@ -17,8 +17,6 @@ const SpellingBee = () => {
       try {
         const response = await axios.get(`/games/spelling_bee/${id}`);
         if (response?.data) {
-          console.log(response.data);
-
           setValue("title", response.data.title);
           setValue("options.0", response.data.options[0]);
           setValue("options.1", response.data.options[1]);
@@ -48,7 +46,6 @@ const SpellingBee = () => {
     };
     try {
       setLoading(true);
-      console.log(newData);
       const res = await axios.put(
         `/games/spelling_bee/${itemObj.id}/update`,
         newData

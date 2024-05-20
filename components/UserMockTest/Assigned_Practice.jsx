@@ -9,7 +9,6 @@ export default function Assigned_Practice() {
   const [mockTestData, setMockTestData] = useState([]);
   const router = useRouter();
   const testName = router.query.mock_type;
-  console.log("testName", testName, "mockTestData", mockTestData);
   useEffect(() => {
     const getMockTestData = async () => {
       try {

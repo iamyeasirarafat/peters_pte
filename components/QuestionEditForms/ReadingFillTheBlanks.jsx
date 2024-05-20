@@ -63,10 +63,9 @@ const ReadingFillTheBlanks = () => {
             // Set button counter based on the last index in the options array
             const lastOptionsIndex = response?.data?.options.length
               ? response?.data?.options[response?.data?.options.length - 1]
-                .index
+                  .index
               : "A"; // Default to 'A' if there are no options
             setButtonCounter(lastOptionsIndex.charCodeAt(0) + 1);
-            console.log(response.data);
           }
         } catch (error) {
           toast.error("something went wrong");
@@ -190,9 +189,9 @@ const ReadingFillTheBlanks = () => {
         prevOptions.map((option) =>
           option.index === index
             ? {
-              ...option,
-              options: [...option.options, ""],
-            }
+                ...option,
+                options: [...option.options, ""],
+              }
             : option
         )
       );
@@ -202,9 +201,9 @@ const ReadingFillTheBlanks = () => {
         prevOptions.map((option) =>
           option.index === index
             ? {
-              ...option,
-              options: option.options.slice(0, -1),
-            }
+                ...option,
+                options: option.options.slice(0, -1),
+              }
             : option
         )
       );
@@ -289,16 +288,18 @@ const ReadingFillTheBlanks = () => {
                         checked={option.answer === item && option.answer !== ""}
                       />
                       <span
-                        className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${option.answer === item && option.answer !== ""
-                          ? "bg-green-1 border-green-1 dark:!border-green-1"
-                          : "bg-transparent border-n-1 dark:border-white"
-                          }`}
+                        className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                          option.answer === item && option.answer !== ""
+                            ? "bg-green-1 border-green-1 dark:!border-green-1"
+                            : "bg-transparent border-n-1 dark:border-white"
+                        }`}
                       >
                         <Icon
-                          className={`fill-white transition-opacity ${option.answer === item && option.answer !== ""
-                            ? "opacity-100"
-                            : "opacity-0"
-                            }`}
+                          className={`fill-white transition-opacity ${
+                            option.answer === item && option.answer !== ""
+                              ? "opacity-100"
+                              : "opacity-0"
+                          }`}
                           name="check"
                         />
                       </span>

@@ -30,7 +30,6 @@ const EssayQuestion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
       setLoading(true);
       const response = await axios.put(

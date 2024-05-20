@@ -31,7 +31,6 @@ const MultipleChoiceReading = () => {
       try {
         const response = await axios.get(`/multi_choice/reading/${id}`);
         if (response?.data) {
-          console.log(response.data);
           setFormData(response.data);
           setOptions(response.data?.options);
           setOptionNumber(response.data?.options.length);
@@ -181,16 +180,18 @@ const MultipleChoiceReading = () => {
                       checked={selectedOptions.includes(option.value)} // Use 'in' operator to check if the key exists
                     />
                     <span
-                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${selectedOptions.includes(option.value)
+                      className={`relative flex justify-center items-center shrink-0 w-5 h-5 border transition-colors dark:border-white group-hover:border-green-1 ${
+                        selectedOptions.includes(option.value)
                           ? "bg-green-1 border-green-1 dark:!border-green-1"
                           : "bg-transparent border-n-1 dark:border-white"
-                        }`}
+                      }`}
                     >
                       <Icon
-                        className={`fill-white transition-opacity ${selectedOptions.includes(option.value)
+                        className={`fill-white transition-opacity ${
+                          selectedOptions.includes(option.value)
                             ? "opacity-100"
                             : "opacity-0"
-                          }`}
+                        }`}
                         name="check"
                       />
                     </span>
