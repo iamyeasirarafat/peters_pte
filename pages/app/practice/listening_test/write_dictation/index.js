@@ -45,11 +45,17 @@ const Page = () => {
     <DashboardLayout>
       <SideModal data={SideModalData} />
       <PageHeader title="Write From Dictation" />
+      <p className="text-gray text-xs md:text-base mt-2 ">
+        You will hear a sentence. Type the sentence in the box below exactly as
+        you hear it. Write as much of the sentence as you can. You will hear the
+        sentence only once.
+      </p>
       {/* main content */}
-      <GlobalMainContent>
+      <GlobalMainContent data={data}>
         <ListenBlock data={data} setOpen={setOpen} />
         <TypingBlock
-          typingTime={10}
+          hideTimer
+          typingTime={1000}
           result={result}
           setReFetch={setReFetch}
           api={answerApi}
