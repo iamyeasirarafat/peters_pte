@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import GlobalPagination from "./GlobalPagination";
 
-const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
+const TypingBlock = ({
+  result,
+  setReFetch,
+  api,
+  isReady,
+  typingTime,
+  hideTimer,
+}) => {
   // remaining time function
   const initialMinutes = typingTime;
   const [minutes, setMinutes] = useState(initialMinutes);
@@ -75,10 +82,11 @@ const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
         <div className="flex items-center justify-end bg-primary rounded-t-[15px] p-1 px-5">
           <div className="w-1/2 flex items-center justify-between">
             <p className="text-gray text-xs text-center mr-auto">
-              <i>
-                Time Remaining {minutes}:
-                {seconds < 10 ? `0${seconds}` : seconds}
-              </i>
+              {hideTimer
+                ? null
+                : `Time Left: ${minutes}:${
+                    seconds < 10 ? `0${seconds}` : seconds
+                  }`}
             </p>
             <p className="text-gray text-xs text-center">
               Word Count: {textAnswer.split(" ").length}
@@ -91,7 +99,7 @@ const TypingBlock = ({ result, setReFetch, api, isReady, typingTime }) => {
             value={textAnswer}
             disabled={timerExpired || isReady}
             className="w-full disabled:opacity-40 border-0 text-gray focus:ring-0"
-            placeholder="Type your summary here..."
+            placeholder="Type your response here..."
             rows={4}
           ></textarea>
         </div>

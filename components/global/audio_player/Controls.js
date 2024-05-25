@@ -5,8 +5,15 @@ import { IoPauseSharp, IoPlaySharp } from "react-icons/io5";
 
 import { IoMdVolumeHigh, IoMdVolumeLow, IoMdVolumeOff } from "react-icons/io";
 
-const Controls = ({ audioRef, progressBarRef, duration, setTimeProgress }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+const Controls = ({
+  audioRef,
+  isPlaying,
+  setIsPlaying,
+  progressBarRef,
+  duration,
+  setTimeProgress,
+  setAutoPlayTriggered,
+}) => {
   const [volume, setVolume] = useState(60);
   const [muteVolume, setMuteVolume] = useState(false);
 
