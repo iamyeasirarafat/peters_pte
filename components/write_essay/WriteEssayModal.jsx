@@ -18,7 +18,6 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
     Vocabulary,
     Overall: totalScore,
   } = result?.scores || {};
-  console.log(result, "result");
   const formateData = [
     { color: "cream", value: Content, name: "Content" },
     { color: "primary", value: Grammar, name: "Grammar" },
@@ -92,9 +91,9 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
               {/* progress bar */}
               <div className="space-y-0 p-5">
                 {formateData?.map((item, index) => {
-                  let outOf = 2
+                  let outOf = 2;
                   if (item?.name === "Content") {
-                    outOf = 3
+                    outOf = 3;
                   }
                   return (
                     <div
@@ -111,11 +110,12 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
                           strokeWidth={item?.value * 50}
                         />
                       </div>
-                      <p className="text-gray w-1/12 text-lg">{item?.value}/{outOf}</p>
+                      <p className="text-gray w-1/12 text-lg">
+                        {item?.value}/{outOf}
+                      </p>
                     </div>
-                  )
-                }
-                )}
+                  );
+                })}
               </div>
             </div>
           </div>

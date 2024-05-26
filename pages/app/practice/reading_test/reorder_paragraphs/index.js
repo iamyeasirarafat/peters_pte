@@ -11,6 +11,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
 import DashboardLayout from "../../../layout";
+import GlobalPagination from "../../../../../components/global/GlobalPagination";
 
 function Page() {
   const [aiResult, setAiResult] = useState(null);
@@ -22,7 +23,6 @@ function Page() {
   const router = useRouter();
   const id = router.query.que_no;
   const answerApi = `/reorder_paragraph/${id}/answer`;
-  console.log(data.options, "data");
   // getting Data
   useEffect(() => {
     const getData = async () => {
@@ -126,28 +126,31 @@ function Page() {
           setAnswerData={setAnswerData}
           setQuestionData={setQuestionData}
         />
-        <button
-          disabled={isLoading || timerExpired}
-          onClick={handelSubmit}
-          className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
-        >
-          {isLoading ? (
-            <>
-              <div
-                className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                role="status"
-                aria-label="loading"
-              >
-                <span className="sr-only">Loading...</span>
-              </div>
-              Loading...
-            </>
-          ) : result?.self?.[0]?.user ? (
-            "Re-Submit"
-          ) : (
-            "Submit"
-          )}
-        </button>
+        <div className="flex items-center justify-between">
+          <button
+            disabled={isLoading || timerExpired}
+            onClick={handelSubmit}
+            className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
+          >
+            {isLoading ? (
+              <>
+                <div
+                  className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                  role="status"
+                  aria-label="loading"
+                >
+                  <span className="sr-only">Loading...</span>
+                </div>
+                Loading...
+              </>
+            ) : result?.self?.[0]?.user ? (
+              "Re-Submit"
+            ) : (
+              "Submit"
+            )}
+          </button>
+          <GlobalPagination />
+        </div>
       </GlobalMainContent>
       {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
         <ResultSection
@@ -339,7 +342,6 @@ const ReorderModal = ({ apiData, data, open, setOpen }) => {
               <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
                 <p className="flex gap-2 mt-6 text-xl text-center">
                   {data?.scores?.score_details.map((item, index) => {
-                    console.log((index + 1) % 2 == 0, "sssss");
                     return (
                       <div key={index} className="">
                         {data?.scores?.score_details.length - 1 === index ? (

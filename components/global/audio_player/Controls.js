@@ -5,8 +5,15 @@ import { IoPauseSharp, IoPlaySharp } from "react-icons/io5";
 
 import { IoMdVolumeHigh, IoMdVolumeLow, IoMdVolumeOff } from "react-icons/io";
 
-const Controls = ({ audioRef, progressBarRef, duration, setTimeProgress }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+const Controls = ({
+  audioRef,
+  isPlaying,
+  setIsPlaying,
+  progressBarRef,
+  duration,
+  setTimeProgress,
+  setAutoPlayTriggered,
+}) => {
   const [volume, setVolume] = useState(60);
   const [muteVolume, setMuteVolume] = useState(false);
 
@@ -15,16 +22,16 @@ const Controls = ({ audioRef, progressBarRef, duration, setTimeProgress }) => {
   };
 
   const playAnimationRef = useRef();
-  console.log(progressBarRef.current?.value);
   const repeat = useCallback(() => {
     const currentTime = audioRef?.current?.currentTime;
     setTimeProgress(currentTime);
-    progressBarRef.current.value = currentTime;
-    progressBarRef.current.style.setProperty(
-      "--range-progress",
-      `${(progressBarRef.current?.value / duration) * 100}%`
-    );
-
+    if (progressBarRef.current) {
+      progressBarRef.current.value = currentTime;
+      progressBarRef.current.style.setProperty(
+        "--range-progress",
+        `${(progressBarRef.current.value / duration) * 100}%`
+      );
+    }
     playAnimationRef.current = requestAnimationFrame(repeat);
   }, [audioRef, duration, progressBarRef, setTimeProgress]);
 

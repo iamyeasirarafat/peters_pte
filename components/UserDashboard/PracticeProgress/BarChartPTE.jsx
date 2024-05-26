@@ -177,25 +177,22 @@ const items = [
 export default function BarChartPTE() {
   const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(()=> {
+  useEffect(() => {
     const handleResize = () => {
-      if(window.innerWidth<767) {
+      if (window.innerWidth < 767) {
         setIsMobile(true);
-      }
-      else {
+      } else {
         setIsMobile(false);
       }
-    }
+    };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-    }
-
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
-  console.log(isMobile)
 
   return (
     <div className="border border-[#FF8412] bg-[#FFF4EB] rounded-lg p-4">
@@ -229,7 +226,7 @@ export default function BarChartPTE() {
               axisLine={false}
               tick={<CustomizedAxisTick />}
             />
-            <YAxis axisLine={false} hide={isMobile}/>
+            <YAxis axisLine={false} hide={isMobile} />
             <Tooltip
               cursor={{
                 fill: "transparent",

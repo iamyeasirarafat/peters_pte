@@ -61,7 +61,7 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
               </div>
               {/* score point*/}
               <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-32 h-w-32">
+                <div className="w-32">
                   <CircularProgressbar
                     value={totalScore}
                     text={totalScore}
@@ -78,11 +78,11 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
                 <p className="text-gray text-xl mt-1">Out of 10.00</p>
               </div>
             </div>
-            <div className="col-span-4 w-full border border-primary rounded-[13px]">
+            {/* <div className="col-span-4 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Listening Score</p>
               </div>
-              {/* score point*/}
+              score point
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
@@ -100,12 +100,12 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
                 </div>
                 <p className="text-gray text-xl mt-1">Out of 90.00</p>
               </div>
-            </div>
-            <div className="col-span-4 w-full border border-primary rounded-[13px]">
+            </div> */}
+            {/* <div className="col-span-4 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Writing Score</p>
               </div>
-              {/* score point*/}
+              score point
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
@@ -123,10 +123,10 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
                 </div>
                 <p className="text-gray text-xl mt-1">Out of 90.00</p>
               </div>
-            </div>
+            </div> */}
 
             {/* Total Score */}
-            <div className="col-span-12 w-full border mt-4 border-primary rounded-[13px]">
+            <div className="col-span-8 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
               </div>

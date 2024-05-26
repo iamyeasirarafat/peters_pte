@@ -16,8 +16,6 @@ const CardItems = () => {
     fetchData();
   }, []);
 
-  console.log("itemNumber", itemNumber);
-
   const Speaking = [
     {
       title: "Read Aloud",

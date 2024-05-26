@@ -1,4 +1,4 @@
-import { GlobalPagination } from "../../pages/app/practice/listening_test/multiple_answers";
+import GlobalPagination from "./GlobalPagination";
 
 const Pagination = ({
   HandleSubmit,

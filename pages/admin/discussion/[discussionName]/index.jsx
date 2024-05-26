@@ -18,7 +18,6 @@ const discussionTab = [
 function DiscussionList() {
   const router = useRouter();
   const [data, setData] = useState([]);
-  console.log(data);
   const { discussionName } = router?.query;
   const { mounted } = useHydrated();
   const isTablet = useMediaQuery({

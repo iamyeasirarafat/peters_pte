@@ -63,7 +63,6 @@ const MultipleSingleReading = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("reading62", formData);
     try {
       setLoading(true);
       const response = await axios.post("/multi_choice/reading", formData);

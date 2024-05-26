@@ -20,7 +20,6 @@ const StudentList = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const pageLimit = 9;
   const { state } = useSelector((state) => state.refetch);
-  console.log(state, "dddd");
   useEffect(() => {
     const getData = async () => {
       const res = await axios(

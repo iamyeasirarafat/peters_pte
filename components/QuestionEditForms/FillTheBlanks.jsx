@@ -189,7 +189,6 @@ const FillTheBlanks = () => {
             "content-type": "multipart/form-data", // Use lowercase for header keys
           },
         };
-        console.log(formData, "updat");
         const { data } = await axios.put(
           `/blank/${itemObj.id}/update`,
           newForm,
