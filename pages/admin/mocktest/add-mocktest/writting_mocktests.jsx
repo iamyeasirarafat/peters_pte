@@ -1,14 +1,13 @@
-import Layout from "@/components/Layout";
 import Field from "@/components/Field";
-import { useForm } from "react-hook-form";
-import { getQuestion } from "./full_mocktests";
-import { useState } from "react";
-import { useEffect } from "react";
+import Layout from "@/components/Layout";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "../../../../components/Spinner/Spinner";
-import { useRouter } from "next/router";
 import MockTestMultiSelector from "./MockTestMultiSelector";
+import { getQuestion } from "./full_mocktests";
 function FullMocktest() {
   const router = useRouter();
   const { id } = router.query;
@@ -26,9 +25,18 @@ const WritingTestForm = ({ id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [summarizes, setSummarizes] = useState([]);
   const [writeEasys, setWriteEasys] = useState([]);
+  const [spokenSummarizes, setSpokenSummarizes] = useState([]);
+  const [dictations, setDictations] = useState([]);
+  const [rwblanks, setRwblanks] = useState([]);
+  const [listeningBlancks, setListeningBlancks] = useState([]);
+
   useEffect(() => {
     getQuestion("/summarizes", setSummarizes);
     getQuestion("/write_easies", setWriteEasys);
+    getQuestion("/spoken/summarizes", setSpokenSummarizes);
+    getQuestion("/dictations", setDictations);
+    getQuestion("/read-write/blanks", setRwblanks);
+    getQuestion("/blanks", setListeningBlancks);
   }, []);
   const {
     register,
@@ -41,15 +49,15 @@ const WritingTestForm = ({ id }) => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    const MockTestData = {
-      title: data?.title,
-      summarize: data?.summarize || [],
-      write_essay: data?.write_essay || [],
-    };
+    // const MockTestData = {
+    //   title: data?.title,
+    //   summarize: data?.summarize || [],
+    //   write_essay: data?.write_essay || [],
+    // };
     try {
-      const res = id
-        ? await axios.put(`writting_mocktest/${id}`, MockTestData)
-        : await axios.post("/writting_mocktest", MockTestData);
+      id
+        ? await axios.put(`writting_mocktest/${id}`, data)
+        : await axios.post("/writting_mocktest", data);
       toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
@@ -66,6 +74,7 @@ const WritingTestForm = ({ id }) => {
       const getMocktest = async () => {
         try {
           const { data } = await axios.get(`/writting_mocktest/${id}`);
+          console.log(data);
           reset(data);
         } catch (error) {
           toast.error(error?.response?.data?.message || "Something went wrong");
@@ -84,7 +93,7 @@ const WritingTestForm = ({ id }) => {
         register={register}
         name="title"
       />
-      <div className="grid grid-cols-3 gap-x-5">
+      <div className="grid grid-cols-3 gap-5">
         <MockTestMultiSelector
           options={summarizes}
           control={control}
@@ -98,6 +107,34 @@ const WritingTestForm = ({ id }) => {
           name="write_essay"
           placeholder="Select Write Essay"
           label="Write Essay"
+        />
+        <MockTestMultiSelector
+          options={spokenSummarizes}
+          control={control}
+          name="summarize_spoken"
+          placeholder="Select Summarize Spoken Text"
+          label="Summarize Spoken Text"
+        />
+        <MockTestMultiSelector
+          options={dictations}
+          control={control}
+          name="dictation"
+          placeholder="Select Write From Dictations"
+          label="Write From Dictations"
+        />
+        <MockTestMultiSelector
+          options={rwblanks}
+          control={control}
+          name="reading_writting_blank"
+          placeholder="Select Reading & Writing: FIB"
+          label="Reading & Writing: FIB"
+        />
+        <MockTestMultiSelector
+          options={listeningBlancks}
+          control={control}
+          name="blank"
+          placeholder="Select Reading: Fill in the Blanks"
+          label="Reading: Fill in the Blanks"
         />
       </div>
       <button
