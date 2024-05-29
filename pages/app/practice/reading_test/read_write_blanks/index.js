@@ -82,7 +82,7 @@ const Page = () => {
 
 export default Page;
 
-const FillBlanksBlock = ({
+export const FillBlanksBlock = ({
   typingTime,
   result,
   setReFetch,
@@ -138,6 +138,7 @@ const FillBlanksBlock = ({
         ...prev.slice(0, existingIndex),
         { index, value },
         ...prev.slice(existingIndex + 1),
+        7,
       ]);
     } else {
       // If index does not exist, add a new entry
