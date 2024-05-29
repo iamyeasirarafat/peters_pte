@@ -71,7 +71,6 @@ function Index() {
           <MocktestCart key={i} item={item} />
         ))}
       </div>
-      {/* <MockTestForm /> */}
     </DashboardLayout>
   );
 }

@@ -27,18 +27,18 @@ function Index() {
   return (
     <DashboardLayout>
       <MockTestForm />
-      {/* <Assigned_Practice /> */}
     </DashboardLayout>
   );
 }
 
 export default Index;
-// { id: 1, name: "Read Aloud", questionType: "read_aloud" },
-//     { id: 2, name: "Repeat Sentence", questionType: "repeat_sentence" },
 const MockTestForm = () => {
+  const [allResults, setAllResults] = useState([]);
   const [questionList, setQuestionList] = useState({});
   const router = useRouter();
   const { mock_type, testId } = router?.query;
+
+  console.log("questionList", questionList);
 
   useEffect(() => {
     const getQuestionData = async () => {
@@ -54,29 +54,25 @@ const MockTestForm = () => {
     router?.isReady && getQuestionData();
   }, [router]);
 
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
   const [submitModal, setSubmitModal] = useState(false);
   const [progress, setProgress] = useState(0);
 
   const handleStart = () => {
-    // set current question from question list if start button is clicked then set id on current question
-    setCurrentQuestion(questionList?.question[0].id);
+    setCurrentQuestion(0);
   };
 
   const handleNext = () => {
-    // if current question is last question then set isLastQuestion to true
-    if (currentQuestion !== questionList?.question?.length) {
-      setIsLastQuestion(false);
-      setCurrentQuestion(questionList?.question[currentQuestion].id);
-    }
+    if (currentQuestion === questionList?.question?.length) {
+      setIsLastQuestion(true);
+    } else setCurrentQuestion(currentQuestion + 1);
   };
 
   const handlePrev = () => {
-    // if current question is 0 then set isLastQuestion to false and set current question present question
     if (currentQuestion !== 0) {
-      setIsLastQuestion(false);
       setCurrentQuestion(currentQuestion - 1);
+      setIsLastQuestion(false);
     }
   };
 
@@ -85,7 +81,7 @@ const MockTestForm = () => {
       setIsLastQuestion(true);
     }
     //set progress bar
-    setProgress((currentQuestion / questionList?.question?.length) * 100);
+    setProgress(((currentQuestion + 1) / questionList?.question?.length) * 100);
   }, [currentQuestion]);
 
   const handleFinish = () => {
@@ -93,14 +89,17 @@ const MockTestForm = () => {
   };
 
   // if current question is 0 then show starting page
-  if (currentQuestion === 0) {
-    return <MockTestStartingPage handleStart={handleStart} />;
-    // return <Assigned_Practice />
+  if (currentQuestion === null) {
+    return (
+      <MockTestStartingPage
+        handleStart={handleStart}
+        questionList={questionList}
+      />
+    );
   }
 
   return (
     <>
-      {/* <Assigned_Practice /> */}
       <MockLayouts
         handleNext={handleNext}
         handlePrev={handlePrev}
@@ -108,20 +107,29 @@ const MockTestForm = () => {
         progress={progress}
         isLastQuestion={isLastQuestion}
         currentQuestion={currentQuestion}
+        questionList={questionList}
       />
 
       {submitModal && (
-        <SubmitModal open={submitModal} setOpen={setSubmitModal} />
+        <SubmitModal
+          open={submitModal}
+          setOpen={setSubmitModal}
+          mock_type={mock_type}
+          testId={testId}
+          questionList={questionList}
+          setAllResults={setAllResults}
+        />
       )}
     </>
   );
 };
 
-const MockTestStartingPage = ({ handleStart }) => {
+const MockTestStartingPage = ({ handleStart, questionList }) => {
   return (
     <div className="flex flex-col m-5">
       <h2 className="text-2xl font-medium text-gray-800 mb-4">
-        Score Test D (2 hour)
+        Score {questionList?.title} (
+        {parseFloat(questionList?.time / 60).toFixed(2)} hour)
       </h2>
       <div className="w-full bg-gray/20 h-[1px] my-5" />
 
@@ -143,7 +151,28 @@ const MockTestStartingPage = ({ handleStart }) => {
   );
 };
 
-const SubmitModal = ({ open, setOpen }) => {
+const SubmitModal = ({
+  open,
+  setOpen,
+  mock_type,
+  testId,
+  questionList,
+  setAllResults,
+}) => {
+  const handelComplete = async () => {
+    try {
+      const res = await axios(
+        `/mocktest/${mock_type?.split("_")?.[0]}/${testId}/answer/${
+          questionList?.aid
+        }?complete=true`
+      );
+      setOpen(false);
+      router.push("/app/practice/mock_test/report");
+      setAllResults(res?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const router = useRouter();
   return (
     <>
@@ -175,14 +204,14 @@ const SubmitModal = ({ open, setOpen }) => {
 
           {/* button container */}
           <div className="flex  gap-2 ">
-            <button className="bg-gray/20 hover:bg-gray/30 flex items-center gap-2 text-white px-4 py-2 rounded">
+            <button
+              onClick={() => setOpen(false)}
+              className="bg-gray/20 hover:bg-gray/30 flex items-center gap-2 text-white px-4 py-2 rounded"
+            >
               No
             </button>
             <button
-              onClick={() => {
-                setOpen(false);
-                router.push("/app/practice/mock_test/report");
-              }}
+              onClick={handelComplete}
               className="bg-cyan-700 hover:bg-cyan-800 flex items-center gap-2 text-white px-4 py-2 rounded"
             >
               Yes
@@ -201,6 +230,7 @@ const MockLayouts = ({
   progress,
   isLastQuestion,
   currentQuestion,
+  questionList,
 }) => {
   return (
     <MockTestLayout
@@ -209,82 +239,68 @@ const MockLayouts = ({
       handleFinish={handleFinish}
       progress={progress}
       isLastQuestion={isLastQuestion}
+      currentQuestion={currentQuestion}
+      questionList={questionList}
     >
       {/* if current question is 1 then show read aloud component */}
-      {currentQuestion === 1 && <Read_aloud />}
+      {questionList?.question?.[currentQuestion]?.type === "read_aloud" && (
+        <Read_aloud />
+      )}
       {/* if current question is 2 then show repeat sentence component */}
-      {currentQuestion === 2 && <Repeat_sentence />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "repeat_sentence" && <Repeat_sentence />}
       {/* if current question is 3 then show describe image component */}
-      {currentQuestion === 3 && <Describe_image />}
+      {questionList?.question?.[currentQuestion]?.type === "describe_image" && (
+        <Describe_image />
+      )}
       {/* if current question is 4 then show retell lecture component */}
-      {currentQuestion === 4 && <Retell_lecture />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "retell_sentence" && <Retell_lecture />}
       {/* if current question is 5 then show answer short question component */}
-      {currentQuestion === 5 && <Answer_short_question />}
+      {questionList?.question?.[currentQuestion]?.type === "short_question" && (
+        <Answer_short_question />
+      )}
       {/* if current question is 6 then show summarize written component */}
-      {currentQuestion === 6 && <Summarize_written />}
-      {/* if current question is 7 then show write essay component */}
-      {currentQuestion === 7 && <Write_essay />}
+      {(questionList?.question?.[currentQuestion]?.type === "summarize" ||
+        questionList?.question?.[currentQuestion]?.type === "write_essay" ||
+        questionList?.question?.[currentQuestion]?.type ===
+          "summarize_spoken" ||
+        questionList?.question?.[currentQuestion]?.type === "dictation") && (
+        <Summarize_written
+          question={questionList?.question?.[currentQuestion]}
+          aid={questionList?.aid}
+        />
+      )}
       {/* if current question is 8 then show read write blanks component */}
-      {currentQuestion === 8 && <Read_write_blanks />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "reading_writting_blank" && (
+        <Read_write_blanks
+          question={questionList?.question?.[currentQuestion]}
+          aid={questionList?.aid}
+        />
+      )}
       {/* if current question is 9 then show multiple answers component */}
-      {currentQuestion === 9 && <Multiple_answers />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "multi_choice_reading_multi_answer" && <Multiple_answers />}
       {/* if current question is 10 then show re order component */}
-      {currentQuestion === 10 && <Re_Order />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "reorder_paragraph" && <Re_Order />}
       {/* if current question is 11 then show missing words component */}
-      {currentQuestion === 11 && <Missing_words />}
+      {questionList?.question?.[currentQuestion]?.type === "missing_word" && (
+        <Missing_words />
+      )}
       {/* if current question is 12 then show record missing words component */}
-      {currentQuestion === 12 && <Record_Missing_words />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "highlight_incorrect_word" && <Record_Missing_words />}
       {/* if current question is 13 then show multiple choice single component */}
-      {currentQuestion === 13 && <Multiple_choice_single />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "multi_choice_reading_single_answer" && <Multiple_choice_single />}
       {/* if current question is 14 then show highlight correct summary component */}
-      {currentQuestion === 14 && <Highlight_correct_summary />}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "highlight_summary" && <Highlight_correct_summary />}
       {/* if current question is 15 then show highlight incorrect words component */}
-      {currentQuestion === 15 && <Highlight_incorrect_words />}
-
-      {/* Read aloud  */}
-      {/* <Read_aloud /> */}
-
-      {/* repeat sentence  */}
-      {/* <Repeat_sentence /> */}
-
-      {/* describe image  */}
-      {/* <Describe_image /> */}
-
-      {/* retell lecture */}
-      {/* <Retell_lecture /> */}
-
-      {/* Answer_short_question */}
-      {/* <Answer_short_question /> */}
-
-      {/* Summary writing */}
-      {/* <Summarize_written /> */}
-
-      {/* Write_essay */}
-      {/* <Write_essay /> */}
-
-      {/* Read_write_blanks */}
-      {/* <Read_write_blanks /> */}
-
-      {/* Multiple_answers */}
-      {/* <Multiple_answers /> */}
-
-      {/* Re Order */}
-      {/* <Re_Order /> */}
-
-      {/* Missing_words */}
-      {/* <Missing_words /> */}
-
-      {/* Record_Missing_words */}
-      {/* <Record_Missing_words /> */}
-
-      {/* Multiple_choice_single */}
-      {/* <Multiple_choice_single /> */}
-
-      {/* Highlight_correct_summary */}
-      {/* <Highlight_correct_summary /> */}
-
-      {/* Highlight_incorrect_words */}
-      {/* <Highlight_incorrect_words /> */}
+      {questionList?.question?.[currentQuestion]?.type ===
+        "highlight_incorrect_word" && <Highlight_incorrect_words />}
     </MockTestLayout>
   );
 };
