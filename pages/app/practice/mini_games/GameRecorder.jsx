@@ -1,7 +1,16 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { BsFillMicFill } from "react-icons/bs";
-import AudioPlayer from "../../../../components/global/audio_player/AudioPlayer";
+
+// Dynamically import the AudioPlayer component
+const AudioPlayer = dynamic(
+  () => import("../../../../components/global/audio_player/AudioPlayer"),
+  {
+    ssr: false,
+  }
+);
+
+// Dynamically import the ReactMic component
 const DynamicReactMic = dynamic(
   () => import("react-mic").then((module) => module.ReactMic),
   {
@@ -11,13 +20,18 @@ const DynamicReactMic = dynamic(
 
 const GameRecorder = ({ audioData, setAudioData }) => {
   const [isRecording, setIsRecording] = useState(false);
-  const beepAudio = new Audio("/beep.mp3");
+  const [beepAudio, setBeepAudio] = useState(null);
   const [recordingTime, setRecordingTime] = useState(0); // Track recording time
   let timerId;
 
+  useEffect(() => {
+    // Initialize beep audio in useEffect to ensure it's only used client-side
+    setBeepAudio(new Audio("/beep.mp3"));
+  }, []);
+
   const handleStartRecording = () => {
     setRecordingTime(0);
-    beepAudio.play();
+    beepAudio && beepAudio.play();
     setIsRecording(true);
     setAudioData(null);
   };
@@ -41,7 +55,7 @@ const GameRecorder = ({ audioData, setAudioData }) => {
     return () => clearInterval(timerId);
   }, [isRecording]);
 
-  //progressbar width
+  // Progress bar width calculation
   const progressBarWidth = (recordingTime / 40000) * 100;
 
   return (
