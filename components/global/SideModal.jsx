@@ -1,7 +1,8 @@
 import { toggleModal as modalSlice } from "@/redux/slice/globalModalSlice";
+import { useEffect } from "react";
+import { MdDoubleArrow } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import GlobalModal from "./GlobalModal";
-import { MdDoubleArrow } from "react-icons/md";
 
 const SideModal = ({ data }) => {
   const dispatch = useDispatch();
@@ -12,7 +13,14 @@ const SideModal = ({ data }) => {
         api: data.api,
       })
     );
-
+  useEffect(() => {
+    dispatch(
+      modalSlice({
+        title: data.title,
+        api: data.api,
+      })
+    );
+  }, []);
   return (
     <>
       <button

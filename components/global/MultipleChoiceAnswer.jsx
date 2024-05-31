@@ -21,7 +21,8 @@ function MultipleChoiceAnswer({
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
-
+  const [reset, setReset] = useState(false);
+  console.log("answerData", answerData);
   useEffect(() => {
     const countdownInterval = setInterval(() => {
       if (seconds > 0) {
@@ -74,15 +75,16 @@ function MultipleChoiceAnswer({
           {text_content && (
             <p className="text-gray text-base">{text_content}</p>
           )}
-          <p className="text-gray text-xs">
+          {/* <p className="text-gray text-xs">
             <i>
-              Time Remaining {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+              Time {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
             </i>
-          </p>
+          </p> */}
         </div>
         <div className="space-y-2 mt-2">
           {answers?.map((answer, i) => (
             <Answer
+              id={id}
               key={i}
               answer={answer}
               answerData={answerData}
@@ -92,14 +94,24 @@ function MultipleChoiceAnswer({
         </div>
       </div>
       <div className="flex items-center justify-between mt-4">
-        <button
-          onClick={handelSubmit}
-          disabled={loading || timerExpired || isReady}
-          className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
-        >
-          {loading && <LoaderIcon />}
-          {result?.self?.[0]?.user ? "Re-Submit" : "Submit"}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handelSubmit}
+            disabled={loading || isReady}
+            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
+          >
+            {loading && <LoaderIcon />}
+            Submit
+          </button>
+          <button
+            onClick={() => {
+              router.reload();
+            }}
+            className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
+          >
+            Reset
+          </button>
+        </div>
         <GlobalPagination />
       </div>
     </>
@@ -108,8 +120,12 @@ function MultipleChoiceAnswer({
 
 export default MultipleChoiceAnswer;
 
-export const Answer = ({ answer, answerData, setAnswerData }) => {
+export const Answer = ({ answer, id, answerData, setAnswerData }) => {
   const [isCheck, setIsCheck] = useState(false);
+
+  useEffect(() => {
+    setIsCheck(false);
+  }, [id]);
 
   useEffect(() => {
     if (isCheck) {
@@ -117,7 +133,7 @@ export const Answer = ({ answer, answerData, setAnswerData }) => {
     } else {
       setAnswerData((prev) => prev.filter((item) => item !== answer?.value));
     }
-  }, [isCheck, answer?.value, setAnswerData]);
+  }, [isCheck, setAnswerData]);
 
   const isChecked = answerData.includes(answer?.value);
   const labelClass = isChecked ? "bg-secondary" : "bg-white";
