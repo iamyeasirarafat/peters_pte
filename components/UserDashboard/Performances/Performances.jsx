@@ -7,61 +7,22 @@ import Reading from "./Reading";
 import Speaking from "./Speaking";
 import Writing from "./Writing";
 
-const allTimePerformances = [
-  {
-    title: "Mock Test Questions",
-    value: "52/475",
-    percentage: "60%",
-    color: "#F44141",
-  },
-  {
-    title: "Speaking Questions",
-    value: "1998/3775",
-    percentage: "60%",
-    color: "#FF8412",
-  },
-  {
-    title: "Listening Questions",
-    value: "2258/4758",
-    percentage: "60%",
-    color: "#949494",
-  },
-  {
-    title: "Writing Questions",
-    value: "858/3756",
-    percentage: "60%",
-    color: "#F2B277",
-  },
-  {
-    title: "Reading Questions",
-    value: "2548/1325",
-    percentage: "60%",
-    color: "#4399FF",
-  },
-];
-
 const Performances = () => {
   const [allTimePerformances, setAllTimePerformances] = useState([]);
   const [data, setData] = useState();
-  useEffect(() => {
-    const getData = async () => {
-      const { data } = await axios("/progress");
-      setData(data);
-      setAllTimePerformances(convertData());
-    };
-    getData();
-  }, []);
-  const convertData = () => {
+
+  // convert data to display
+  const convertData = (data) => {
     const newData = [];
-    for (const key in data?.all_time) {
-      if (data?.all_time.hasOwnProperty(key)) {
-        const item = data?.all_time[key];
+    const colors = ["#F44141", "#FF8412", "#949494", "#F2B277", "#4399FF"];
+    if (data) {
+      for (const [key, item] of Object.entries(data)) {
         const title = `${key.charAt(0).toUpperCase()}${key
           .slice(1)
           .replace(/_/g, " ")}`;
         const value = `${item.practices}/${item.total}`;
         const percentage = `${item.percentage}%`;
-        const color = "#4399FF";
+        const color = colors[Math.floor(Math.random() * colors.length)];
         newData.push({ title, value, percentage, color });
       }
     }
@@ -73,6 +34,17 @@ const Performances = () => {
     });
     return newData;
   };
+
+  // get data from server
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios("/progress");
+      setData(data);
+      setAllTimePerformances(convertData(data?.all_time));
+    };
+    getData();
+  }, []);
+
   return (
     <>
       <div>

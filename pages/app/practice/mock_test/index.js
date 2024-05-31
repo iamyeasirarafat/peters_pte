@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../layout";
-import Assigned_Practice from "../../../../components/UserMockTest/Assigned_Practice";
+import { GoTrash } from "react-icons/go";
 import Link from "next/link";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 // function Index() {
 //   return <DashboardLayout>
@@ -65,11 +66,16 @@ function Index() {
 
   return (
     <DashboardLayout>
-      <p className="text-lg font-extrabold">Mock Test Type</p>
-      <div className="grid md:grid-cols-3 grid-cols-1 gap-5 mt-3">
-        {mocktest?.map((item, i) => (
-          <MocktestCart key={i} item={item} />
-        ))}
+      <MockTestResultList />
+
+      {/*  */}
+      <div>
+        <p className="text-lg font-extrabold">Mock Test Type</p>
+        <div className="grid md:grid-cols-3 grid-cols-1 gap-5 mt-3">
+          {mocktest?.map((item, i) => (
+            <MocktestCart key={i} item={item} />
+          ))}
+        </div>
       </div>
     </DashboardLayout>
   );
@@ -95,5 +101,45 @@ const MocktestCart = ({ item }) => {
         </p>
       </div>
     </Link>
+  );
+};
+
+const MockTestResultList = () => {
+  return (
+    <div className="py-5">
+      <p className="text-lg font-extrabold mb-3">My Test</p>
+      {/*  */}
+      <MockTestResultCard />
+    </div>
+  );
+};
+
+const MockTestResultCard = () => {
+  const router = useRouter();
+  return (
+    <div className="flex items-center justify-between p-3 border border-primary rounded-[15px]">
+      <div className="space-y-1">
+        <p className="text-base font-semibold text-gray">
+          VIP Full Test Mock Test 38A (New 2h Format)
+        </p>
+        <p className="text-sm text-gray opacity-75">
+          Submitted at: 2024-05-26 16:58
+        </p>
+      </div>
+      {/*  */}
+      <div className="flex items-center gap-x-3">
+        {/* delete button */}
+        <button className="w-8 h-8 rounded-full bg-red text-white flex items-center justify-center">
+          <GoTrash />
+        </button>
+        {/* check result */}
+        <button
+          onClick={() => router.push("/app/practice/mock_test/result")}
+          className="py-2 px-3 bg-primary text-white font-medium rounded-full"
+        >
+          Check Result
+        </button>
+      </div>
+    </div>
   );
 };

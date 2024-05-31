@@ -93,14 +93,6 @@ function Read_write_blanks({ question, aid }) {
         </div>
         exercitationem provident repellat autem nam neque voluptas accusantium,
         impedit illo. */}
-        {/* =================================== */}
-        <FillBlanksBlock
-          typingTime={2}
-          api={answerApi}
-          sentence={question?.sentence}
-          option_list={question?.options || []}
-        />
-        {/* ================================ */}
         {/* <p className="text-xl font-medium">
           {Array.isArray(question) &&
             question.map((word, index) => {
