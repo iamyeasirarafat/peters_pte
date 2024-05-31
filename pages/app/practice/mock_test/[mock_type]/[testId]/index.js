@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../../../layout";
-import MockTestLayout from "../../../../../../components/UserMockTest/layout";
-import Read_write_blanks from "../../../../../../components/UserMockTest/Read_write_blanks";
-import Missing_words from "../../../../../../components/UserMockTest/Missing_words";
-import Multiple_answers from "../../../../../../components/UserMockTest/Multiple_answers";
-import Summarize_written from "../../../../../../components/UserMockTest/Summarize_written";
-import Re_Order from "../../../../../../components/UserMockTest/Re_Order";
-import Record_Missing_words from "../../../../../../components/UserMockTest/Record_Missing_words";
-import Read_aloud from "../../../../../../components/UserMockTest/Read_aloud";
-import Repeat_sentence from "../../../../../../components/UserMockTest/Repeat_sentence";
-import Describe_image from "../../../../../../components/UserMockTest/Describe_image";
-import Retell_lecture from "../../../../../../components/UserMockTest/Retell_lecture";
-import Answer_short_question from "../../../../../../components/UserMockTest/Answer_short_question";
-import Write_essay from "../../../../../../components/UserMockTest/Write_essay";
-import Multiple_choice_single from "../../../../../../components/UserMockTest/Multiple_choice_single";
-import Highlight_correct_summary from "../../../../../../components/UserMockTest/Highlight_correct_summary";
-import Highlight_incorrect_words from "../../../../../../components/UserMockTest/Highlight_incorrect_words";
 import ReusableModal from "@/components/global/ReusableModal";
+import axios from "axios";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { CiClock2 } from "react-icons/ci";
 import { FaTimes } from "react-icons/fa";
-import { useRouter } from "next/router";
-import Assigned_Practice from "../../../../../../components/UserMockTest/Assigned_Practice";
-import axios from "axios";
+import Answer_short_question from "../../../../../../components/UserMockTest/Answer_short_question";
+import Describe_image from "../../../../../../components/UserMockTest/Describe_image";
+import Highlight_correct_summary from "../../../../../../components/UserMockTest/Highlight_correct_summary";
+import Highlight_incorrect_words from "../../../../../../components/UserMockTest/Highlight_incorrect_words";
+import Missing_words from "../../../../../../components/UserMockTest/Missing_words";
+import Multiple_answers from "../../../../../../components/UserMockTest/Multiple_answers";
+import Multiple_choice_single from "../../../../../../components/UserMockTest/Multiple_choice_single";
+import Re_Order from "../../../../../../components/UserMockTest/Re_Order";
+import Read_aloud from "../../../../../../components/UserMockTest/Read_aloud";
+import Read_write_blanks from "../../../../../../components/UserMockTest/Read_write_blanks";
+import Record_Missing_words from "../../../../../../components/UserMockTest/Record_Missing_words";
+import Repeat_sentence from "../../../../../../components/UserMockTest/Repeat_sentence";
+import Retell_lecture from "../../../../../../components/UserMockTest/Retell_lecture";
+import Summarize_written from "../../../../../../components/UserMockTest/Summarize_written";
+import Fill_blanks from "../../../../../../components/UserMockTest/fill_blanks";
+import MockTestLayout from "../../../../../../components/UserMockTest/layout";
+import DashboardLayout from "../../../../layout";
 
 function Index() {
   return (
@@ -232,6 +231,7 @@ const MockLayouts = ({
   currentQuestion,
   questionList,
 }) => {
+  console.log("questionList", questionList);
   return (
     <MockTestLayout
       handleNext={handleNext}
@@ -242,14 +242,13 @@ const MockLayouts = ({
       currentQuestion={currentQuestion}
       questionList={questionList}
     >
-      {/* if current question is 1 then show read aloud component */}
       {questionList?.question?.[currentQuestion]?.type === "read_aloud" && (
         <Read_aloud />
       )}
-      {/* if current question is 2 then show repeat sentence component */}
+
       {questionList?.question?.[currentQuestion]?.type ===
         "repeat_sentence" && <Repeat_sentence />}
-      {/* if current question is 3 then show describe image component */}
+
       {questionList?.question?.[currentQuestion]?.type === "describe_image" && (
         <Describe_image />
       )}
@@ -275,6 +274,13 @@ const MockLayouts = ({
       {questionList?.question?.[currentQuestion]?.type ===
         "reading_writting_blank" && (
         <Read_write_blanks
+          question={questionList?.question?.[currentQuestion]}
+          aid={questionList?.aid}
+        />
+      )}
+      {/* if current question is 8 then show read write blanks component */}
+      {questionList?.question?.[currentQuestion]?.type === "blank" && (
+        <Fill_blanks
           question={questionList?.question?.[currentQuestion]}
           aid={questionList?.aid}
         />
