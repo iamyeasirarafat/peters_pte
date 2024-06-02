@@ -1,12 +1,12 @@
 import { toggleModal as modalSlice } from "@/redux/slice/globalModalSlice";
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
+import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBlock from "./QuestionBlock";
 import QuestionNavigation from "./QuestionNavigation";
-import Image from "next/image";
 
 const GlobalModal = () => {
   //redux state management functions

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LoaderIcon } from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 import DashboardLayout from "../../layout";
 import GameScore from "./GameScore";
 import axios from "axios";
@@ -14,6 +14,8 @@ function SpeakingSpell() {
   const [aid, setAid] = useState("");
   const [isCorrect, setIsCorrect] = useState(true);
   const [tryAgain, setTryAgain] = useState(false);
+
+  console.log("answerText", answerText);
 
   useEffect(() => {
     // fetch question
@@ -37,23 +39,23 @@ function SpeakingSpell() {
 
   //  handleMakeAudioToText
   const handleMakeAudioToText = async () => {
+    const formData = new FormData();
+    formData.append("audio", audioData);
     try {
       setLoading(true);
-      const res = await axios.post("/audio_to_text", {
-        audio: audioData,
-      });
+      const res = await axios.post("/audio_to_text", formData);
       setAnswerText(res?.data?.text);
-      handelSubmit();
+      handelSubmit(res?.data?.text);
     } catch (error) {
       setLoading(false);
       console.log(error);
     }
   };
-  const handelSubmit = async () => {
+  const handelSubmit = async (text) => {
     setLoading(true);
     const answerData = {
       id: question?.question?.id,
-      answer: answerText,
+      answer: text,
     };
     try {
       const res = await axios.post(

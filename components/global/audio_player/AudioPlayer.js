@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 
 // import components
+import { useRouter } from "next/router";
 import getBlobDuration from "../../../utils/getBlobDuration";
 import Controls from "./Controls";
 import ProgressBar from "./ProgressBar";
 
-const AudioPlayer = ({ apiAudio, data }) => {
-  // states
+// const AudioPlayer = ({ apiAudio, data }) => {
+// states
+const AudioPlayer = ({ data, apiAudio }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [userInteracted, setUserInteracted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [countdown, setCountdown] = useState(5);
-  // references
+  const [alreadyPlayed, setAlreadyPlayed] = useState(false);
+
   const audioRef = useRef();
   const progressBarRef = useRef();
   const playTimeoutRef = useRef();
@@ -55,12 +58,24 @@ const AudioPlayer = ({ apiAudio, data }) => {
   };
 
   useEffect(() => {
+    const handlePlayEvent = () => {
+      setAlreadyPlayed(true);
+    };
+
+    if (audioRef.current) {
+      audioRef.current.addEventListener("play", handlePlayEvent);
+    }
+
     if (audioRef.current && userInteracted) {
       playTimeoutRef.current = setTimeout(() => {
-        audioRef.current.play().catch((error) => {
-          console.error("Autoplay failed:", error);
-        });
-        setIsPlaying(true);
+        if (alreadyPlayed) {
+          return;
+        } else {
+          audioRef.current.play().catch((error) => {
+            console.error("Autoplay failed:", error);
+          });
+          setIsPlaying(true);
+        }
       }, 5000);
 
       countdownIntervalRef.current = setInterval(() => {
@@ -76,27 +91,29 @@ const AudioPlayer = ({ apiAudio, data }) => {
       return () => {
         clearTimeout(playTimeoutRef.current);
         clearInterval(countdownIntervalRef.current);
+        if (audioRef.current) {
+          audioRef.current.removeEventListener("play", handlePlayEvent);
+        }
       };
     }
-  }, [userInteracted, currentTrack]);
+  }, [userInteracted, currentTrack, alreadyPlayed]);
 
   useEffect(() => {
-    if (!userInteracted) {
-      document.addEventListener("click", handleUserInteraction);
-    }
-    return () => {
-      document.removeEventListener("click", handleUserInteraction);
-    };
-  }, [userInteracted]);
+    handleUserInteraction();
+  }, []);
+
+  const router = useRouter();
+  useEffect(() => {
+    setCountdown(5);
+    setAlreadyPlayed(false);
+  }, [router.query]);
 
   return (
     <div className="h-[150px] mb-4 w-full">
       <div className="flex flex-col  w-full gap-y-2">
         <div className="">
-          {userInteracted && (
-            <p className="text-sm text-gray-500">
-              Audio will start in {countdown} seconds
-            </p>
+          {userInteracted && countdown !== 0 && (
+            <p className="text-sm text-gray-500">Beginning in {countdown}</p>
           )}
         </div>
       </div>
@@ -115,6 +132,7 @@ const AudioPlayer = ({ apiAudio, data }) => {
               setTimeProgress,
               isPlaying,
               setIsPlaying,
+              setAlreadyPlayed,
             }}
           />
           <ProgressBar

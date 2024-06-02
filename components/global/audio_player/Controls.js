@@ -12,6 +12,7 @@ const Controls = ({
   progressBarRef,
   duration,
   setTimeProgress,
+  setAlreadyPlayed,
   setAutoPlayTriggered,
 }) => {
   const [volume, setVolume] = useState(60);
@@ -19,6 +20,7 @@ const Controls = ({
 
   const togglePlayPause = () => {
     setIsPlaying((prev) => !prev);
+    setAlreadyPlayed(true);
   };
 
   const playAnimationRef = useRef();

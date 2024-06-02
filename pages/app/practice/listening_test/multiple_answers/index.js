@@ -1,4 +1,3 @@
-"use client";
 import GlobalMainContent from "@/components/global/GlobalMainContent";
 import ListenBlock from "@/components/global/ListenBlock";
 import MultipleChoiceAiModal from "@/components/global/MultipleChoiceAiModal";
@@ -10,8 +9,6 @@ import TranscriptModal from "@/components/spoken_text/TranscriptModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { RxShuffle } from "react-icons/rx";
 import DashboardLayout from "../../../layout";
 
 function Page() {
