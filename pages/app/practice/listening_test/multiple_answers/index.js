@@ -62,7 +62,6 @@ function Page() {
           text_content={data?.text_content}
           setReFetch={setReFetch}
           answers={data?.options}
-          result={result}
           isReady={data?.id ? false : true}
           typingTime={5}
           api={answerApi}
