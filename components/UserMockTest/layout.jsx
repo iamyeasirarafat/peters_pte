@@ -1,10 +1,8 @@
 import React from "react";
 import { CiClock2 } from "react-icons/ci";
-import { TfiMenuAlt } from "react-icons/tfi";
 import { FaRegSave } from "react-icons/fa";
-import { GrCaretNext } from "react-icons/gr";
 import { MdOutlineNavigateNext } from "react-icons/md";
-import { GrFormPrevious } from "react-icons/gr";
+import { TfiMenuAlt } from "react-icons/tfi";
 
 const MockTestLayout = ({
   children,
@@ -60,12 +58,12 @@ const MockTestLayout = ({
         </button>
 
         <div className="flex gap-2 items-center">
-          {/* <button
+          <button
             onClick={handlePrev}
             className="bg-cyan-700 hover:bg-cyan-800 flex items-center gap-2 text-white px-4 py-2 rounded"
           >
             <MdOutlineNavigateNext className="text-white rotate-180" /> Prev
-          </button> */}
+          </button>
           {currentQuestion + 1 !== questionList?.question?.length ? (
             <button
               id="submit_button"
@@ -76,6 +74,7 @@ const MockTestLayout = ({
             </button>
           ) : (
             <button
+              id="submit_button"
               onClick={handleFinish}
               className="bg-cyan-700 hover:bg-cyan-800 flex items-center gap-2 text-white px-4 py-2 rounded"
             >

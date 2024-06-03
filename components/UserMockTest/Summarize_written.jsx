@@ -34,10 +34,28 @@ export default function Summarize_written({ question, aid }) {
       console.log(error);
     }
   };
+
+  //audio controls and auto play related function
+  const audioRef = useRef(null);
+  useEffect(() => {
+    if (question?.audio) {
+      audioRef.current.play();
+    }
+  }, [question]);
   return (
     <div>
       <p className="font-semibold mb-6">{question?.title}</p>
-      <p>{question?.content || question?.question}</p>
+      {question?.audio ? (
+        <audio ref={audioRef} controls>
+          <source
+            src={`${process.env.NEXT_PUBLIC_API_URL}${question?.audio}`}
+            type="audio/mpeg"
+          />
+          Your browser does not support the audio element.
+        </audio>
+      ) : (
+        <p>{question?.content || question?.question}</p>
+      )}
 
       <div className="flex flex-col text-zinc-700 my-5">
         <div className="flex justify-end items-center bg-gray/20  rounded-t-sm">

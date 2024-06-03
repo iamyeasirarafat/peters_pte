@@ -1,9 +1,9 @@
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { RxShuffle } from "react-icons/rx";
 import { getPageName } from "../../utils/getPageName";
-import axios from "axios";
 
 const GlobalPagination = () => {
   const [qId, setQId] = useState();
@@ -40,9 +40,9 @@ const GlobalPagination = () => {
       query: { que_no: id },
     });
   };
-  useEffect(() => {
-    qId && handelSetQuestionId(qId[Math.floor(Math.random() * qId.length)]);
-  }, [qId]);
+  // useEffect(() => {
+  //   qId && handelSetQuestionId(qId[Math.floor(Math.random() * qId.length)]);
+  // }, [qId]);
   return (
     <div className="flex items-center gap-x-2">
       <button className="w-10 h-7 md:w-[56px] md:h-[45px] bg-secondary rounded-[22px] flex items-center justify-center hover:bg-[#ffe4cd] duration-200">

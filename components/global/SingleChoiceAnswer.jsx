@@ -6,7 +6,6 @@ import GlobalPagination from "./GlobalPagination";
 
 function SingleChoiceAnswer({
   answers,
-  result,
   api,
   setReFetch,
   isReady,
@@ -14,6 +13,7 @@ function SingleChoiceAnswer({
   text_content,
 }) {
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const initialMinutes = typingTime;
   const router = useRouter();
@@ -53,11 +53,12 @@ function SingleChoiceAnswer({
   const handelSubmit = async () => {
     try {
       setLoading(true);
-      const res = await axios.post(api, {
+      const { data } = await axios.post(api, {
         answers: [selectedAnswer],
         time_taken: timeTakenInMinutes,
       });
-      toast.success(res.data.message || "Submitted Successfully");
+      setResult(data);
+      toast.success(data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
       setLoading(false);
     } catch (error) {
@@ -65,19 +66,27 @@ function SingleChoiceAnswer({
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+  const right_options = result?.score?.score_details?.right_options;
+  const wrong_answers = result?.score?.score_details?.wrong_answers;
   return (
     <div className="p-5 rounded-[15px] border border-primary">
       {text_content && <p className="text-lg text-center">{text_content}</p>}
       <div>
         <div className="space-y-2 mt-2">
-          {answers?.map((answer, i) => (
-            <Answer
-              key={i}
-              answer={answer}
-              selectedAnswer={selectedAnswer}
-              setSelectedAnswer={setSelectedAnswer}
-            />
-          ))}
+          {answers?.map((answer, i) => {
+            const right = right_options?.includes(answer?.index);
+            const wrong = wrong_answers?.includes(answer?.index);
+            return (
+              <Answer
+                right={right}
+                wrong={wrong}
+                key={i}
+                answer={answer}
+                selectedAnswer={selectedAnswer}
+                setSelectedAnswer={setSelectedAnswer}
+              />
+            );
+          })}
         </div>
         <div className="flex items-center justify-between mt-4">
           <button
@@ -87,7 +96,7 @@ function SingleChoiceAnswer({
           >
             {" "}
             {loading && <LoaderIcon />}
-            {result?.self?.[0]?.user ? "Re-Submit" : "Submit"}
+            Submit
           </button>
           <GlobalPagination />
         </div>
@@ -98,11 +107,18 @@ function SingleChoiceAnswer({
 
 export default SingleChoiceAnswer;
 
-export const Answer = ({ answer, selectedAnswer, setSelectedAnswer }) => {
+export const Answer = ({
+  answer,
+  right,
+  wrong,
+  selectedAnswer,
+  setSelectedAnswer,
+}) => {
+  const bgColor = selectedAnswer === answer?.value ? "bg-secondary" : "";
   return (
     <label
       className={`${
-        selectedAnswer === answer?.value ? "bg-secondary" : "bg-white"
+        right ? "bg-green-300" : wrong ? "bg-rose-300" : bgColor
       } rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
     >
       <input

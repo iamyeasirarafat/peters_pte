@@ -6,7 +6,6 @@ import GlobalPagination from "./GlobalPagination";
 
 function MultipleChoiceAnswer({
   answers,
-  result,
   api,
   setReFetch,
   isReady,
@@ -21,7 +20,7 @@ function MultipleChoiceAnswer({
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
-  const [reset, setReset] = useState(false);
+  const [result, setResult] = useState(null);
   console.log("answerData", answerData);
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -55,19 +54,22 @@ function MultipleChoiceAnswer({
   const handelSubmit = async () => {
     try {
       setLoading(true);
-      const res = await axios.post(api, {
+      const { data } = await axios.post(api, {
         answers: answerData,
         time_taken: timeTakenInMinutes,
       });
-      toast.success(res.data.message || "Submitted Successfully");
+      setResult(data);
+      toast.success(data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
       setLoading(false);
-      setAnswerData([]);
+      // setAnswerData([]);
     } catch (error) {
       setLoading(false);
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+  const right_options = result?.score?.score_details?.right_options;
+  const wrong_answers = result?.score?.score_details?.wrong_answers;
   return (
     <>
       <div className="p-5 rounded-[15px] border border-primary">
@@ -82,15 +84,22 @@ function MultipleChoiceAnswer({
           </p> */}
         </div>
         <div className="space-y-2 mt-2">
-          {answers?.map((answer, i) => (
-            <Answer
-              id={id}
-              key={i}
-              answer={answer}
-              answerData={answerData}
-              setAnswerData={setAnswerData}
-            />
-          ))}
+          {answers?.map((answer, i) => {
+            console.log("answer", answer);
+            const right = right_options?.includes(answer?.index);
+            const wrong = wrong_answers?.includes(answer?.index);
+            return (
+              <Answer
+                right={right}
+                wrong={wrong}
+                id={id}
+                key={i}
+                answer={answer}
+                answerData={answerData}
+                setAnswerData={setAnswerData}
+              />
+            );
+          })}
         </div>
       </div>
       <div className="flex items-center justify-between mt-4">
@@ -120,7 +129,14 @@ function MultipleChoiceAnswer({
 
 export default MultipleChoiceAnswer;
 
-export const Answer = ({ answer, id, answerData, setAnswerData }) => {
+export const Answer = ({
+  answer,
+  id,
+  answerData,
+  setAnswerData,
+  right,
+  wrong,
+}) => {
   const [isCheck, setIsCheck] = useState(false);
 
   useEffect(() => {
@@ -136,12 +152,14 @@ export const Answer = ({ answer, id, answerData, setAnswerData }) => {
   }, [isCheck, setAnswerData]);
 
   const isChecked = answerData.includes(answer?.value);
-  const labelClass = isChecked ? "bg-secondary" : "bg-white";
+  const labelClass = isChecked ? "bg-secondary" : "";
 
   return (
     <label
       htmlFor={answer?.index}
-      className={`${labelClass} rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
+      className={`${
+        right ? "bg-green-300" : wrong ? "bg-rose-300" : labelClass
+      }  rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
     >
       <input
         className="border-2 border-primary focus:ring-transparent cursor-pointer w-7 h-7 rounded-md text-primary"

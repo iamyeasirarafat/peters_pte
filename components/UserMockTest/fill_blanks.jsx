@@ -2,11 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 
-function Read_write_blanks({ question, aid }) {
-  // const [answers, setAnswers] = useState([]);
-
-  console.log("question", question);
-
+function Fill_blanks({ question, aid }) {
   const router = useRouter();
   const mockTestId = router?.query?.testId;
   const answerApi = `/mocktest/writting/${mockTestId}/answer/${aid}`;
@@ -17,38 +13,23 @@ function Read_write_blanks({ question, aid }) {
         appear. Select the appropriate answer choice for each blank.
       </p>
       <div>
-        {/* doloribus ut rerum consectetur velit excepturi voluptatem, eius
-        similique, consequuntur cum mollitia tempore accusamus dolorum. Itaque
-        <div className="px-2 inline-block">
-          <select
-            // onBlur={onChange}
-            // onChange={onChange}
-            className="w-40 text-gray  text-center border border-x-0 border-t-0 border-b-gray outline-none focus:ring-transparent focus:border-gray p-0 m-0"
-          >
-            <option value="">Select Answer</option>
-            <option value="Dolor">Dolor</option>
-          </select>
-        </div>
-        exercitationem provident repellat autem nam neque voluptas accusantium,
-        impedit illo. */}
-        {/* =================================== */}
         <FillBlanksBlock
           typingTime={2}
           question={question}
           api={answerApi}
           sentence={question?.sentence}
-          option_list={question?.options || []}
         />
       </div>
     </>
   );
 }
 
-export default Read_write_blanks;
+export default Fill_blanks;
 
-const FillBlanksBlock = ({ question, sentence, option_list, api }) => {
+const FillBlanksBlock = ({ question, sentence, api }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [answers, setAnswers] = useState([]);
+  console.log("answers", answers);
   //!Updating answer state
   const updateAnswer = (index, value) => {
     const existingIndex = answers.findIndex((item) => item.index === index);
@@ -138,11 +119,6 @@ const FillBlanksBlock = ({ question, sentence, option_list, api }) => {
                   {word}
                   {index !== sentence.length - 1 && (
                     <FillBlankInput
-                      options={
-                        option_list.filter(
-                          (item) => item.index === abc[index + 1]
-                        )[0]?.options
-                      }
                       onChange={(e) => updateAnswer(index, e.target.value)}
                     />
                   )}
@@ -156,21 +132,15 @@ const FillBlanksBlock = ({ question, sentence, option_list, api }) => {
   );
 };
 
-const FillBlankInput = ({ onChange, options }) => {
+const FillBlankInput = ({ onChange }) => {
   return (
     <div className="px-2 inline-block">
-      <select
+      <input
         onBlur={onChange}
         // onChange={onChange}
-        className="w-40 text-gray  text-center border border-x-0 border-t-0 border-b-gray outline-none focus:ring-transparent focus:border-gray p-0 m-0"
-      >
-        <option value="">Select Answer</option>
-        {options?.map((item, index) => (
-          <option key={index} value={item}>
-            {item}
-          </option>
-        ))}
-      </select>
+        className="w-[150px] text-gray text-lg text-center border border-x-0 border-t-0 border-b-gray outline-none focus:ring-transparent focus:border-gray p-0 m-0"
+        type="text"
+      />
     </div>
   );
 };
