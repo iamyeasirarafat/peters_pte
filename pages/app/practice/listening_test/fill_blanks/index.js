@@ -55,7 +55,7 @@ const Page = () => {
       </p>
       {/* main content */}
       <GlobalMainContent data={data}>
-        <ListenBlock data={data} blank />
+        <ListenBlock listening data={data} blank />
         <FillBlanksBlock
           typingTime={2}
           result={result}
@@ -195,7 +195,7 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
             }}
             className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
           >
-            Reset
+            Restart
           </button>
         </div>
         <GlobalPagination />

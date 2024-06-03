@@ -76,7 +76,7 @@ const Index = () => {
       <GlobalMainContent data={data}>
         {/* text block */}
         <div className="border border-primary p-4 rounded-[15px]">
-          <AudioPlayer data={data} apiAudio />
+          <AudioPlayer listening data={data} apiAudio />
         </div>
         {/* recording Block */}
 

@@ -53,7 +53,7 @@ function Page() {
       </p>
       <GlobalMainContent data={data}>
         {/* text block */}
-        <ListenBlock setOpen={setOpenTranscriptModal} data={data} />
+        <ListenBlock listening setOpen={setOpenTranscriptModal} data={data} />
         {/* Multiple Choice Answer */}
         <SingleChoiceAnswer
           text_content={data?.text_content || ""}

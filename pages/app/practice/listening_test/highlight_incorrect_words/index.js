@@ -59,7 +59,7 @@ const Page = () => {
       </p>
       {/* main content */}
       <GlobalMainContent data={data}>
-        <ListenBlock data={data} blank />
+        <ListenBlock listening data={data} blank />
         <SentenceBlock
           typingTime={2}
           result={result}
@@ -264,7 +264,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={handelSubmit}
-            disabled={isLoading || isReady}
+            disabled={isLoading}
             className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
           >
             {isLoading && <LoaderIcon />}
@@ -276,7 +276,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
             }}
             className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
           >
-            Reset
+            Restart
           </button>
         </div>
         <GlobalPagination />

@@ -52,7 +52,7 @@ const Page = () => {
       </p>
       {/* main content */}
       <GlobalMainContent data={data}>
-        <ListenBlock data={data} setOpen={setOpen} />
+        <ListenBlock listening data={data} setOpen={setOpen} />
         <TypingBlock
           hideTimer
           typingTime={1000}

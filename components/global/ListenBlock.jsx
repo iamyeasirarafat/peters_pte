@@ -1,11 +1,11 @@
 import AudioPlayer from "./audio_player/AudioPlayer";
 
-const ListenBlock = ({ setOpen, data, blank }) => {
+const ListenBlock = ({ listening, setOpen, data, blank }) => {
   return (
     <div className="p-5 border border-primary rounded-[15px] relative">
       <div className="flex items-center justify-center">
         <div className="flex flex-col items-center w-full gap-y-2">
-          {data?.id && <AudioPlayer apiAudio data={data} />}
+          {data?.id && <AudioPlayer listening apiAudio data={data} />}
         </div>
       </div>
       {data?.id && !blank && (
