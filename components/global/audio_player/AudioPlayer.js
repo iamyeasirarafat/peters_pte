@@ -8,7 +8,7 @@ import ProgressBar from "./ProgressBar";
 
 // const AudioPlayer = ({ apiAudio, data }) => {
 // states
-const AudioPlayer = ({ data, apiAudio }) => {
+const AudioPlayer = ({ listening, data, apiAudio }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -99,7 +99,7 @@ const AudioPlayer = ({ data, apiAudio }) => {
   }, [userInteracted, currentTrack, alreadyPlayed]);
 
   useEffect(() => {
-    handleUserInteraction();
+    listening && handleUserInteraction();
   }, []);
 
   const router = useRouter();

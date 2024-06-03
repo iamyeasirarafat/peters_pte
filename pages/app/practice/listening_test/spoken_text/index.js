@@ -51,7 +51,7 @@ const Page = () => {
       </p>
       {/* main content */}
       <GlobalMainContent data={data}>
-        <ListenBlock setOpen={setOpen} data={data} />
+        <ListenBlock listening setOpen={setOpen} data={data} />
         <TypingBlock
           result={result}
           setReFetch={setReFetch}
