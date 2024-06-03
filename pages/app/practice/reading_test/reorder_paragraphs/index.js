@@ -8,10 +8,11 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import { LoaderIcon } from "react-hot-toast";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
-import DashboardLayout from "../../../layout";
 import GlobalPagination from "../../../../../components/global/GlobalPagination";
+import DashboardLayout from "../../../layout";
 
 function Page() {
   const [aiResult, setAiResult] = useState(null);
@@ -127,28 +128,24 @@ function Page() {
           setQuestionData={setQuestionData}
         />
         <div className="flex items-center justify-between">
-          <button
-            disabled={isLoading || timerExpired}
-            onClick={handelSubmit}
-            className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
-          >
-            {isLoading ? (
-              <>
-                <div
-                  className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                  role="status"
-                  aria-label="loading"
-                >
-                  <span className="sr-only">Loading...</span>
-                </div>
-                Loading...
-              </>
-            ) : result?.self?.[0]?.user ? (
-              "Re-Submit"
-            ) : (
-              "Submit"
-            )}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handelSubmit}
+              disabled={isLoading}
+              className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
+            >
+              {isLoading && <LoaderIcon />}
+              Submit
+            </button>
+            <button
+              onClick={() => {
+                router.reload();
+              }}
+              className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
+            >
+              Reset
+            </button>
+          </div>
           <GlobalPagination />
         </div>
       </GlobalMainContent>

@@ -7,11 +7,11 @@ import SideModal from "@/components/global/SideModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast, { LoaderIcon, Toaster } from "react-hot-toast";
 import { FaCheck } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
-import DashboardLayout from "../../../layout";
 import GlobalPagination from "../../../../../components/global/GlobalPagination";
+import DashboardLayout from "../../../layout";
 
 const Page = () => {
   const [aiResult, setAiResult] = useState(null);
@@ -101,7 +101,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
   const [apiAnswers, setApiAnswers] = useState([]);
   const [finalSentence, setFinalSentence] = useState("");
   const [selectedWords, setSelectedWords] = useState([]);
-
+  console.log("aaa", selectedWords);
   useEffect(() => {
     if (data) {
       setSentence(data?.sentence);
@@ -132,13 +132,14 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
     setFinalSentence(finalSentence);
   };
 
-  const handleWordClick = (word) => {
+  const handleWordClick = (word, index) => {
     setAnswers(null);
-    const index = selectedWords.indexOf(word);
-    if (index === -1) {
-      setSelectedWords([...selectedWords, word]);
+    const wordIdentifier = `${word}-${index}`;
+    const selectedWordIndex = selectedWords.indexOf(wordIdentifier);
+    if (selectedWordIndex === -1) {
+      setSelectedWords([...selectedWords, wordIdentifier]);
     } else {
-      setSelectedWords(selectedWords.filter((item) => item !== word));
+      setSelectedWords(selectedWords.filter((item) => item !== wordIdentifier));
     }
   };
   // cheching that selected word is correct or not
@@ -146,8 +147,9 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
     return apiAnswers?.some((item) => item.wrong === valueToCheck);
   };
   const renderClickableSentence = () => {
-    const getWordColor = (word) => {
-      if (selectedWords.includes(word)) {
+    const getWordColor = (word, index) => {
+      const wordIdentifier = `${word}-${index}`;
+      if (selectedWords.includes(wordIdentifier)) {
         if (answers) {
           if (isValueInArray(word)) {
             return {
@@ -168,7 +170,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
         }
       } else if (
         (answers && isValueInArray(word)) ||
-        selectedWords.includes(word)
+        selectedWords.includes(wordIdentifier)
       ) {
         return {
           value: "wrong",
@@ -184,20 +186,20 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
     const words = finalSentence.split(" ");
     return words.map((word, index) => (
       <span
-        className={`cursor-pointer  ${getWordColor(word).color}`}
+        className={`cursor-pointer  ${getWordColor(word, index).color}`}
         key={index}
-        onClick={() => handleWordClick(word)}
+        onClick={() => handleWordClick(word, index)}
       >
-        {getWordColor(word).value === "wrong" ? (
+        {getWordColor(word, index).value === "wrong" ? (
           <RxCross2 className="inline" />
-        ) : getWordColor(word).value === "correct" ? (
+        ) : getWordColor(word, index).value === "correct" ? (
           <FaCheck className="inline" />
         ) : (
           ""
         )}{" "}
         {word}{" "}
-        {(getWordColor(word).value === "wrong" ||
-          getWordColor(word).value === "correct") && (
+        {(getWordColor(word, index).value === "wrong" ||
+          getWordColor(word, index).value === "correct") && (
           <span className="text-blue ml-1 bg-white">
             {apiAnswers.find((i) => i.wrong === word).value}{" "}
           </span>
@@ -240,7 +242,7 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
     try {
       setIsLoading(true);
       const res = await axios.post(api, {
-        answers: selectedWords,
+        answers: selectedWords.map((item) => item.split("-")[0]),
         time_taken: timeTakenInMinutes,
       });
       toast.success(res.data.message || "Submitted Successfully");
@@ -259,42 +261,26 @@ const SentenceBlock = ({ typingTime, result, setReFetch, api, data }) => {
         <p className="text-xl font-medium">{renderClickableSentence()}</p>
       </div>
       <div className="flex items-center justify-between">
-        <button
-          disabled={isLoading || timerExpired}
-          onClick={handelSubmit}
-          className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
-        >
-          {isLoading ? (
-            <>
-              <div
-                className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                role="status"
-                aria-label="loading"
-              >
-                <span className="sr-only">Loading...</span>
-              </div>
-              Loading...
-            </>
-          ) : result?.self?.[0]?.user ? (
-            "Re-Submit"
-          ) : (
-            "Submit"
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handelSubmit}
+            disabled={isLoading || isReady}
+            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
+          >
+            {isLoading && <LoaderIcon />}
+            Submit
+          </button>
+          <button
+            onClick={() => {
+              router.reload();
+            }}
+            className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
+          >
+            Reset
+          </button>
+        </div>
         <GlobalPagination />
       </div>
     </>
-  );
-};
-const FillBlankInput = ({ onChange }) => {
-  return (
-    <div className="px-2 inline-block">
-      <input
-        onBlur={onChange}
-        // onChange={onChange}
-        className="w-[150px] text-gray text-lg text-center border border-x-0 border-t-0 border-b-gray outline-none focus:ring-transparent focus:border-gray p-0 m-0"
-        type="text"
-      />
-    </div>
   );
 };

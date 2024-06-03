@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { LoaderIcon, toast } from "react-hot-toast";
 import GlobalPagination from "./GlobalPagination";
 
 const TypingBlock = ({
@@ -97,7 +97,7 @@ const TypingBlock = ({
           <textarea
             onChange={(e) => setTextAnswer(e.target.value)}
             value={textAnswer}
-            disabled={timerExpired || isReady}
+            disabled={isReady}
             className="w-full disabled:opacity-40 border-0 text-gray focus:ring-0"
             placeholder="Type your response here..."
             rows={4}
@@ -106,49 +106,24 @@ const TypingBlock = ({
       </div>
       {/* button */}
       <div className="flex items-center justify-between gap-x-4">
-        {result?.self?.[0]?.user ? (
+        <div className="flex items-center gap-2">
           <button
-            disabled={isLoading || isReady || timerExpired}
             onClick={handleSubmit}
-            className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-primary text-white font-semibold text-sm md:text-lg"
+            disabled={isLoading || isReady}
+            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
           >
-            {isLoading ? (
-              <>
-                <div
-                  className="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                  role="status"
-                  aria-label="loading"
-                >
-                  <span className="sr-only">Loading...</span>
-                </div>
-                Loading...
-              </>
-            ) : (
-              "Re-Test"
-            )}
+            {isLoading && <LoaderIcon />}
+            Submit
           </button>
-        ) : (
           <button
-            disabled={isLoading || isReady || timerExpired}
-            onClick={handleSubmit}
-            className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
+            onClick={() => {
+              router.reload();
+            }}
+            className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
           >
-            {isLoading ? (
-              <>
-                <div
-                  className="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                  role="status"
-                  aria-label="loading"
-                >
-                  <span className="sr-only">Loading...</span>
-                </div>
-                Loading...
-              </>
-            ) : (
-              "Submit"
-            )}
+            Reset
           </button>
-        )}
+        </div>
         <GlobalPagination />
       </div>
     </>

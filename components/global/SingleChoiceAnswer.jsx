@@ -89,15 +89,24 @@ function SingleChoiceAnswer({
           })}
         </div>
         <div className="flex items-center justify-between mt-4">
-          <button
-            onClick={handelSubmit}
-            disabled={loading || timerExpired || isReady}
-            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
-          >
-            {" "}
-            {loading && <LoaderIcon />}
-            Submit
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handelSubmit}
+              disabled={loading || isReady}
+              className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
+            >
+              {loading && <LoaderIcon />}
+              Submit
+            </button>
+            <button
+              onClick={() => {
+                router.reload();
+              }}
+              className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
+            >
+              Reset
+            </button>
+          </div>
           <GlobalPagination />
         </div>
       </div>
