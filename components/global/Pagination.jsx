@@ -1,42 +1,30 @@
+import { useRouter } from "next/router";
+import { LoaderIcon } from "react-hot-toast";
 import GlobalPagination from "./GlobalPagination";
 
-const Pagination = ({
-  HandleSubmit,
-  audioData,
-  handleStartRecording,
-  isLoading,
-}) => {
+const Pagination = ({ HandleSubmit, isLoading }) => {
+  const router = useRouter();
   return (
     <div className="flex gap-4 items-center justify-between mt-3">
       <div className="flex items-center gap-x-2">
-        <button
-          disabled={isLoading}
-          onClick={HandleSubmit}
-          className="py-2 px-3 disabled:opacity-50 flex items-center gap-1 rounded-[22px] bg-blue text-white font-semibold text-sm md:text-lg"
-        >
-          {isLoading ? (
-            <>
-              <div
-                className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-                role="status"
-                aria-label="loading"
-              >
-                <span className="sr-only">Loading...</span>
-              </div>
-              Loading...
-            </>
-          ) : (
-            "Submit"
-          )}
-        </button>
-        {audioData && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={handleStartRecording}
-            className="py-2 px-3 rounded-[22px] bg-primary text-white font-semibold text-sm md:text-lg"
+            onClick={HandleSubmit}
+            disabled={isLoading}
+            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
           >
-            Re-Test
+            {isLoading && <LoaderIcon />}
+            Submit
           </button>
-        )}
+          <button
+            onClick={() => {
+              router.reload();
+            }}
+            className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
+          >
+            Reset
+          </button>
+        </div>
       </div>
       <GlobalPagination />
     </div>
