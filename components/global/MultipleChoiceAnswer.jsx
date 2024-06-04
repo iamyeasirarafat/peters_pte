@@ -21,7 +21,6 @@ function MultipleChoiceAnswer({
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
   const [result, setResult] = useState(null);
-  console.log("answerData", answerData);
   useEffect(() => {
     const countdownInterval = setInterval(() => {
       if (seconds > 0) {

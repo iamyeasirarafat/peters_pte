@@ -85,7 +85,7 @@ export default Page;
 
 const FillBlanksBlock = ({
   typingTime,
-  result,
+
   setReFetch,
   api,
   sentence,
@@ -98,12 +98,13 @@ const FillBlanksBlock = ({
   const initialMinutes = typingTime;
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
+  const [result, setResult] = useState(null);
   const [timerExpired, setTimerExpired] = useState(false);
-  useEffect(() => {
-    if (sentence) {
-      setAnswers(sentence.map((_, index) => ({ index, value: "" })));
-    }
-  }, [sentence]);
+  // useEffect(() => {
+  //   if (sentence) {
+  //     setAnswers(sentence.map((_, index) => ({ index, value: "" })));
+  //   }
+  // }, [sentence]);
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -153,11 +154,15 @@ const FillBlanksBlock = ({
   const handelSubmit = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.post(api, {
-        answers: [...answers.map((item) => item.value)],
+      // get index wise array of string
+      answers.sort((a, b) => a.index - b.index);
+      const x = answers.map((obj) => obj.value);
+      const { data } = await axios.post(api, {
+        answers: x,
         time_taken: timeTakenInMinutes,
       });
-      toast.success(res.data.message || "Submitted Successfully");
+      setResult(data);
+      toast.success(data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
       setIsLoading(false);
     } catch (error) {
@@ -167,32 +172,32 @@ const FillBlanksBlock = ({
   };
 
   const abc = {
-    1: "A",
-    2: "B",
-    3: "C",
-    4: "D",
-    5: "E",
-    6: "F",
-    7: "G",
-    8: "H",
-    9: "I",
-    10: "J",
-    11: "K",
-    12: "L",
-    13: "M",
-    14: "N",
-    15: "O",
-    16: "P",
-    17: "Q",
-    18: "R",
-    19: "S",
-    20: "T",
-    21: "U",
-    22: "V",
-    23: "W",
-    24: "X",
-    25: "Y",
-    26: "Z",
+    A: 1,
+    B: 2,
+    C: 3,
+    D: 4,
+    E: 5,
+    F: 6,
+    G: 7,
+    H: 8,
+    I: 9,
+    J: 10,
+    K: 11,
+    L: 12,
+    M: 13,
+    N: 14,
+    O: 15,
+    P: 16,
+    Q: 17,
+    R: 18,
+    S: 19,
+    T: 20,
+    U: 21,
+    V: 22,
+    W: 23,
+    X: 24,
+    Y: 25,
+    Z: 26,
   };
 
   //Drag and drop functionality
@@ -205,7 +210,6 @@ const FillBlanksBlock = ({
   const handleDragOver = (e) => {
     e.preventDefault();
   };
-
   const handleDrop = (e) => {
     e.preventDefault();
     const data = e.dataTransfer.getData("text/plain");
@@ -221,19 +225,33 @@ const FillBlanksBlock = ({
     newElement.innerText = data;
     e.target.appendChild(newElement);
     draggedElement.remove();
+    setAnswers((prev) => prev.filter((item) => item.value !== data));
     setIsDragging(false);
   };
+  const score_details = result?.score?.score_details;
   return (
     <>
       <div className="border border-primary rounded-lg p-2">
         <p className="text-xl font-medium">
           {Array.isArray(sentence) &&
             sentence.map((word, index) => {
+              const correct =
+                result &&
+                score_details.find(
+                  (item) => abc[item.index] === index + 1 && item.correct
+                );
+              const wrong =
+                result &&
+                score_details.find(
+                  (item) => abc[item.index] === index + 1 && !item.correct
+                );
               return (
                 <span key={index}>
-                  {word}
+                  <span>{word}</span>
                   {index !== sentence.length - 1 && (
                     <FillBlankInput
+                      right={correct}
+                      wrong={wrong}
                       index={index}
                       setAnswer={updateAnswer}
                       handleDragStart={handleDragStart}
@@ -255,7 +273,7 @@ const FillBlanksBlock = ({
             id={item}
             className={`${
               isDragging ? "opacity-50" : ""
-            } border border-primary cursor-move font-medium bg-[#FFF4EB] capitalize px-5  rounded-3xl py-2`}
+            } border border-primary cursor-move font-medium bg-[#FFF4EB]  px-5  rounded-3xl py-2`}
             draggable="true"
             onDragStart={handleDragStart}
             key={i}
@@ -289,11 +307,14 @@ const FillBlanksBlock = ({
   );
 };
 const FillBlankInput = ({
+  right,
+  wrong,
   index,
   setAnswer,
   setIsDragging,
   handleDragStart,
 }) => {
+  console.log(right, wrong);
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -320,13 +341,17 @@ const FillBlankInput = ({
 
     setIsDragging(false);
   };
-
+  const bg = right
+    ? "bg-green-200 border-0"
+    : wrong
+    ? "bg-rose-200 border-0"
+    : "";
   return (
     <div
       id="dropArea"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      className="px-2 w-44 border rounded-lg h-8 mx-4 border-[#949494] inline-block"
+      className={`px-2 w-44 border rounded-lg h-7 mx-4 mt-2 border-[#949494] inline-block ${bg}`}
     ></div>
   );
 };

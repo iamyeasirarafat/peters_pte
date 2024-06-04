@@ -106,6 +106,9 @@ export const FillBlanksBlock = ({
   // }, [sentence]);
 
   useEffect(() => {
+    setAnswers([]);
+  }, [id]);
+  useEffect(() => {
     const countdownInterval = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1);
@@ -138,7 +141,6 @@ export const FillBlanksBlock = ({
         ...prev.slice(0, existingIndex),
         { index, value },
         ...prev.slice(existingIndex + 1),
-        7,
       ]);
     } else {
       // If index does not exist, add a new entry
@@ -154,10 +156,11 @@ export const FillBlanksBlock = ({
   const handelSubmit = async () => {
     try {
       setIsLoading(true);
+      // get index wise array of string
+      answers.sort((a, b) => a.index - b.index);
+      const x = answers.map((obj) => obj.value);
       const res = await axios.post(api, {
-        answers: [
-          ...answers.map((item) => (item.value ? item.value : undefined)),
-        ],
+        answers: x,
         time_taken: timeTakenInMinutes,
       });
       toast.success(res.data.message || "Submitted Successfully");
