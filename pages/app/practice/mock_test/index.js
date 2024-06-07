@@ -4,14 +4,11 @@ import { GoTrash } from "react-icons/go";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
-
-// function Index() {
-//   return <DashboardLayout>
-//     <Assigned_Practice />
-//   </DashboardLayout>;
-// }
-
-// export default Index;
+import { formatDateTime } from "@/utils/formatDateTime";
+import TablePagination from "@/components/TablePagination";
+import Loading from "@/components/Loading";
+import Modal from "@/components/Modal";
+import toast, { LoaderIcon } from "react-hot-toast";
 
 function Index() {
   const [testCount, setTestCount] = useState(0);
@@ -105,41 +102,159 @@ const MocktestCart = ({ item }) => {
 };
 
 const MockTestResultList = () => {
+  const [reFetch, setReFetch] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [mockTestResultList, setMockTestResultList] = useState({});
+  const router = useRouter();
+  const [pageNumber, setPageNumber] = useState(1);
+  const pageLimit = 5;
+
+  // get mock test result list
+
+  useEffect(() => {
+    const getMockTestResultList = async () => {
+      try {
+        setLoading(false);
+        const res = await axios.get(
+          `/mocktest/practiced?page=${pageNumber}&limit=${pageLimit}`
+        );
+        setMockTestResultList(res?.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
+    router.isReady && getMockTestResultList();
+  }, [router.isReady, pageNumber, reFetch]);
+
   return (
     <div className="py-5">
       <p className="text-lg font-extrabold mb-3">My Test</p>
       {/*  */}
-      <MockTestResultCard />
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="space-y-2">
+          {mockTestResultList?.results?.map((item, i) => (
+            <MockTestResultCard key={i} data={item} setReFetch={setReFetch} />
+          ))}
+        </div>
+      )}
+      <TablePagination
+        pageNumber={pageNumber}
+        totalPage={Math.ceil(mockTestResultList?.total / pageLimit)}
+        prevNext={setPageNumber}
+      />
     </div>
   );
 };
 
-const MockTestResultCard = () => {
+const MockTestResultCard = ({ data, setReFetch }) => {
+  const [openDeleteModal, setOpenDeleteModal] = useState({
+    state: false,
+    data: {},
+  });
   const router = useRouter();
   return (
     <div className="flex items-center justify-between p-3 border border-primary rounded-[15px]">
       <div className="space-y-1">
-        <p className="text-base font-semibold text-gray">
-          VIP Full Test Mock Test 38A (New 2h Format)
+        <p className="text-base font-semibold text-gray capitalize">
+          {data?.mocktest?.title}
         </p>
         <p className="text-sm text-gray opacity-75">
-          Submitted at: 2024-05-26 16:58
+          Submitted At: {formatDateTime(data?.created_at, "full")}
         </p>
       </div>
       {/*  */}
       <div className="flex items-center gap-x-3">
         {/* delete button */}
-        <button className="w-8 h-8 rounded-full bg-red text-white flex items-center justify-center">
+        <button
+          onClick={() => setOpenDeleteModal({ state: true, data: data })}
+          className="w-8 h-8 rounded-full bg-red text-white flex items-center justify-center"
+        >
           <GoTrash />
         </button>
         {/* check result */}
         <button
-          onClick={() => router.push("/app/practice/mock_test/result")}
+          onClick={() =>
+            router.push({
+              pathname: "/app/practice/mock_test/result",
+              query: {
+                id: data?.mocktest?.id,
+                aid: data?.aid,
+                type: data?.type,
+              },
+            })
+          }
           className="py-2 px-3 bg-primary text-white font-medium rounded-full"
         >
           Check Result
         </button>
       </div>
+      {openDeleteModal && (
+        <MockTestResultDeleteModal
+          openDeleteModal={openDeleteModal}
+          setOpenDeleteModal={setOpenDeleteModal}
+          setReFetch={setReFetch}
+        />
+      )}
     </div>
+  );
+};
+
+const MockTestResultDeleteModal = ({
+  openDeleteModal,
+  setOpenDeleteModal,
+  setReFetch,
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.delete(
+        `/mocktest/${openDeleteModal?.data?.type}/${openDeleteModal?.data?.mocktest?.id}/answer/${openDeleteModal?.data?.aid}`
+      );
+      toast.success(res?.data?.message || "Deleted Successfully");
+      setLoading(false);
+      setOpenDeleteModal({ state: false, data: {} });
+      setReFetch((prev) => !prev);
+    } catch (error) {
+      setLoading(false);
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      console.log(error);
+    }
+  };
+  return (
+    <Modal
+      title="Mock Test Result Delete"
+      visible={openDeleteModal?.state}
+      onClose={() => setOpenDeleteModal({ state: false, data: {} })}
+    >
+      <div>
+        <h2 className="text-2xl font-medium capitalize">
+          {openDeleteModal?.data?.mocktest?.title}
+        </h2>
+        <p className="text-base font-semibold">
+          Are you sure you want to delete this mock test result?
+        </p>
+        {/* button */}
+        <div className="flex items-center justify-end gap-x-3 mt-5">
+          <button
+            onClick={handleDelete}
+            className="py-2 px-7 bg-primary text-white font-medium rounded-full flex items-center gap-x-2"
+          >
+            {loading && <LoaderIcon />} Yes
+          </button>
+          <button
+            onClick={() => setOpenDeleteModal({ state: false, data: {} })}
+            className="py-2 px-7 bg-red text-white font-medium rounded-full"
+          >
+            No
+          </button>
+        </div>
+      </div>
+    </Modal>
   );
 };

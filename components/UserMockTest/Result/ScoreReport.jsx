@@ -2,14 +2,12 @@ import { useState } from "react";
 import Score from "./Score";
 import ScoreTable from "./ScoreTable";
 
-const scoreReportTab = [
-  "score report",
-  "speaking",
-  "reading",
-  "writing",
-  "listening",
-];
-const ScoreReport = () => {
+const ScoreReport = ({ data }) => {
+  const scoreReportTab = ["score report"];
+  if (data?.score?.details) {
+    scoreReportTab.push(...Object.keys(data.score.details));
+  }
+
   const [activeTab, setActiveTab] = useState("score report");
   return (
     <div className="bg-white border border-primary rounded-[15px]">
@@ -33,7 +31,11 @@ const ScoreReport = () => {
       {/* result */}
       <div className="px-6">
         {activeTab === "score report" ? (
-          <Score setActiveTab={setActiveTab} />
+          <Score
+            setActiveTab={setActiveTab}
+            scoreReportTa={scoreReportTab}
+            data={data}
+          />
         ) : (
           <ScoreTable />
         )}
