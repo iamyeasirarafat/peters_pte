@@ -70,7 +70,7 @@ const ResultScoreDetails = ({ data }) => {
 
   return (
     <div className="mt-10 bg-white border border-primary rounded-[15px]">
-      <p className="text-base font-semibold text-gray p-6">
+      <p className="text-base font-semibold text-gray p-6 capitalize">
         {data?.title} - Answer & Score Info
       </p>
       <hr className="border border-secondary" />
