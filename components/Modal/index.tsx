@@ -69,7 +69,9 @@ const Modal = ({
           >
             {title ? (
               <>
-                <div className="p-5 pr-12 font-extrabold text-h6 ">{title}</div>
+                <div className="p-5 pr-12 font-extrabold text-h6 capitalize">
+                  {title}
+                </div>
                 <div className="pt-4 px-5 pb-7">{children}</div>
               </>
             ) : (
