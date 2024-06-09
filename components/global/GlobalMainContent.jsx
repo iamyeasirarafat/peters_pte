@@ -53,7 +53,7 @@ const GlobalMainContent = ({ children, data }) => {
 
 export default GlobalMainContent;
 
-const NoteModal = ({ open, setOpen, title, id }) => {
+export const NoteModal = ({ open, setOpen, title, id }) => {
   const heading = `${title} | Q No. #${id}`;
   const router = useRouter();
   const [note, setNote] = useState("");
