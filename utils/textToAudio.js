@@ -29,16 +29,12 @@ const useTextToAudio = () => {
     { value: 1.2, label: "Very Fast" },
   ];
   const audioSpeaker = [
-    { value: "US_Male.wav", label: "US Male" },
-    { value: "US_Female.wav", label: "US Female" },
-    { value: "UK_Male.wav", label: "UK Male" },
-    { value: "UK_Female.wav", label: "UK Female" },
-    { value: "IN_Male.wav", label: "Indian Male" },
-    { value: "IN_Female.wav", label: "Indian Female" },
-    { value: "AU_Male.wav", label: "Australian Male" },
-    { value: "AU_Female.wav", label: "Australian Female" },
-    { value: "CN_Male.wav", label: "Canadian Male" },
-    { value: "CN_Female.wav", label: "Canadian Female" },
+    { value: "US(male).mp3", label: "US Male" },
+    { value: "US(female).mp3", label: "US Female" },
+    { value: "UK.mp3", label: "UK" },
+    { value: "IN.mp3", label: "Indian" },
+    { value: "AU.mp3", label: "Australian" },
+    { value: "CA.mp3", label: "Canadian" },
   ];
   const [selectedAudioSpeed, setSelectedAudioSpeed] = useState({
     value: 1.0,
@@ -52,11 +48,17 @@ const useTextToAudio = () => {
   const getAudio = async (text) => {
     try {
       setLoading(true);
-      const { data } = await axios.post("/text_to_audio", {
-        text: text,
-        speaker: selectedAudioSpeaker.value,
-        speed: selectedAudioSpeed.value,
-      });
+      const { data } = await axios.post(
+        "/text_to_audio",
+        {
+          text: text,
+          speaker: selectedAudioSpeaker.value,
+          speed: selectedAudioSpeed.value,
+        },
+        {
+          timeout: 600000, // 10 minutes in milliseconds
+        }
+      );
       const { blob, url } = base64ToAudio(data?.audio);
       setAudio(blob);
       setAudioSrc(url);
@@ -66,7 +68,6 @@ const useTextToAudio = () => {
       setError(error);
     }
   };
-
   const SelectSpeedCompo = () => {
     return (
       <div className="w-full flex gap-x-3 my-4">
