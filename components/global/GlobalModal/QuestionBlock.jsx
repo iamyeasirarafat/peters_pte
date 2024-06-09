@@ -2,11 +2,14 @@ import ButtonFill from "@/components/global/ButtonFill";
 import ButtonOutline from "@/components/global/ButtonOutline";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { NoteModal } from "../GlobalMainContent";
+import { useState } from "react";
 const QuestionBlock = ({ data, toggleModal }) => {
   // pushing id to search params
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [open, setOpen] = useState(false);
 
   const addParam = (event = ChangeEvent) => {
     const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -52,7 +55,12 @@ const QuestionBlock = ({ data, toggleModal }) => {
           )}
         </div>
         <div className="space-x-5">
-          <button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(true);
+            }}
+          >
             <div className="w-[28px] h-[29px]">
               <div className="w-full h-full relative">
                 <Image
@@ -78,6 +86,14 @@ const QuestionBlock = ({ data, toggleModal }) => {
           </button>
         </div>
       </div>
+      {open && (
+        <NoteModal
+          open={open}
+          setOpen={setOpen}
+          title={data?.title}
+          id={data?.id}
+        />
+      )}
     </div>
   );
 };
