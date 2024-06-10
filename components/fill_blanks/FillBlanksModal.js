@@ -1,6 +1,5 @@
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
-import { MdOutlineFileDownload } from "react-icons/md";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 
@@ -19,7 +18,7 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
               </p>
               <p className="text-gray text-[28px] font-medium">80</p>
             </div>
-            <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" />
+            {/* <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" /> */}
             {/* close modal */}
             <button
               onClick={() => setOpen(false)}

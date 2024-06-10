@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { LoaderIcon } from "react-hot-toast";
 import { GrClose } from "react-icons/gr";
-import { MdOutlineFileDownload } from "react-icons/md";
 import GlobalPagination from "../../../../../components/global/GlobalPagination";
 import DashboardLayout from "../../../layout";
 
@@ -259,7 +258,7 @@ const ReorderModal = ({ apiData, data, open, setOpen }) => {
               </p>
               <p className="text-gray text-[28px] font-medium">80</p>
             </div>
-            <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" />
+            {/* <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" /> */}
             {/* close modal */}
             <button
               onClick={() => setOpen(false)}

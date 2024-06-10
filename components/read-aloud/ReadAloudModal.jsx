@@ -1,8 +1,10 @@
 import wordCount from "@/utils/wordCount";
 import { useRouter } from "next/router";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import toast from "react-hot-toast";
 import { GrClose } from "react-icons/gr";
 import { MdOutlineFileDownload } from "react-icons/md";
+import AudioDownloader from "../../utils/audioDownloader";
 import AudioVisualizer from "../AudioVisualizer";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
@@ -18,6 +20,7 @@ const ReadAloudModal = ({
   readAloud,
   repeat_sentence,
 }) => {
+  console.log("result", result);
   const router = useRouter();
   const id = router.query.que_no;
   const speakingScore = Math.round(result?.scores?.speaking) || 0;
@@ -26,6 +29,7 @@ const ReadAloudModal = ({
   const fluency = Math.round(result?.scores?.fluency) || 0;
   const pronunciation = Math.round(result?.scores?.pronunciation) || 0;
   const listening = Math.round(result?.scores?.listening) || 0;
+  const downloadAudio = AudioDownloader();
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -40,7 +44,16 @@ const ReadAloudModal = ({
               </p>
               <p className="text-gray text-[28px] font-medium">80</p>
             </div>
-            <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" />
+            {result?.audio && (
+              <MdOutlineFileDownload
+                onClick={() => {
+                  downloadAudio(result?.audio)
+                    .then()
+                    .catch((error) => toast.error("Failed to download audio"));
+                }}
+                className="text-4xl text-white cursor-pointer"
+              />
+            )}
             {/* close modal */}
             <button
               onClick={() => setOpen(false)}
@@ -121,8 +134,13 @@ const ReadAloudModal = ({
             )}
             {/* Enabling Skill  */}
             <div
-              className={`${answer_question ? "col-span-12" : describe_image ? "col-span-9" : "col-span-6"
-                } w-full border border-primary rounded-[13px]`}
+              className={`${
+                answer_question
+                  ? "col-span-12"
+                  : describe_image
+                  ? "col-span-9"
+                  : "col-span-6"
+              } w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
@@ -224,20 +242,17 @@ const ReadAloudModal = ({
               </div>
             </>
           )}
-          {describe_image || retell_lecture && (
-
-            <div className="w-full border border-primary rounded-[13px] mt-5">
-              <div className="bg-secondary rounded-t-[13px] py-1 px-2">
-                <p className="text-gray text-xl">User response</p>
+          {describe_image ||
+            (retell_lecture && (
+              <div className="w-full border border-primary rounded-[13px] mt-5">
+                <div className="bg-secondary rounded-t-[13px] py-1 px-2">
+                  <p className="text-gray text-xl">User response</p>
+                </div>
+                <div className="px-7 text-left  py-5">
+                  {result?.scores?.user_speech}
+                </div>
               </div>
-              <div className="px-7 text-left  py-5">
-                {
-                  result?.scores?.user_speech
-                }
-              </div>
-            </div>
-
-          )}
+            ))}
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023
           </p>
