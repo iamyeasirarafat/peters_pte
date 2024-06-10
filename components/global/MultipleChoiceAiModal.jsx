@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
-import { MdOutlineFileDownload } from "react-icons/md";
 import ReusableModal from "./ReusableModal";
 
 const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
@@ -24,7 +23,7 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
               </p>
               <p className="text-gray text-[28px] font-medium">80</p>
             </div>
-            <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" />
+            {/* <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" /> */}
             {/* close modal */}
             <button
               onClick={() => setOpen(false)}

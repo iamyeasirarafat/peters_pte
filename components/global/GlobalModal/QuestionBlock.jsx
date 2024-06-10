@@ -1,15 +1,29 @@
 import ButtonFill from "@/components/global/ButtonFill";
 import ButtonOutline from "@/components/global/ButtonOutline";
+import axios from "axios";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { CiBookmark } from "react-icons/ci";
+import { IoBookmark } from "react-icons/io5";
 import { NoteModal } from "../GlobalMainContent";
-import { useState } from "react";
-const QuestionBlock = ({ data, toggleModal }) => {
+const QuestionBlock = ({ data, toggleModal, finalPath }) => {
   // pushing id to search params
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+
+  //checking if the question is bookmarked
+  useEffect(() => {
+    if (data?.self_bookmark) {
+      setBookmarked(true);
+    } else {
+      setBookmarked(false);
+    }
+  }, [data]);
 
   const addParam = (event = ChangeEvent) => {
     const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -72,17 +86,28 @@ const QuestionBlock = ({ data, toggleModal }) => {
               </div>
             </div>
           </button>
-          <button>
-            <div className="w-[17px] h-[28px]">
-              <div className="w-full h-full relative">
-                <Image
-                  className="object-cover"
-                  src="/icons/bookmark_primary.svg"
-                  fill
-                  alt="bookmark"
-                />
-              </div>
-            </div>
+          <button
+            onClick={async (e) => {
+              e.stopPropagation();
+              try {
+                await axios(`/practice/${finalPath}/${data?.id}/bookmark`);
+                setBookmarked(!bookmarked);
+                toast.success(
+                  `${bookmarked ? "Bookmark Removed" : "Bookmark Added"}`,
+                  {
+                    icon: bookmarked ? "🗑️" : "📌",
+                  }
+                );
+              } catch (error) {
+                toast.error("Something went wrong");
+              }
+            }}
+          >
+            {bookmarked ? (
+              <IoBookmark className="text-primary text-3xl" />
+            ) : (
+              <CiBookmark className="text-primary text-3xl" />
+            )}
           </button>
         </div>
       </div>
