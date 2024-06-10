@@ -47,7 +47,7 @@ const Index = () => {
         icon: "RL",
         Items: count?.retell_sentence || 0,
         bg: "#CF8800",
-        url: "/admin/discussion/retell_sentence",
+        url: "/admin/discussion/retell_lecture",
       },
     ],
     Writing_Test: [
@@ -56,14 +56,14 @@ const Index = () => {
         icon: "SWT",
         Items: count?.summarize_written || 0,
         bg: "#F2B277",
-        url: "/admin/discussion/summarize_written",
+        url: "/admin/discussion/summarize",
       },
       {
         name: "Write Essay",
         icon: "WE",
         Items: count?.write_easy || 0,
         bg: "#F2B277",
-        url: "/admin/discussion/write_easy",
+        url: "/admin/discussion/write_essay",
       },
     ],
     Reading_Test: [
@@ -79,7 +79,7 @@ const Index = () => {
         icon: "MCM",
         Items: count?.multi_choice_reading_multi_answer || 0,
         bg: "#4399FF",
-        url: "/admin/discussion/multi_choice_reading_multi_answer",
+        url: "/admin/discussion/multi_choice_reading_multiple",
       },
       {
         name: "Re-order Paragraphs",
@@ -100,7 +100,7 @@ const Index = () => {
         icon: "MCS",
         Items: count?.multi_choice_reading_single_answer || 0,
         bg: "#4399FF",
-        url: "/admin/discussion/multi_choice_reading_single_answer",
+        url: "/admin/discussion/multi_choice_reading_single",
       },
     ],
     Listening_Test: [
@@ -109,14 +109,14 @@ const Index = () => {
         icon: "SST",
         Items: count?.summarize_spoken || 0,
         bg: "#5F646D",
-        url: "/admin/discussion/summarize_spoken",
+        url: "/admin/discussion/spoken_text",
       },
       {
         name: "Multiple Choice (Multiple)",
         icon: "MCM",
         Items: count?.multi_choice_multi_answer || 0,
         bg: "#5F646D",
-        url: "/admin/discussion/multi_choice_multi_answer",
+        url: "/admin/discussion/multi_choice_multiple",
       },
       {
         name: "Highlight Correct Summary",
@@ -130,14 +130,14 @@ const Index = () => {
         icon: "FIB",
         Items: count?.blank_listening || 0,
         bg: "#5F646D",
-        url: "/admin/discussion/blank_listening",
+        url: "/admin/discussion/blank",
       },
       {
         name: "Multiple Choice (Single)",
         icon: "MCS",
         Items: count?.multi_choice_single_answer || 0,
         bg: "#5F646D",
-        url: "/admin/discussion/multi_choice_single_answer",
+        url: "/admin/discussion/multi_choice_single",
       },
       {
         name: "Select Missing Word",
