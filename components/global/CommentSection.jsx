@@ -64,10 +64,19 @@ function CommentSection({ discussionId, discussionName }) {
 
   const pageName = router?.isReady && getTransformedPageName(pathname, router);
 
+  let discussionPage =
+    discussionName === "multi_choice_multiple" ||
+    discussionName === "multi_choice_single"
+      ? "multi_choice"
+      : discussionName === "multi_choice_reading_multiple" ||
+        discussionName === "multi_choice_reading_single"
+      ? "multi_choice_reading"
+      : discussionName;
+
   useEffect(() => {
     try {
       const getComment = async () => {
-        const url = `/${discussionName ? discussionName : pageName}/${
+        const url = `/${discussionPage ? discussionPage : pageName}/${
           discussionId ? discussionId : id
         }/discussions`;
         const res = await axios.get(url);
@@ -77,11 +86,11 @@ function CommentSection({ discussionId, discussionName }) {
     } catch (error) {
       toast.error(error?.message);
     }
-  }, [id, fetch, pathname, discussionName, discussionId]);
+  }, [id, fetch, pathname, discussionPage, discussionId]);
   return (
     <>
       {/*add comment modal open */}
-      {!discussionName && (
+      {!discussionPage && (
         <button
           onClick={() => setOpen({ state: true, id: id })}
           className="py-2 px-3 bg-primary text-gray text-base rounded-[15px] flex items-center gap-x-2 mb-2"
@@ -132,6 +141,8 @@ function CommentSection({ discussionId, discussionName }) {
                     fetch={fetch}
                     setFetch={setFetch}
                     pathname={pathname}
+                    discussionPage={discussionPage}
+                    discussionId={discussionId}
                   />
                 )}
               </div>
@@ -164,15 +175,24 @@ const CommentBlock = ({
   fetch,
   setFetch,
   pathname,
+  discussionPage,
+  discussionId,
 }) => {
   // comment reply post start =====================================
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
-  const pageName = router?.isReady && getTransformedPageName(pathname, router);
+  const pageName =
+    router?.isReady && !discussionPage
+      ? getTransformedPageName(pathname, router)
+      : discussionPage;
 
   const onSubmit = async (data) => {
+    if (!pageName) {
+      toast.error("Page name is not set. Please try again.");
+      return;
+    }
     const replyData = {
-      [pageName]: questionId,
+      [pageName]: questionId || discussionId,
       parent: parentId,
       body: data?.body,
     };
