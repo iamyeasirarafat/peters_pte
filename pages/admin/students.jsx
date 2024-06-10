@@ -89,7 +89,7 @@ const EmptyPage = ({ setStatus }) => {
 export const AddStudentModalAdmin = ({ visible, setVisible, setStatus }) => {
   const plans = [
     {
-      id: "2",
+      id: null,
       name: "Free Plan",
     },
   ];

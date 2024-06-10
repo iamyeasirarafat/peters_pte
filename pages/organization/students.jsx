@@ -93,7 +93,7 @@ const EmptyPage = ({ setStatus }) => {
 export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
   const plans = [
     {
-      id: "2",
+      id: null,
       name: "Free Plan",
     },
   ];
@@ -111,9 +111,9 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
         const formattedGroup = [
           {
             id: null,
-            name: "None"
+            name: "None",
           },
-          ...fetchedGroups
+          ...fetchedGroups,
         ];
         setGroups(formattedGroup);
       } catch (error) {
@@ -130,7 +130,7 @@ export const AddStudentModal = ({ visible, setVisible, setStatus }) => {
     watch,
     formState: { errors },
   } = useForm({});
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
