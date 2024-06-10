@@ -2,9 +2,11 @@ import { toggleModal as modalSlice } from "@/redux/slice/globalModalSlice";
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
+import { getPageName } from "../../../utils/getPageName";
 import QuestionBlock from "./QuestionBlock";
 import QuestionNavigation from "./QuestionNavigation";
 
@@ -42,6 +44,34 @@ const GlobalModal = () => {
       setFilteredData(filter);
     }
   }, [data, questionType]);
+
+  //creating final path for the api
+  const router = useRouter();
+  const pageName = getPageName(router?.pathname);
+  const finalPath =
+    pageName === "summarize_written"
+      ? "summarize"
+      : pageName === "read_write_blanks"
+      ? "read_write_blank"
+      : pageName === "multiple_answers" &&
+        router?.pathname.includes("reading_test")
+      ? "multi_choice_reading"
+      : pageName === "single_answer" &&
+        router?.pathname.includes("reading_test")
+      ? "multi_choice_reading"
+      : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
+      ? "blank_reading"
+      : pageName === "multiple_answers" &&
+        router?.pathname.includes("listening_test")
+      ? "multi_choice"
+      : pageName === "single_answer" &&
+        router?.pathname.includes("listening_test")
+      ? "multi_choice"
+      : pageName === "fill_blanks" &&
+        router?.pathname.includes("listening_test")
+      ? "blank"
+      : pageName;
+
   return (
     <Transition.Root show={state.visible} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={toggleModal}>
@@ -118,6 +148,7 @@ const GlobalModal = () => {
                         {/* Question */}
                         {filteredData?.map((item, i) => (
                           <QuestionBlock
+                            finalPath={finalPath}
                             toggleModal={toggleModal}
                             key={i}
                             data={item}

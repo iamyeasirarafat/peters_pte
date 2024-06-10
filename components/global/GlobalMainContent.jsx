@@ -1,14 +1,49 @@
-import React, { useEffect, useState } from "react";
-import { CiBookmark, CiFileOn } from "react-icons/ci";
-import Modal from "../Modal";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { getPageName } from "../../utils/getPageName";
+import React, { useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
+import { CiBookmark, CiFileOn } from "react-icons/ci";
+import { IoBookmark } from "react-icons/io5";
+import { getPageName } from "../../utils/getPageName";
 import Loading from "../Loading";
-
+import Modal from "../Modal";
 const GlobalMainContent = ({ children, data }) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+  const pageName = getPageName(router?.pathname);
+  const finalPath =
+    pageName === "summarize_written"
+      ? "summarize"
+      : pageName === "read_write_blanks"
+      ? "read_write_blank"
+      : pageName === "multiple_answers" &&
+        router?.pathname.includes("reading_test")
+      ? "multi_choice_reading"
+      : pageName === "single_answer" &&
+        router?.pathname.includes("reading_test")
+      ? "multi_choice_reading"
+      : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
+      ? "blank_reading"
+      : pageName === "multiple_answers" &&
+        router?.pathname.includes("listening_test")
+      ? "multi_choice"
+      : pageName === "single_answer" &&
+        router?.pathname.includes("listening_test")
+      ? "multi_choice"
+      : pageName === "fill_blanks" &&
+        router?.pathname.includes("listening_test")
+      ? "blank"
+      : pageName;
+  //checking if the question is bookmarked
+  useEffect(() => {
+    if (data?.self_bookmark) {
+      setBookmarked(true);
+    } else {
+      setBookmarked(false);
+    }
+  }, [data]);
+
   return (
     <div className="relative border border-primary rounded-[15px] mt-12">
       {/* tab button */}
@@ -35,7 +70,28 @@ const GlobalMainContent = ({ children, data }) => {
             title="note"
             className="text-primary text-3xl cursor-pointer"
           />
-          <CiBookmark className="text-3xl text-primary" />
+          <button
+            onClick={async () => {
+              try {
+                await axios(`/practice/${finalPath}/${data?.id}/bookmark`);
+                setBookmarked(!bookmarked);
+                toast.success(
+                  `${bookmarked ? "Bookmark Removed" : "Bookmark Added"}`,
+                  {
+                    icon: bookmarked ? "🗑️" : "📌",
+                  }
+                );
+              } catch (error) {
+                toast.error("Something went wrong");
+              }
+            }}
+          >
+            {bookmarked ? (
+              <IoBookmark className="text-primary text-3xl" />
+            ) : (
+              <CiBookmark className="text-primary text-3xl" />
+            )}
+          </button>
         </div>
       </div>
       <div className="px-4 md:px-6 py-2 space-y-5">{children}</div>
