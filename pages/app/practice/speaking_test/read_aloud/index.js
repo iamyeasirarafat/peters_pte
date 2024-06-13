@@ -3,7 +3,7 @@ import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
 import SideModal from "@/components/global/SideModal";
 import TextBlock from "@/components/global/TextBlock";
-import ReadAloudModal from "@/components/read-aloud/ReadAloudModal";
+import ReadAloudModal2 from "@/components/read-aloud/ReadAloudModal2";
 import RecordBlock from "@/components/read-aloud/RecordBlock";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -100,8 +100,7 @@ const Index = () => {
         </>
       )}
       {result && (
-        <ReadAloudModal
-          // readAloud
+        <ReadAloudModal2
           result={aiResult}
           open={openModal}
           setOpen={setOpenModal}
