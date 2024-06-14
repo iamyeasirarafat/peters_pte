@@ -134,13 +134,12 @@ const ReadAloudModal = ({
             )}
             {/* Enabling Skill  */}
             <div
-              className={`${
-                answer_question
-                  ? "col-span-12"
-                  : describe_image
+              className={`${answer_question
+                ? "col-span-12"
+                : describe_image
                   ? "col-span-9"
                   : "col-span-6"
-              } w-full border border-primary rounded-[13px]`}
+                } w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
@@ -213,33 +212,51 @@ const ReadAloudModal = ({
             </div>
           </div>
           {/* AI Speech to Text */}
-          {describe_image || retell_lecture || (
+          {retell_lecture || (
             <>
               <div className="w-full border border-primary rounded-[13px] mt-5">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                   <p className="text-gray text-xl">AI Speech to Text</p>
                 </div>
                 <div className="px-7 py-5">
-                  {answer_question ? (
-                    <p>{result?.scores?.user_speech}</p>
+                  {answer_question || describe_image ? (
+                    <p className="text-left">{result?.scores?.user_speech}</p>
                   ) : (
                     <WordHighlight words={result?.scores?.word_highlight} />
                   )}
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <p className="text-gray text-lg font-medium">
-                  Total: {result?.scores?.word_highlight?.length || 0} words
-                </p>
-                <p className="text-[#858736] text-lg font-medium">
-                  Good: {wordCount(result?.scores?.word_highlight, "correct")}{" "}
-                  words
-                </p>
-                <p className="text-red text-lg font-medium">
-                  Bad/Missed:{" "}
-                  {wordCount(result?.scores?.word_highlight, "missing")} words
-                </p>
-              </div>
+
+              {
+                !answer_question || !describe_image && <div className="flex items-center justify-between">
+                  <p className="text-gray text-lg font-medium">
+                    Total: {result?.scores?.word_highlight?.length || 0} words
+                  </p>
+                  <p
+                    style={{
+                      color: "green",
+                    }}
+                    className=" text-lg font-medium"
+                  >
+                    Good: {wordCount(result?.scores?.word_highlight, "correct")}{" "}
+                    words
+                  </p>
+                  <p
+                    style={{
+                      color: "orange",
+                    }}
+                    className=" text-lg font-medium"
+                  >
+                    Average:{" "}
+                    {wordCount(result?.scores?.word_highlight, "mispronounced")}{" "}
+                    words
+                  </p>
+                  <p className="text-red text-lg font-medium">
+                    Bad/Missed:{" "}
+                    {wordCount(result?.scores?.word_highlight, "missing")} words
+                  </p>
+                </div>
+              }
             </>
           )}
           {describe_image ||

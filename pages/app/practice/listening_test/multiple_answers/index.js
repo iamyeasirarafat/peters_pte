@@ -77,6 +77,7 @@ function Page() {
         />
       )}
       <MultipleChoiceAiModal
+        listining
         outOf={aiResult?.scores?.score_details?.right_options?.length || 0}
         result={aiResult}
         open={openScoreModal}

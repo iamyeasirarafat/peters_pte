@@ -69,6 +69,10 @@ function MultipleChoiceAnswer({
   };
   const right_options = result?.score?.score_details?.right_options;
   const wrong_answers = result?.score?.score_details?.wrong_answers;
+  //setting result empty when question will change
+  useEffect(() => {
+    setResult(null)
+  }, [id])
   return (
     <>
       <div className="p-5 rounded-[15px] border border-primary">
@@ -84,7 +88,6 @@ function MultipleChoiceAnswer({
         </div>
         <div className="space-y-2 mt-2">
           {answers?.map((answer, i) => {
-            console.log("answer", answer);
             const right = right_options?.includes(answer?.index);
             const wrong = wrong_answers?.includes(answer?.index);
             return (
@@ -105,11 +108,12 @@ function MultipleChoiceAnswer({
         <div className="flex items-center gap-2">
           <button
             onClick={handelSubmit}
-            disabled={loading || isReady}
+            disabled={loading || isReady || answerData?.length === 0 || result}
+
             className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
           >
             {loading && <LoaderIcon />}
-            Submit
+            {result ? "Submitted" : "Submit"}
           </button>
           <button
             onClick={() => {
@@ -156,9 +160,8 @@ export const Answer = ({
   return (
     <label
       htmlFor={answer?.index}
-      className={`${
-        right ? "bg-green-300" : wrong ? "bg-rose-300" : labelClass
-      }  rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
+      className={`${right ? "bg-green-300" : wrong ? "bg-rose-300" : labelClass
+        }  rounded-[15px] border border-primary p-3 flex items-center gap-x-3 cursor-pointer`}
     >
       <input
         className="border-2 border-primary focus:ring-transparent cursor-pointer w-7 h-7 rounded-md text-primary"

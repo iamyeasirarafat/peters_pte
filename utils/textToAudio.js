@@ -41,7 +41,7 @@ const useTextToAudio = () => {
     label: "Normal",
   });
   const [selectedAudioSpeaker, setSelectedAudioSpeaker] = useState({
-    value: "US_Male.wav",
+    value: "US(male).mp3",
     label: "US Male",
   });
   // Main function to get audio from text
