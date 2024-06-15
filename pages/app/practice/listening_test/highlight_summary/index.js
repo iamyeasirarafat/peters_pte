@@ -90,12 +90,9 @@ function Page() {
 
 export default Page;
 
-
-
-
+import ReusableModal from "@/components/global/ReusableModal";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
-import ReusableModal from "@/components/global/ReusableModal";
 
 const MultipleChoiceAiModal = ({ open, setOpen, result, outOf, listining }) => {
   const router = useRouter();
@@ -130,20 +127,22 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf, listining }) => {
         {/* Modal content */}
         <div className="p-5">
           {/* score */}
-          <div className="grid grid-cols-12 gap-x-6">
+          <div className="grid grid-cols-4 gap-6">
             {/* Total Score */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div
+              className={`$col-span-1 w-full border border-primary rounded-[13px]`}
+            >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">{listining ? "Listining" : "Reading"} Score</p>
+                <p className="text-gray text-xl">Reading Score</p>
               </div>
               {/* score point*/}
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={result?.scores?.score}
-                    text={result?.scores?.score}
+                    value={result?.scores.score || 0}
+                    text={result?.scores.score || 0}
+                    maxValue={result?.scores.max_score || 0}
                     strokeWidth={15}
-                    maxValue={outOf || 10}
                     styles={buildStyles({
                       textColor: "gray",
                       textSize: "20px",
@@ -152,21 +151,52 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf, listining }) => {
                     })}
                   />
                 </div>
-                <p className="text-gray text-xl mt-1">Out of {outOf || 0}</p>
+                <p className="text-gray text-xl mt-1">
+                  Out of {result?.scores.max_score || 0}
+                </p>
               </div>
             </div>
+
+            <div className="col-span-1 w-full border border-primary rounded-[13px]">
+              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                <p className="text-gray text-xl">Listening Score</p>
+              </div>
+              {/* score point*/}
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="w-32 h-w-32">
+                  <CircularProgressbar
+                    value={result?.scores.score || 0}
+                    text={result?.scores.score || 0}
+                    maxValue={result?.scores.max_score || 0}
+                    strokeWidth={15}
+                    styles={buildStyles({
+                      textColor: "gray",
+                      textSize: "20px",
+                      pathColor: "#ff8412",
+                      trailColor: "#f1f1f1",
+                    })}
+                  />
+                </div>
+                <p className="text-gray text-xl mt-1">
+                  Out of {result?.scores.max_score || 0}
+                </p>
+              </div>
+            </div>
+
             {/* Time Taken */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-2 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Time Taken</p>
               </div>
               {/* score point*/}
               <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
-                <p className="text-[60px] text-gray">0{result?.time_taken}</p>
+                <p className="text-[60px] text-gray">
+                  {result?.time_taken || "0.00"}
+                </p>
               </div>
             </div>
             {/* Correct answer */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-2 h-36 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Correct answer</p>
               </div>
@@ -178,7 +208,7 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf, listining }) => {
               </div>
             </div>
             {/* Your Answer */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-2 h-36 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Your Answer</p>
               </div>
@@ -194,27 +224,7 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf, listining }) => {
               </div>
             </div>
           </div>
-          {/* Your Response */}
-          {/* <div className="w-full border border-primary rounded-[13px] mt-4">
-            <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-              <p className="text-gray text-xl">Enabling Skill</p>
-            </div>
-            <div className="px-7 py-5">
-              <div className="w-full flex items-center justify-between gap-x-5">
-                <p className="text-gray text-xl w-3/12 text-start">Reading</p>
-                <div className="w-8/12">
-                  <LineProgressBar
-                    height={30}
-                    lineColor={"cream"}
-                    strokeWidth={result?.scores?.score * 50}
-                  />
-                </div>
-                <p className="text-gray w-1/12 text-xl">
-                  {result?.scores?.score}/2
-                </p>
-              </div>
-            </div>
-          </div> */}
+
           <p className="text-center mt-2 text-lightGray">
             This score will disappear on 02/08/2023
           </p>
@@ -224,12 +234,12 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf, listining }) => {
   );
 };
 
-
 const WordValue = ({ word, wrong }) => {
   return (
     <p
-      className={`text-[35px] text-gray ${wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
-        } capitalize leading-none  p-2.5 rounded-[10px] border border-primary`}
+      className={`text-[35px] text-gray ${
+        wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
+      } capitalize leading-none  p-2.5 rounded-[10px] border border-primary`}
     >
       {word}
     </p>
