@@ -94,7 +94,7 @@ const SummarizeModal = ({ open, setOpen, result }) => {
                         strokeWidth={item?.value * 50}
                       />
                     </div>
-                    <p className="text-gray w-1/12 text-xl">{item?.value}/2</p>
+                    <p className="text-gray w-1/12 text-xl">{item?.value}/{item?.name === "Form" ? 1:2}</p>
                   </div>
                 ))}
               </div>

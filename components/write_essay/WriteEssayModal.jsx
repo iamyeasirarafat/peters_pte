@@ -151,6 +151,7 @@ const WriteEssayModal = ({ open, setOpen, result }) => {
             <div className="px-7 py-5">
               <p className="text-left text-xl leading-normal">
                 {result?.answer}
+                {/* <WordHighlight words={result?.scores?.word_highlight} /> */}
               </p>
             </div>
           </div>

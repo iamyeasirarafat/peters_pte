@@ -3,7 +3,7 @@ import { GrClose } from "react-icons/gr";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 
-const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
+const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks, fill_blanks }) => {
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -31,18 +31,18 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
         {/* Modal content */}
         <div className="p-5">
           {/* score */}
-          <div className="grid grid-cols-12 gap-x-6">
+          <div className="grid grid-cols-4 gap-6">
             {/* Total Score */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className={`${reading_fill_banks ? "col-span-2" : "col-span-1"} w-full border border-primary rounded-[13px]`}>
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Total Score</p>
+                <p className="text-gray text-xl">{fill_blanks ? "Listening" : "Reading"} Score</p>
               </div>
               {/* score point*/}
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={data?.scores.score || 0}
-                    text={data?.scores.score || 0}
+                    value={fill_blanks ? data?.scores.listening : data?.scores.reading || 0}
+                    text={fill_blanks ? data?.scores.listening : data?.scores.reading || 0}
                     maxValue={data?.scores.max_score || 0}
                     strokeWidth={15}
                     styles={buildStyles({
@@ -58,8 +58,35 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
                 </p>
               </div>
             </div>
+            {
+              reading_fill_banks || <div className="col-span-1 w-full border border-primary rounded-[13px]">
+                <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
+                  <p className="text-gray text-xl">Writing Score</p>
+                </div>
+                {/* score point*/}
+                <div className="flex flex-col items-center justify-center p-4">
+                  <div className="w-32 h-w-32">
+                    <CircularProgressbar
+                      value={data?.scores.writing || 0}
+                      text={data?.scores.writing || 0}
+                      maxValue={data?.scores.max_writing_score || 0}
+                      strokeWidth={15}
+                      styles={buildStyles({
+                        textColor: "gray",
+                        textSize: "20px",
+                        pathColor: "#ff8412",
+                        trailColor: "#f1f1f1",
+                      })}
+                    />
+                  </div>
+                  <p className="text-gray text-xl mt-1">
+                    Out of {data?.scores.max_writing_score || 0}
+                  </p>
+                </div>
+              </div>
+            }
             {/* Time Taken */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-2 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Time Taken</p>
               </div>
@@ -71,12 +98,12 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
               </div>
             </div>
             {/* Correct answer */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className=" col-span-2 w-full border border-primary  rounded-[13px] ">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Correct answer</p>
               </div>
               {/* score point*/}
-              <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
+              <div className="flex items-start justify-center gap-x-1.5 p-4 w-full h-full">
                 <p className="text-gray text-xl text-center">
                   {data?.scores?.score_details.map((item, index) => {
                     return (
@@ -89,20 +116,19 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
               </div>
             </div>
             {/* Your Answer */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-2 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Your Answer</p>
               </div>
               {/* score point*/}
-              <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
+              <div className="flex items-start justify-center gap-x-1.5 p-4 w-full h-full">
                 <p className="text-gray text-xl text-center">
                   {data?.scores?.score_details.map((item, index) => {
                     return (
                       <span
                         key={index}
-                        className={`block ${
-                          item?.correct ? "text-green-500" : "text-red"
-                        }`}
+                        className={`block ${item?.correct ? "text-green-500" : "text-red"
+                          }`}
                       >
                         {item.user_option ? item.user_option : "-"}
                       </span>
@@ -112,62 +138,7 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks }) => {
               </div>
             </div>
           </div>
-          {/* Your Response */}
-          <div className="w-full border border-primary rounded-[13px] mt-4">
-            <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-              <p className="text-gray text-xl">Enabling Skill</p>
-            </div>
-            <div className="px-7 py-5 space-y-3">
-              {reading_fill_banks ? (
-                <>
-                  <div className="w-full flex items-center justify-between gap-x-5">
-                    <p className="text-gray text-xl w-3/6 text-start">
-                      Reading
-                    </p>
-                    <LineProgressBar
-                      height={30}
-                      lineColor={"primary"}
-                      strokeWidth={
-                        (data?.scores.score * 100) / data?.scores.max_score || 0
-                      }
-                    />
-                    <p className="text-gray text-xl">
-                      {data?.scores.score || 0}/{data?.scores.max_score || 0}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="w-full flex items-center justify-between gap-x-5">
-                    <p className="text-gray text-xl w-3/6 text-start">
-                      Listening
-                    </p>
-                    <LineProgressBar
-                      height={30}
-                      lineColor={"cream"}
-                      strokeWidth={
-                        data?.scores.score * (100 / data?.scores.max_score) || 0
-                      }
-                    />
-                    <p className="text-gray text-xl">
-                      {data?.scores.score || 0}/{data?.scores.max_score || 0}
-                    </p>
-                  </div>
-                  {/* <div className="w-full flex items-center justify-between gap-x-5">
-                    <p className="text-gray text-xl w-3/6 text-start">
-                      Writing
-                    </p>
-                    <LineProgressBar
-                      height={30}
-                      lineColor={"primary"}
-                      strokeWidth={60}
-                    />
-                    <p className="text-gray text-xl">0/2</p>
-                  </div> */}
-                </>
-              )}
-            </div>
-          </div>
+
           <p className="text-center mt-2 text-lightGray">
             This score will disappear on 02/08/2023
           </p>

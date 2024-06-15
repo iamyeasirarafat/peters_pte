@@ -74,6 +74,7 @@ const Page = () => {
         />
       )}
       <FillBlanksModal
+      fill_blanks
         data={aiResult}
         open={openScoreModal}
         setOpen={setOpenScoreModal}

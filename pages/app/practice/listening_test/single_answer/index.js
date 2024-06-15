@@ -79,6 +79,7 @@ function Page() {
         setOpen={setOpenTranscriptModal}
       />
       <MultipleChoiceAiModal
+        listining
         outOf={1}
         result={aiResult}
         data={data}

@@ -84,12 +84,11 @@ const TypingBlock = ({
             <p className="text-gray text-xs text-center mr-auto">
               {hideTimer
                 ? null
-                : `Time Left: ${minutes}:${
-                    seconds < 10 ? `0${seconds}` : seconds
-                  }`}
+                : `Time Left: ${minutes}:${seconds < 10 ? `0${seconds}` : seconds
+                }`}
             </p>
             <p className="text-gray text-xs text-center">
-              Word Count: {textAnswer.split(" ").length}
+              Word Count: {textAnswer.split(" ").length - 1}
             </p>
           </div>
         </div>

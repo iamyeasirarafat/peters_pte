@@ -275,7 +275,7 @@ const ReorderModal = ({ apiData, data, open, setOpen }) => {
             {/* Total Score */}
             <div className="col-span-3 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Total Score</p>
+                <p className="text-gray text-xl">Reading Score</p>
               </div>
               {/* score point*/}
               <div className="flex flex-col items-center justify-center p-4">

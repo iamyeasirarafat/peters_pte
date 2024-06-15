@@ -3,7 +3,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
 import ReusableModal from "./ReusableModal";
 
-const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
+const MultipleChoiceAiModal = ({ open, setOpen, result, outOf, listining }) => {
   const router = useRouter();
   const id = router.query.que_no;
   const rightOptions = result?.scores?.score_details?.right_options || [];
@@ -40,7 +40,7 @@ const MultipleChoiceAiModal = ({ open, setOpen, result, outOf }) => {
             {/* Total Score */}
             <div className="col-span-3 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Total Score</p>
+                <p className="text-gray text-xl">{listining ? "Listining" : "Reading"} Score</p>
               </div>
               {/* score point*/}
               <div className="flex flex-col items-center justify-center p-4">
@@ -135,9 +135,8 @@ export default MultipleChoiceAiModal;
 const WordValue = ({ word, wrong }) => {
   return (
     <p
-      className={`text-[35px] text-gray ${
-        wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
-      } capitalize leading-none  p-2.5 rounded-[10px] border border-primary`}
+      className={`text-[35px] text-gray ${wrong ? "bg-[#ffe0e0]" : "bg-[#d3ffd5]"
+        } capitalize leading-none  p-2.5 rounded-[10px] border border-primary`}
     >
       {word}
     </p>
