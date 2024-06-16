@@ -1,7 +1,8 @@
+import { useRouter } from "next/router";
 import { GiProgression } from "react-icons/gi";
 import { PiShareThin } from "react-icons/pi";
 const Score = ({ setActiveTab, scoreReportTa, data }) => {
-  console.log("data", data);
+  const router = useRouter();
   return (
     <div className="py-5">
       <div className="w-full flex gap-x-5 py-7">
@@ -108,7 +109,10 @@ const Score = ({ setActiveTab, scoreReportTa, data }) => {
         >
           <GiProgression /> Check Score Analysis
         </button>
-        <button className="py-2 px-3 rounded-full text-white bg-primary flex items-center gap-x-2">
+        <button
+          onClick={() => router.push("/app/practice/mock_test/report")}
+          className="py-2 px-3 rounded-full text-white bg-primary flex items-center gap-x-2"
+        >
           <GiProgression /> Report
         </button>
         <button className="py-2 px-3 rounded-full text-white bg-primary flex items-center gap-x-2">
