@@ -166,7 +166,7 @@ const SubmitModal = ({
         }?complete=true`
       );
       setOpen(false);
-      router.push("/app/practice/mock_test/report");
+      router.push("/app/practice/mock_test");
       setAllResults(res?.data);
     } catch (error) {
       console.log(error);
