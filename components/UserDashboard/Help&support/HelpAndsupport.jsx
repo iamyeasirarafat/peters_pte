@@ -4,7 +4,7 @@ import { FaRegPaperPlane } from "react-icons/fa6";
 
 const HelpAndsupport = () => {
   return (
-    <div className='my-5'>
+    <div className='mb-20'>
       <h2 className="text-4xl font-normal mb-3 capitalize">help & support</h2>
       <div className="flex flex-col md:flex-row gap-2 w-full justify-between ">
         {/* card  */}

@@ -16,8 +16,8 @@ export default function HeaderCounter() {
         <div className="p-1.5 bg-white dark:bg-white/20 rounded-[50px] flex items-center gap-x-2 border border-primary ">
           <button
             // disabled={router?.asPath?.startsWith("/admin")}
-            onClick={() => setOpenEModal(true)}
-            className="bg-gold text-white text-sm lg:text-base leading-none py-2.5 px-3.5 rounded-[50px]"
+
+            className="bg-primary cursor-default text-white text-sm lg:text-base leading-none py-2.5 px-3.5 rounded-[50px]"
           >
             Exam Count Down
           </button>
@@ -29,20 +29,20 @@ export default function HeaderCounter() {
                 )} */}
             20d 03h 03m 52s
           </div>
-          <RiSettings2Fill className="text-xl text-cream" />
+          <RiSettings2Fill onClick={() => setOpenEModal(true)} className="text-xl cursor-pointer text-primary" />
         </div>
         <div className="p-1.5 bg-white dark:bg-white/20 rounded-[50px] flex items-center gap-x-2 border border-primary">
           <button
             // disabled={router?.asPath?.startsWith("/admin")}
-            onClick={() => setOpenTModal(true)}
-            className="bg-cream text-white text-sm lg:text-base leading-none py-2.5 px-3.5 rounded-[50px]"
+
+            className="bg-primary cursor-default text-white text-sm lg:text-base leading-none py-2.5 px-3.5 rounded-[50px]"
           >
             Target Score
           </button>
           <p className="text-sm md:text-xl lg:text-3xl font-medium text-gray dark:text-white">
             79+{/* {score?.score}+ */}
           </p>
-          <RiSettings2Fill className="text-xl text-cream" />
+          <RiSettings2Fill onClick={() => setOpenTModal(true)} className="text-xl cursor-pointer text-primary" />
         </div>
         {/* <ExamCountDown
               openExamCountDown={openExamCountDown}

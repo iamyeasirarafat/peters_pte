@@ -5,7 +5,7 @@ import { BsMic, BsBook } from "react-icons/bs";
 import { FiMonitor } from "react-icons/fi";
 const studyMaterials = [
     {
-        bgcolor: "#F2B277",
+        bgcolor: "#00B4D8",
         name: "Template",
         icon: <BiBookAlt className="h-10 w-10" />
     },
@@ -20,12 +20,12 @@ const studyMaterials = [
         icon: <BsMic className="h-10 w-10" />
     },
     {
-        bgcolor: "#849C3E",
+        bgcolor: "#3EC70B",
         name: "Compatibility",
         icon: <FiMonitor className="h-10 w-10" />
     },
     {
-        bgcolor: "#4399FF",
+        bgcolor: "#2D46B9",
         name: "Study Material",
         icon: <BsBook className="h-10 w-10" />
     }
@@ -34,7 +34,7 @@ const studyMaterials = [
 
 const StudyMaterial = () => {
     return (
-        <div className='my-5'>
+        <div className='my-20'>
             <h2 className="text-4xl font-normal mb-3 capitalize">study material</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {/* card  */}

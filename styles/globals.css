@@ -6,12 +6,15 @@
   .splide__pagination.splide__pagination-cards {
     @apply static mt-2;
   }
+
   .splide__pagination.splide__pagination-crypto {
     @apply -top-10 left-auto right-0 bottom-auto;
   }
+
   .splide__pagination .splide__pagination__page {
     @apply mx-1 bg-purple-3;
   }
+
   .splide__pagination .splide__pagination__page.is-active {
     @apply bg-purple-1 scale-100;
   }
@@ -21,6 +24,7 @@
 /* ------------------ */
 /* cabin  */
 @import url("https://fonts.googleapis.com/css2?family=Cabin:wght@400;500;600;700&display=swap");
+
 /* -------------- */
 @font-face {
   font-family: Avantt;
@@ -31,6 +35,7 @@
 * {
   scroll-behavior: smooth;
 }
+
 /* body scrollbar */
 
 body::-webkit-scrollbar {
@@ -39,6 +44,7 @@ body::-webkit-scrollbar {
   background-color: #fff4eb;
   border-radius: 1rem;
 }
+
 body::-webkit-scrollbar-thumb {
   background: #f2b277;
   border-radius: 1rem;
@@ -56,10 +62,12 @@ body::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 1rem;
 }
+
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -85,27 +93,32 @@ body::-webkit-scrollbar-thumb {
   width: 12px !important;
   height: 12px !important;
 }
+
 .swiper-pagination-bullet-active {
   background-color: black !important;
   width: 12px !important;
   height: 12px !important;
 }
+
 .swiper-pagination {
   display: flex;
   top: 40% !important;
   justify-content: start !important;
 }
+
 /* swiper slider custom button CSS END */
 
 .PhoneInputInput {
   border: none !important;
 }
+
 .PhoneInputInput:focus {
   border: none !important;
   outline: none !important;
   --tw-ring-color: none;
   box-shadow: none;
 }
+
 .PhoneInputCountryIcon {
   margin-right: 2px;
 }
@@ -129,6 +142,7 @@ body::-webkit-scrollbar-thumb {
   width: 6px;
   height: 6px;
 }
+
 .calendarCell {
   border: 1px solid #f2f2f5;
 }
@@ -140,12 +154,14 @@ body::-webkit-scrollbar-thumb {
 .calendar-component-front .rs-calendar-header-forward:hover {
   background-color: #fff4eb;
 }
+
 /* on focus */
 .calendar-component-front .rs-calendar-header-title:focus,
 .calendar-component-front .rs-calendar-header-backward:focus,
 .calendar-component-front .rs-calendar-header-forward:focus {
   background-color: #fff4eb;
 }
+
 
 /* user dashboard scrollbar hide */
 .no-scrollbar {
@@ -154,12 +170,19 @@ body::-webkit-scrollbar-thumb {
 
 .whiteGd {
   background: rgb(255, 255, 255);
-  background: linear-gradient(
-    360deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 0.7) 55%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
+  background: linear-gradient(360deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.7) 55%,
+      rgba(255, 255, 255, 0.5) 100%);
 }
 
 /* drag and drop  */
+
+
+
+/* custom shadhow */
+
+.custom-shadow {
+  /* border-color: #1e293b !important;
+  border-bottom: 2px !important; */
+}
