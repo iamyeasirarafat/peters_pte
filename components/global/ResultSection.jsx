@@ -13,14 +13,14 @@ const sectionTabButton = [
   {
     name: "Forum",
     icon: "/icons/massage.svg",
-    bgColor: "cream",
-    textColor: "gray",
+    bgColor: "primary",
+    textColor: "white",
   },
   {
     name: "Community Score",
     icon: "/icons/score.svg",
     bgColor: "primary",
-    textColor: "gray",
+    textColor: "white",
   },
 ];
 const ResultSection = ({
@@ -35,7 +35,7 @@ const ResultSection = ({
 }) => {
   const [pageTab, setPageTab] = useState("My Score");
   return (
-    <div className="relative border border-primary rounded-[15px] mt-12 p-2 lg:p-5">
+    <div className="relative border border-oldPrimary rounded-[15px] mt-12 p-2 lg:py-4  lg:px-9">
       {/* tab button */}
       <div className="flex items-center gap-x-2 absolute bottom-full right-5">
         {sectionTabButton?.map((button, i) => {

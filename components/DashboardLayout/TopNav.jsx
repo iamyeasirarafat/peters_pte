@@ -21,41 +21,33 @@ const TopNav = ({ dashboard }) => {
   return (
     <div
       className={`${topNav ? "" : "-mt-16"
-        } transition-all duration-300 ease-linear`}
+        } transition-all border-b shadow-2xl  bg-white duration-300 ease-linear`}
     >
-      <div className="flex h-16 bg-primary w-full p-1.5">
-        {/* fake left */}
-        <div
-          className={`${sideNav ? "w-72" : dashboard ? "w-0" : "w-[134px]"
-            } flex-shrink-0 transition-all relative duration-300 ease-linear hidden lg:block`}
-        ></div>
-        {/* top nav */}
-        <div className="w-full">
-          <div className="h-full max-w-6xl mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="block lg:hidden"
-            >
-              <RiMenu2Line className="text-white text-4xl" />
-            </button>
-            <Logo />
-            <MenuItem />
-            <UserDropdown />
-          </div>
-        </div>
+      <div className=" h-16 w-full p-1.5 container mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="block lg:hidden"
+        >
+          <RiMenu2Line className="text-primary text-4xl" />
+        </button>
+        <Logo />
+        <MenuItem />
+        <UserDropdown />
       </div>
-      <button
-        onClick={toggleTopNav}
-        className="hidden lg:block absolute top-6 right-4"
-      >
-        <Image
-          className="object-cover"
-          src="/icons/chevron-up.svg"
-          width={16}
-          height={16}
-          alt="icon"
-        />
-      </button>
+      {
+        topNav && <button
+          onClick={toggleTopNav}
+          className="hidden lg:block absolute bg-primary top-6 right-4"
+        >
+          <Image
+            className="object-cover"
+            src="/icons/chevron-up.svg"
+            width={16}
+            height={16}
+            alt="icon"
+          />
+        </button>
+      }
       <MobileMenu
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
@@ -77,24 +69,30 @@ const Logo = () => {
 const MenuItem = () => {
   const menuData = navItems;
   return (
-    <ul className="text-white hidden lg:flex items-center gap-4 text-xl font-semibold font-avantt">
+    <ul className="text-gray hidden lg:flex items-center gap-4 text-xl  font-avantt">
       <li>
         <Link className="text-base md:text-lg xl:text-xl" href="/app">
           Home
         </Link>
       </li>
       <li className="group flex items-center gap-x-2 cursor-pointer">
-        Practice Test <IoIosArrowDown className="text-sm text-white" />
+        Practice Test <IoIosArrowDown className="text-sm text-gray" />
         {/* mega menu */}
         <div
-          className={`absolute z-50 top-11 left-0 w-full overflow-hidden group-hover:shadow-md transition-all duration-500 group-hover:h-[630px] h-0 cursor-default`}
+          className={`absolute z-50 top-11 left-0 w-full overflow-hidden group-hover:shadow-md transition-all duration-500 group-hover:h-[430px] h-0 cursor-default`}
         >
           <div className="pt-5 bg-white h-full w-full mt-5">
-            <div className="max-w-6xl mx-auto flex justify-between gap-x-3">
+            <div className="w-full container mx-auto flex justify-between gap-x-3">
               {Object.keys(menuData).map((item, index) => {
+                const itemColor = item.includes("Speaking") ? "#FF8D29" : item.includes("Writing") ? "#2D46B9" : item.includes("Reading") ? "#3EC70B" : "#00B4D8"
                 return (
                   <div key={index} className="w-full">
-                    <h3 className="text-gray text-xl font-semibold border-b border-gray leading-10 w-full">
+                    <h3
+                      style={{
+                        "color": itemColor,
+                        "borderColor": itemColor
+                      }}
+                      className=" text-xl border-b mr-10 leading-10 w-full">
                       {item}
                     </h3>
                     <div className="space-y-2 mt-3">
@@ -105,7 +103,7 @@ const MenuItem = () => {
                             href={test?.path}
                             className="flex gap-x-2  items-center"
                           >
-                            <div className="relative h-14 w-14 flex-shrink-0">
+                            {/* <div className="relative h-14 w-14 flex-shrink-0">
                               <div
                                 className={`bg-${test?.bg} rounded-xl w-full h-full flex items-center justify-center text-xl text-white font-semibold`}
                               >
@@ -116,9 +114,15 @@ const MenuItem = () => {
                                   AI
                                 </div>
                               )}
-                            </div>
+                            </div> */}
                             <h2 className="font-cabin hover:text-primary  duration-300 text-base leading-tight text-gray">
-                              {test?.name}
+                              {test?.name} <span
+                                style={
+                                  {
+                                    "color": itemColor
+                                  }
+                                }
+                                className="text-sm font-semibold font-avantt">{test.icon}</span>
                             </h2>
                           </Link>
                         );
@@ -127,6 +131,20 @@ const MenuItem = () => {
                   </div>
                 );
               })}
+            </div>
+            {/* study material  */}
+            <div className="container mx-auto">
+              <div className="flex max-w-3xl flex-col">
+                <h1 className="text-primary border-b pb-2 mb-4 border-primary">
+                  Study Materials
+                </h1>
+                <div className="flex  justify-between">
+                  <Link href='#'>Vocabularies</Link>
+                  <Link href='#'>Templates</Link>
+                  <Link href='#'>Predictions</Link>
+                  <Link href='#'>Marking</Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -139,11 +157,11 @@ const MenuItem = () => {
           Mock Test
         </Link>
       </li>
-      <li>
+      {/* <li>
         <Link className="text-base md:text-lg xl:text-xl" href="/contact">
           Prediction
         </Link>
-      </li>
+      </li> */}
       <li>
         <Link className="text-base md:text-lg xl:text-xl" href="/contact">
           Mobile App
@@ -158,19 +176,10 @@ const UserDropdown = () => {
   const { user } = useSelector((state) => state?.user);
   return (
     <div className="flex gap-2 relative">
-      <button className="bg-gold hidden md:flex text-sm md:text-base xl:text-lg text-white font-avantt font-semibold items-center py-2 px-3 xl:py-3 xl:px-5 rounded-[32px] gap-1">
-        <span>Become Premium</span>
-        <Image
-          className="object-cover"
-          src="/icons/diamond.svg"
-          width={24}
-          height={24}
-          alt="icon"
-        />
-      </button>
+
       <button
         onClick={() => setShowProfile(!showProfile)}
-        className="rounded-full overflow-hidden text-4xl text-gray w-12 h-12 bg-white capitalize flex items-center justify-center"
+        className="rounded-full overflow-hidden text-4xl  w-12 h-12 text-white bg-primary capitalize flex items-center justify-center"
       >
         {user?.picture ? (
           <Image
@@ -182,6 +191,16 @@ const UserDropdown = () => {
         ) : (
           user?.full_name?.charAt(0)
         )}
+      </button>
+      <button className="bg-oldPrimary hidden md:flex text-sm md:text-base xl:text-lg text-white font-avantt font-semibold items-center py-2 px-3 xl:py-3 xl:px-5 rounded-[32px] gap-1">
+        <span>Premium</span>
+        <Image
+          className="object-cover"
+          src="/icons/diamond.svg"
+          width={24}
+          height={24}
+          alt="icon"
+        />
       </button>
 
       {/* user info */}
@@ -203,7 +222,7 @@ const UserDropdown = () => {
           <hr className="border-t border-gray" />
           <div className="py-2 px-7">
             <button className="text-gray hover:scale-105 duration-200 hover:text-stone-600 text-lg font-medium flex items-center px-3 py-1 gap-x-2">
-              Become Premium
+              Premium
               <Image
                 className="object-cover"
                 src="/icons/diamond_black.svg"

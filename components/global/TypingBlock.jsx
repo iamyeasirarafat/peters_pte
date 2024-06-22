@@ -109,7 +109,7 @@ const TypingBlock = ({
           <button
             onClick={handleSubmit}
             disabled={isLoading || isReady}
-            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-blue text-white font-semibold text-lg"
+            className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-primary text-white font-semibold text-lg"
           >
             {isLoading && <LoaderIcon />}
             Submit
@@ -118,7 +118,7 @@ const TypingBlock = ({
             onClick={() => {
               router.reload();
             }}
-            className="py-2 px-6 hover:bg-secondary  flex items-center gap-x-2 rounded-[22px]  text-primary border border-primary font-semibold text-lg"
+            className="py-2 px-6 hover:bg-[#b38140] bg-oldPrimary  flex items-center gap-x-2 rounded-[22px]  text-white  font-semibold text-lg"
           >
             Restart
           </button>

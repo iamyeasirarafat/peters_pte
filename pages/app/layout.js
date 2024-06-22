@@ -22,12 +22,14 @@ const DashboardLayout = ({ children, dashboard }) => {
   }, [dispatch]);
   return (
     <>
+
       <TopNav dashboard={dashboard} />
-      <div className="flex relative">
+
+      <div className=" flex">
         {!topNav && (
           <button
             onClick={toggleTopNav}
-            className="absolute h-6 w-7 flex items-center justify-center rotate-180 bg-gold rounded top-2 right-3"
+            className="absolute h-6 w-7 flex items-center justify-center rotate-180 bg-primary rounded top-2 right-3"
           >
             <Image
               className="object-cover"
@@ -38,14 +40,14 @@ const DashboardLayout = ({ children, dashboard }) => {
             />
           </button>
         )}
-        <SideNav dashboard={dashboard} />
+        {/* <SideNav dashboard={dashboard} /> */}
         <div
           className={` w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-64px)]"}
         overflow-y-auto  bg-white content-scrollbar no-scrollbar`}
         >
           <Suspense fallback={<SearchBarFallback />}>
-            <div className="max-w-6xl mx-auto px-6 pb-3 md:px-10 4xl:px-0">
+            <div className="container mx-auto px-6 pb-3 md:px-10 4xl:px-0">
               {children}
             </div>
           </Suspense>

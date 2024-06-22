@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 const MiniGameWidgets = () => {
   const router = useRouter();
   return (
-    <div className="mb-5">
+    <div className="mb-20">
       <h2 className="text-xl md:text-2xl lg:text-4xl font-normal mb-3">
         Mini Game - Play & Win
       </h2>

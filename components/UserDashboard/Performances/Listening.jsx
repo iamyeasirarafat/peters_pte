@@ -68,8 +68,8 @@ function Listening({ data }) {
                 const title = `${key.charAt(0).toUpperCase()}${key.slice(1).replace(/_/g, " ")}`;
                 const value = `${item.practices}/${item.total}`;
                 const percentage = `${item.percentage}`;
-                const strokeColor = "#949494";
-                const trailColor = "#F4D1B1";
+                const strokeColor = "#00B4D8";
+                const trailColor = "#949494";
                 newData.push({ title, value, percentage, strokeColor, trailColor });
             }
         }
@@ -84,10 +84,10 @@ function Listening({ data }) {
     return (
         <div className="bg-white rounded-[10px] h-full p-[15px] ">
             {/* cards  */}
-            <h3 className="font-medium text-[21px] text-[#949494] text-center mb-2.5">
+            <h3 className="font-medium text-[21px] text-lightGray text-center mb-2.5">
                 Listening
             </h3>
-            <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2'>
+            <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 items-center gap-2'>
                 {/* card 1  */}
                 {listeningPerformances?.map((Listening, index) => (<CircularProgressWidget key={index} data={Listening} />))}
             </div>

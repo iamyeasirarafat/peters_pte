@@ -19,7 +19,7 @@ const Index = () => {
   const user = useSelector((state) => state?.user?.user);
   return (
     <DashboardLayout dashboard>
-      <div className="p-3">
+      <div className="p-3 mt-12">
         <div className="w-full flex flex-col md:flex-row justify-between items-center">
           <p className="text-[#949494] text-[26px] lg:text-[36px]">
             Welcome,{" "}
@@ -29,12 +29,12 @@ const Index = () => {
           <HeaderCounter />
         </div>
         {/* practice slider  */}
-        <PracticeSlider />
-        <div>
-          <div className="flex bg-[#FF8412] w-full h-[46px] rounded-[15px] justify-center items-center">
+        {/* <PracticeSlider /> */}
+        <div className="my-20">
+          <div className="flex bg-primary w-full h-[46px] rounded-[15px] justify-center items-center">
             <span className="text-[26px] text-white">Study Plan</span>
           </div>
-          <div className="flex flex-col lg:flex-row border-2 border-primary rounded-[15px] mt-2 p-2 justify-between gap-2">
+          <div className="flex flex-col lg:flex-row  rounded-[15px] mt-2 p-2 justify-between gap-2">
             {/* Calendar */}
             <div className="w-full">
               <PTECalendar />
@@ -49,7 +49,7 @@ const Index = () => {
         {/* mini game */}
         <MiniGameWidgets />
 
-        <div className="flex bg-[#FF8412] w-full h-[46px] rounded-[15px] justify-center items-center my-3">
+        <div className="flex bg-primary w-full h-[46px] rounded-[15px] justify-center items-center my-3">
           <span className="text-[26px] text-white">Your Progress</span>
         </div>
 
@@ -58,14 +58,14 @@ const Index = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setToggleProgress(true)}
-              className="bg-[#849C3E] hover:bg-[#4399FF] hover:text-white px-2 py-1 md:px-4 md:py-2 text-white text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
+              className="bg-primary hover:bg-cream hover:text-white px-2 py-1 md:px-4 md:py-2 text-white text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
             >
               Your Performance
               <SlBadge />
             </button>
             <button
               onClick={() => setToggleProgress(false)}
-              className="border border-[#CF8800] hover:bg-[#4399FF] hover:text-white px-2 py-1 md:px-4 md:py-2 text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
+              className="border border-primary hover:bg-cream hover:text-white px-2 py-1 md:px-4 md:py-2 text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
             >
               Practice Progress
               <IoAnalyticsOutline />
@@ -73,7 +73,7 @@ const Index = () => {
           </div>
           <div className="text-right ">
             <select
-              className="border border-[#CF8800] mb-2 text-[12px] md:text-[16px]"
+              className="border border-primary mb-2 text-[12px] md:text-[16px]"
               name=""
               id=""
             >

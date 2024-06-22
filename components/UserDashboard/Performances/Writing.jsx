@@ -5,15 +5,15 @@ const WritingPerformances = [
         title: "Reading:Fill in the Blanks",
         value: "5/112",
         percentage: "30",
-        strokeColor: "#F2B277",
-        trailColor: "#F4D1B1"
+        strokeColor: "#2D46B9",
+        trailColor: "#2D46B9"
     },
     {
         title: "Reading:Re-Order Paragraphs",
         value: "5/112",
         percentage: "30",
-        strokeColor: "#F2B277",
-        trailColor: "#F4D1B1"
+        strokeColor: "#2D46B9",
+        trailColor: "#2D46B9"
     },
 
 
@@ -28,8 +28,8 @@ const Writing = ({ data }) => {
                 const title = `${key.charAt(0).toUpperCase()}${key.slice(1).replace(/_/g, " ")}`;
                 const value = `${item.practices}/${item.total}`;
                 const percentage = `${item.percentage}`;
-                const strokeColor = "#F2B277";
-                const trailColor = "#F4D1B1";
+                const strokeColor = "#2D46B9";
+                const trailColor = "#949494";
                 newData.push({ title, value, percentage, strokeColor, trailColor });
             }
         }
@@ -43,7 +43,7 @@ const Writing = ({ data }) => {
     }, [data]);
     return (
         <div className="bg-white rounded-[10px] h-full p-[15px] w-full ">
-            <h3 className="font-medium text-[21px] text-[#F2B277] text-center mb-2.5">
+            <h3 className="font-medium text-[21px] text-lightGray text-center mb-2.5">
                 Writing
             </h3>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>

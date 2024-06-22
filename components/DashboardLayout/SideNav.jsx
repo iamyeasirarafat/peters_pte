@@ -66,7 +66,7 @@ export const navItems = {
       name: "Reading & Writing Fill in the blanks",
       path: "/app/practice/reading_test/read_write_blanks",
       ai: false,
-      icon: "FIB",
+      icon: "FIB-RW",
       bg: "cream",
     },
     {
@@ -80,14 +80,14 @@ export const navItems = {
       name: "Re-order Paragraphs",
       path: "/app/practice/reading_test/reorder_paragraphs",
       ai: false,
-      icon: "RP",
+      icon: "RO",
       bg: "cream",
     },
     {
       name: "Reading Fill in the Blanks",
       path: "/app/practice/reading_test/fill_blanks",
       ai: false,
-      icon: "FIB",
+      icon: "FIB-R",
       bg: "cream",
     },
     {
@@ -117,7 +117,7 @@ export const navItems = {
       name: "Fill in the Blanks",
       path: "/app/practice/listening_test/fill_blanks",
       ai: false,
-      icon: "FIB",
+      icon: "FIB-L",
       bg: "primary",
     },
     {

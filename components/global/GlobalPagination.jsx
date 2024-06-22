@@ -14,14 +14,14 @@ const GlobalPagination = () => {
     (pageName === "multiple_answers" ||
       pageName === "fill_blanks" ||
       pageName === "single_answer") &&
-    router?.pathname.includes("reading_test")
+      router?.pathname.includes("reading_test")
       ? `${pageName}_reading`
       : (pageName === "multiple_answers" ||
-          pageName === "fill_blanks" ||
-          pageName === "single_answer") &&
+        pageName === "fill_blanks" ||
+        pageName === "single_answer") &&
         router?.pathname.includes("listening_test")
-      ? `${pageName}_listening`
-      : pageName;
+        ? `${pageName}_listening`
+        : pageName;
 
   const index = qId?.findIndex(
     (item) => item === parseInt(router?.query?.que_no)
@@ -45,18 +45,18 @@ const GlobalPagination = () => {
   }, [qId]);
   return (
     <div className="flex items-center gap-x-2">
-      <button className="w-10 h-7 md:w-[56px] md:h-[45px] bg-secondary rounded-[22px] flex items-center justify-center hover:bg-[#ffe4cd] duration-200">
+      <button className="w-10 h-7 md:w-[56px] md:h-[45px] bg-oldPrimary rounded-[22px] flex items-center justify-center hover:bg-[#ffe4cd] duration-200">
         <RxShuffle
           onClick={() =>
             handelSetQuestionId(qId[Math.floor(Math.random() * qId.length)])
           }
-          className="text-gray text-xl md:text-3xl"
+          className="text-white text-xl md:text-3xl"
         />
       </button>
-      <div className="bg-secondary rounded-[30px] px-2 md:px-4 py-[5px] flex items-center gap-x-1 md:gap-x-2">
+      <div className="bg-oldPrimary rounded-[30px] px-2 md:px-4 py-[5px] flex items-center gap-x-1 md:gap-x-2">
         <IoIosArrowBack
           onClick={() => index !== 0 && handelSetQuestionId(qId[index - 1])}
-          className="text-sm md:text-lg text-gray cursor-pointer"
+          className="text-sm md:text-lg text-white cursor-pointer"
         />
         <select
           value={qId?.[index]}
@@ -69,14 +69,14 @@ const GlobalPagination = () => {
             </option>
           ))}
         </select>
-        <p className="text-sm text-gray font-medium">of</p>
-        <p className="text-sm text-gray font-medium">{qId?.length}</p>
+        <p className="text-sm text-white font-medium">of</p>
+        <p className="text-sm text-white font-medium">{qId?.length}</p>
         <IoIosArrowBack
           onClick={() =>
             parseInt(router?.query?.que_no) !== qId?.[qId?.length - 1] &&
             handelSetQuestionId(qId[index + 1])
           }
-          className="text-sm md:text-lg text-gray cursor-pointer rotate-180"
+          className="text-sm md:text-lg text-white cursor-pointer rotate-180"
         />
       </div>
     </div>

@@ -9,7 +9,7 @@ Custom Input range
 
   -webkit-appearance: none;
   position: relative;
-  background: #fff4eb;
+  background: #c9fef5;
   width: 100%;
   height: 8px;
   border-radius: 13px;
@@ -19,7 +19,7 @@ Custom Input range
 /* Input range - firefox */
 .progress_bar::-moz-range-track {
   position: relative;
-  background: #fff4eb;
+  background: #c9fef5;
   width: 100%;
   height: 8px;
   border-radius: 13px;
@@ -30,7 +30,7 @@ Custom Input range
 .progress_bar::before {
   content: "";
   height: 8px;
-  background: #f2b277;
+  background: #00b4d8;
   width: var(--range-progress);
   border-bottom-left-radius: 13px;
   border-top-left-radius: 13px;
@@ -41,7 +41,7 @@ Custom Input range
 
 /* played progress length - firefox */
 .progress_bar::-moz-range-progress {
-  background: #f2b277;
+  background: #00b4d8;
   border-bottom-left-radius: 13px;
   border-top-left-radius: 13px;
   height: 8px;
@@ -49,14 +49,15 @@ Custom Input range
 
 /* slider thumb - chrome and safari */
 .progress_bar::-webkit-slider-thumb {
-  -webkit-appearance: none;
+  /* -webkit-appearance: none;
   height: 20px;
   width: 20px;
   border-radius: 50%;
   border: none;
   background-color: #cf8800;
   cursor: pointer;
-  position: relative;
+  position: relative; */
+  display: none;
 }
 
 /* dragging thumb - chrome and safari */
@@ -66,13 +67,14 @@ Custom Input range
 
 /* slider thumb - firefox */
 .progress_bar::-moz-range-thumb {
-  height: 20px;
+  /* height: 20px;
   width: 20px;
   border-radius: 50%;
   background: #cf8800;
   cursor: pointer;
   border: transparent;
-  position: relative;
+  position: relative; */
+  display: none;
 }
 /* dragging thumb - firefox */
 .progress_bar:active::-moz-range-thumb {
@@ -87,7 +89,7 @@ Custom Input range
 
   -webkit-appearance: none;
   position: relative;
-  background: yellow;
+  background: #c9fef5;
   width: 100%;
   height: 2px;
   border-radius: 2px;
@@ -97,7 +99,7 @@ Custom Input range
 /* Input range - firefox */
 .volume_range::-moz-range-track {
   position: relative;
-  background: yellow;
+  background: #c9fef5;
   width: 100%;
   height: 2px;
   border-radius: 2px;
@@ -108,7 +110,7 @@ Custom Input range
 .volume_range::before {
   content: "";
   height: 2px;
-  background: #f2b277;
+  background: #00b4d8;
   width: var(--range-progress);
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
@@ -119,7 +121,7 @@ Custom Input range
 
 /* played progress length - firefox */
 .volume_range::-moz-range-progress {
-  background: #f2b277;
+  background: #00b4d8;
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
   height: 2px;
@@ -132,7 +134,7 @@ Custom Input range
   width: 8px;
   border-radius: 50%;
   border: none;
-  background-color: #cf8800;
+  background-color: #00b4d8;
   cursor: pointer;
   position: relative;
 }
@@ -147,7 +149,7 @@ Custom Input range
   height: 8px;
   width: 8px;
   border-radius: 50%;
-  background: #cf8800;
+  background: #00b4d8;
   cursor: pointer;
   border: transparent;
   position: relative;

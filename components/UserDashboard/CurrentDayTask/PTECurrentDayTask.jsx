@@ -16,24 +16,24 @@ const taskCard = [
   },
   {
     name: "Writing",
-    bgcolor: "#F2B277",
+    bgcolor: "#2D46B9",
     icon: <PiPencilSimpleLineThin className="w-[48px] h-[48px]" />,
   },
   {
     name: "reading",
-    bgcolor: "#4399FF",
+    bgcolor: "#3EC70B",
     icon: <PiBookOpen className="w-[48px] h-[48px]" />,
   },
   {
     name: "listening",
-    bgcolor: "#949494",
+    bgcolor: "#00B4D8",
     icon: <PiHeadphonesThin className="w-[48px] h-[48px]" />,
   },
 ];
 
 export default function PTECurrentDayTask() {
   return (
-    <div className="w-full flex flex-col text-[#616161] border border-[#F2B277] p-[15px] rounded-[10px] bg-[#FFF4EB]">
+    <div className="w-full flex flex-col text-[#616161] p-[15px] rounded-[10px] bg-secondary">
       <h3 className="font-medium text-[21px] text-center mb-2.5">
         Today&apos;s Task
       </h3>

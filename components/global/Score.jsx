@@ -14,11 +14,11 @@ const Score = ({
   repeat_sentence
 }) => {
   return (
-    <div className="border border-primary rounded-[15px] p-2">
+    <div className="border border-oldPrimary rounded-[15px] p-2">
       <div className="flex items-center justify-between ">
         {/* profile*/}
         <div className="flex items-center gap-x-2">
-          <p className="lg:text-3xl w-10 h-10 flex items-center justify-center text-gray rounded-full border border-primary">
+          <p className="lg:text-3xl w-10 h-10 flex items-center  font-cabin justify-center text-white rounded-full  bg-primary">
             {result?.user?.full_name?.charAt(0)}
           </p>
           <p className="lg:text-sm text-base text-gray">
@@ -31,8 +31,8 @@ const Score = ({
         {/* mark */}
         <div className="md:flex hidden items-center gap-x-2">
           {!answer_question && (
-            <button className="min-w-[120px] cursor-default border border-primary rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
-              <p className="lg:text-base text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
+            <button className="min-w-[120px] cursor-default  rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
+              <p className="lg:text-base text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-oldPrimary">
                 S
               </p>
               <p className="text-base lg:text-xl text-gray">
@@ -47,8 +47,8 @@ const Score = ({
             </button>
           )}
           {!summary && !answer_question && !describe_image && (
-            <button className="min-w-[120px] cursor-default border border-primary rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
-              <p className="lg:text-base text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-cream">
+            <button className="min-w-[120px] cursor-default  rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
+              <p className="lg:text-base text-3xl w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-[#3EC70B]">
                 {
                   repeat_sentence ? 'L' : 'R'
                 }
@@ -67,11 +67,11 @@ const Score = ({
             }}
             className="border hover:bg-secondary duration-200 border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3"
           >
-            <p className="text-base w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-blue">
+            <p className="text-base w-[35px] h-[35px] flex items-center justify-center rounded-full text-white bg-primary">
               AI
             </p>
             <p className="text-base lg:text-xl text-gray flex items-center gap-x-1">
-              Detailed Score
+              Score
             </p>
             <BsPlusCircle className="text-[#9B9B9A] text-2xl" />
           </button>
@@ -80,15 +80,15 @@ const Score = ({
         {!others && (
           <div className="flex items-center gap-x-4">
             <MdOutlineFileDownload className="text-3xl text-primary cursor-pointer" />
-            <BiSolidTrashAlt className="text-2xl text-primary cursor-pointer" />
+            <BiSolidTrashAlt className="text-2xl text-oldPrimary cursor-pointer" />
           </div>
         )}
       </div>
       {/* only mobile view */}
       <div className="flex md:hidden mt-2 justify-evenly items-center gap-x-2">
         {!answer_question && (
-          <button className="min-w-[120px] cursor-default border border-primary rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
-            <p className="lg:text-base w-[25px] h-[25px] flex items-center justify-center rounded-full text-white bg-primary">
+          <button className="min-w-[120px] cursor-default  rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
+            <p className="lg:text-base w-[25px] h-[25px] flex items-center justify-center rounded-full text-white bg-oldPrimary">
               S
             </p>
             <p className="text-base lg:text-xl text-gray">
@@ -102,8 +102,8 @@ const Score = ({
           </button>
         )}
         {!summary && !answer_question && !describe_image && (
-          <button className="min-w-[120px] cursor-default border border-primary rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
-            <p className="lg:text-base w-[25px] h-[25px] flex items-center justify-center rounded-full text-white bg-cream">
+          <button className="min-w-[120px] cursor-default  rounded-[30px] flex items-center justify-start lg:gap-x-2 gap-x-4 py-1 px-3">
+            <p className="lg:text-base w-[25px] h-[25px] flex items-center justify-center rounded-full text-white bg-[#3EC70B]">
               R
             </p>
             <p className="text-base lg:text-xl text-gray">
@@ -120,11 +120,11 @@ const Score = ({
           }}
           className="border hover:bg-secondary duration-200 border-primary rounded-[30px] flex items-center lg:gap-x-2 gap-x-4 py-1 px-3"
         >
-          <p className="text-base w-[25px] h-[25px] flex items-center justify-center rounded-full text-white bg-blue">
+          <p className="text-base w-[25px] h-[25px] flex items-center justify-center rounded-full text-white bg-primary">
             AI
           </p>
           <p className="text-base lg:text-xl text-gray flex items-center gap-x-1">
-            Detailed Score
+            Score
           </p>
         </button>
       </div>

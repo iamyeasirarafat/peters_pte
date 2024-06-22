@@ -48,8 +48,8 @@ function Reading({ data }) {
                 const title = `${key.charAt(0).toUpperCase()}${key.slice(1).replace(/_/g, " ")}`;
                 const value = `${item.practices}/${item.total}`;
                 const percentage = `${item.percentage}`;
-                const strokeColor = "#4399FF";
-                const trailColor = "#7DD8FF";
+                const strokeColor = "#3EC70B";
+                const trailColor = "#949494";
                 newData.push({ title, value, percentage, strokeColor, trailColor });
             }
         }
@@ -64,7 +64,7 @@ function Reading({ data }) {
     return (
         <div className="bg-white rounded-[10px] h-full p-[15px] ">
             {/* cards  */}
-            <h3 className="font-medium text-[21px] text-[#4399FF] text-center mb-2.5">
+            <h3 className="font-medium text-[21px] text-lightGray text-center mb-2.5">
                 Reading
             </h3>
             <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-2'>

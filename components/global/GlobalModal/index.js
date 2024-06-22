@@ -52,26 +52,25 @@ const GlobalModal = () => {
     pageName === "summarize_written"
       ? "summarize"
       : pageName === "read_write_blanks"
-        ? "read_write_blank"
-        : pageName === "multiple_answers" &&
-          router?.pathname.includes("reading_test")
-          ? "multi_choice_reading"
-          : pageName === "single_answer" &&
-            router?.pathname.includes("reading_test")
-            ? "multi_choice_reading"
-            : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
-              ? "blank_reading"
-              : pageName === "multiple_answers" &&
-                router?.pathname.includes("listening_test")
-                ? "multi_choice"
-                : pageName === "single_answer" &&
-                  router?.pathname.includes("listening_test")
-                  ? "multi_choice"
-                  : pageName === "fill_blanks" &&
-                    router?.pathname.includes("listening_test")
-                    ? "blank"
-                    : pageName;
-  console.log("filteredData", Array.isArray(filteredData))
+      ? "read_write_blank"
+      : pageName === "multiple_answers" &&
+        router?.pathname.includes("reading_test")
+      ? "multi_choice_reading"
+      : pageName === "single_answer" &&
+        router?.pathname.includes("reading_test")
+      ? "multi_choice_reading"
+      : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
+      ? "blank_reading"
+      : pageName === "multiple_answers" &&
+        router?.pathname.includes("listening_test")
+      ? "multi_choice"
+      : pageName === "single_answer" &&
+        router?.pathname.includes("listening_test")
+      ? "multi_choice"
+      : pageName === "fill_blanks" &&
+        router?.pathname.includes("listening_test")
+      ? "blank"
+      : pageName;
   return (
     <Transition.Root show={state.visible} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={toggleModal}>
@@ -146,14 +145,15 @@ const GlobalModal = () => {
                       </div>
                       <div className="space-y-2 h-[calc(100vh-28rem)] pr-2 overflow-auto content-scrollbar">
                         {/* Question */}
-                        {Array.isArray(filteredData) && filteredData?.map((item, i) => (
-                          <QuestionBlock
-                            finalPath={finalPath}
-                            toggleModal={toggleModal}
-                            key={i}
-                            data={item}
-                          />
-                        ))}
+                        {Array.isArray(filteredData) &&
+                          filteredData?.map((item, i) => (
+                            <QuestionBlock
+                              finalPath={finalPath}
+                              toggleModal={toggleModal}
+                              key={i}
+                              data={item}
+                            />
+                          ))}
                       </div>
                       {/* pagination */}
                       <div className="flex items-center justify-end pt-4">

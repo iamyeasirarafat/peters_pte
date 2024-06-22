@@ -48,7 +48,7 @@ const Performances = () => {
   return (
     <>
       <div>
-        <div className="w-full flex flex-col text-[#616161] border border-[#F2B277] p-[15px] rounded-[10px] bg-[#FFF4EB]">
+        <div className="w-full flex flex-col text-[#616161] rounded-t-[10px]  p-[15px]  bg-secondary">
           <h3 className="font-medium text-[21px] text-center mb-2.5">
             All Time Progress
           </h3>
@@ -59,16 +59,16 @@ const Performances = () => {
             ))}
           </div>
         </div>
-        <div className="w-full flex flex-col gap-2 text-[#616161] border border-[#F2B277] p-[15px] rounded-[10px] bg-[#FFF4EB]">
+        <div className="w-full flex flex-col gap-2 text-[#616161] rounded-b-[10px]  p-[15px]  bg-secondary">
           {/* Speaking */}
           {data?.speaking && <Speaking data={data?.speaking} />}
-          <hr />
+
           {/* Reading */}
           {data?.reading && <Reading data={data?.reading} />}
-          <hr />
+
           {/* Listening */}
           {data?.listening && <Listening data={data?.listening} />}
-          <hr />
+
           {/* double */}
           <div className="flex flex-col md:flex-row justify-between gap-2">
             {/* Writing  */}
