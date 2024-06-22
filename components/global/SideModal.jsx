@@ -27,7 +27,7 @@ const SideModal = ({ data }) => {
         onClick={toggleModal}
         className="top-2/4 absolute h-16 w-5 lg:h-20 lg:w-7 flex items-center justify-center bg-primary right-0 rounded-tl-3xl rounded-bl-3xl "
       >
-        <MdDoubleArrow className="rotate-180" />
+        <MdDoubleArrow className="rotate-180 text-white" />
       </button>
       <GlobalModal />
     </>

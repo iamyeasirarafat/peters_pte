@@ -16,25 +16,25 @@ const GlobalMainContent = ({ children, data }) => {
     pageName === "summarize_written"
       ? "summarize"
       : pageName === "read_write_blanks"
-      ? "read_write_blank"
-      : pageName === "multiple_answers" &&
-        router?.pathname.includes("reading_test")
-      ? "multi_choice_reading"
-      : pageName === "single_answer" &&
-        router?.pathname.includes("reading_test")
-      ? "multi_choice_reading"
-      : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
-      ? "blank_reading"
-      : pageName === "multiple_answers" &&
-        router?.pathname.includes("listening_test")
-      ? "multi_choice"
-      : pageName === "single_answer" &&
-        router?.pathname.includes("listening_test")
-      ? "multi_choice"
-      : pageName === "fill_blanks" &&
-        router?.pathname.includes("listening_test")
-      ? "blank"
-      : pageName;
+        ? "read_write_blank"
+        : pageName === "multiple_answers" &&
+          router?.pathname.includes("reading_test")
+          ? "multi_choice_reading"
+          : pageName === "single_answer" &&
+            router?.pathname.includes("reading_test")
+            ? "multi_choice_reading"
+            : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
+              ? "blank_reading"
+              : pageName === "multiple_answers" &&
+                router?.pathname.includes("listening_test")
+                ? "multi_choice"
+                : pageName === "single_answer" &&
+                  router?.pathname.includes("listening_test")
+                  ? "multi_choice"
+                  : pageName === "fill_blanks" &&
+                    router?.pathname.includes("listening_test")
+                    ? "blank"
+                    : pageName;
   //checking if the question is bookmarked
   useEffect(() => {
     if (data?.self_bookmark) {
@@ -45,30 +45,30 @@ const GlobalMainContent = ({ children, data }) => {
   }, [data]);
 
   return (
-    <div className="relative border border-primary rounded-[15px] mt-12">
+    <div className="relative rounded-[15px] mt-12">
       {/* tab button */}
       <div className="flex items-center gap-x-2 absolute bottom-full right-5">
         {data?.prediction && (
-          <button className="text-gray py-1 px-3 rounded-t text-base bg-cream">
+          <button className="text-gray py-1 px-3 rounded text-base bg-secondary ">
             Prediction
           </button>
         )}
-        <button className="text-gray py-1 px-3 rounded-t text-base bg-primary">
+        <button className="text-gray py-1 px-3 rounded text-base bg-secondary ">
           Practiced {data?.practiced ? `(${data?.practiced})` : ""}
         </button>
-        <button className="text-white py-1 px-3 rounded-t text-base bg-blue">
+        <button className="text-gray py-1 px-3 rounded text-base bg-secondary ">
           Appeared ({data?.appeared ? data?.appeared : 0})
         </button>
       </div>
-      <div className="bg-secondary rounded-t-[15px] py-1 px-4 md:px-6 flex items-center justify-between">
-        <p className="text-[#ACACAC] text-base md:text-xl">
+      <div className=" py-1 border-b-2 border-oldPrimary px-4 flex items-center justify-between">
+        <p className="text-oldPrimary font-medium text-2xl">
           {data?.title} | Q No. #{data?.id}
         </p>
         <div className="flex items-center gap-x-2">
           <CiFileOn
             onClick={() => setOpen(true)}
             title="note"
-            className="text-primary text-3xl cursor-pointer"
+            className="text-oldPrimary text-3xl cursor-pointer"
           />
           <button
             onClick={async () => {
@@ -87,9 +87,9 @@ const GlobalMainContent = ({ children, data }) => {
             }}
           >
             {bookmarked ? (
-              <IoBookmark className="text-primary text-3xl" />
+              <IoBookmark className="text-oldPrimary text-3xl" />
             ) : (
-              <CiBookmark className="text-primary text-3xl" />
+              <CiBookmark className="text-oldPrimary text-3xl" />
             )}
           </button>
         </div>
@@ -122,25 +122,25 @@ export const NoteModal = ({ open, setOpen, title, id }) => {
     pageName === "summarize_written"
       ? "summarize"
       : pageName === "read_write_blanks"
-      ? "read_write_blank"
-      : pageName === "multiple_answers" &&
-        router?.pathname.includes("reading_test")
-      ? "multi_choice_reading"
-      : pageName === "single_answer" &&
-        router?.pathname.includes("reading_test")
-      ? "multi_choice_reading"
-      : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
-      ? "blank_reading"
-      : pageName === "multiple_answers" &&
-        router?.pathname.includes("listening_test")
-      ? "multi_choice"
-      : pageName === "single_answer" &&
-        router?.pathname.includes("listening_test")
-      ? "multi_choice"
-      : pageName === "fill_blanks" &&
-        router?.pathname.includes("listening_test")
-      ? "blank"
-      : pageName;
+        ? "read_write_blank"
+        : pageName === "multiple_answers" &&
+          router?.pathname.includes("reading_test")
+          ? "multi_choice_reading"
+          : pageName === "single_answer" &&
+            router?.pathname.includes("reading_test")
+            ? "multi_choice_reading"
+            : pageName === "fill_blanks" && router?.pathname.includes("reading_test")
+              ? "blank_reading"
+              : pageName === "multiple_answers" &&
+                router?.pathname.includes("listening_test")
+                ? "multi_choice"
+                : pageName === "single_answer" &&
+                  router?.pathname.includes("listening_test")
+                  ? "multi_choice"
+                  : pageName === "fill_blanks" &&
+                    router?.pathname.includes("listening_test")
+                    ? "blank"
+                    : pageName;
 
   // get note from api
   useEffect(() => {

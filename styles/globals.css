@@ -41,12 +41,12 @@
 body::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-  background-color: #fff4eb;
+  background-color: #c9fef5;
   border-radius: 1rem;
 }
 
 body::-webkit-scrollbar-thumb {
-  background: #f2b277;
+  background: #00b4d8;
   border-radius: 1rem;
 }
 
@@ -54,12 +54,12 @@ body::-webkit-scrollbar-thumb {
 .content-scrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-  background-color: #cbd5e1;
+  background-color: #c9fef5;
   border-radius: 1rem;
 }
 
 .content-scrollbar::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #00b4d8;
   border-radius: 1rem;
 }
 
@@ -162,7 +162,6 @@ body::-webkit-scrollbar-thumb {
   background-color: #fff4eb;
 }
 
-
 /* user dashboard scrollbar hide */
 .no-scrollbar {
   scrollbar-width: none;
@@ -170,19 +169,12 @@ body::-webkit-scrollbar-thumb {
 
 .whiteGd {
   background: rgb(255, 255, 255);
-  background: linear-gradient(360deg,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(255, 255, 255, 0.7) 55%,
-      rgba(255, 255, 255, 0.5) 100%);
+  background: linear-gradient(
+    360deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.7) 55%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
 }
 
 /* drag and drop  */
-
-
-
-/* custom shadhow */
-
-.custom-shadow {
-  /* border-color: #1e293b !important;
-  border-bottom: 2px !important; */
-}

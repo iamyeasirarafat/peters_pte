@@ -1,9 +1,9 @@
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
-import dynamic from "next/dynamic";
 import Pagination from "../global/Pagination";
 import AudioPlayer from "../global/audio_player/AudioPlayer";
 const DynamicReactMic = dynamic(
@@ -124,7 +124,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
       <div className="whiteGd h-[50px] block md:hidden"></div>
       <div className="border-t-2 border-primary bg-white  w-full left-0 pb-4 block md:hidden " />
       <div className="bg-white md:bg-transparent px-6 md:px-0">
-        <div className="border border-primary rounded-[15px] md:mt-3 pt-7 md:pt-4 p-4 flex flex-col items-center justify-center relative">
+        <div className=" md:mt-3 pt-7 md:pt-4 p-4 flex flex-col items-center justify-center relative">
           {!audioData && (
             <>
               <button
