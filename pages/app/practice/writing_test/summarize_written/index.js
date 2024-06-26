@@ -68,14 +68,12 @@ const Index = () => {
         />
       </GlobalMainContent>
       {/* result section */}
-      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection
-          setAiResult={setAiResult}
-          summary
-          result={result}
-          setOpenModal={setOpen}
-        />
-      )}
+      <ResultSection
+        setAiResult={setAiResult}
+        summary
+        result={result}
+        setOpenModal={setOpen}
+      />
       <SummarizeModal result={aiResult} open={open} setOpen={setOpen} />
     </DashboardLayout>
   );

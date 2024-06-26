@@ -84,13 +84,13 @@ const Index = () => {
         )}
       </GlobalMainContent>
       {/* // result tab */}
-      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection
-          setAiResult={setAiResult}
-          result={result}
-          setOpenModal={setOpenModal}
-        />
-      )}
+
+      <ResultSection
+        setAiResult={setAiResult}
+        result={result}
+        setOpenModal={setOpenModal}
+      />
+
       {isTablet && (
         <>
           <div className="block md:hidden h-[220px]" />

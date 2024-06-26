@@ -1,27 +1,26 @@
-const WordHighlight = ({ words }) => {
+const ErrorHighlight = ({ words }) => {
   return (
     <p className="text-left flex flex-wrap text-xl leading-normal">
       {words?.length > 0 &&
         words.map((item, i) => {
           const colors = {
-            missing: "red",
-            stress_word: "red",
-            mispronounced: "orange",
+            spelling_error: "red",
+            grammar_error: "red",
             correct: "green",
           };
           return (
             <span
               className="mr-1"
               style={{
-                color: colors[item[1]],
+                color: colors[item.status],
               }}
               key={i}
             >
-              {item[0]}
+              {item.word}
             </span>
           );
         })}
     </p>
   );
 };
-export default WordHighlight;
+export default ErrorHighlight;

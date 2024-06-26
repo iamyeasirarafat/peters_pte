@@ -60,14 +60,14 @@ const Page = () => {
           isReady={data?.id ? false : true}
         />
       </GlobalMainContent>
-      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection
-          summary
-          result={result}
-          setAiResult={setAiResult}
-          setOpenModal={setOpenScoreModal}
-        />
-      )}
+
+      <ResultSection
+        summary
+        result={result}
+        setAiResult={setAiResult}
+        setOpenModal={setOpenScoreModal}
+      />
+
       <TranscriptModal open={open} setOpen={setOpen} />
       <SpokenTextModal
         result={aiResult}
