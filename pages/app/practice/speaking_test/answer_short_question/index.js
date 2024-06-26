@@ -2,7 +2,6 @@ import GlobalMainContent from "@/components/global/GlobalMainContent";
 import PageHeader from "@/components/global/PageHeader";
 import ResultSection from "@/components/global/ResultSection";
 import SideModal from "@/components/global/SideModal";
-import ReadAloudModal from "@/components/read-aloud/ReadAloudModal";
 import RecordBlock from "@/components/read-aloud/RecordBlock";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { useMediaQuery } from "react-responsive";
 import AudioPlayer from "../../../../../components/global/audio_player/AudioPlayer";
+import AnswerShortQue from "../../../../../components/read-aloud/AnswerShortQue";
 import DashboardLayout from "../../../layout";
 // const MainContent = dynamic(
 //   () => import("@/components/read-aloud/MainContent"),
@@ -84,14 +84,14 @@ const Index = () => {
         )}
       </GlobalMainContent>
       {/* // result tab */}
-      {(result?.other?.[0]?.user || result?.self?.[0]?.user) && (
-        <ResultSection
-          answer_question
-          setAiResult={setAiResult}
-          result={result}
-          setOpenModal={setOpenModal}
-        />
-      )}
+
+      <ResultSection
+        answer_question
+        setAiResult={setAiResult}
+        result={result}
+        setOpenModal={setOpenModal}
+      />
+
       {isTablet && (
         <>
           <div className="block md:hidden h-[220px]" />
@@ -101,9 +101,7 @@ const Index = () => {
         </>
       )}
       {result && (
-        <ReadAloudModal
-          answer_question
-          // describe_image
+        <AnswerShortQue
           result={aiResult}
           open={openModal}
           setOpen={setOpenModal}

@@ -7,7 +7,7 @@ const sectionTabButton = [
   {
     name: "My Score",
     icon: "/icons/aplus.svg",
-    bgColor: "blue",
+    bgColor: "primary",
     textColor: "white",
   },
   {
@@ -41,6 +41,7 @@ const ResultSection = ({
         {sectionTabButton?.map((button, i) => {
           return (
             <TabButton
+              selected={pageTab === button?.name}
               key={i}
               src={button?.icon}
               bgColor={button?.bgColor}

@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
+import ErrorHighlight from "../global/ErrorHighlight";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
-
 const SummarizeModal = ({ open, setOpen, result }) => {
   const router = useRouter();
   const id = router.query.que_no;
@@ -20,6 +20,10 @@ const SummarizeModal = ({ open, setOpen, result }) => {
     { color: "blue", value: form, name: "Form" },
     { color: "cream", value: vocabulary, name: "Vocabulary" },
   ];
+  function togglePopover(elementId) {
+    const popover = document.getElementById(elementId);
+    popover.classList.toggle('hidden');
+  }
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -94,7 +98,7 @@ const SummarizeModal = ({ open, setOpen, result }) => {
                         strokeWidth={item?.value * 50}
                       />
                     </div>
-                    <p className="text-gray w-1/12 text-xl">{item?.value}/{item?.name === "Form" ? 1:2}</p>
+                    <p className="text-gray w-1/12 text-xl">{item?.value}/{item?.name === "Form" ? 1 : 2}</p>
                   </div>
                 ))}
               </div>
@@ -106,9 +110,7 @@ const SummarizeModal = ({ open, setOpen, result }) => {
               <p className="text-gray text-xl">Your Response</p>
             </div>
             <div className="px-7 py-5">
-              <p className="text-left text-xl leading-normal">
-                {result?.answer}
-              </p>
+              <ErrorHighlight words={result?.scores?.word_highlight} />
             </div>
           </div>
           <div className="flex items-center justify-between">
