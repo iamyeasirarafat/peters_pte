@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
+import ErrorHighlight from "../global/ErrorHighlight";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 
@@ -77,52 +78,7 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
                 <p className="text-gray text-xl mt-1">Out of 10.00</p>
               </div>
             </div>
-            {/* <div className="col-span-4 w-full border border-primary rounded-[13px]">
-              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Listening Score</p>
-              </div>
-              score point
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-32 h-w-32">
-                  <CircularProgressbar
-                    value={listening}
-                    text={listening}
-                    strokeWidth={15}
-                    maxValue={90}
-                    styles={buildStyles({
-                      textColor: "gray",
-                      textSize: "20px",
-                      pathColor: "#ff8412",
-                      trailColor: "#f1f1f1",
-                    })}
-                  />
-                </div>
-                <p className="text-gray text-xl mt-1">Out of 90.00</p>
-              </div>
-            </div> */}
-            {/* <div className="col-span-4 w-full border border-primary rounded-[13px]">
-              <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">Writing Score</p>
-              </div>
-              score point
-              <div className="flex flex-col items-center justify-center p-4">
-                <div className="w-32 h-w-32">
-                  <CircularProgressbar
-                    value={writing}
-                    text={writing}
-                    strokeWidth={15}
-                    maxValue={90}
-                    styles={buildStyles({
-                      textColor: "gray",
-                      textSize: "20px",
-                      pathColor: "#ff8412",
-                      trailColor: "#f1f1f1",
-                    })}
-                  />
-                </div>
-                <p className="text-gray text-xl mt-1">Out of 90.00</p>
-              </div>
-            </div> */}
+
 
             {/* Total Score */}
             <div className="col-span-8 w-full border border-primary rounded-[13px]">
@@ -158,7 +114,7 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
               <p className="text-gray text-xl">Your Response</p>
             </div>
             <div className="px-7 py-5">
-              <p className="text-left text-xl">{result?.answer}</p>
+              <ErrorHighlight words={result?.scores?.word_highlights} />
             </div>
           </div>
           <div className="flex items-center justify-between">

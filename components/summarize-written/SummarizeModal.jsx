@@ -122,17 +122,6 @@ const SummarizeModal = ({ open, setOpen, result }) => {
             </p>
             <p className="text-gray text-lg font-medium">English: British</p>
           </div>
-          {/* Suggestion */}
-          {/* <div className="w-full border border-primary rounded-[13px] mt-4">
-            <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-              <p className="text-gray text-xl">Suggestion</p>
-            </div>
-            <div className="px-7 py-5">
-              <p className="text-left text-base leading-normal">
-                {result?.suggestion}
-              </p>
-            </div>
-          </div> */}
           <p className="text-center mt-3 text-lightGray">
             This score will disappear on 02/08/2023
           </p>

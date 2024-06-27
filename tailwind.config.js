@@ -167,7 +167,6 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/forms"),
-    require('flowbite/plugin'),
     require("@headlessui/tailwindcss")({ prefix: "ui" }),
     require("tailwind-scrollbar"),
     plugin(function ({ addBase, addComponents, addUtilities }) {
