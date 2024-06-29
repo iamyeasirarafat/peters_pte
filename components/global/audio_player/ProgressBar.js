@@ -18,7 +18,7 @@ const ProgressBar = ({ progressBarRef, audioRef, timeProgress, duration }) => {
     <div className="progress flex gap-4 items-center">
       <span className="time current">{formatTime(timeProgress)}</span>
       <input
-        className="progress_bar"
+        className="progress_bar transition-all duration-300 ease-linear"
         type="range"
         ref={progressBarRef}
         defaultValue="0"

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
+import { checkMicrophonePermission } from "../../utils/checkMic";
 import Pagination from "../global/Pagination";
 import AudioPlayer from "../global/audio_player/AudioPlayer";
 const DynamicReactMic = dynamic(
@@ -15,7 +16,7 @@ const DynamicReactMic = dynamic(
 
 const RecordBlock = ({ setReFetch, api, data }) => {
   // countdown function
-  const targetDate = new Date().getTime() + 35000;
+  let targetDate = new Date().getTime() + 35000;
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   function calculateTimeLeft() {
@@ -30,6 +31,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
 
   useEffect(() => {
     if (data?.id) {
+      targetDate = new Date().getTime() + 37000;
       const interval = setInterval(() => {
         setTimeLeft(calculateTimeLeft());
       }, 1000);
@@ -45,9 +47,27 @@ const RecordBlock = ({ setReFetch, api, data }) => {
   const [recordingTime, setRecordingTime] = useState(0); // Track recording time
   let timerId;
 
+  //Checking microphone permission
+  const [micPermission, setMicPermission] = useState(false);
+  useEffect(() => {
+    const checkPermission = async () => {
+      const permission = await checkMicrophonePermission();
+      if (!permission) {
+        toast.error("Please allow microphone permission");
+      } else {
+        setMicPermission(true);
+      }
+    };
+    checkPermission();
+  }, []);
+
   const handleStartRecording = () => {
+    if (!micPermission) {
+      toast.error("Please allow microphone permission");
+      return;
+    }
     setRecordingTime(0);
-    beepAudio.play();
+    // beepAudio.play();
     setIsRecording(true);
     timerId = setTimeout(handleStopRecording, 40000);
     setAudioData(null);

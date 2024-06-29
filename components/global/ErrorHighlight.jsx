@@ -1,31 +1,4 @@
-// const ErrorHighlight = ({ words }) => {
-//   return (
-//     <p className="text-left flex flex-wrap text-xl leading-normal">
-//       {words?.length > 0 &&
-//         words.map((item, i) => {
-//           const colors = {
-//             spelling_error: "red",
-//             grammar_error: "red",
-//             correct: "green",
-//           };
-//           return (
-//             <>
-//               <span
-//                 className={`${(item.status === "spelling_error" || item.status === "grammar_error") && "underline cursor-pointer"}  mr-1`}
-//                 style={{
-//                   color: colors[item.status],
-//                 }}
-//                 key={i}
-//               >
-//                 {item.word}
-//               </span>
-//             </>
-//           );
-//         })}
-//     </p>
-//   );
-// };
-// export default ErrorHighlight;
+
 
 
 // components/Popover.js
@@ -51,8 +24,8 @@ const ErrorHighlight = ({ words }) => {
   };
 
   const colors = {
-    spelling_error: 'text-red-500',
-    grammar_error: 'text-red-500',
+    spelling_error: 'text-red',
+    grammar_error: 'text-red',
     correct: 'text-green-500',
   };
 
