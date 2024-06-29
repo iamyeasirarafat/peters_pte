@@ -39,11 +39,6 @@ const Index = () => {
     };
 
     id && getData();
-
-    // get Discussion data
-    const getDiscussion = async () => {
-      const { data } = await axios(`/read_aloud /${id}/discussions`);
-    };
   }, [id]);
 
   useEffect(() => {
