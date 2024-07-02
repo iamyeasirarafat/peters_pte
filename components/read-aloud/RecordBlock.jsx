@@ -69,7 +69,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
     setRecordingTime(0);
     // beepAudio.play();
     setIsRecording(true);
-    timerId = setTimeout(handleStopRecording, 40000);
+    timerId = setTimeout(handleStopRecording, 35000);
     setAudioData(null);
   };
 
@@ -103,7 +103,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
   }, [isRecording]);
 
   //progressbar width
-  const progressBarWidth = (recordingTime / 40000) * 100;
+  const progressBarWidth = (recordingTime / 35000) * 100;
   // handle submit function
   const router = useRouter();
   const id = router.query.que_no;
@@ -183,7 +183,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
                 <p className="text-base text-gray">
                   0:{Math.floor(recordingTime / 1000)}
                 </p>
-                <p className="text-base text-gray">0:40</p>
+                <p className="text-base text-gray">0:35</p>
               </div>
               <div className="relative bg-secondary w-full h-2 rounded-[13px]">
                 <div
