@@ -53,7 +53,7 @@ function Page() {
       </p>
       <GlobalMainContent data={data}>
         {/* text block */}
-        <TextBlock data={data} />
+        <TextBlock highlight={true} readAloud={false} data={data} />
         {/* Multiple Choice Answer */}
         <SingleChoiceAnswer
           text_content={data?.text_content}

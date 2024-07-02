@@ -7,8 +7,6 @@ import SideModal from "@/components/global/SideModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { IoIosArrowBack } from "react-icons/io";
-import { RxShuffle } from "react-icons/rx";
 import TextBlock from "../../../../../components/global/TextBlock";
 import DashboardLayout from "../../../layout";
 
@@ -54,7 +52,7 @@ function Page() {
       </p>
       <GlobalMainContent data={data}>
         {/* text block */}
-        <TextBlock data={data} />
+        <TextBlock highlight multiple readAloud={false} data={data} />
         {/* Multiple Choice Answer */}
         <MultipleChoiceAnswer
           text_content={data?.text_content}
