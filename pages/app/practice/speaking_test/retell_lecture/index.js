@@ -58,6 +58,23 @@ const Index = () => {
     title: "Retell Lecture",
     api: "/retell_sentences",
   };
+
+  // start countdownTime after audio clips finished
+  const [startTime, setStartTime] = useState(false);
+  const [beginText, setBeginText] = useState(false);
+  useEffect(() => {
+    // this function will call after one second
+    const timer = setTimeout(() => {
+      const audioPlayer = document.getElementById("audio__player");
+      if (audioPlayer) {
+        audioPlayer.addEventListener("ended", () => {
+          setStartTime(true);
+          setBeginText(true);
+        });
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <DashboardLayout>
       {/* Side Modal */}
@@ -74,12 +91,20 @@ const Index = () => {
       <GlobalMainContent data={data}>
         {/* text block */}
         <div className="border border-primary p-4 rounded-[15px]">
-          <AudioPlayer listening data={data} apiAudio />
+          <AudioPlayer autoPlayAfter={4} listening data={data} apiAudio />
         </div>
         {/* recording Block */}
 
         {isTablet || (
-          <RecordBlock data={data} api={answerApi} setReFetch={setReFetch} />
+          <RecordBlock
+            startCountdown={startTime}
+            stopTimer={40}
+            beginTimer={6}
+            beginText={beginText}
+            data={data}
+            api={answerApi}
+            setReFetch={setReFetch}
+          />
         )}
       </GlobalMainContent>
       {/* // result tab */}
@@ -94,7 +119,15 @@ const Index = () => {
         <>
           <div className="block md:hidden h-[220px]" />
           <div className="block absolute bottom-0 w-full left-0  md:hidden">
-            <RecordBlock data={data} api={answerApi} setReFetch={setReFetch} />
+            <RecordBlock
+              startCountdown={startTime}
+              stopTimer={40}
+              beginTimer={6}
+              beginText={beginText}
+              data={data}
+              api={answerApi}
+              setReFetch={setReFetch}
+            />
           </div>
         </>
       )}

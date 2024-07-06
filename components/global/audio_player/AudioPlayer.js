@@ -6,9 +6,8 @@ import getBlobDuration from "../../../utils/getBlobDuration";
 import Controls from "./Controls";
 import ProgressBar from "./ProgressBar";
 
-// const AudioPlayer = ({ apiAudio, data }) => {
 // states
-const AudioPlayer = ({ listening, data, apiAudio }) => {
+const AudioPlayer = ({ listening, data, apiAudio, autoPlayAfter = 5 }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -76,7 +75,7 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
           });
           setIsPlaying(true);
         }
-      }, 5000);
+      }, autoPlayAfter * 1000);
 
       countdownIntervalRef.current = setInterval(() => {
         setCountdown((prev) => {
@@ -104,7 +103,7 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
 
   const router = useRouter();
   useEffect(() => {
-    setCountdown(5);
+    setCountdown(autoPlayAfter);
     setAlreadyPlayed(false);
   }, [router.query]);
 
@@ -120,6 +119,7 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
       <div className={`audio-player ${duration || "hidden"}`}>
         <div className="inner flex flex-col justify-center w-full">
           <audio
+            id="audio__player"
             src={currentTrack}
             ref={audioRef}
             onLoadedMetadata={onLoadedMetadata}
