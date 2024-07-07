@@ -148,7 +148,10 @@ const RecordBlock = ({ beginTimer = 35, beginText = true, setReFetch, api, data,
 
   // if change question automatically removing old record function
   useEffect(() => {
-    setAudioData(null);
+    handleStopRecording();
+    setTimeout(() => {
+      setAudioData(null);
+    }, 100);
   }, [id]);
   return (
     <div>

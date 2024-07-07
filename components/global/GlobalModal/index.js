@@ -16,35 +16,47 @@ const GlobalModal = () => {
   const dispatch = useDispatch();
   const toggleModal = () => dispatch(modalSlice({}));
   const [questionType, setQuestionType] = useState("All");
-
+  const [queryParams, setQueryParams] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [prediction, setPrediction] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
+  const limit = 10;
   //getting Data from api functions
   const [data, setData] = useState([]);
   useEffect(() => {
+    const api = `${state.data.api}${`?page=${
+      pageNumber ? pageNumber : 1
+    }`}${`&limit=${limit}`}${queryParams ? `&query=${queryParams}` : ""}${
+      prediction ? `&prediction=${prediction}` : ""
+    }${bookmark ? `&bookmark=${bookmark}` : ""}`;
+    console.log(api);
     const getData = async () => {
-      const { data } = await axios(state?.data?.api);
+      const { data } = await axios(api);
       setData(data);
     };
     if (state.visible) {
       getData();
     }
-  }, [state]);
+  }, [bookmark, pageNumber, prediction, queryParams, state]);
 
   // data filtration
   const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
     if (questionType === "All") {
-      setFilteredData(data);
+      setFilteredData(data?.results);
     }
     if (questionType === "Practiced") {
-      const filter = data.filter((item) => item.practiced > 0);
+      const filter = data?.results.filter((item) => item.practiced > 0);
       setFilteredData(filter);
     }
     if (questionType === "Not_Practiced") {
-      const filter = data.filter((item) => item.practiced === 0);
+      const filter = data?.results.filter(
+        (item) => item.practiced === 0 || !item.practiced
+      );
       setFilteredData(filter);
     }
   }, [data, questionType]);
-
+  console.log(typeof pageNumber);
   //creating final path for the api
   const router = useRouter();
   const pageName = getPageName(router?.pathname);
@@ -133,13 +145,28 @@ const GlobalModal = () => {
                     <div className="relative border border-primary rounded-[13px] bg-white p-5 mt-11">
                       {/* tab button */}
                       <div className="flex items-center gap-x-2 absolute bottom-full right-5">
-                        <button className="text-gray py-1 px-3 rounded-t-md text-base bg-cream">
+                        <button
+                          onClick={() => setPrediction(false)}
+                          className={`${
+                            prediction ? "bg-cream" : "bg-primary"
+                          } text-gray py-1 px-3 rounded-t-md text-base `}
+                        >
                           All
                         </button>
-                        <button className="text-gray py-1 px-3 rounded-t-md text-base bg-primary">
+                        <button
+                          onClick={() => setPrediction((prev) => !prev)}
+                          className={`${
+                            prediction ? "bg-primary" : "bg-cream"
+                          } text-gray py-1 px-3 rounded-t-md text-base `}
+                        >
                           Prediction
                         </button>
-                        <button className="text-white py-1 px-3 rounded-t-md text-base bg-blue">
+                        <button
+                          onClick={() => setBookmark((prev) => !prev)}
+                          className={`${
+                            bookmark ? "bg-primary" : "bg-cream"
+                          } text-gray py-1 px-3 rounded-t-md text-base `}
+                        >
                           BookMarked
                         </button>
                       </div>
@@ -158,19 +185,47 @@ const GlobalModal = () => {
                       {/* pagination */}
                       <div className="flex items-center justify-end pt-4">
                         <div className="bg-secondary rounded-[30px] px-4 py-[5px] flex items-center gap-x-2">
-                          <IoIosArrowBack className="text-lg text-gray cursor-pointer" />
-                          <select
-                            className="py-2 bg-white rounded-[22px] outline-none border-0 focus:outline-none focus:ring-0"
-                            name=""
-                            id=""
+                          <button
+                            disabled={!data.prev}
+                            onClick={() =>
+                              setPageNumber(Number(pageNumber) - 1)
+                            }
+                            className="disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                          </select>
+                            <IoIosArrowBack className="text-lg text-gray " />
+                          </button>
+                          <input
+                            value={pageNumber}
+                            onChange={(e) => setPageNumber(e.target.value)}
+                            type="number"
+                            className="py-2 w-15 appearance-none bg-white rounded-[22px] outline-none border-0 focus:outline-none focus:ring-0 text-center"
+                          />
+
+                          {/* //for hide the up and down button */}
+                          <style jsx>{`
+                            input[type="number"]::-webkit-outer-spin-button,
+                            input[type="number"]::-webkit-inner-spin-button {
+                              -webkit-appearance: none;
+                              margin: 0;
+                            }
+
+                            input[type="number"] {
+                              -moz-appearance: textfield;
+                            }
+                          `}</style>
                           <p className="text-sm text-gray font-medium">of</p>
-                          <p className="text-sm text-gray font-medium">1127</p>
-                          <IoIosArrowBack className="text-lg text-gray cursor-pointer rotate-180" />
+                          <p className="text-sm text-gray font-medium">
+                            {Math.ceil(data?.total / limit)}
+                          </p>
+                          <button
+                            disabled={!data.next}
+                            onClick={() =>
+                              setPageNumber(Number(pageNumber) + 1)
+                            }
+                            className="disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <IoIosArrowBack className="text-lg text-gray rotate-180" />
+                          </button>
                         </div>
                       </div>
                     </div>

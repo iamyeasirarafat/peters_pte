@@ -64,15 +64,14 @@ function Page() {
           api={answerApi}
         />
       </GlobalMainContent>
-      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
-        <ResultSection
-          summary
-          setOpenModal={setOpenScoreModal}
-          setOpenScoreModal={setOpenScoreModal}
-          result={result}
-          setAiResult={setAiResult}
-        />
-      )}
+      <ResultSection
+        summary
+        setOpenModal={setOpenScoreModal}
+        setOpenScoreModal={setOpenScoreModal}
+        result={result}
+        setAiResult={setAiResult}
+      />
+
       <MultipleChoiceAiModal
         outOf={aiResult?.scores?.score_details?.right_options?.length || 0}
         result={aiResult}

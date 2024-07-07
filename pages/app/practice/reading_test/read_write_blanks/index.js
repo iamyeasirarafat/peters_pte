@@ -62,15 +62,14 @@ const Page = () => {
           option_list={data?.options || []}
         />
       </GlobalMainContent>
-      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
-        <ResultSection
-          summary
-          setOpenModal={setOpenScoreModal}
-          setOpenScoreModal={setOpenScoreModal}
-          result={result}
-          setAiResult={setAiResult}
-        />
-      )}
+      <ResultSection
+        summary
+        setOpenModal={setOpenScoreModal}
+        setOpenScoreModal={setOpenScoreModal}
+        result={result}
+        setAiResult={setAiResult}
+      />
+
       <FillBlanksModal
         data={aiResult}
         open={openScoreModal}
