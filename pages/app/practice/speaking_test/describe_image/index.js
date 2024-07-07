@@ -58,6 +58,7 @@ const Index = () => {
     title: "Describe Image",
     api: "/describe_images",
   };
+
   return (
     <DashboardLayout>
       {/* Side Modal */}
@@ -80,12 +81,19 @@ const Index = () => {
         {/* recording Block */}
 
         {isTablet || (
-          <RecordBlock data={data} api={answerApi} setReFetch={setReFetch} />
+          <RecordBlock
+            beginTimer={25}
+            stopTimer={40}
+            data={data}
+            api={answerApi}
+            setReFetch={setReFetch}
+          />
         )}
       </GlobalMainContent>
       {/* // result tab */}
 
       <ResultSection
+        downloadable
         describe_image
         summary
         setAiResult={setAiResult}
@@ -97,7 +105,13 @@ const Index = () => {
         <>
           <div className="block md:hidden h-[220px]" />
           <div className="block absolute bottom-0 w-full left-0  md:hidden">
-            <RecordBlock data={data} api={answerApi} setReFetch={setReFetch} />
+            <RecordBlock
+              beginTimer={25}
+              stopTimer={40}
+              data={data}
+              api={answerApi}
+              setReFetch={setReFetch}
+            />
           </div>
         </>
       )}

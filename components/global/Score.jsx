@@ -2,6 +2,7 @@ import { formatDateTime } from "@/utils/formatDateTime";
 import { BiSolidTrashAlt } from "react-icons/bi";
 import { BsPlusCircle } from "react-icons/bs";
 import { MdOutlineFileDownload } from "react-icons/md";
+import AudioDownloader from "../../utils/audioDownloader";
 
 const Score = ({
   result,
@@ -11,8 +12,11 @@ const Score = ({
   setAiResult,
   answer_question,
   describe_image,
-  repeat_sentence
+  repeat_sentence,
+  downloadable,
 }) => {
+
+  const downloadAudio = AudioDownloader();
   return (
     <div className="border border-oldPrimary rounded-[15px] p-2">
       <div className="flex items-center justify-between ">
@@ -79,7 +83,15 @@ const Score = ({
         {/* icons */}
         {!others && (
           <div className="flex items-center gap-x-4">
-            <MdOutlineFileDownload className="text-3xl text-primary cursor-pointer" />
+            {
+              downloadable && <MdOutlineFileDownload
+                onClick={() => {
+                  downloadAudio(result?.audio)
+                    .then()
+                    .catch((error) => toast.error("Failed to download audio"));
+                }}
+                className="text-3xl text-primary cursor-pointer" />
+            }
             <BiSolidTrashAlt className="text-2xl text-oldPrimary cursor-pointer" />
           </div>
         )}

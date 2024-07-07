@@ -64,15 +64,15 @@ const Page = () => {
           sentence={data?.sentence}
         />
       </GlobalMainContent>
-      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
-        <ResultSection
-          summary
-          setOpenModal={setOpenScoreModal}
-          setOpenScoreModal={setOpenScoreModal}
-          result={result}
-          setAiResult={setAiResult}
-        />
-      )}
+
+      <ResultSection
+        summary
+        setOpenModal={setOpenScoreModal}
+        setOpenScoreModal={setOpenScoreModal}
+        result={result}
+        setAiResult={setAiResult}
+      />
+
       <FillBlanksModal
         fill_blanks
         data={aiResult}

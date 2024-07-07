@@ -31,7 +31,8 @@ const ResultSection = ({
   setOpenScoreModal,
   setAiResult,
   describe_image,
-  repeat_sentence
+  repeat_sentence,
+  downloadable
 }) => {
   const [pageTab, setPageTab] = useState("My Score");
   return (
@@ -60,6 +61,7 @@ const ResultSection = ({
         <div className="space-y-2">
           {result?.self?.map((item, index) => (
             <Score
+              downloadable={downloadable}
               repeat_sentence={repeat_sentence}
               describe_image={describe_image}
               answer_question={answer_question}
@@ -76,6 +78,7 @@ const ResultSection = ({
         <div className="space-y-2">
           {result?.other?.map((item, index) => (
             <Score
+              downloadable={downloadable}
               repeat_sentence={repeat_sentence}
               describe_image={describe_image}
               answer_question={answer_question}

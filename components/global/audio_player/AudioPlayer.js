@@ -6,9 +6,8 @@ import getBlobDuration from "../../../utils/getBlobDuration";
 import Controls from "./Controls";
 import ProgressBar from "./ProgressBar";
 
-// const AudioPlayer = ({ apiAudio, data }) => {
 // states
-const AudioPlayer = ({ listening, data, apiAudio }) => {
+const AudioPlayer = ({ listening, data, apiAudio, autoPlayAfter = 5 }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [timeProgress, setTimeProgress] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -16,7 +15,7 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [countdown, setCountdown] = useState(5);
   const [alreadyPlayed, setAlreadyPlayed] = useState(false);
-
+  const [startCountdown, setStartCountdown] = useState(false);
   const audioRef = useRef();
   const progressBarRef = useRef();
   const playTimeoutRef = useRef();
@@ -36,6 +35,7 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
         ? audioRef.current.duration
         : await getBlobDuration(data);
       setDuration(seconds);
+      setStartCountdown(true);
       if (progressBarRef.current) {
         progressBarRef.current.max = seconds;
       }
@@ -67,26 +67,28 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
     }
 
     if (audioRef.current && userInteracted) {
-      playTimeoutRef.current = setTimeout(() => {
-        if (alreadyPlayed) {
-          return;
-        } else {
-          audioRef.current.play().catch((error) => {
-            console.error("Autoplay failed:", error);
-          });
-          setIsPlaying(true);
-        }
-      }, 5000);
-
-      countdownIntervalRef.current = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(countdownIntervalRef.current);
-            return 0;
+      // check if startcowntdown is true
+      if (startCountdown) {
+        playTimeoutRef.current = setTimeout(() => {
+          if (alreadyPlayed) {
+            return;
+          } else {
+            audioRef.current.play().catch((error) => {
+              console.error("Autoplay failed:", error);
+            });
+            setIsPlaying(true);
           }
-          return prev - 1;
-        });
-      }, 1000);
+        }, autoPlayAfter * 1000);
+        countdownIntervalRef.current = setInterval(() => {
+          setCountdown((prev) => {
+            if (prev <= 1) {
+              clearInterval(countdownIntervalRef.current);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      }
 
       return () => {
         clearTimeout(playTimeoutRef.current);
@@ -96,7 +98,13 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
         }
       };
     }
-  }, [userInteracted, currentTrack, alreadyPlayed]);
+  }, [
+    userInteracted,
+    currentTrack,
+    alreadyPlayed,
+    autoPlayAfter,
+    startCountdown,
+  ]);
 
   useEffect(() => {
     listening && handleUserInteraction();
@@ -104,7 +112,7 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
 
   const router = useRouter();
   useEffect(() => {
-    setCountdown(5);
+    setCountdown(autoPlayAfter);
     setAlreadyPlayed(false);
   }, [router.query]);
 
@@ -120,6 +128,7 @@ const AudioPlayer = ({ listening, data, apiAudio }) => {
       <div className={`audio-player ${duration || "hidden"}`}>
         <div className="inner flex flex-col justify-center w-full">
           <audio
+            id="audio__player"
             src={currentTrack}
             ref={audioRef}
             onLoadedMetadata={onLoadedMetadata}

@@ -1,7 +1,7 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
 import { checkMicrophonePermission } from "../../utils/checkMic";
@@ -14,16 +14,16 @@ const DynamicReactMic = dynamic(
   }
 );
 
-const RecordBlock = ({ setReFetch, api, data }) => {
+const RecordBlock = ({ beginTimer = 35, beginText = true, setReFetch, api, data, stopTimer = 35, startRecord, startCountdown = true }) => {
   // countdown function
-  let targetDate = new Date().getTime() + 35000;
+  let targetDate = new Date().getTime() + beginTimer * 1000;
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   function calculateTimeLeft() {
     const difference = targetDate - new Date().getTime();
     const timeLeft = {};
 
-    if (difference > 0) {
+    if (difference > 0 && startCountdown) {
       timeLeft.seconds = Math.floor(difference / 1000);
     }
     return timeLeft;
@@ -31,13 +31,13 @@ const RecordBlock = ({ setReFetch, api, data }) => {
 
   useEffect(() => {
     if (data?.id) {
-      targetDate = new Date().getTime() + 37000;
+      targetDate = new Date().getTime() + (beginTimer + 2) * 1000;
       const interval = setInterval(() => {
         setTimeLeft(calculateTimeLeft());
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [data]);
+  }, [data, startCountdown]);
 
   //recording function...
   const [isRecording, setIsRecording] = useState(false);
@@ -69,9 +69,20 @@ const RecordBlock = ({ setReFetch, api, data }) => {
     setRecordingTime(0);
     // beepAudio.play();
     setIsRecording(true);
-    timerId = setTimeout(handleStopRecording, 35000);
+    timerId = setTimeout(handleStopRecording, stopTimer * 1000);
     setAudioData(null);
   };
+
+  //! start recording from another component
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      handleStartRecording()
+    }
+  }, [startRecord]);
 
   const handleStopRecording = () => {
     setIsRecording(false);
@@ -103,7 +114,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
   }, [isRecording]);
 
   //progressbar width
-  const progressBarWidth = (recordingTime / 35000) * 100;
+  const progressBarWidth = (recordingTime / (stopTimer * 1000)) * 100;
   // handle submit function
   const router = useRouter();
   const id = router.query.que_no;
@@ -137,7 +148,10 @@ const RecordBlock = ({ setReFetch, api, data }) => {
 
   // if change question automatically removing old record function
   useEffect(() => {
-    setAudioData(null);
+    handleStopRecording();
+    setTimeout(() => {
+      setAudioData(null);
+    }, 100);
   }, [id]);
   return (
     <div>
@@ -169,7 +183,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
               <p className="text-base text-gray">
                 Click To {isRecording ? "Stop" : "Start"}
               </p>
-              {!isRecording && !audioData && (
+              {!isRecording && !audioData && beginText && (
                 <p className="text-sm text-accent">
                   <i>Beginning in {timeLeft.seconds} Sec...</i>
                 </p>
@@ -183,7 +197,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
                 <p className="text-base text-gray">
                   0:{Math.floor(recordingTime / 1000)}
                 </p>
-                <p className="text-base text-gray">0:35</p>
+                <p className="text-base text-gray">0:{stopTimer}</p>
               </div>
               <div className="relative bg-secondary w-full h-2 rounded-[13px]">
                 <div
@@ -209,3 +223,6 @@ const RecordBlock = ({ setReFetch, api, data }) => {
 };
 
 export default RecordBlock;
+
+
+
