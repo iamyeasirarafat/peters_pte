@@ -20,8 +20,9 @@ const TopNav = ({ dashboard }) => {
   };
   return (
     <div
-      className={`${topNav ? "" : "-mt-16"
-        } transition-all border-b shadow-2xl  bg-white duration-300 ease-linear`}
+      className={`${
+        topNav ? "" : "-mt-16"
+      } transition-all border-b shadow-2xl  bg-white duration-300 ease-linear`}
     >
       <div className=" h-16 w-full p-1.5 container mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
         <button
@@ -34,8 +35,8 @@ const TopNav = ({ dashboard }) => {
         <MenuItem />
         <UserDropdown />
       </div>
-      {
-        topNav && <button
+      {topNav && (
+        <button
           onClick={toggleTopNav}
           className="hidden lg:block absolute bg-primary top-6 right-4"
         >
@@ -47,7 +48,7 @@ const TopNav = ({ dashboard }) => {
             alt="icon"
           />
         </button>
-      }
+      )}
       <MobileMenu
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
@@ -84,15 +85,22 @@ const MenuItem = () => {
           <div className="pt-5 bg-white h-full w-full mt-5">
             <div className="w-full container mx-auto flex justify-between gap-x-3">
               {Object.keys(menuData).map((item, index) => {
-                const itemColor = item.includes("Speaking") ? "#FF8D29" : item.includes("Writing") ? "#2D46B9" : item.includes("Reading") ? "#3EC70B" : "#00B4D8"
+                const itemColor = item.includes("Speaking")
+                  ? "#FF8D29"
+                  : item.includes("Writing")
+                  ? "#2D46B9"
+                  : item.includes("Reading")
+                  ? "#3EC70B"
+                  : "#00B4D8";
                 return (
                   <div key={index} className="w-full">
                     <h3
                       style={{
-                        "color": itemColor,
-                        "borderColor": itemColor
+                        color: itemColor,
+                        borderColor: itemColor,
                       }}
-                      className=" text-xl border-b mr-10 leading-10 w-full">
+                      className=" text-xl border-b mr-10 leading-10 w-full"
+                    >
                       {item}
                     </h3>
                     <div className="space-y-2 mt-3">
@@ -116,13 +124,15 @@ const MenuItem = () => {
                               )}
                             </div> */}
                             <h2 className="font-cabin hover:text-primary  duration-300 text-base leading-tight text-gray">
-                              {test?.name} <span
-                                style={
-                                  {
-                                    "color": itemColor
-                                  }
-                                }
-                                className="text-sm font-semibold font-avantt">{test.icon}</span>
+                              {test?.name}{" "}
+                              <span
+                                style={{
+                                  color: itemColor,
+                                }}
+                                className="text-sm font-semibold font-avantt"
+                              >
+                                {test.icon}
+                              </span>
                             </h2>
                           </Link>
                         );
@@ -139,10 +149,10 @@ const MenuItem = () => {
                   Study Materials
                 </h1>
                 <div className="flex  justify-between">
-                  <Link href='#'>Vocabularies</Link>
-                  <Link href='#'>Templates</Link>
-                  <Link href='#'>Predictions</Link>
-                  <Link href='#'>Marking</Link>
+                  <Link href="#">Vocabularies</Link>
+                  <Link href="#">Templates</Link>
+                  <Link href="#">Predictions</Link>
+                  <Link href="#">Marking</Link>
                 </div>
               </div>
             </div>
@@ -176,7 +186,6 @@ const UserDropdown = () => {
   const { user } = useSelector((state) => state?.user);
   return (
     <div className="flex gap-2 relative">
-
       <button
         onClick={() => setShowProfile(!showProfile)}
         className="rounded-full overflow-hidden text-4xl  w-12 h-12 text-white bg-primary capitalize flex items-center justify-center"
@@ -250,8 +259,9 @@ const UserDropdown = () => {
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   return (
     <div
-      className={`w-[250px] h-full bg-secondary absolute top-0  ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } z-50 pt-14 transition-transform duration-500 ease-in-out`}
+      className={`w-[250px] h-full bg-secondary absolute top-0  ${
+        mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+      } z-50 pt-14 transition-transform duration-500 ease-in-out`}
     >
       <RiCloseCircleLine
         onClick={() => setMobileMenuOpen(false)}
