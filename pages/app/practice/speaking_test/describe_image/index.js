@@ -93,6 +93,7 @@ const Index = () => {
       {/* // result tab */}
 
       <ResultSection
+        downloadable
         describe_image
         summary
         setAiResult={setAiResult}

@@ -109,6 +109,7 @@ const Index = () => {
       {/* // result tab */}
 
       <ResultSection
+        downloadable
         answer_question
         setAiResult={setAiResult}
         result={result}

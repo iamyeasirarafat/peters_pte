@@ -65,15 +65,13 @@ function Page() {
           api={answerApi}
         />
       </GlobalMainContent>
-      {(result?.self?.[0]?.user || result?.other?.[0]?.user) && (
-        <ResultSection
-          summary
-          setOpenModal={setOpenScoreModal}
-          setOpenScoreModal={setOpenScoreModal}
-          result={result}
-          setAiResult={setAiResult}
-        />
-      )}
+      <ResultSection
+        summary
+        setOpenModal={setOpenScoreModal}
+        setOpenScoreModal={setOpenScoreModal}
+        result={result}
+        setAiResult={setAiResult}
+      />
       <TranscriptModal
         open={openTranscriptModal}
         setOpen={setOpenTranscriptModal}

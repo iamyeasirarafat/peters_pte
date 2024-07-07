@@ -109,6 +109,7 @@ const Index = () => {
       {/* // result tab */}
 
       <ResultSection
+        downloadable
         repeat_sentence
         // answer_question
         setAiResult={setAiResult}

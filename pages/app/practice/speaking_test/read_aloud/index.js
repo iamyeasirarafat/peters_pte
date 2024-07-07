@@ -81,6 +81,7 @@ const Index = () => {
       {/* // result tab */}
 
       <ResultSection
+        downloadable
         setAiResult={setAiResult}
         result={result}
         setOpenModal={setOpenModal}
