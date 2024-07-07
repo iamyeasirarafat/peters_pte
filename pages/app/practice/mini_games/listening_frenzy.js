@@ -13,6 +13,7 @@ function ListeningFrenzy() {
   const [aid, setAid] = useState("");
   const [isCorrect, setIsCorrect] = useState(true);
   const [tryAgain, setTryAgain] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     // fetch question
@@ -23,6 +24,7 @@ function ListeningFrenzy() {
         );
         setQuestion(res?.data);
         setGameScore({ current: res?.data?.score, max: res?.data?.max_score });
+        setAnswerText("");
       } catch (error) {
         console.log(error);
       }
@@ -46,15 +48,19 @@ function ListeningFrenzy() {
         answerData
       );
       if (res?.data?.game_over || res?.data?.wrong_answer) {
-        toast.error(
-          res.data.message || res?.data?.game_over
-            ? "Your game is over"
-            : "Your answer is not correct try again"
-        );
-        setAid("");
-        setIsCorrect(false);
-        setTryAgain(!tryAgain);
-        setAnswerText("");
+        if (res.data.message || res?.data?.game_over) {
+          toast.success("Your game is over");
+        } else {
+          toast.error("Your answer is not correct try again");
+        }
+        if (res?.data?.game_over) {
+          setGameOver(true);
+        } else {
+          setAid("");
+          setIsCorrect(false);
+          setTryAgain(!tryAgain);
+          setAnswerText("");
+        }
         setGameScore({ current: res?.data?.score, max: res?.data?.max_score });
       } else {
         toast.success(res.data.message || "Congratulations");
@@ -72,32 +78,42 @@ function ListeningFrenzy() {
 
   return (
     <DashboardLayout dashboard>
-      <div className="pt-2.5 pb-15">
-        <div className="w-full bg-[url('/mini_game/listening_frenzy.png')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center relative">
+      <div className="pt-2.5">
+        <div className="w-full bg-[url('/mini_game/listening_frenzy.svg')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center relative">
           <p className=" text-lg text-white font-semibold absolute top-7 left-7">
             Listening Frenzy
           </p>
           <div className="w-[60%]">
-            <p className="text-white text-center text-2xl font-semibold">
-              {isCorrect
-                ? "Listen And Write the Line"
-                : "Wrong Answer: Game Over"}
-            </p>
-            <div className="space-y-3 mt-3">
-              {/* audio */}
-              <div className="w-full bg-white rounded-xl">
-                <AudioVisualizer selectedFile={question?.question?.audio} />
+            {!gameOver && (
+              <p className="text-white text-center text-2xl font-semibold">
+                {isCorrect
+                  ? "Listen And Write the Line"
+                  : "Wrong Answer: Game Over"}
+              </p>
+            )}
+            {gameOver ? (
+              <div className="w-full py-20 flex items-center justify-center">
+                <p className="text-white text-center text-4xl font-semibold">
+                  Game is over
+                </p>
               </div>
-              <input
-                onChange={(e) => setAnswerText(e.target.value)}
-                required
-                value={answerText}
-                type="text"
-                className="py-4 px-3 bg-white w-full border-none focus:ring-0 text-base rounded-md"
-                placeholder="Type your answer ............"
-              />
-            </div>
-            {isCorrect ? (
+            ) : (
+              <div className="space-y-3 mt-3">
+                {/* audio */}
+                <div className="w-full bg-white rounded-xl">
+                  <AudioVisualizer selectedFile={question?.question?.audio} />
+                </div>
+                <input
+                  onChange={(e) => setAnswerText(e.target.value)}
+                  required
+                  value={answerText}
+                  type="text"
+                  className="py-4 px-3 bg-white w-full border-none focus:ring-0 text-base rounded-md"
+                  placeholder="Type your answer ............"
+                />
+              </div>
+            )}
+            {isCorrect && !gameOver ? (
               <button
                 onClick={handelSubmit}
                 disabled={loading}
@@ -111,10 +127,11 @@ function ListeningFrenzy() {
                   setAid("");
                   setIsCorrect(true);
                   setTryAgain(!tryAgain);
+                  setGameOver(false);
                 }}
                 className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
               >
-                Ply again
+                Play again
               </button>
             )}
             <GameScore data={gameScore} />
