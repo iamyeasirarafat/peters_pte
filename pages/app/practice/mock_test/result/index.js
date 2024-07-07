@@ -5,10 +5,13 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { formatDateTime } from "@/utils/formatDateTime";
 import Loading from "@/components/Loading";
+import { IoIosArrowForward } from "react-icons/io";
 
 function Index() {
   const [loading, setLoading] = useState(true);
   const [resultDetails, setResultDetails] = useState({});
+
+  console.log("resultDetails", resultDetails);
 
   const router = useRouter();
   const { id, aid, type } = router.query;
@@ -94,7 +97,73 @@ const ResultScoreDetails = ({ data }) => {
         </div>
         <hr className="border border-secondary" />
         {/* result */}
+        <div className="py-4 space-y-2 divide-y divide-secondary">
+          {data?.score?.details?.writting?.all?.map((item, index) => (
+            <MockTextResultDetails key={index} count={index + 1} data={item} />
+          ))}
+        </div>
       </div>
     </div>
   );
+};
+
+const MockTextResultDetails = ({ data, count }) => {
+  return (
+    <div>
+      <QuestionTitle
+        count={count}
+        title={data?.question?.title}
+        id={data?.question?.id}
+      />
+      {/* dynamic result */}
+      <p className="text-gray py-3">
+        {data?.question?.content || data?.question?.question}
+      </p>
+      {/* score button */}
+      <button className="border border-primary py-0.5 px-3 rounded-full font-medium text-primary mt-2">
+        Score info{" "}
+        {data?.score?.score &&
+          data?.score?.score + "/" + data?.score?.max_score &&
+          data?.score?.max_score}
+      </button>
+    </div>
+  );
+};
+
+const QuestionTitle = ({ type, id, title, path, count }) => {
+  const router = useRouter();
+  return (
+    <div className="flex items-center justify-between py-2">
+      <p className="text-base font-semibold">
+        {count}. {QuestionType("summarize_written_text")} #{id} {title}
+      </p>
+      <button
+        onClick={() =>
+          router.push("/app/practice/writing_test/summarize_written?que_no=16")
+        }
+        className="flex items-center gap-x-1 text-primary font-semibold "
+      >
+        Go to Question <IoIosArrowForward className="text-base" />
+      </button>
+    </div>
+  );
+};
+
+const QuestionType = (type) => {
+  const allType = {
+    read_aloud: "RA",
+    repeat_sentence: "RS",
+    describe_image: "DI",
+    reTell_lecture: "RL",
+    answer_short_question: "ASQ",
+    summarize_written_text: "SWT",
+    write_essay: "WE",
+    summarize_spoken_text: "SST",
+    fill_in_the_blanks: "FIB-L",
+    highlight_correct_summary: "HCS",
+    select_missing_word: "SMW",
+    highlight_incorrect_words: "HIW",
+    write_from_dictation: "WFD",
+  };
+  return allType[type];
 };
