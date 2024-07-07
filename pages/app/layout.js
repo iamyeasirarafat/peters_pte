@@ -1,11 +1,10 @@
 import { toggleTopNav as toggleNav } from "@/redux/slice/layoutSlice";
 import { getUser } from "@/redux/slice/userSlice";
-import Image from "next/image";
 import { Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SideNav from "../../components/DashboardLayout/SideNav";
 import TopNav from "../../components/DashboardLayout/TopNav";
 import Footer from "../../components/UserDashboard/Footer";
+import { IoIosArrowUp } from "react-icons/io";
 
 function SearchBarFallback() {
   return <>placeholder</>;
@@ -21,25 +20,17 @@ const DashboardLayout = ({ children, dashboard }) => {
     dispatch(getUser());
   }, [dispatch]);
   return (
-    <>
-      <TopNav dashboard={dashboard} />
-
-      <div className=" flex">
+    <div>
+      <div className=" flex flex-col">
+        <TopNav dashboard={dashboard} />
         {!topNav && (
           <button
             onClick={toggleTopNav}
-            className="absolute h-6 w-7 flex items-center justify-center rotate-180 bg-primary rounded top-2 right-3"
+            className="absolute h-6 w-7 flex items-center justify-center rotate-180 rounded top-2 right-3"
           >
-            <Image
-              className="object-cover"
-              src="/icons/chevron-up.svg"
-              width={16}
-              height={16}
-              alt="icon"
-            />
+            <IoIosArrowUp className="text-xl" />
           </button>
         )}
-        {/* <SideNav dashboard={dashboard} /> */}
         <div
           className={` w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-64px)]"}
@@ -55,7 +46,7 @@ const DashboardLayout = ({ children, dashboard }) => {
         </div>
         {/* <GlobalModal /> */}
       </div>
-    </>
+    </div>
   );
 };
 

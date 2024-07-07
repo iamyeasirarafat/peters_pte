@@ -14,16 +14,20 @@ const Performances = () => {
   // convert data to display
   const convertData = (data) => {
     const newData = [];
-    const colors = ["#F44141", "#FF8412", "#949494", "#F2B277", "#4399FF"];
+    const Color = {
+      Speaking_Questions: "#FF8D29",
+      Listening_Questions: "#00B4D8",
+      Reading_Questions: "#2D46B9",
+      Writing_Questions: "#3EC70B",
+    };
     if (data) {
       for (const [key, item] of Object.entries(data)) {
         const title = `${key.charAt(0).toUpperCase()}${key
           .slice(1)
-          .replace(/_/g, " ")}`;
+          .replace(/_/g, " ")}_Questions`;
         const value = `${item.practices}/${item.total}`;
         const percentage = `${item.percentage}%`;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        newData.push({ title, value, percentage, color });
+        newData.push({ title, value, percentage, color: Color[title] });
       }
     }
     newData.push({

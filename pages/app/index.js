@@ -10,12 +10,11 @@ import MiniGameWidgets from "../../components/UserDashboard/MiniGameWidgets/Mini
 import Performances from "../../components/UserDashboard/Performances/Performances";
 import StudyMaterial from "../../components/UserDashboard/StudyMaterial/StudyMaterial";
 import HelpAndsupport from "../../components/UserDashboard/Help&support/HelpAndsupport";
-import PracticeSlider from "../../components/UserDashboard/PracticeSlider/PracticeSlider";
 import PracticeProgress from "../../components/UserDashboard/PracticeProgress/PracticeProgress";
 import { useSelector } from "react-redux";
 
 const Index = () => {
-  const [toggleProgress, setToggleProgress] = useState(true);
+  const [toggleProgress, setToggleProgress] = useState("performance");
   const user = useSelector((state) => state?.user?.user);
   return (
     <DashboardLayout dashboard>
@@ -57,15 +56,23 @@ const Index = () => {
         <div className="w-full bg-gray-500 flex justify-between gap-1 mb-3">
           <div className="flex gap-2">
             <button
-              onClick={() => setToggleProgress(true)}
-              className="bg-primary hover:bg-cream hover:text-white px-2 py-1 md:px-4 md:py-2 text-white text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
+              onClick={() => setToggleProgress("performance")}
+              className={`${
+                toggleProgress === "performance"
+                  ? "bg-primary text-white"
+                  : "bg-white border-primary"
+              } hover:bg-cream border hover:text-white px-2 py-1 md:px-4 md:py-2 text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]`}
             >
               Your Performance
               <SlBadge />
             </button>
             <button
-              onClick={() => setToggleProgress(false)}
-              className="border border-primary hover:bg-cream hover:text-white px-2 py-1 md:px-4 md:py-2 text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]"
+              onClick={() => setToggleProgress("progress")}
+              className={`${
+                toggleProgress === "progress"
+                  ? "bg-primary text-white"
+                  : "bg-white border-primary"
+              } border  hover:bg-cream hover:text-white px-2 py-1 md:px-4 md:py-2 text-[13px] md:text-[21px] gap-1 flex flex-col justify-center items-center rounded-[10px]`}
             >
               Practice Progress
               <IoAnalyticsOutline />
@@ -90,7 +97,11 @@ const Index = () => {
         </div>
 
         {/* all time progress  */}
-        {toggleProgress ? <Performances /> : <PracticeProgress />}
+        {toggleProgress === "performance" ? (
+          <Performances />
+        ) : (
+          <PracticeProgress />
+        )}
 
         {/* study material  */}
 

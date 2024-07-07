@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { FiUser } from "react-icons/fi";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { RiCloseCircleLine, RiMenu2Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +22,7 @@ const TopNav = ({ dashboard }) => {
     <div
       className={`${
         topNav ? "" : "-mt-16"
-      } transition-all border-b shadow-2xl  bg-white duration-300 ease-linear`}
+      } transition-all shadow-[0px_-5px_25px_2px_rgba(0,0,0,0.25)] bg-white duration-300 ease-linear z-50 relative`}
     >
       <div className=" h-16 w-full p-1.5 container mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
         <button
@@ -38,15 +38,9 @@ const TopNav = ({ dashboard }) => {
       {topNav && (
         <button
           onClick={toggleTopNav}
-          className="hidden lg:block absolute bg-primary top-6 right-4"
+          className="hidden lg:block absolute bg-white top-6 right-4"
         >
-          <Image
-            className="object-cover"
-            src="/icons/chevron-up.svg"
-            width={16}
-            height={16}
-            alt="icon"
-          />
+          <IoIosArrowUp className="text-xl" />
         </button>
       )}
       <MobileMenu
@@ -70,7 +64,7 @@ const Logo = () => {
 const MenuItem = () => {
   const menuData = navItems;
   return (
-    <ul className="text-gray hidden lg:flex items-center gap-4 text-xl  font-avantt">
+    <ul className="text-gray hidden lg:flex items-center gap-8 text-xl  font-avantt">
       <li>
         <Link className="text-base md:text-lg xl:text-xl" href="/app">
           Home
@@ -185,7 +179,7 @@ const UserDropdown = () => {
   const [showProfile, setShowProfile] = useState(false);
   const { user } = useSelector((state) => state?.user);
   return (
-    <div className="flex gap-2 relative">
+    <div className="flex items-center gap-2 relative">
       <button
         onClick={() => setShowProfile(!showProfile)}
         className="rounded-full overflow-hidden text-4xl  w-12 h-12 text-white bg-primary capitalize flex items-center justify-center"
