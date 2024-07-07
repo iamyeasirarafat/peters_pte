@@ -62,7 +62,7 @@ export default TopNav;
 const Logo = () => {
   return (
     <div className="relative w-36 h-full">
-      <Image src="/logo.png" fill alt="logo" />
+      <Image src="/pte_logo.png" fill alt="logo" />
     </div>
   );
 };

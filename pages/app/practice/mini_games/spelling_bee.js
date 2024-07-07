@@ -23,6 +23,7 @@ function SpellingBee() {
         );
         setQuestion(res?.data);
         setGameScore({ current: res?.data?.score, max: res?.data?.max_score });
+        setRightAnswer({ id: null, answer: "" });
       } catch (error) {
         console.log(error);
       }
@@ -47,11 +48,11 @@ function SpellingBee() {
         answerData
       );
       if (res?.data?.game_over || res?.data?.wrong_answer) {
-        toast.error(
-          res.data.message || res?.data?.game_over
-            ? "Your game is over"
-            : "Your answer is not correct try again"
-        );
+        if (res.data.message || res?.data?.game_over) {
+          toast.success("Your game is over");
+        } else {
+          toast.error("Your answer is not correct try again");
+        }
         if (res?.data?.game_over) {
           setGameOver(true);
         } else {
@@ -80,42 +81,52 @@ function SpellingBee() {
 
   return (
     <DashboardLayout dashboard>
-      <div className="pt-2.5 pb-15">
-        <div className="w-full bg-[url('/mini_game/spelling_bee.png')] bg-cover bg-center bg-no-repeat h-full flex items-center justify-center relative">
+      <div className="pt-2.5">
+        <div className="w-full bg-[url('/mini_game/spelling_bee.svg')] bg-contain bg-center bg-no-repeat h-full flex items-center justify-center relative">
           <p className=" text-lg text-white font-semibold absolute top-7 left-7">
             Spelling Bee
           </p>
           <div className="w-[60%] pt-32 pb-20">
-            <p className="text-white text-center text-2xl font-semibold">
-              {isCorrect
-                ? "Choose the correct spelling is Correct?"
-                : "Wrong Answer: Game Over"}
-            </p>
-            <div className="grid grid-cols-2 gap-3 mt-4">
-              {question?.question?.options?.map((item, index) => (
-                <label
-                  key={index}
-                  className={`group ${
-                    !isCorrect && "opacity-50 cursor-auto"
-                  } relative inline-flex items-center gap-2 select-none cursor-pointer tap-highlight-color bg-white  py-4 px-4`}
-                >
-                  <input
-                    disabled={!isCorrect}
-                    onChange={() =>
-                      setRightAnswer({
-                        id: index,
-                        answer: item,
-                      })
-                    }
-                    checked={rightAnswer?.id === index}
-                    className="border-2 border-green-500 text-green-500 ring-transparent focus:ring-transparent w-5 h-5 cursor-pointer"
-                    type="checkbox"
-                  />
-                  <p className="text-lg font-medium">{item}</p>
-                </label>
-              ))}
-            </div>
-            {isCorrect ? (
+            {!gameOver && (
+              <p className="text-white text-center text-2xl font-semibold">
+                {isCorrect
+                  ? "Choose the correct answer"
+                  : "Wrong Answer: Game Over"}
+              </p>
+            )}
+            {gameOver ? (
+              <div className="w-full py-20 flex items-center justify-center">
+                <p className="text-white text-center text-4xl font-semibold">
+                  Game is over
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                {question?.question?.options?.map((item, index) => (
+                  <label
+                    key={index}
+                    className={`group ${
+                      !isCorrect && "opacity-50 cursor-auto"
+                    } relative inline-flex items-center gap-2 select-none cursor-pointer tap-highlight-color bg-white  py-4 px-4`}
+                  >
+                    <input
+                      disabled={!isCorrect}
+                      onChange={() =>
+                        setRightAnswer({
+                          id: index,
+                          answer: item,
+                        })
+                      }
+                      checked={rightAnswer?.id === index}
+                      className="border-2 border-green-500 text-green-500 ring-transparent focus:ring-transparent w-5 h-5 cursor-pointer"
+                      type="checkbox"
+                    />
+                    <p className="text-lg font-medium">{item}</p>
+                  </label>
+                ))}
+              </div>
+            )}
+            {isCorrect && !gameOver ? (
               <button
                 onClick={handelSubmit}
                 disabled={loading}
@@ -129,10 +140,11 @@ function SpellingBee() {
                   setAid("");
                   setIsCorrect(true);
                   setTryAgain(!tryAgain);
+                  setGameOver(false);
                 }}
                 className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
               >
-                Ply again
+                Play Again
               </button>
             )}
             <GameScore data={gameScore} />

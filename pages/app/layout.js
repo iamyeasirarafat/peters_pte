@@ -22,7 +22,6 @@ const DashboardLayout = ({ children, dashboard }) => {
   }, [dispatch]);
   return (
     <>
-
       <TopNav dashboard={dashboard} />
 
       <div className=" flex">
@@ -44,7 +43,7 @@ const DashboardLayout = ({ children, dashboard }) => {
         <div
           className={` w-full
         ${!topNav ? "h-screen" : "h-[calc(100vh-64px)]"}
-        overflow-y-auto  bg-white content-scrollbar no-scrollbar`}
+        overflow-y-auto  bg-white content-scrollbar no-scrollbar flex flex-col justify-between`}
         >
           <Suspense fallback={<SearchBarFallback />}>
             <div className="container mx-auto px-6 pb-3 md:px-10 4xl:px-0">
