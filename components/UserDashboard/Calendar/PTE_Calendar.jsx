@@ -23,7 +23,6 @@ export default function PTECalendar() {
         cellClassName={renderCell}
         className="calendar-component-front
                     bg-white
-                    rounded-[10px]
                     [&>div.rs-calendar-header-has-month]:pb-0
                     [&>div>div>button.rs-calendar-header-title]:text-black
                     [&>div>div>button.rs-calendar-header-title]:text-[21px]
