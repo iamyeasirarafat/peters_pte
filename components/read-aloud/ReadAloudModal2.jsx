@@ -77,7 +77,7 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
             </div>
           </div> */}
           {/* score */}
-          <div className="grid grid-cols-12 gap-x-6 mt-12">
+          <div className="grid grid-cols-12 gap-x-6 mt-6">
             {/* Speaking Score */}
 
             <div className="col-span-3 w-full border border-primary rounded-[13px]">
