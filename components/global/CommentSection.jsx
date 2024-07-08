@@ -1,6 +1,7 @@
 import { formatDateTime } from "@/utils/formatDateTime";
 import { getPageName } from "@/utils/getPageName";
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,7 +16,6 @@ import {
 import { GrClose } from "react-icons/gr";
 import { useSelector } from "react-redux";
 import ReusableModal from "./ReusableModal";
-import Image from "next/image";
 
 // =================================================
 const pageMappings = {
@@ -66,19 +66,18 @@ function CommentSection({ discussionId, discussionName }) {
 
   let discussionPage =
     discussionName === "multi_choice_multiple" ||
-    discussionName === "multi_choice_single"
+      discussionName === "multi_choice_single"
       ? "multi_choice"
       : discussionName === "multi_choice_reading_multiple" ||
         discussionName === "multi_choice_reading_single"
-      ? "multi_choice_reading"
-      : discussionName;
+        ? "multi_choice_reading"
+        : discussionName;
 
   useEffect(() => {
     try {
       const getComment = async () => {
-        const url = `/${discussionPage ? discussionPage : pageName}/${
-          discussionId ? discussionId : id
-        }/discussions`;
+        const url = `/${discussionPage ? discussionPage : pageName}/${discussionId ? discussionId : id
+          }/discussions`;
         const res = await axios.get(url);
         setParentComment(res?.data);
       };
@@ -181,6 +180,10 @@ const CommentBlock = ({
   // comment reply post start =====================================
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
+  const [selectedImg, setSelectedImg] = useState({
+    state: false,
+    img: null,
+  });
   const pageName =
     router?.isReady && !discussionPage
       ? getTransformedPageName(pathname, router)
@@ -219,7 +222,6 @@ const CommentBlock = ({
     toast.success(res?.data?.message);
   };
   // comment like end ===============================================
-
   return (
     <>
       <div className="flex items-center justify-between gap-x-3">
@@ -298,7 +300,11 @@ const CommentBlock = ({
       <div className="pl-12">
         {data?.image && (
           <Image
-            className="mt-2 rounded-md"
+            onClick={() => setSelectedImg({
+              state: true,
+              img: data?.image,
+            })}
+            className="mt-2 rounded-md cursor-pointer"
             alt="Uploaded Image"
             width={100}
             height={100}
@@ -306,6 +312,14 @@ const CommentBlock = ({
           />
         )}
       </div>
+      {
+        selectedImg?.state && (
+          <ImgModal
+            open={selectedImg}
+            setOpen={setSelectedImg}
+          />
+        )
+      }
     </>
   );
 };
@@ -397,9 +411,8 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
                 type="button"
                 key={i}
                 onClick={() => setCommentType(type?.name)}
-                className={`text-base text-gray ${
-                  type?.name === commentType ? "bg-secondary" : "bg-white"
-                } border border-primary py-2 px-3 rounded-[10px] font-medium`}
+                className={`text-base text-gray ${type?.name === commentType ? "bg-secondary" : "bg-white"
+                  } border border-primary py-2 px-3 rounded-[10px] font-medium`}
               >
                 {type?.name}
               </button>
@@ -445,3 +458,37 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
     </ReusableModal>
   );
 };
+
+
+const ImgModal = ({ open, setOpen }) => {
+
+  return (
+    <ReusableModal open={open?.state} setOpen={setOpen} className="">
+      <div className="bg-white border border-primary rounded-[15px] w-[500px] overflow-hidden">
+        {/* modal header */}
+        <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-end px-3 py-2">
+          {/* <p className="text-white text-xl">#{open?.id}</p> */}
+          {/* <p className="text-white text-xl">Image view</p> */}
+          <button
+            onClick={() => {
+              setOpen({ state: false, img: null });
+            }}
+            className="w-7 h-7 rounded-full bg-white flex items-center outline-none justify-center"
+          >
+            <GrClose className="text-gray text-base" />
+          </button>
+        </div>
+        {/* Modal content */}
+        <div className="p-4">
+          <Image
+            className="rounded-md"
+            alt="Uploaded Image"
+            width={500}
+            height={500}
+            src={open?.img}
+          />
+        </div>
+      </div>
+    </ReusableModal>
+  )
+}

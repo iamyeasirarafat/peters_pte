@@ -124,6 +124,13 @@ const GlobalModal = () => {
                       </div>
                       <div className="max-w-lg w-full relative bg-white overflow-hidden rounded-3xl">
                         <input
+                          onChange={(e) => {
+                            setTimeout(
+                              () => setQueryParams(e.target.value),
+                              1000
+                            );
+                          }}
+                          type="text"
                           className="w-full focus:ring-0 placeholder:text-lg rounded-3xl border-none pl-8 placeholder:text-gray placeholder:font-light "
                           placeholder="Search By Question Title / Number"
                         />
