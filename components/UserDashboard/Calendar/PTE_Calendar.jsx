@@ -1,7 +1,9 @@
+import React from "react";
 import { Calendar } from "rsuite";
 import "rsuite/dist/rsuite-no-reset.min.css";
 
-export default function PTECalendar() {
+export default function PTECalendar({ setSelectedDate = () => { } }) {
+
   function renderCell() {
     let cellStyle =
       "[&.rs-calendar-table-cell-selected>.rs-calendar-table-cell-content]:!bg-[#F4D1B1] [&.rs-calendar-table-cell]:w-[40px] [&.rs-calendar-table-cell-selected>.rs-calendar-table-cell-content]:!shadow-none [&.rs-calendar-table-cell-is-today>.rs-calendar-table-cell-content]:bg-[#849C3E] [&.rs-calendar-table-cell-is-today>.rs-calendar-table-cell-content>.rs-calendar-table-cell-day]:bg-transparent";
@@ -16,8 +18,8 @@ export default function PTECalendar() {
               [&>div]:justify-center
               [&>div]:items-center `;
   }
+
   return (
-    // <main className='m-5'>
     <div className="p-[15px] rounded-[10px]">
       <Calendar
         cellClassName={renderCell}
@@ -33,8 +35,8 @@ export default function PTECalendar() {
                     [&>div>div>button.rs-calendar-header-forward]:absolute
                     [&>div>div>button.rs-calendar-header-forward]:right-[10px]
                     "
+        onSelect={(date) => setSelectedDate(date)}
       />
     </div>
-    // </main>
   );
 }
