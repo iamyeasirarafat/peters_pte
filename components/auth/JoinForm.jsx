@@ -72,7 +72,7 @@ const JoinForm = ({ setPage }) => {
   };
   return (
     <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-      <div className="p-4 space-y-2 bg-[#FFF4EB] rounded-[32px] w-full">
+      <div className="p-4 space-y-2 bg-secondary rounded-[32px] w-full">
         <div className="flex flex-col md:flex-row items-center gap-3">
           <input
             className={`bg-white w-full text-[#616161] placeholder:text-[#B9B9B9] py-3 px-4 ${

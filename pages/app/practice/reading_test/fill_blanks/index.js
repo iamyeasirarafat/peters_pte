@@ -49,7 +49,15 @@ const Page = () => {
       <Toaster />
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Reading fill in the Blanks" />
+      <PageHeader
+        title="Reading fill in the Blanks"
+        tips_link="https://peterspte.com/reading-test/reading-fill-in-the-blanks-guide-tips/"
+      />
+      <p className="text-gray text-base mt-2 text-center">
+        In the text below some words are missing. Drag words from the box below
+        to the appropriate place in the text. To undo an answer choice, drag the
+        word back to the box below the text.
+      </p>
       {/* main content */}
       <GlobalMainContent data={data}>
         {/* <ListenBlock data={data} blank /> */}

@@ -26,7 +26,7 @@ export default function AuthHeader({ page, setPage }) {
         <div className="w-full h-full relative">
           <Image
             className="object-cover"
-            src="/site-logo.png"
+            src="/logo.svg"
             fill
             alt="auth image"
           />
@@ -40,7 +40,7 @@ export default function AuthHeader({ page, setPage }) {
         PTE Mock Test & Practice{" "}
       </h2>
       {/* login and signup toggle button */}
-      <div className="w-full bg-[#FFF4EB] rounded-[32px] flex items-center justify-between py-2 px-4 my-4">
+      <div className="w-full bg-secondary rounded-[32px] flex items-center justify-between py-2 px-4 my-4">
         <button
           onClick={() => setPage("login")}
           className={`${

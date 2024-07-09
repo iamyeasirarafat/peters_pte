@@ -43,6 +43,7 @@ body::-webkit-scrollbar {
   height: 6px;
   background-color: #c9fef5;
   border-radius: 1rem;
+  scroll-behavior: smooth;
 }
 
 body::-webkit-scrollbar-thumb {

@@ -8,12 +8,12 @@ import { Toaster } from "react-hot-toast";
 const Auth = () => {
   const [page, setPage] = useState("join");
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-white">
       <Toaster />
       {/* left side of joining page */}
       <AuthBanner />
       {/* right side joining forms */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center px-7 justify-center">
+      <div className="w-full lg:w-1/2 flex flex-col items-center px-20 justify-center bg-white">
         {/* logo and slogan */}
         <AuthHeader page={page} setPage={setPage} />
         {/* Join form */}

@@ -52,7 +52,10 @@ const Page = () => {
       <Toaster />
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Highlight Incorrect Words" />
+      <PageHeader
+        title="Highlight Incorrect Words"
+        tips_link="https://peterspte.com/listening-test/highlight-incorrect-words-guide-tips/"
+      />
       <p className="text-gray text-base mt-2 text-center">
         You will hear a recording. Below is a transcription of the recording.
         Some words in the transcription differ from what the speaker(s) said.

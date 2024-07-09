@@ -43,8 +43,11 @@ const Page = () => {
   return (
     <DashboardLayout>
       <SideModal data={SideModalData} />
-      <PageHeader title="Summarize Spoken Text" />
-      <p className="text-gray text-base mt-2 ml-2">
+      <PageHeader
+        title="Summarize Spoken Text"
+        tips_link="https://peterspte.com/listening-test/mastering-the-summarize-spoken-text-guide-tips/"
+      />
+      <p className="text-gray text-base mt-2 text-center">
         You will hear a short lecture. Write a summary for a fellow student who
         was not present at the lecture. You should write 50 - 70 words. You have
         10 minutes to finish this task

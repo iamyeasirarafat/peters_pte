@@ -82,11 +82,15 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <PageHeader title="Retell Lecture" />
+      <PageHeader
+        title="Retell Lecture"
+        tips_link="https://peterspte.com/speaking-test/mastering-the-re-tell-lecture-a-detailed-guide-and-tips/ "
+      />
       <p className="text-gray text-xs md:text-base mt-2 text-center">
-        Listen the audio below. In 35 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 35 seconds to Retell
-        lecture.
+        You will hear a lecture. After listening to the lecture, in 7 seconds,
+        please speak into the microphone and retell what you have just heard
+        from the lecture in your own words. You will have 40 seconds to give
+        your response.
       </p>
       <GlobalMainContent data={data}>
         {/* text block */}

@@ -51,7 +51,7 @@ const Performances = () => {
 
   return (
     <>
-      <div>
+      <div id="progress">
         <div className="w-full flex flex-col text-[#616161] rounded-t-[10px]  p-[15px]  bg-secondary">
           <h3 className="font-medium text-[21px] text-center mb-2.5">
             All Time Progress

@@ -241,17 +241,19 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
                 <div className="rounded-t-[13px] gap-4 flex place-items-center py-1 px-2">
                   <button
                     onClick={() => setSelectedTab("pr")}
-                    className={`px-4 py-2 font-semibold ${selectedTab === "pr" &&
+                    className={`px-4 py-2 font-semibold ${
+                      selectedTab === "pr" &&
                       "border-b-2 text-primary border-primary"
-                      }`}
+                    }`}
                   >
                     Pronunciation Accuracy
                   </button>
                   <button
                     onClick={() => setSelectedTab("st")}
-                    className={`px-4 py-2 font-semibold ${selectedTab === "st" &&
+                    className={`px-4 py-2 font-semibold ${
+                      selectedTab === "st" &&
                       "border-b-2 text-primary border-primary"
-                      }`}
+                    }`}
                   >
                     Stress
                   </button>
@@ -265,7 +267,9 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
                         *The function words highlighted in red are the ones you
                         stressed unnecessarily
                       </p>
-                      <WordHighlight words={result?.scores?.stress_words_highlights} />
+                      <WordHighlight
+                        words={result?.scores?.stress_words_highlights}
+                      />
                     </>
                   )}
                 </div>
