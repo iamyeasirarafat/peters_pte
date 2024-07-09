@@ -50,7 +50,7 @@ const AuthBanner = () => {
             className="mySwiper h-full"
           >
             {authSliderContent?.map((item, i) => (
-              <SwiperSlide>
+              <SwiperSlide key={i}>
                 {/* star icon */}
                 <div className="flex items-center gap-x-1">
                   <BsStarFill className="text-xl" />
