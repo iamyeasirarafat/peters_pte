@@ -44,8 +44,11 @@ const Page = () => {
   return (
     <DashboardLayout>
       <SideModal data={SideModalData} />
-      <PageHeader title="Write From Dictation" />
-      <p className="text-gray text-xs md:text-base mt-2 ">
+      <PageHeader
+        title="Write From Dictation"
+        tips_link="https://peterspte.com/listening-test/write-from-dictation-guide-tips/"
+      />
+      <p className="text-gray text-base mt-2 text-center">
         You will hear a sentence. Type the sentence in the box below exactly as
         you hear it. Write as much of the sentence as you can. You will hear the
         sentence only once.

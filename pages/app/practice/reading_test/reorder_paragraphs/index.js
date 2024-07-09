@@ -113,7 +113,10 @@ function Page() {
     <DashboardLayout>
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Re-order Paragraphs" />
+      <PageHeader
+        title="Re-order Paragraphs"
+        tips_link="https://peterspte.com/reading-test/re-order-paragraph-guide-tips/"
+      />
       <p className="text-gray text-base mt-2 text-center">
         The text boxes in the left panel have been placed in random order.
         Restore the original order by dragging the text boxes from the left

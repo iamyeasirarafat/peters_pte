@@ -81,12 +81,13 @@ const Index = () => {
       {/* toast */}
       <Toaster />
       {/* Read Aloud top */}
-      <PageHeader title="Answer Short Question" />
+      <PageHeader
+        title="Answer Short Question"
+        tips_link="https://peterspte.com/speaking-test/mastering-the-answer-short-question-a-detailed-guide-and-tips/ "
+      />
       <p className="text-gray text-xs md:text-base mt-2 text-center">
-        You will hear a lecture. After listening to the lecture, in 7 seconds,
-        please speak into the microphone and retell what you have just heard
-        from the lecture in your own words. You will have 40 seconds to give
-        your response.
+        You will hear a question. Please give a simple and short answer. Often
+        just one or a few words is enough.
       </p>
       <GlobalMainContent data={data}>
         {/* text block */}

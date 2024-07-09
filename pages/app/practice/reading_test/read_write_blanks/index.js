@@ -49,7 +49,14 @@ const Page = () => {
       <Toaster />
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Read & Write Blanks" />
+      <PageHeader
+        title="Read & Write Blanks"
+        tips_link="https://peterspte.com/reading-test/reading-writing-fill-in-the-blanks-guide-tips/"
+      />
+      <p className="text-gray text-base mt-2 text-center">
+        Below is a text with blanks. Click on each blank, a list of choices will
+        appear. Select the appropriate answer choice for each blank.
+      </p>
       {/* main content */}
       <GlobalMainContent data={data}>
         {/* <ListenBlock data={data} blank /> */}

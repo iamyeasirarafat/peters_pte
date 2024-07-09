@@ -49,8 +49,11 @@ const Page = () => {
       <Toaster />
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Fill In The Blanks" />
-      <p className="text-gray text-base mt-2 ml-2">
+      <PageHeader
+        title="Fill In The Blanks"
+        tips_link="https://peterspte.com/listening-test/listening-fill-in-the-blanks-guide-tips/"
+      />
+      <p className="text-gray text-base mt-2 text-center">
         You will hear a recording. Type the missing words in each blank.
       </p>
       {/* main content */}

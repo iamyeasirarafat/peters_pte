@@ -46,7 +46,10 @@ const Index = () => {
 
       {/* sideModal Component  */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Write Essay" setOpen={setOpen} />
+      <PageHeader
+        title="Write Essay"
+        tips_link="https://peterspte.com/writing-test/ultimate-guide-to-write-essay-with-tips-tricks/"
+      />
       <p className="text-gray text-base mt-2 text-center">
         You will have 20 minutes to plan, write and revise an essay about the
         topic below. Your response will be judged on how well you develop a

@@ -49,7 +49,10 @@ function Page() {
     <DashboardLayout>
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Multiple Choice, Multiple Answers" />
+      <PageHeader
+        title="Multiple Choice, Multiple Answers"
+        tips_link="https://peterspte.com/listening-test/listening-multiple-choice-single-answers-guide-tips/"
+      />
       <p className="text-gray text-base mt-2 text-center">
         Listen to the recording and answer the question by selecting all the
         correct responses. You will need to select more than one response.

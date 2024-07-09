@@ -50,7 +50,10 @@ function Page() {
     <DashboardLayout>
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Select Missing Words" />
+      <PageHeader
+        title="Select Missing Words"
+        tips_link="https://peterspte.com/listening-test/select-missing-word-guide-tips/"
+      />
       <p className="text-gray text-base mt-2 text-center">
         You will hear a recording. At the end of the recording the last word or
         group of words has been replaced by a beep. Select the correct option to

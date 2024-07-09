@@ -47,7 +47,10 @@ const Index = () => {
 
       {/* sideModal Component  */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Summarize Written Text" setOpen={setOpen} />
+      <PageHeader
+        title="Summarize Written Text"
+        tips_link="https://peterspte.com/writing-test/ultimate-guide-to-summarize-written-text-swt-with-tips-tricks/"
+      />
       <p className="text-gray text-base mt-2 text-center">
         Read the passage below and summarize it using one sentence. Type your
         response in the box at the bottom of the screen. You have 10 minutes to

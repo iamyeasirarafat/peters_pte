@@ -46,7 +46,10 @@ function Page() {
     <DashboardLayout>
       {/* Side Modal */}
       <SideModal data={SideModalData} />
-      <PageHeader title="Multiple Choice, Single Answers" />
+      <PageHeader
+        title="Multiple Choice, Single Answers"
+        tips_link="https://peterspte.com/reading-test/reading-multiple-choice-single-answers-guide-tips/"
+      />
       <p className="text-gray text-base mt-2 text-center">
         Listen to the recording and answer the multiple-choice question by
         selecting the correct response. Only one response is correct.

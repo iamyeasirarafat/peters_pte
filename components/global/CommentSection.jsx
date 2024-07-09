@@ -92,7 +92,7 @@ function CommentSection({ discussionId, discussionName }) {
       {!discussionPage && (
         <button
           onClick={() => setOpen({ state: true, id: id })}
-          className="py-2 px-3 bg-primary text-gray text-base rounded-[15px] flex items-center gap-x-2 mb-2"
+          className="py-2 px-3 bg-primary text-white text-base rounded-[15px] flex items-center gap-x-2 mb-2"
         >
           Add comment <AiOutlinePlusCircle className="text-base" />
         </button>
@@ -401,7 +401,7 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
             {...register("body", { required: true })}
             className="bg-white text-xl border border-primary rounded-[15px] p-3 w-full"
             rows="3"
-            placeholder="Wright your comment"
+            placeholder="write your comment"
           ></textarea>
           {/* comment type */}
           <div className="flex items-center gap-x-3 my-2.5">
@@ -443,7 +443,7 @@ const AddCommentModal = ({ open, setOpen, fetch, setFetch, pathname }) => {
           <div className="flex justify-end mt-2.5">
             <button
               type="submit"
-              className="py-2 px-3 bg-primary text-gray text-base rounded-[15px] flex items-center gap-x-2"
+              className="py-2 px-3 bg-primary text-white text-base rounded-[15px] flex items-center gap-x-2"
             >
               Post Comment
               {loading ? (
