@@ -228,6 +228,16 @@ const FillBlanksBlock = ({
     setIsDragging(false);
   };
   const score_details = result?.score?.score_details;
+
+  // resetting the blanks
+  console.log(answers);
+  useEffect(() => {
+    answers.forEach((item) => {
+      document.getElementById(item.value)?.remove();
+    });
+    setResult(null);
+    setAnswers([]);
+  }, [id]);
   return (
     <>
       <div className="border border-primary rounded-lg p-2">
@@ -313,7 +323,6 @@ const FillBlankInput = ({
   setIsDragging,
   handleDragStart,
 }) => {
-  console.log(right, wrong);
   const handleDragOver = (e) => {
     e.preventDefault();
   };

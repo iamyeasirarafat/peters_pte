@@ -20,9 +20,8 @@ const TopNav = ({ dashboard }) => {
   };
   return (
     <div
-      className={`${
-        topNav ? "" : "-mt-16"
-      } transition-all shadow-[0px_-5px_25px_2px_rgba(0,0,0,0.25)] bg-white duration-300 ease-linear z-50 relative`}
+      className={`${topNav ? "" : "-mt-16"
+        } transition-all shadow-[0px_-5px_25px_2px_rgba(0,0,0,0.25)] bg-white duration-300 ease-linear z-50 relative`}
     >
       <div className=" h-16 w-full p-1.5 container mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
         <button
@@ -82,10 +81,10 @@ const MenuItem = () => {
                 const itemColor = item.includes("Speaking")
                   ? "#FF8D29"
                   : item.includes("Writing")
-                  ? "#2D46B9"
-                  : item.includes("Reading")
-                  ? "#3EC70B"
-                  : "#00B4D8";
+                    ? "#2D46B9"
+                    : item.includes("Reading")
+                      ? "#3EC70B"
+                      : "#00B4D8";
                 return (
                   <div key={index} className="w-full">
                     <h3
@@ -140,12 +139,12 @@ const MenuItem = () => {
             <div className="container mx-auto">
               <div className="flex max-w-3xl flex-col">
                 <h1 className="text-primary border-b pb-2 mb-4 border-primary">
-                  Study Materials
+                  Study Tools
                 </h1>
                 <div className="flex  justify-between">
-                  <Link href="#">Vocabularies</Link>
-                  <Link href="#">Templates</Link>
-                  <Link href="#">Predictions</Link>
+                  <Link href="/app/study-material">Study Materials</Link>
+                  <Link href="/app/template">Templates</Link>
+                  <Link href="/app/prediction">Predictions</Link>
                   <Link href="#">Marking</Link>
                 </div>
               </div>
@@ -253,9 +252,8 @@ const UserDropdown = () => {
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   return (
     <div
-      className={`w-[250px] h-full bg-secondary absolute top-0  ${
-        mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-      } z-50 pt-14 transition-transform duration-500 ease-in-out`}
+      className={`w-[250px] h-full bg-secondary absolute top-0  ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } z-50 pt-14 transition-transform duration-500 ease-in-out`}
     >
       <RiCloseCircleLine
         onClick={() => setMobileMenuOpen(false)}
