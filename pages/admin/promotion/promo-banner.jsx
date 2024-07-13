@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import Layout from "@/components/Layout";
 import Field from "@/components/Field";
-import { useForm } from "react-hook-form";
-import Image from "next/image";
 import Icon from "@/components/Icon";
+import Layout from "@/components/Layout";
 import { Switch as SwitchReact } from "@headlessui/react";
-import { twMerge } from "tailwind-merge";
-import toast from "react-hot-toast";
 import axios from "axios";
+import Image from "next/image";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { twMerge } from "tailwind-merge";
 
 function PromoBanner() {
   return (
@@ -48,7 +48,7 @@ const PromoForm = () => {
     if (image) {
       const formData = new FormData();
       formData.append("image", image);
-      formData.append("title", data.title);
+      formData.append("title", "Promo Banner");
       formData.append("link", data.link);
       formData.append("show_after", data.show_after);
       formData.append("active", value);
@@ -84,9 +84,9 @@ const PromoForm = () => {
           errors={errors}
           className="mb-4"
           placeholder="Promo Banner"
-          required
           register={register}
           name="title"
+          isReadOnly={true}
         />
         <Field
           errors={errors}
@@ -179,8 +179,7 @@ const Switch = ({ className, value, setValue }) => (
       <span
         aria-hidden="true"
         className={twMerge(
-          `pointer-events-none inline-block w-4 h-4 transition-all ${
-            value ? "translate-x-4 bg-primary" : "translate-x-0 bg-black"
+          `pointer-events-none inline-block w-4 h-4 transition-all ${value ? "translate-x-4 bg-primary" : "translate-x-0 bg-black"
           }`
         )}
       />
