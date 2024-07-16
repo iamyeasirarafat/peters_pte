@@ -20,10 +20,10 @@ function StudyMaterial() {
       // setStudyMaterial(res?.data);
       let organizedData = {};
       data.forEach(item => {
-        if (!organizedData[item.topic.title]) {
-          organizedData[item.topic.title] = [];
+        if (!organizedData[item.topic ? item.topic.title : "Others"]) {
+          organizedData[item.topic ? item.topic.title : "Others"] = [];
         }
-        organizedData[item.topic.title].push(item);
+        organizedData[item.topic ? item.topic.title : "Others"].push(item);
       });
       setStudyMaterial(organizedData);
       setLoading(false);
@@ -51,15 +51,15 @@ function StudyMaterial() {
         </button>
       </div>
       {/* tab */}
-      <div className="flex md:flex-wrap my-3">
+      <div className="flex md:flex-wrap my-3 border rounded-xl p-2 border-primary">
         {topic?.map((tab, i) => (
           <button
             key={i}
             onClick={() => setActiveTab(activeTab === tab?.title ? "" : tab?.title)}
             className={`${tab?.title === activeTab
-              ? "bg-primary dark:bg-[#2b2c2c] text-white"
-              : "bg-white text-black dark:bg-white/20 dark:text-white"
-              } py-2 px-3 text-xs font-bold`}
+              ? "bg-secondary rounded-md dark:bg-[#2b2c2c] "
+              : "bg-white  dark:bg-white/20 dark:text-white"
+              } py-1 px-2.5 text-black text-base font-bold`}
           >
             {tab?.title}
           </button>
