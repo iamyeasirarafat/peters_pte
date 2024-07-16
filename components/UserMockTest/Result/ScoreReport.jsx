@@ -4,17 +4,8 @@ import ScoreTable from "./ScoreTable";
 
 const ScoreReport = ({ data }) => {
   const scoreReportTab = ["score report"];
-  if (data?.score?.report?.listening !== null) {
-    scoreReportTab.push("listening");
-  }
-  if (data?.score?.report?.speaking !== null) {
-    scoreReportTab.push("speaking");
-  }
-  if (data?.score?.report?.reading !== null) {
-    scoreReportTab.push("reading");
-  }
-  if (data?.score?.report?.writting !== null) {
-    scoreReportTab.push("writting");
+  if (data?.score?.report) {
+    scoreReportTab.push(...Object.keys(data?.score?.report));
   }
 
   const [activeTab, setActiveTab] = useState("score report");
