@@ -7,6 +7,7 @@ import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 
 const SpokenTextModal = ({ open, setOpen, result }) => {
+  console.log("modal result Data", result);
   const router = useRouter();
   const id = router.query.que_no;
   const {
@@ -20,12 +21,13 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
     overall: totalScore,
   } = result?.scores || {};
   const formateData = [
-    { color: "cream", value: content, name: "Content" },
-    { color: "primary", value: grammar, name: "Grammar" },
-    { color: "blue", value: form, name: "Form" },
-    { color: "cream", value: spelling, name: "Spelling" },
-    { color: "primary", value: vocabulary, name: "Vocabulary" },
+    { color: "cream", value: content?.toFixed(2), name: "Content" },
+    { color: "primary", value: grammar?.toFixed(2), name: "Grammar" },
+    { color: "blue", value: form?.toFixed(2), name: "Form" },
+    { color: "cream", value: spelling?.toFixed(2), name: "Spelling" },
+    { color: "primary", value: vocabulary?.toFixed(2), name: "Vocabulary" },
   ];
+  const overAllResult = totalScore?.toFixed(2);
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -63,8 +65,8 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32">
                   <CircularProgressbar
-                    value={totalScore}
-                    text={totalScore}
+                    value={overAllResult}
+                    text={overAllResult}
                     strokeWidth={15}
                     maxValue={10}
                     styles={buildStyles({
@@ -78,7 +80,6 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
                 <p className="text-gray text-xl mt-1">Out of 10.00</p>
               </div>
             </div>
-
 
             {/* Total Score */}
             <div className="col-span-8 w-full border border-primary rounded-[13px]">
@@ -114,16 +115,22 @@ const SpokenTextModal = ({ open, setOpen, result }) => {
               <p className="text-gray text-xl">Your Response</p>
             </div>
             <div className="px-7 py-5">
-              <ErrorHighlight words={result?.scores?.word_highlights} />
+              <ErrorHighlight
+                words={
+                  result?.scores?.word_highlights || result?.word_highlights
+                }
+              />
             </div>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-gray text-lg font-medium">
               Total: {result?.answer?.split(" ")?.length} words
             </p>
-            <p className="text-gray text-lg font-medium">
-              Time Taken : {result?.time_taken}
-            </p>
+            {result?.time_taken && (
+              <p className="text-gray text-lg font-medium">
+                Time Taken : {result?.time_taken}
+              </p>
+            )}
           </div>
           {/* Suggestion */}
           {/* <div className="w-full border border-primary rounded-[13px] mt-4">

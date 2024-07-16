@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "../../../../components/Spinner/Spinner";
 import MockTestMultiSelector from "./MockTestMultiSelector";
-import { getQuestion } from "./full_mocktests";
+import { getQuestion, optionFormatter } from "./full_mocktests";
 function FullMocktest() {
   const router = useRouter();
   const { id } = router.query;
@@ -78,6 +78,8 @@ const WritingTestForm = ({ id }) => {
       router?.isReady && getMocktest();
     }
   }, [id, router?.isReady, reset]);
+
+  const readWriteBlankOptions = optionFormatter(rwblanks);
   return (
     <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
       <Field
@@ -118,7 +120,7 @@ const WritingTestForm = ({ id }) => {
           label="Write From Dictations"
         />
         <MockTestMultiSelector
-          options={rwblanks}
+          options={readWriteBlankOptions}
           control={control}
           name="reading_writting_blank"
           placeholder="Select Reading & Writing: FIB"

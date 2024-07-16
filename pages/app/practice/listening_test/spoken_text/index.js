@@ -72,11 +72,13 @@ const Page = () => {
       />
 
       <TranscriptModal open={open} setOpen={setOpen} />
-      <SpokenTextModal
-        result={aiResult}
-        open={openScoreModal}
-        setOpen={setOpenScoreModal}
-      />
+      {openScoreModal && (
+        <SpokenTextModal
+          result={aiResult}
+          open={openScoreModal}
+          setOpen={setOpenScoreModal}
+        />
+      )}
     </DashboardLayout>
   );
 };

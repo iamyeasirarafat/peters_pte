@@ -7,9 +7,9 @@ import Reading from "./Reading";
 import Speaking from "./Speaking";
 import Writing from "./Writing";
 
-const Performances = () => {
+const Performances = ({ performanceTab }) => {
   const [allTimePerformances, setAllTimePerformances] = useState([]);
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
 
   // convert data to display
   const convertData = (data) => {
@@ -65,20 +65,30 @@ const Performances = () => {
         </div>
         <div className="w-full flex flex-col gap-2 text-[#616161] rounded-b-[10px]  p-[15px]  bg-secondary">
           {/* Speaking */}
-          {data?.speaking && <Speaking data={data?.speaking} />}
+          {(performanceTab === "speaking" || performanceTab === "all") && (
+            <Speaking data={data?.speaking} />
+          )}
 
           {/* Reading */}
-          {data?.reading && <Reading data={data?.reading} />}
+          {(performanceTab === "reading" || performanceTab === "all") && (
+            <Reading data={data?.reading} />
+          )}
 
           {/* Listening */}
-          {data?.listening && <Listening data={data?.listening} />}
+          {(performanceTab === "listening" || performanceTab === "all") && (
+            <Listening data={data?.listening} />
+          )}
 
           {/* double */}
           <div className="flex flex-col md:flex-row justify-between gap-2">
             {/* Writing  */}
-            {data?.writing && <Writing data={data?.writing} />}
+            {(performanceTab === "writing" || performanceTab === "all") && (
+              <Writing data={data?.writing} />
+            )}
             {/* Mocktest */}
-            <Mocktest />
+            {(performanceTab === "mocktest" || performanceTab === "all") && (
+              <Mocktest />
+            )}
           </div>
         </div>
       </div>

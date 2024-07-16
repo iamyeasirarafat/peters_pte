@@ -4,8 +4,17 @@ import ScoreTable from "./ScoreTable";
 
 const ScoreReport = ({ data }) => {
   const scoreReportTab = ["score report"];
-  if (data?.score?.details) {
-    scoreReportTab.push(...Object.keys(data.score.details));
+  if (data?.score?.report?.listening !== null) {
+    scoreReportTab.push("listening");
+  }
+  if (data?.score?.report?.speaking !== null) {
+    scoreReportTab.push("speaking");
+  }
+  if (data?.score?.report?.reading !== null) {
+    scoreReportTab.push("reading");
+  }
+  if (data?.score?.report?.writting !== null) {
+    scoreReportTab.push("writting");
   }
 
   const [activeTab, setActiveTab] = useState("score report");
@@ -13,7 +22,7 @@ const ScoreReport = ({ data }) => {
     <div className="bg-white border border-primary rounded-[15px]">
       {/* tab */}
       <div className="flex gap-12 px-3">
-        {scoreReportTab.map((item, i) => (
+        {scoreReportTab?.map((item, i) => (
           <button
             onClick={() => setActiveTab(item)}
             key={i}
@@ -33,11 +42,11 @@ const ScoreReport = ({ data }) => {
         {activeTab === "score report" ? (
           <Score
             setActiveTab={setActiveTab}
-            scoreReportTa={scoreReportTab}
+            scoreReportTab={scoreReportTab}
             data={data}
           />
         ) : (
-          <ScoreTable />
+          <ScoreTable data={data} activeTab={activeTab} />
         )}
       </div>
     </div>

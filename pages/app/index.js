@@ -21,6 +21,7 @@ import DashboardLayout from "./layout";
 const Index = () => {
   const [toggleProgress, setToggleProgress] = useState("performance");
   const user = useSelector((state) => state?.user?.user);
+  const [performanceTab, setPerformanceTab] = useState("all");
   const [promotion, setPromotion] = useState({
     state: false,
     data: null,
@@ -101,27 +102,14 @@ const Index = () => {
               <IoAnalyticsOutline />
             </button>
           </div>
-          <div className="text-right ">
-            <select
-              className="border border-primary mb-2 text-[12px] md:text-[16px]"
-              name=""
-              id=""
-            >
-              <option value="all">All Time</option>
-              <option value="speaking">Speaking</option>
-              <option value="writing">Writing</option>
-              <option value="reading">Reading</option>
-              <option value="listening">Listening</option>
-            </select>
-            <p className="text-[12px] md:text-[16px] font-normal text-[#949494]">
-              Last updated on 25/07/2023
-            </p>
-          </div>
+          {toggleProgress === "performance" && (
+            <Tab setPerformanceTab={setPerformanceTab} />
+          )}
         </div>
 
         {/* all time progress  */}
         {toggleProgress === "performance" ? (
-          <Performances />
+          <Performances performanceTab={performanceTab} />
         ) : (
           <PracticeProgress />
         )}
@@ -142,6 +130,26 @@ const Index = () => {
 
 export default Index;
 
+export const Tab = ({ setPerformanceTab }) => {
+  return (
+    <div className="text-right ">
+      <select
+        onChange={(e) => setPerformanceTab(e.target.value)}
+        className="border border-primary mb-2 text-[12px] md:text-[16px]"
+      >
+        <option value="all">All</option>
+        <option value="speaking">Speaking</option>
+        <option value="writing">Writing</option>
+        <option value="reading">Reading</option>
+        <option value="listening">Listening</option>
+        <option value="mocktest">Mock test</option>
+      </select>
+      <p className="text-[12px] md:text-[16px] font-normal text-[#949494]">
+        Last updated on {new Date().toLocaleDateString()}
+      </p>
+    </div>
+  );
+};
 const PromotionModal = ({ open, setOpen }) => {
   return (
     <ReusableModal open={open?.state} setOpen={setOpen} className="">
