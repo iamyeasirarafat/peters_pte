@@ -195,7 +195,7 @@ export default function BarChartPTE() {
   }, []);
 
   return (
-    <div className="border border-[#FF8412] bg-[#FFF4EB] rounded-lg p-4">
+    <div className=" bg-secondary rounded-t-lg p-4">
       <div className="flex flex-wrap gap-5 text-[#949494] mb-4 ml-4">
         <p className="flex gap-1 justify-start items-center">
           <span className="w-3 h-3 rounded-full bg-[#FF8412]" />

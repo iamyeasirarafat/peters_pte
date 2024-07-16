@@ -6,6 +6,39 @@ import axios from "axios";
 import { formatDateTime } from "@/utils/formatDateTime";
 import Loading from "@/components/Loading";
 import { IoIosArrowForward } from "react-icons/io";
+import Link from "next/link";
+import SpokenTextModal from "../../../../../components/spoken_text/SpokenTextModal";
+
+const QuestionDetails = {
+  read_aloud: { code: "RA", url: "read_aloud" },
+  repeat_sentence: { code: "RS", url: "repeat_sentence" },
+  describe_image: { code: "DI", url: "describe_image" },
+  retell_sentence: { code: "RL", url: "retell_lecture" },
+  short_question: { code: "ASQ", url: "answer_short_question" },
+  summarize: { code: "SWT", url: "summarize_written" },
+  write_essay: { code: "WE", url: "write_essay" },
+  summarize_spoken: { code: "SST", url: "spoken_text" },
+  blank: { code: "FIB-L", url: "fill_blanks" },
+  highlight_summary: { code: "HCS", url: "highlight_summary" },
+  missing_word: { code: "SMW", url: "missing_word" },
+  highlight_incorrect_word: { code: "HIW", url: "highlight_incorrect_words" },
+  dictation: { code: "WFD", url: "write_dictation" },
+  reading_writting_blank: { code: "FIB-RW", url: "read_write_blanks" },
+  blank_reading: { code: "FIB-R", url: "fill_blanks" },
+  reorder_paragraph: { code: "RO", url: "reorder_paragraphs" },
+  multi_choice_reading_multi_answer: { code: "MCM", url: "multiple_answers" },
+  multi_choice_reading_single_answer: { code: "MCS", url: "single_answer" },
+  multi_choice_multi_answer: { code: "MCM", url: "multiple_answers" },
+  multi_choice_single_answer: { code: "MCS", url: "single_answer" },
+};
+
+const getQuestionCode = (type) => {
+  return QuestionDetails[type]?.code;
+};
+
+const getQuestionUrl = (type) => {
+  return QuestionDetails[type]?.url;
+};
 
 function Index() {
   const [loading, setLoading] = useState(true);
@@ -68,7 +101,7 @@ function Index() {
 export default Index;
 
 const ResultScoreDetails = ({ data }) => {
-  const scoreReportTab = Object.keys(data?.score?.details);
+  const scoreReportTab = Object.keys(data?.score?.details) || [];
   const [activeTab, setActiveTab] = useState(scoreReportTab[0]);
 
   return (
@@ -81,7 +114,7 @@ const ResultScoreDetails = ({ data }) => {
       <div className="p-5">
         {/* tab */}
         <div className="flex gap-12 px-3">
-          {scoreReportTab.map((item, i) => (
+          {scoreReportTab?.map((item, i) => (
             <button
               onClick={() => setActiveTab(item)}
               key={i}
@@ -98,8 +131,13 @@ const ResultScoreDetails = ({ data }) => {
         <hr className="border border-secondary" />
         {/* result */}
         <div className="py-4 space-y-2 divide-y divide-secondary">
-          {data?.score?.details?.writting?.all?.map((item, index) => (
-            <MockTextResultDetails key={index} count={index + 1} data={item} />
+          {data?.score?.details?.[activeTab]?.all?.map((item, index) => (
+            <MockTextResultDetails
+              key={index}
+              count={index + 1}
+              data={item}
+              activeTab={activeTab}
+            />
           ))}
         </div>
       </div>
@@ -107,63 +145,64 @@ const ResultScoreDetails = ({ data }) => {
   );
 };
 
-const MockTextResultDetails = ({ data, count }) => {
+const MockTextResultDetails = ({ data, count, activeTab }) => {
+  const [open, setOpen] = useState({ data: null, state: false });
   return (
     <div>
       <QuestionTitle
         count={count}
         title={data?.question?.title}
         id={data?.question?.id}
+        type={data?.type}
+        activeTab={activeTab}
       />
       {/* dynamic result */}
+
+      {/* audio */}
+      {data?.question?.audio && (
+        <>
+          <audio
+            src={`https://api.codebyamirus.link/${data?.question?.audio}`}
+            className="w-full bg-gray p-1 rounded-full"
+          />
+          <p>Audio is here</p>
+        </>
+      )}
+      {/* text question | content */}
       <p className="text-gray py-3">
         {data?.question?.content || data?.question?.question}
       </p>
       {/* score button */}
-      <button className="border border-primary py-0.5 px-3 rounded-full font-medium text-primary mt-2">
+      <button
+        onClick={() => setOpen({ data: data?.scores, state: true })}
+        className="border border-primary py-0.5 px-3 rounded-full font-medium text-primary mt-2"
+      >
         Score info{" "}
-        {data?.score?.score &&
-          data?.score?.score + "/" + data?.score?.max_score &&
-          data?.score?.max_score}
+        {data?.scores?.score &&
+          data?.scores?.score + "/" + data?.scores?.max_score}
       </button>
+      {/* Modal */}
+      {data?.type === "summarize_spoken" && open?.state && (
+        <SpokenTextModal open={open?.state} setOpen={setOpen} result={data} />
+      )}
     </div>
   );
 };
 
-const QuestionTitle = ({ type, id, title, path, count }) => {
-  const router = useRouter();
+const QuestionTitle = ({ type, id, title, count, activeTab }) => {
   return (
     <div className="flex items-center justify-between py-2">
       <p className="text-base font-semibold">
-        {count}. {QuestionType("summarize_written_text")} #{id} {title}
+        {count}. {getQuestionCode(type)} #{id} {title}
       </p>
-      <button
-        onClick={() =>
-          router.push("/app/practice/writing_test/summarize_written?que_no=16")
-        }
+      <Link
+        href={`/app/practice/${activeTab}_test/${getQuestionUrl(
+          type
+        )}?que_no=${id}`}
         className="flex items-center gap-x-1 text-primary font-semibold "
       >
         Go to Question <IoIosArrowForward className="text-base" />
-      </button>
+      </Link>
     </div>
   );
-};
-
-const QuestionType = (type) => {
-  const allType = {
-    read_aloud: "RA",
-    repeat_sentence: "RS",
-    describe_image: "DI",
-    reTell_lecture: "RL",
-    answer_short_question: "ASQ",
-    summarize_written_text: "SWT",
-    write_essay: "WE",
-    summarize_spoken_text: "SST",
-    fill_in_the_blanks: "FIB-L",
-    highlight_correct_summary: "HCS",
-    select_missing_word: "SMW",
-    highlight_incorrect_words: "HIW",
-    write_from_dictation: "WFD",
-  };
-  return allType[type];
 };

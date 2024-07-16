@@ -1,8 +1,14 @@
 import { useRouter } from "next/router";
 import { GiProgression } from "react-icons/gi";
 import { PiShareThin } from "react-icons/pi";
-const Score = ({ setActiveTab, scoreReportTa, data }) => {
+const Score = ({ setActiveTab, scoreReportTab, data }) => {
   const router = useRouter();
+  const overAll =
+    (data?.score?.listening +
+      data?.score?.speaking +
+      data?.score?.reading +
+      data?.score?.writting) /
+    4;
   return (
     <div className="py-5">
       <div className="w-full flex gap-x-5 py-7">
@@ -86,12 +92,12 @@ const Score = ({ setActiveTab, scoreReportTa, data }) => {
             <div
               style={{
                 position: "absolute",
-                left: `${data?.score?.overall}%`,
+                left: `${overAll}%`,
                 top: "-40px",
               }}
             >
               <p className="text-slate-500 font-semibold whitespace-nowrap">
-                {data?.score?.overall} Overall
+                {overAll} Overall
               </p>
               <div className="w-1 h-40 bg-slate-500"></div>
             </div>
@@ -104,7 +110,7 @@ const Score = ({ setActiveTab, scoreReportTa, data }) => {
           <PiShareThin /> Share Result
         </button>
         <button
-          onClick={() => setActiveTab(scoreReportTa[1])}
+          onClick={() => setActiveTab(scoreReportTab[1])}
           className="py-2 px-3 rounded-full text-white bg-primary flex items-center gap-x-2"
         >
           <GiProgression /> Check Score Analysis
