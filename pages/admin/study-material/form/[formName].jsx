@@ -1,14 +1,14 @@
 import Layout from "@/components/Layout";
-import { BiSolidCloudUpload } from "react-icons/bi";
-import { RiRadioButtonFill } from "react-icons/ri";
-import { CgRadioCheck } from "react-icons/cg";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { useRouter } from "next/router";
-import toast, { Toaster } from "react-hot-toast";
 import Select from "@/components/Select";
 import { getFileName } from "@/utils/getFileName";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import { BiSolidCloudUpload } from "react-icons/bi";
+import { CgRadioCheck } from "react-icons/cg";
+import { RiRadioButtonFill } from "react-icons/ri";
 function AddStudyMaterial() {
   const [loading, setLoading] = useState(false);
   const [studyFile, setStudyFile] = useState(null);
@@ -100,10 +100,11 @@ function AddStudyMaterial() {
       setStudyFile(null);
       router.push(`/admin/study-material/${formPage}`);
     } catch (error) {
+      console.log("error----------->", error)
       toast.error(
         (error?.response?.data?.title && error?.response?.data?.title[0]) ||
-          (error?.response?.data?.topic && "topic field is required") ||
-          "soothing went wrong"
+        (error?.response?.data?.topic && "topic field is required") ||
+        "soothing went wrong"
       );
       setLoading(false);
     }
@@ -111,9 +112,8 @@ function AddStudyMaterial() {
 
   return (
     <Layout
-      title={`${formPage?.replace(/[-,._]/g, " ")} / ${
-        id ? `#${id}` : " New File"
-      }`}
+      title={`${formPage?.replace(/[-,._]/g, " ")} / ${id ? `#${id}` : " New File"
+        }`}
       back
     >
       <Toaster />
