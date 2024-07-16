@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 const Auth = () => {
   const [page, setPage] = useState("join");
   return (
-    <div className="flex h-screen overflow-auto bg-white">
+    <div className="flex h-screen items-center justify-center overflow-auto bg-white">
       <Toaster />
       {/* left side of joining page */}
       <AuthBanner />
