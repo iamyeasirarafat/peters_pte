@@ -43,20 +43,20 @@ export default function AuthHeader({ page, setPage }) {
       <div className="w-full bg-secondary rounded-[32px] flex items-center justify-between py-2 px-4 my-4">
         <button
           onClick={() => setPage("login")}
-          className={`${
+          className={`py-3 px-7 md:py-6 md:px-14 rounded-[22px] ${
             page === "login"
-              ? "py-6 px-14 rounded-[22px] text-white bg-[#4399FF]"
-              : "py-6 px-14 rounded-[22px] text-black bg-transparent"
+              ? "text-white bg-[#4399FF]"
+              : "text-black bg-transparent"
           } duration-300`}
         >
           {screenWidth >= 1023 ? "I am already a USER" : "Login"}
         </button>
         <button
           onClick={() => setPage("join")}
-          className={`${
+          className={`py-3 px-7 md:py-6 md:px-14 rounded-[22px] ${
             page === "join"
-              ? "py-6 px-14 rounded-[22px] text-white bg-[#4399FF]"
-              : "py-6 px-14 rounded-[22px] text-black bg-transparent"
+              ? "text-white bg-[#4399FF]"
+              : "text-black bg-transparent"
           } duration-300`}
         >
           {screenWidth >= 1023 ? "I am NEW to PETER’S PTE" : "Sign Up"}

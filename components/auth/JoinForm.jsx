@@ -194,9 +194,9 @@ const JoinForm = ({ setPage }) => {
       {/* login button */}
       <button
         type="submit"
-        className="py-5 w-full mt-2 font-semibold text-3xl flex items-center gap-x-3 justify-center text-white bg-[#4399FF] rounded-[22px]"
+        className="py-3 md:py-5 w-full mt-2 font-semibold text-3xl flex items-center gap-x-3 justify-center text-white bg-[#4399FF] rounded-[22px]"
       >
-        Join Now {isLoading && <Spinner />}
+        Join Now {isLoading && <Spinner className="w-6 h-6 md:w-9 md:h-9" />}
       </button>
     </form>
   );
