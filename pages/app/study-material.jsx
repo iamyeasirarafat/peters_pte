@@ -1,48 +1,67 @@
-import TablePagination from "@/components/TablePagination";
-import { formatDateTime } from "@/utils/formatDateTime";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BiSolidDownload } from "react-icons/bi";
+import { FiInfo } from "react-icons/fi";
+import { TbDownload } from "react-icons/tb";
 import { getFileName } from "../../utils/getFileName";
 import DashboardLayout from "./layout";
-const FilterTab = [
-  { name: "Grammar" },
-  { name: "Vocabulary" },
-  { name: "Essay" },
-];
+
 function StudyMaterial() {
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Grammar");
-  const [studyMaterial, setStudyMaterial] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const pageLimit = 9;
-
+  const [activeTab, setActiveTab] = useState("");
+  const [studyMaterial, setStudyMaterial] = useState({});
+  const [topic, setTopic] = useState([]);
+  console.log(topic)
   // get Data
   useEffect(() => {
     const getStudyMaterial = async () => {
-      const res = await axios.get(
-        `/study_materials/study_material?limit=${pageLimit}&page=${pageNumber}`
+      const { data } = await axios.get(
+        `/study_materials/study_material`
       );
-      setStudyMaterial(res?.data);
+      // setStudyMaterial(res?.data);
+      let organizedData = {};
+      data.forEach(item => {
+        if (!organizedData[item.topic.title]) {
+          organizedData[item.topic.title] = [];
+        }
+        organizedData[item.topic.title].push(item);
+      });
+      setStudyMaterial(organizedData);
+      setLoading(false);
+    };
+    const getTopic = async () => {
+      const res = await axios.get(
+        `/topic`
+      );
+      setTopic(res?.data);
       setLoading(false);
     };
     getStudyMaterial();
-  }, [pageNumber]);
+    getTopic();
+  }, []);
+  console.log(studyMaterial)
+
   return (
     <DashboardLayout >
-      <p className="text-lg font-extrabold mb-2">Topic</p>
+      <div className="flex justify-between mt-7 items-center">
+        <h1 className="text-lightGray font-cabin text-4xl">
+          Study Material
+        </h1>
+        <button>
+          <FiInfo className="text-2xl text-blue" />
+        </button>
+      </div>
       {/* tab */}
       <div className="flex md:flex-wrap my-3">
-        {FilterTab?.map((tab, i) => (
+        {topic?.map((tab, i) => (
           <button
             key={i}
-            onClick={() => setActiveTab(tab?.name)}
-            className={`${tab?.name === activeTab
-              ? "bg-black dark:bg-[#2b2c2c] text-white"
+            onClick={() => setActiveTab(activeTab === tab?.title ? "" : tab?.title)}
+            className={`${tab?.title === activeTab
+              ? "bg-primary dark:bg-[#2b2c2c] text-white"
               : "bg-white text-black dark:bg-white/20 dark:text-white"
               } py-2 px-3 text-xs font-bold`}
           >
-            {tab?.name}
+            {tab?.title}
           </button>
         ))}
       </div>
@@ -51,19 +70,32 @@ function StudyMaterial() {
         <div className="flex justify-center items-center h-96">
           <div
             className="w-12 h-12 rounded-full animate-spin
-                  border-x-8 border-solid border-orange-400 border-t-transparent"
+                  border-x-8 border-solid border-primary border-t-transparent"
           ></div>
         </div>
       ) : (
-        <div className={`${studyMaterial?.length > 0 ? "space-y-2" : ""}`}>
-          {studyMaterial?.results?.map((material, i) => (
-            <StudyFile key={material?.id} data={material} />
-          ))}
-          <TablePagination
-            pageNumber={pageNumber}
-            totalPage={Math.ceil(studyMaterial?.total / pageLimit)}
-            prevNext={setPageNumber}
-          />
+        <div >
+          {
+            Object.keys(studyMaterial)?.map((key, i) => {
+              const isActiveTab = activeTab === key || activeTab === "";
+              return (
+                <div key={i} className={`my-5 ${isActiveTab ? "block" : "hidden"}`}>
+                  <h3 className="text-2xl mb-2 text-center font-medium text-black">
+                    {key}
+                  </h3>
+                  <div className="space-y-2">
+                    {
+                      studyMaterial[key]?.map((item, i) => (
+                        <StudyFile key={i} data={item} />
+                      ))
+                    }
+                  </div>
+                </div>
+              );
+            })
+          }
+
+
         </div>
       )}
     </DashboardLayout>
@@ -88,12 +120,13 @@ export const handlePdfDownload = (name) => {
 };
 export const StudyFile = ({ data }) => {
   return (
-    <div className="px-5 py-6 bg-white dark:bg-white/20 flex items-center justify-between">
-      <p className="text-sm font-bold">
-        {data?.title} {formatDateTime(data?.uploaded_at, "date")}
+    <div className="px-5 py-6 bg-white border-primary border rounded-3xl dark:bg-white/20 flex items-center justify-between">
+      <p className="text-xl font-semibold text-gray">
+        {data?.title}
       </p>
-      <button onClick={() => handlePdfDownload(data)}>
-        <BiSolidDownload className="text-xl" />
+      <button onClick={() => handlePdfDownload(data)} className="rounded-full text-center flex items-center justify-center w-11 h-11 bg-primary ">
+        <TbDownload
+          className="text-2xl text-white" />
       </button>
     </div>
   );

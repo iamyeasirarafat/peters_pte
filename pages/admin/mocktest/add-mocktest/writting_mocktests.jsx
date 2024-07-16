@@ -49,11 +49,6 @@ const WritingTestForm = ({ id }) => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    // const MockTestData = {
-    //   title: data?.title,
-    //   summarize: data?.summarize || [],
-    //   write_essay: data?.write_essay || [],
-    // };
     try {
       id
         ? await axios.put(`writting_mocktest/${id}`, data)
@@ -135,8 +130,8 @@ const WritingTestForm = ({ id }) => {
           options={listeningBlancks}
           control={control}
           name="blank"
-          placeholder="Select Reading: Fill in the Blanks"
-          label="Reading: Fill in the Blanks"
+          placeholder="Select Listening: Fill in the Blanks"
+          label="Listening: Fill in the Blanks"
         />
       </div>
       <button

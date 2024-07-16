@@ -1,22 +1,45 @@
-import DashboardLayout from "./layout";
-import TodaysTask from "../../components/UserDashboard/CurrentDayTask/PTECurrentDayTask";
-import PTECalendar from "../../components/UserDashboard/Calendar/PTE_Calendar";
-import HeaderCounter from "../../components/UserDashboard/HeaderCounter/HeaderCounter";
-import PTEAccurateMock from "../../components/UserDashboard/AccurateMockTest/PTEAccurateMock";
+import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { GrClose } from "react-icons/gr";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { SlBadge } from "react-icons/sl";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import ReusableModal from "../../components/global/ReusableModal";
+import PTEAccurateMock from "../../components/UserDashboard/AccurateMockTest/PTEAccurateMock";
+import PTECalendar from "../../components/UserDashboard/Calendar/PTE_Calendar";
+import TodaysTask from "../../components/UserDashboard/CurrentDayTask/PTECurrentDayTask";
+import HeaderCounter from "../../components/UserDashboard/HeaderCounter/HeaderCounter";
+import HelpAndsupport from "../../components/UserDashboard/Help&support/HelpAndsupport";
 import MiniGameWidgets from "../../components/UserDashboard/MiniGameWidgets/MiniGameWidgets";
 import Performances from "../../components/UserDashboard/Performances/Performances";
-import StudyMaterial from "../../components/UserDashboard/StudyMaterial/StudyMaterial";
-import HelpAndsupport from "../../components/UserDashboard/Help&support/HelpAndsupport";
 import PracticeProgress from "../../components/UserDashboard/PracticeProgress/PracticeProgress";
-import { useSelector } from "react-redux";
+import StudyMaterial from "../../components/UserDashboard/StudyMaterial/StudyMaterial";
+import DashboardLayout from "./layout";
 
 const Index = () => {
   const [toggleProgress, setToggleProgress] = useState("performance");
   const user = useSelector((state) => state?.user?.user);
   const [performanceTab, setPerformanceTab] = useState("all");
+  const [promotion, setPromotion] = useState({
+    state: false,
+    data: null,
+  });
+  useEffect(() => {
+    const promotion = async () => {
+      const { data } = await axios.get("/promo_banner");
+      if (data && data.active) {
+        if (localStorage.getItem("promotionImage") === data.image) {
+          return;
+        }
+        setTimeout(() => {
+          setPromotion({ state: true, data: data });
+        }, data.show_after * 1000);
+      }
+    };
+    promotion();
+  }, []);
   return (
     <DashboardLayout dashboard>
       <div className="p-3 mt-12">
@@ -97,6 +120,9 @@ const Index = () => {
 
         {/* help & support */}
         <HelpAndsupport />
+        {promotion?.state && (
+          <PromotionModal open={promotion} setOpen={setPromotion} />
+        )}
       </div>
     </DashboardLayout>
   );
@@ -122,5 +148,33 @@ export const Tab = ({ setPerformanceTab }) => {
         Last updated on {new Date().toLocaleDateString()}
       </p>
     </div>
+  );
+};
+const PromotionModal = ({ open, setOpen }) => {
+  return (
+    <ReusableModal open={open?.state} setOpen={setOpen} className="">
+      <div className="bg-white relative">
+        {/* modal header */}
+        <button
+          onClick={() => {
+            setOpen({ state: false, data: null });
+            localStorage.setItem("promotionImage", open?.data.image);
+          }}
+          className="w-7 h-7 absolute top-0 right-0  rounded-full bg-white flex items-center outline-none justify-center"
+        >
+          <GrClose className="text-gray text-base" />
+        </button>
+        {/* Modal content */}
+        <Link target="_blank" href={open?.data.link} className="p-4">
+          <Image
+            className="rounded-md"
+            alt="Uploaded Image"
+            width={600}
+            height={600}
+            src={open?.data.image}
+          />
+        </Link>
+      </div>
+    </ReusableModal>
   );
 };

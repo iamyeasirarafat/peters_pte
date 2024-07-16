@@ -1,13 +1,12 @@
-import Layout from "@/components/Layout";
 import Field from "@/components/Field";
-import { useForm } from "react-hook-form";
-import { getQuestion, optionFormatter } from "./full_mocktests";
-import { useState } from "react";
-import { useEffect } from "react";
+import Layout from "@/components/Layout";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "../../../../components/Spinner/Spinner";
-import { useRouter } from "next/router";
+import { getQuestion, optionFormatter } from "./full_mocktests";
 import MockTestMultiSelector from "./MockTestMultiSelector";
 function FullMocktest() {
   const router = useRouter();
@@ -25,22 +24,28 @@ const ReadingTestForm = ({ id }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [spokenSummarizes, setSpokenSummarizes] = useState([]);
-  const [spokenMcqs, setSpokenMcqs] = useState([]);
+  const [mcm, setMcm] = useState([]);
   const [highlightSummarys, setHighlightSummarys] = useState([]);
-  const [readingBlancks, setReadingBlancks] = useState([]);
-  const [spokenMcqSingles, setSpokenMcqSingles] = useState([]);
+  const [blanks, setBlanks] = useState([]);
+  const [mcmSingle, setMcmSingle] = useState([]);
   const [missingWords, setMissingWords] = useState([]);
   const [incorrectWords, setIncorrectWords] = useState([]);
   const [dictations, setDictations] = useState([]);
+  const [repeatSentence, setRepeatSentence] = useState([]);
+  const [retellLecture, setRetellLecture] = useState([]);
+  const [shortQuestions, setShortQuestions] = useState([]);
   useEffect(() => {
     getQuestion("/spoken/summarizes", setSpokenSummarizes);
-    getQuestion("/multi_choices/reading", setSpokenMcqs);
+    getQuestion("/multi_choices", setMcm);
     getQuestion("/highlight_summarys", setHighlightSummarys);
-    getQuestion("/reading_blanks", setReadingBlancks);
-    getQuestion("/multi_choices/reading/single-answer", setSpokenMcqSingles);
+    getQuestion("/blanks", setBlanks);
+    getQuestion("/multi_choices/single-answer", setMcmSingle);
     getQuestion("/missing_words", setMissingWords);
     getQuestion("/highlight_incorrect_words", setIncorrectWords);
     getQuestion("/dictations", setDictations);
+    getQuestion("/repeat_sentences", setRepeatSentence);
+    getQuestion("/retell_sentences", setRetellLecture);
+    getQuestion("/short_questions", setShortQuestions);
   }, []);
   const {
     register,
@@ -52,23 +57,10 @@ const ReadingTestForm = ({ id }) => {
   } = useForm();
   const onSubmit = async (data) => {
     setIsLoading(true);
-    const formData = {
-      title: data?.title,
-      summarize_spoken: data?.summarize_spoken || [],
-      highlight_summary: data?.highlight_summary || [],
-      multi_choice_reading_multi_answer:
-        data?.multi_choice_reading_multi_answer || [],
-      missing_word: data?.missing_word || [],
-      highlight_incorrect_word: data?.highlight_incorrect_word || [],
-      dictation: data?.dictation || [],
-      reading_balnk: data?.reading_balnk || [],
-      multi_choice_reading_single_answer:
-        data?.multi_choice_reading_single_answer || [],
-    };
     try {
       const res = id
-        ? await axios.put(`listening_mocktest/${id}`, formData)
-        : await axios.post("/listening_mocktest", formData);
+        ? await axios.put(`listening_mocktest/${id}`, data)
+        : await axios.post("/listening_mocktest", data);
       toast.success(`Mocktest ${id ? "update" : "added"} successfully`);
       reset();
       setIsLoading(false);
@@ -79,9 +71,9 @@ const ReadingTestForm = ({ id }) => {
         toast.error(error?.response?.data?.title[0] || "Something went wrong");
     }
   };
-  const spokenMcqOptions = optionFormatter(spokenMcqs);
+  const mcmOptions = optionFormatter(mcm);
   const highlightSummarysOptions = optionFormatter(highlightSummarys);
-  const spokenMcqSinglesOptions = optionFormatter(spokenMcqSingles);
+  const mcmSingleOptions = optionFormatter(mcmSingle);
   const missingWordsOptions = optionFormatter(missingWords);
   const inCorrectWordOptions = optionFormatter(incorrectWords);
   // set Default data
@@ -108,7 +100,7 @@ const ReadingTestForm = ({ id }) => {
         register={register}
         name="title"
       />
-      <div className="grid grid-cols-3 gap-x-5">
+      <div className="grid grid-cols-3 gap-5">
         <MockTestMultiSelector
           options={spokenSummarizes}
           control={control}
@@ -117,9 +109,9 @@ const ReadingTestForm = ({ id }) => {
           label="Summarize Spoken Text"
         />
         <MockTestMultiSelector
-          options={spokenMcqOptions}
+          options={mcmOptions}
           control={control}
-          name="multi_choice_reading_multi_answer"
+          name="multi_choice_multi_answer"
           placeholder="Select Multiple Choice (Multiple)"
           label="Multiple Choice (Multiple)"
         />
@@ -130,19 +122,18 @@ const ReadingTestForm = ({ id }) => {
           placeholder="Select Highlight Correct Summary"
           label="Highlight Correct Summary"
         />
-      </div>
-      <div className="grid grid-cols-3 gap-x-5">
+
         <MockTestMultiSelector
-          options={readingBlancks}
+          options={blanks}
           control={control}
-          name="reading_balnk"
+          name="blank"
           placeholder="Select Fill in the Blanks"
           label="Fill in the Blanks"
         />
         <MockTestMultiSelector
-          options={spokenMcqSinglesOptions}
+          options={mcmSingleOptions}
           control={control}
-          name="multi_choice_reading_single_answer"
+          name="multi_choice_single_answer"
           placeholder="Select Multiple Choice (Single)"
           label="Multiple Choice (Single)"
         />
@@ -153,8 +144,7 @@ const ReadingTestForm = ({ id }) => {
           placeholder="Select Select Missing Word"
           label="Select Missing Word"
         />
-      </div>
-      <div className="grid grid-cols-3 gap-x-5">
+
         <MockTestMultiSelector
           options={inCorrectWordOptions}
           control={control}
@@ -168,6 +158,27 @@ const ReadingTestForm = ({ id }) => {
           name="dictation"
           placeholder="Select Write From Dictations"
           label="Write From Dictations"
+        />
+        <MockTestMultiSelector
+          options={repeatSentence}
+          control={control}
+          name="repeat_sentence"
+          placeholder="Select Repeat Sentence"
+          label="Repeat Sentence"
+        />
+        <MockTestMultiSelector
+          options={retellLecture}
+          control={control}
+          name="retell_sentence"
+          placeholder="Select Retell Lecture"
+          label="Retell Lecture"
+        />
+        <MockTestMultiSelector
+          options={shortQuestions}
+          control={control}
+          name="short_question"
+          placeholder="Select Answer Short Question"
+          label="Answer Short Question"
         />
       </div>
       <button
