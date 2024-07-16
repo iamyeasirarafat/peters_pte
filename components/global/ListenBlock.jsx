@@ -5,10 +5,10 @@ const ListenBlock = ({ listening, setOpen, data, blank }) => {
     <div className="p-5 border border-primary rounded-[15px] relative">
       <div className="flex items-center justify-center">
         <div className="flex flex-col items-center w-full gap-y-2">
-          {data?.id && <AudioPlayer listening apiAudio data={data} />}
+          {data?.id && <AudioPlayer listening={listening} apiAudio data={data} />}
         </div>
       </div>
-      {data?.id && !blank && (
+      {/* {data?.id && !blank && (
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -18,7 +18,7 @@ const ListenBlock = ({ listening, setOpen, data, blank }) => {
         >
           Transcript
         </button>
-      )}
+      )} */}
     </div>
   );
 };
