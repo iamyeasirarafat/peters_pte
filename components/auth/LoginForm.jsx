@@ -97,9 +97,9 @@ const Login = () => {
       <button
         type="submit"
         disabled={isLoading}
-        className="py-5 w-full flex items-center gap-x-3 justify-center mt-2 font-semibold text-3xl text-white bg-[#4399FF] rounded-[22px]"
+        className="py-3 md:py-5 w-full flex items-center gap-x-3 justify-center mt-2 font-semibold text-3xl text-white bg-[#4399FF] rounded-[22px]"
       >
-        Login {isLoading && <Spinner className="w-9 h-9" />}
+        Login {isLoading && <Spinner className="w-6 h-6 md:w-9 md:h-9" />}
       </button>
     </form>
   );
