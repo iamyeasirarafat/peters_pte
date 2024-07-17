@@ -56,6 +56,10 @@ const Students = ({ items, student, setReFetch }) => {
                         ? "MultiChoiceReading"
                         : pageName === "MultiChoiceSingle"
                         ? "MultiChoice"
+                        : pageName === "ReadingWritingBlank"
+                        ? "RWBlank"
+                        : pageName === "RetellLecture"
+                        ? "RetellSentence"
                         : pageName
                     }
                     deleteUserList={deleteUserList}

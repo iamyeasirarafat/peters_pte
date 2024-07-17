@@ -8,6 +8,7 @@ import Icon from "@/components/Icon";
 import { multiDeleteList } from "@/utils/multiDeleteList";
 import toast, { LoaderIcon } from "react-hot-toast";
 import { PiTrash } from "react-icons/pi";
+import Loading from "@/components/Loading";
 
 const Students = ({ items, setStatus, admin }) => {
   const [deleteUserList, setDeleteUserList] = useState([]);
@@ -129,9 +130,9 @@ export const MultiActions = ({
 
   return (
     <div
-      className={`absolute top-1/2 right-[70%] bg-secondary dark:bg-white/20 p-1 rounded-md ${
+      className={`absolute z-50 top-1/2 right-[70%] bg-secondary dark:bg-white/20 p-1 rounded-md ${
         onlyDelete ? "w-[230px]" : "w-[120px]"
-      }  z-50`}
+      }`}
     >
       {onlyDelete && (
         <>
@@ -141,7 +142,8 @@ export const MultiActions = ({
               e.stopPropagation();
               handleMultiDelete("increase", "appeared");
             }}
-            className="block px-4 py-2 text-sm text-gray-700  dark:text-gray-700 hover:bg-gray-100 hover:text-gray"
+            disable={loadingDelete}
+            className="block disabled:cursor-not-allowed px-4 py-2 text-sm text-gray-700  dark:text-gray-700 hover:bg-gray-100 hover:text-gray"
           >
             <Icon name="plus" /> Increase Appeared by 1
           </button>
@@ -151,7 +153,8 @@ export const MultiActions = ({
               e.stopPropagation();
               handleMultiDelete("decrease", "appeared");
             }}
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
+            disable={loadingDelete}
+            className="block disabled:cursor-not-allowed px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray"
           >
             <Icon name="plus" /> Decrease Appeared by 1
           </button>
@@ -161,7 +164,8 @@ export const MultiActions = ({
               e.stopPropagation();
               handleMultiDelete("on", "prediction");
             }}
-            className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
+            disable={loadingDelete}
+            className="block disabled:cursor-not-allowed px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
           >
             <Icon name="prediction" /> Prediction On
           </button>
@@ -171,7 +175,8 @@ export const MultiActions = ({
               e.stopPropagation();
               handleMultiDelete("off", "prediction");
             }}
-            className="block px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
+            disable={loadingDelete}
+            className="block disabled:cursor-not-allowed px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-gray"
           >
             <Icon name="predictionOff" /> Prediction Off
           </button>
@@ -183,10 +188,16 @@ export const MultiActions = ({
           e.stopPropagation();
           handleMultiDelete();
         }}
-        className="flex items-center gap-x-2 px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-red"
+        disable={loadingDelete}
+        className="flex disabled:cursor-not-allowed items-center gap-x-2 px-4 py-2 text-sm text-gray-700 hover-bg-gray-100 hover:text-red"
       >
-        {loadingDelete ? <LoaderIcon /> : <PiTrash />} Remove
+        <PiTrash /> Remove
       </button>
+      {loadingDelete && (
+        <div className="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Loading />
+        </div>
+      )}
     </div>
   );
 };
