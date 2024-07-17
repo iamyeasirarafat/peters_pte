@@ -25,6 +25,7 @@ const Row = ({
       setValue(true);
     } else {
       setValue(false);
+      setIsOpen({ ...isOpen, [item.id]: false });
     }
   }, [item, deleteUserList]);
 
@@ -87,7 +88,7 @@ const Row = ({
             >
               <Icon name="dots" />
             </button>
-            {isOpen === item?.id && (
+            {isOpen === item?.id && deleteUserList?.length <= 0 && (
               <MoreButton
                 handleUpdateClick={handleUpdateClick}
                 item={item}
@@ -184,7 +185,18 @@ export const StudentRow = ({ item, setDeleteUserList, deleteUserList }) => {
 const MoreButton = ({ handleUpdateClick, item, setReFetch }) => {
   const router = useRouter();
   const { questionTable } = router.query;
-  const pageName = convertToCamelCase(questionTable);
+  const url = convertToCamelCase(questionTable);
+
+  const pageName =
+    url === "MultiChoiceReadingSingle"
+      ? "MultiChoiceReading"
+      : url === "MultiChoiceSingle"
+      ? "MultiChoice"
+      : url === "ReadingWritingBlank"
+      ? "RWBlank"
+      : url === "RetellLecture"
+      ? "RetellSentence"
+      : url;
   const handelAction = async (type, incDec, action) => {
     try {
       const res = incDec
