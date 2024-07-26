@@ -243,11 +243,19 @@ const MockLayouts = ({
       questionList={questionList}
     >
       {questionList?.question?.[currentQuestion]?.type === "read_aloud" && (
-        <Read_aloud />
+        <Read_aloud
+          question={questionList?.question?.[currentQuestion]}
+          aid={questionList?.aid}
+        />
       )}
 
       {questionList?.question?.[currentQuestion]?.type ===
-        "repeat_sentence" && <Repeat_sentence />}
+        "repeat_sentence" && (
+        <Repeat_sentence
+          question={questionList?.question?.[currentQuestion]}
+          aid={questionList?.aid}
+        />
+      )}
 
       {questionList?.question?.[currentQuestion]?.type === "describe_image" && (
         <Describe_image />
