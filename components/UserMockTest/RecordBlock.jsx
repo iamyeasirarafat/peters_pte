@@ -1,10 +1,9 @@
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
-import dynamic from "next/dynamic";
-import Pagination from "../global/Pagination";
 import AudioPlayer from "../global/audio_player/AudioPlayer";
 const DynamicReactMic = dynamic(
   () => import("react-mic").then((module) => module.ReactMic),
@@ -81,7 +80,7 @@ const RecordBlock = ({ setReFetch, api, data }) => {
 
     return () => clearInterval(timerId); // Cleanup the timer on component unmount
   }, [isRecording]);
-
+  console.log(audioData)
   //progressbar width
   const progressBarWidth = (recordingTime / 40000) * 100;
   // handle submit function
@@ -89,36 +88,39 @@ const RecordBlock = ({ setReFetch, api, data }) => {
   const id = router.query.que_no;
   const HandleSubmit = async () => {
     setIsLoading(true);
-    if (audioData) {
-      try {
-        const formData = new FormData();
-        formData.append("audio", audioData, "recorded.wav"); // Append the audioData as is
-        // formData.append("read_aloud", id);
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data", // Use lowercase for header keys
-          },
-        };
+    try {
+      const formData = new FormData();
+      formData.append("audio", audioData, "recorded.wav"); // Append the audioData as is
+      // formData.append("read_aloud", id);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data", // Use lowercase for header keys
+        },
+      };
 
-        const { data } = await axios.post(api, formData, config);
-        data && setReFetch((prev) => !prev);
-        setIsLoading(false);
-        setAudioData(null);
-      } catch (error) {
-        console.error("Error sending audio:", error);
-        toast.error("Something went wrong, try again later.");
-        setIsLoading(false);
-      }
-    } else {
-      toast.error("You need to record yourself!");
+      const { data } = await axios.post(api, formData, config);
+      data && setReFetch((prev) => !prev);
+      setIsLoading(false);
+      setAudioData(null);
+    } catch (error) {
+      console.error("Error sending audio:", error);
+      toast.error("Something went wrong, try again later.");
       setIsLoading(false);
     }
   };
 
-  // if change question automatically removing old record function
+  const summitButton = useRef(null);
   useEffect(() => {
-    setAudioData(null);
-  }, [id]);
+    const layout_button = document.getElementById("submit_button");
+    layout_button.addEventListener("click", () => {
+      summitButton?.current?.click();
+    });
+  }, []);
+
+  // if change question automatically removing old record function
+  // useEffect(() => {
+  //   setAudioData(null);
+  // }, [id]);
   return (
     <div>
       <div className="whiteGd h-[50px] block md:hidden"></div>
@@ -183,6 +185,9 @@ const RecordBlock = ({ setReFetch, api, data }) => {
           audioData={audioData}
           HandleSubmit={HandleSubmit}
         /> */}
+        <button
+          ref={summitButton}
+          onClick={HandleSubmit} className="hidden"></button>
       </div>
     </div>
   );
