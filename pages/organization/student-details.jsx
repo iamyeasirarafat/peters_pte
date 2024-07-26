@@ -495,8 +495,8 @@ export const UpdateInformation = ({
   const onSubmit = async (data) => {
     const updateData = {
       ...data,
-      ...(group.id && { group: group.id }),
-      ...(org?.id && { organization: org.id }),
+      ...(group?.id && { group: group?.id }),
+      ...(org?.id && { organization: org?.id }),
       profile: {
         gender: gender?.name,
         ...data?.profile,
@@ -549,8 +549,8 @@ export const UpdateInformation = ({
     setGroup(openUpdateInformation?.data?.profile[0]?.group);
     setOrg(
       {
-        id: openUpdateInformation?.data?.profile[0]?.organization.id,
-        name: openUpdateInformation?.data?.profile[0]?.organization.full_name,
+        id: openUpdateInformation?.data?.profile[0]?.organization?.id,
+        name: openUpdateInformation?.data?.profile[0]?.organization?.full_name,
       } || {}
     );
   }, [openUpdateInformation?.data, setValue]);
@@ -729,11 +729,13 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
     planId: item?.id,
   }));
 
+  console.log("plansData", plansData);
+
   // get plans
   useEffect(() => {
     const getPlans = async () => {
       const res = await axios.get("/packages/student");
-      setPlansData(res?.data?.results);
+      setPlansData(res?.data);
     };
     getPlans();
   }, [openAssignNewPlan]);
@@ -745,7 +747,7 @@ const AssignNewPlan = ({ openAssignNewPlan, setOpenAssignNewPlan }) => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     const planData = {
       student: openAssignNewPlan?.student,
       plan: plan?.planId,
