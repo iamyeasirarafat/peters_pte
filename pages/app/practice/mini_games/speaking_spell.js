@@ -1,9 +1,9 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 import DashboardLayout from "../../layout";
-import GameScore from "./GameScore";
-import axios from "axios";
 import GameRecorder from "./GameRecorder";
+import GameScore from "./GameScore";
 
 function SpeakingSpell() {
   const [loading, setLoading] = useState(false);
@@ -90,19 +90,17 @@ function SpeakingSpell() {
   return (
     <DashboardLayout dashboard>
       <div className="pt-2.5 pb-15">
-        <div className="w-full bg-[url('/mini_game/speaking_spell.png')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center">
+        <div className="w-full bg-gradient-to-r from-primary to-secondary md:bg-[url('/mini_game/speaking_spell.png')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center rounded-lg">
           <div className="w-[60%]">
             <p className="text-white text-center text-xl font-semibold">
               Speak the Line <q>{question?.question?.word}</q>
             </p>
-            <div className="bg-white rounded-[15px]">
-              <GameRecorder audioData={audioData} setAudioData={setAudioData} />
-            </div>
+            <GameRecorder audioData={audioData} setAudioData={setAudioData} />
             {isCorrect ? (
               <button
                 onClick={handleMakeAudioToText}
                 disabled={loading}
-                className="py-2 px-3 disabled:opacity-70 bg-primary hover:bg-secondary font-semibold duration-200 text-white hover:text-black flex items-center justify-center gap-x-2 w-full mt-5"
+                className="py-2 px-3 disabled:opacity-70 bg-primary hover:bg-secondary font-semibold duration-200 text-white hover:text-black flex items-center justify-center gap-x-2 w-full mt-5 rounded-lg"
               >
                 {loading && <LoaderIcon />} Submit
               </button>
@@ -113,7 +111,7 @@ function SpeakingSpell() {
                   setIsCorrect(true);
                   setTryAgain(!tryAgain);
                 }}
-                className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
+                className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5  rounded-lg"
               >
                 Ply again
               </button>

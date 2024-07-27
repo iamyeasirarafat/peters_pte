@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../layout";
-import toast, { LoaderIcon } from "react-hot-toast";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import toast, { LoaderIcon } from "react-hot-toast";
+import DashboardLayout from "../../layout";
 import GameScore from "./GameScore";
 
 function SpellingBee() {
@@ -82,7 +82,7 @@ function SpellingBee() {
   return (
     <DashboardLayout dashboard>
       <div className="pt-2.5">
-        <div className="w-full bg-[url('/mini_game/spelling_bee.svg')] bg-contain bg-center bg-no-repeat h-full flex items-center justify-center relative">
+        <div className="w-full bg-gradient-to-r from-primary to-secondary md:bg-[url('/mini_game/spelling_bee.svg')] bg-contain bg-center bg-no-repeat h-full flex items-center justify-center relative rounded-lg">
           <p className=" text-lg text-white font-semibold absolute top-7 left-7">
             Spelling Bee
           </p>
@@ -101,13 +101,13 @@ function SpellingBee() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                 {question?.question?.options?.map((item, index) => (
                   <label
                     key={index}
                     className={`group ${
                       !isCorrect && "opacity-50 cursor-auto"
-                    } relative inline-flex items-center gap-2 select-none cursor-pointer tap-highlight-color bg-white  py-4 px-4`}
+                    } relative inline-flex items-center gap-2 select-none cursor-pointer tap-highlight-color bg-white  py-4 px-4 rounded-lg`}
                   >
                     <input
                       disabled={!isCorrect}
@@ -130,7 +130,7 @@ function SpellingBee() {
               <button
                 onClick={handelSubmit}
                 disabled={loading}
-                className="py-2 px-3 disabled:opacity-70 bg-primary hover:bg-secondary font-semibold duration-200 text-white hover:text-black flex items-center justify-center gap-x-2 w-full mt-5"
+                className="py-2 px-3 disabled:opacity-70 bg-primary hover:bg-secondary font-semibold duration-200 text-white hover:text-black flex items-center justify-center gap-x-2 w-full mt-5 rounded-lg"
               >
                 {loading && <LoaderIcon />} Submit
               </button>
@@ -142,7 +142,7 @@ function SpellingBee() {
                   setTryAgain(!tryAgain);
                   setGameOver(false);
                 }}
-                className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
+                className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5 rounded-lg"
               >
                 Play Again
               </button>

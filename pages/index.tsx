@@ -17,21 +17,12 @@ const Home: NextPage = () => {
         <div className="w-full h-full relative">
           <Image
             className="object-contain"
-            src="/site-logo.png"
+            src="/logo.png"
             fill
-            alt="auth image"
+            alt="brand logos"
           />
         </div>
       </div>
-      {/* <div className="flex items-center gap-x-4">
-        <div className="flex justify-center items-center h-96">
-          <div
-            className="w-6 h-6 rounded-full animate-spin
-                  border-x-4 border-solid border-orange-400 border-t-transparent"
-          ></div>
-        </div>
-        <div className="flex items-center gap-x-1">Initializing</div>
-      </div> */}
     </div>
   );
 };

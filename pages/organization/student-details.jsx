@@ -979,18 +979,16 @@ const ProgressModal = ({ data }) => {
             <div className="flex items-center gap-x-4 w-full">
               <button
                 onClick={() => setTab("performance")}
-                className={` ${
-                  tab === "performance" ? "bg-[#849C3E] text-white" : "bg-white"
-                } p-2.5 text-xl text-center rounded border border-[#849C3E]`}
+                className={` ${tab === "performance" ? "bg-[#849C3E] text-white" : "bg-white"
+                  } p-2.5 text-xl text-center rounded border border-[#849C3E]`}
               >
                 <p className="leading-none">Your Performance</p>
                 <FiAward className="text-2xl inline-block mt-2" />
               </button>
               <button
                 onClick={() => setTab("progress")}
-                className={`${
-                  tab === "progress" ? "bg-blue text-white" : "bg-white"
-                } p-2.5 text-xl text-center rounded border border-blue`}
+                className={`${tab === "progress" ? "bg-blue text-white" : "bg-white"
+                  } p-2.5 text-xl text-center rounded border border-blue`}
               >
                 <p className="leading-none">Practice Progress</p>
                 <FiTrendingUp className="text-2xl inline-block mt-2" />

@@ -53,7 +53,7 @@ const Index = () => {
         </div>
         {/* practice slider  */}
         {/* <PracticeSlider /> */}
-        <div className="my-20">
+        <div className=" my-10 md:my-20">
           <div className="flex bg-primary w-full h-[46px] rounded-[15px] justify-center items-center">
             <span className="text-[26px] text-white">Study Plan</span>
           </div>
@@ -144,9 +144,9 @@ export const Tab = ({ setPerformanceTab }) => {
         <option value="listening">Listening</option>
         <option value="mocktest">Mock test</option>
       </select>
-      <p className="text-[12px] md:text-[16px] font-normal text-[#949494]">
+      {/* <p className="text-[12px] md:text-[16px] font-normal text-[#949494]">
         Last updated on {new Date().toLocaleDateString()}
-      </p>
+      </p> */}
     </div>
   );
 };
