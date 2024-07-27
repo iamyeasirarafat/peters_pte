@@ -68,7 +68,7 @@ export const StudentsDetailsMain = ({ studentDetails, setFetch }) => {
   );
 };
 
-const StudentProfileInfo = ({ data, setFetch }) => {
+export const StudentProfileInfo = ({ data, setFetch }) => {
   const router = useRouter();
   const [openUpdateInformation, setOpenUpdateInformation] = useState({
     state: false,
@@ -116,7 +116,7 @@ const StudentProfileInfo = ({ data, setFetch }) => {
         <div>
           <h2 className="text-xl font-extrabold">{data?.full_name}</h2>
           <p className="text-sm">
-            {data?.profile[0]?.country || "Not Available"}
+            {data?.profile?.[0]?.country || "Not Available"}
           </p>
         </div>
       </div>
@@ -132,31 +132,31 @@ const StudentProfileInfo = ({ data, setFetch }) => {
       <div>
         <p className="text-sm">Gender</p>
         <p className="text-sm font-bold">
-          {data?.profile[0]?.gender || "Not Available"}
+          {data?.profile?.[0]?.gender || "Not Available"}
         </p>
       </div>
       <div>
         <p className="text-sm">Education</p>
         <p className="text-sm font-bold">
-          {data?.profile[0]?.education || "Not Available"}
+          {data?.profile?.[0]?.education || "Not Available"}
         </p>
       </div>
       <div>
         <p className="text-sm">Address</p>
         <p className="text-sm font-bold">
-          {data?.profile[0]?.address || "Not Available"}
+          {data?.profile?.[0]?.address || "Not Available"}
         </p>
       </div>
       <div>
         <p className="text-sm">Group</p>
         <p className="text-sm font-bold">
-          {data?.profile[0]?.group?.name || "Not Available"}
+          {data?.profile?.[0]?.group?.name || "Not Available"}
         </p>
       </div>
       <div>
         <p className="text-sm">Birthday</p>
         <p className="text-sm font-bold">
-          {formatDateTime(data?.profile[0]?.birth_date, "date") ||
+          {formatDateTime(data?.profile?.[0]?.birth_date, "date") ||
             "Not Available"}
         </p>
       </div>
@@ -525,32 +525,33 @@ export const UpdateInformation = ({
     setValue("full_name", openUpdateInformation?.data?.full_name);
     setValue("email", openUpdateInformation?.data?.email);
     setValue("phone", openUpdateInformation?.data?.phone);
-    setCountry(openUpdateInformation?.data?.profile[0]?.country || "");
+    setCountry(openUpdateInformation?.data?.profile?.[0]?.country || "");
     setValue(
       "profile.education",
-      openUpdateInformation?.data?.profile[0]?.education
+      openUpdateInformation?.data?.profile?.[0]?.education
     );
     setValue(
       "profile.address",
-      openUpdateInformation?.data?.profile[0]?.address
+      openUpdateInformation?.data?.profile?.[0]?.address
     );
     setValue(
       "profile.birth_date",
       formatDateTime(
-        openUpdateInformation?.data?.profile[0]?.birth_date,
+        openUpdateInformation?.data?.profile?.[0]?.birth_date,
         "datere"
       )
     );
     setGender(
-      openUpdateInformation?.data?.profile[0]?.gender === "male"
+      openUpdateInformation?.data?.profile?.[0]?.gender === "male"
         ? genders[0]
         : genders[1]
     );
-    setGroup(openUpdateInformation?.data?.profile[0]?.group);
+    setGroup(openUpdateInformation?.data?.profile?.[0]?.group);
     setOrg(
       {
-        id: openUpdateInformation?.data?.profile[0]?.organization?.id,
-        name: openUpdateInformation?.data?.profile[0]?.organization?.full_name,
+        id: openUpdateInformation?.data?.profile?.[0]?.organization?.id,
+        name: openUpdateInformation?.data?.profile?.[0]?.organization
+          ?.full_name,
       } || {}
     );
   }, [openUpdateInformation?.data, setValue]);

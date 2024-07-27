@@ -14,14 +14,14 @@ const GlobalPagination = () => {
     (pageName === "multiple_answers" ||
       pageName === "fill_blanks" ||
       pageName === "single_answer") &&
-      router?.pathname.includes("reading_test")
+    router?.pathname.includes("reading_test")
       ? `${pageName}_reading`
       : (pageName === "multiple_answers" ||
-        pageName === "fill_blanks" ||
-        pageName === "single_answer") &&
+          pageName === "fill_blanks" ||
+          pageName === "single_answer") &&
         router?.pathname.includes("listening_test")
-        ? `${pageName}_listening`
-        : pageName;
+      ? `${pageName}_listening`
+      : pageName;
 
   const index = qId?.findIndex(
     (item) => item === parseInt(router?.query?.que_no)
@@ -44,7 +44,7 @@ const GlobalPagination = () => {
     qId && handelSetQuestionId(qId[qId.length - 1]);
   }, [qId]);
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex items-center gap-x-4">
       <button className="w-10 h-7 md:w-[56px] md:h-[45px] bg-oldPrimary rounded-[22px] flex items-center justify-center hover:bg-[#ffe4cd] duration-200">
         <RxShuffle
           onClick={() =>
@@ -53,7 +53,7 @@ const GlobalPagination = () => {
           className="text-white text-xl md:text-3xl"
         />
       </button>
-      <div className="bg-oldPrimary rounded-[30px] px-2 md:px-4 py-[5px] flex items-center gap-x-1 md:gap-x-2">
+      <div className="bg-oldPrimary rounded-[30px] px-4 py-[5px] flex items-center gap-x-1 md:gap-x-2">
         <IoIosArrowBack
           onClick={() => index !== 0 && handelSetQuestionId(qId[index - 1])}
           className="text-sm md:text-lg text-white cursor-pointer"
