@@ -1,9 +1,14 @@
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { GrClose } from "react-icons/gr";
-import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 
-const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks, fill_blanks }) => {
+const FillBlanksModal = ({
+  data,
+  open,
+  setOpen,
+  reading_fill_banks,
+  fill_blanks,
+}) => {
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
@@ -33,16 +38,30 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks, fill_blanks 
           {/* score */}
           <div className="grid grid-cols-4 gap-6">
             {/* Total Score */}
-            <div className={`${reading_fill_banks ? "col-span-2" : "col-span-1"} w-full border border-primary rounded-[13px]`}>
+            <div
+              className={`${
+                reading_fill_banks ? "col-span-2" : "col-span-1"
+              } w-full border border-primary rounded-[13px]`}
+            >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
-                <p className="text-gray text-xl">{fill_blanks ? "Listening" : "Reading"} Score</p>
+                <p className="text-gray text-xl">
+                  {fill_blanks ? "Listening" : "Reading"} Score
+                </p>
               </div>
               {/* score point*/}
               <div className="flex flex-col items-center justify-center p-4">
                 <div className="w-32 h-w-32">
                   <CircularProgressbar
-                    value={fill_blanks ? data?.scores.listening : data?.scores.reading || 0}
-                    text={fill_blanks ? data?.scores.listening : data?.scores.reading || 0}
+                    value={
+                      fill_blanks
+                        ? data?.scores.listening
+                        : data?.scores.reading || 0
+                    }
+                    text={
+                      fill_blanks
+                        ? data?.scores.listening
+                        : data?.scores.reading || 0
+                    }
                     maxValue={data?.scores.max_score || 0}
                     strokeWidth={15}
                     styles={buildStyles({
@@ -58,8 +77,8 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks, fill_blanks 
                 </p>
               </div>
             </div>
-            {
-              reading_fill_banks || <div className="col-span-1 w-full border border-primary rounded-[13px]">
+            {reading_fill_banks || (
+              <div className="col-span-1 w-full border border-primary rounded-[13px]">
                 <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                   <p className="text-gray text-xl">Writing Score</p>
                 </div>
@@ -84,7 +103,7 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks, fill_blanks 
                   </p>
                 </div>
               </div>
-            }
+            )}
             {/* Time Taken */}
             <div className="col-span-2 w-full border border-primary rounded-[13px] relative">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
@@ -127,8 +146,9 @@ const FillBlanksModal = ({ data, open, setOpen, reading_fill_banks, fill_blanks 
                     return (
                       <span
                         key={index}
-                        className={`block ${item?.correct ? "text-green-500" : "text-red"
-                          }`}
+                        className={`block ${
+                          item?.correct ? "text-green-500" : "text-red"
+                        }`}
                       >
                         {item.user_option ? item.user_option : "-"}
                       </span>
