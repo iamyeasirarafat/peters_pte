@@ -1,7 +1,12 @@
-import React from 'react'
-import RecordBlock from './RecordBlock'
+import { useRouter } from 'next/router';
+import React from 'react';
+import RecordBlock from './RecordBlock';
 
-const Repeat_sentence = () => {
+const Repeat_sentence = ({ question, aid }) => {
+    const router = useRouter();
+    const { mock_type, testId } = router?.query;
+    console.log("question", question);
+    const answerApi = `/mocktest/${mock_type?.split("_")?.[0]}/${testId}/answer/${aid}`;
     return (
         <div>
             <p className='py-2 font-medium'>You will hear a sentence. Please repeat the sentence
@@ -18,8 +23,8 @@ const Repeat_sentence = () => {
             </div>
 
             <RecordBlock
-            // data={data} 
-            // api={answerApi} 
+                data={question}
+                api={answerApi}
             // setReFetch={setReFetch} 
             />
 

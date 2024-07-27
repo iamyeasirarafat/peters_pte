@@ -39,9 +39,9 @@ const withSession = async ({ token, refreshToken }) => {
       const data = await res.json();
       return [data.access, false];
     } catch (error) {
-      return [null, error];
+      return [null, true];
     }
   }
-  return [null, null];
+  return [false, true];
 };
 export default withSession;

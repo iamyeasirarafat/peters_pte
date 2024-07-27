@@ -59,7 +59,7 @@ const GameRecorder = ({ audioData, setAudioData }) => {
   const progressBarWidth = (recordingTime / 40000) * 100;
 
   return (
-    <div className="bg-white md:bg-transparent px-6 md:px-0 relative">
+    <div className="bg-white relative rounded-[10px]">
       {audioData && (
         <button
           onClick={() => setAudioData(null)}
@@ -68,7 +68,7 @@ const GameRecorder = ({ audioData, setAudioData }) => {
           Reset
         </button>
       )}
-      <div className="border border-primary rounded-[15px] md:mt-3 pt-7 md:pt-4 p-4 flex flex-col items-center justify-center relative">
+      <div className="md:mt-3 pt-7 md:pt-4 p-4 flex flex-col items-center justify-center">
         {!audioData && (
           <>
             <button
@@ -79,7 +79,7 @@ const GameRecorder = ({ audioData, setAudioData }) => {
                   handleStartRecording();
                 }
               }}
-              className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center absolute md:static -top-8 left-1/2 -translate-x-1/2 md:translate-x-0"
+              className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] bg-primary rounded-full flex items-center justify-center"
             >
               <BsFillMicFill className="text-white text-2xl md:text-5xl" />
             </button>
@@ -90,7 +90,7 @@ const GameRecorder = ({ audioData, setAudioData }) => {
               onStop={handleAudioStop}
               mimeType="audio/wav"
             />
-            <p className="text-base text-gray">
+            <p className="text-base text-gray mt-1">
               Click To {isRecording ? "Stop" : "Start"}
             </p>
           </>

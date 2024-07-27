@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../layout";
-import toast, { LoaderIcon } from "react-hot-toast";
 import axios from "axios";
-import GameScore from "./GameScore";
+import React, { useEffect, useState } from "react";
+import toast, { LoaderIcon } from "react-hot-toast";
 import AudioVisualizer from "../../../../components/AudioVisualizer";
+import DashboardLayout from "../../layout";
+import GameScore from "./GameScore";
 
 function ListeningFrenzy() {
   const [loading, setLoading] = useState(false);
@@ -79,7 +79,7 @@ function ListeningFrenzy() {
   return (
     <DashboardLayout dashboard>
       <div className="pt-2.5">
-        <div className="w-full bg-[url('/mini_game/listening_frenzy.svg')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center relative">
+        <div className="w-full bg-gradient-to-r from-primary to-secondary md:bg-[url('/mini_game/listening_frenzy.svg')] bg-cover bg-center bg-no-repeat pt-32 pb-20 h-full flex items-center justify-center relative rounded-lg">
           <p className=" text-lg text-white font-semibold absolute top-7 left-7">
             Listening Frenzy
           </p>
@@ -117,7 +117,7 @@ function ListeningFrenzy() {
               <button
                 onClick={handelSubmit}
                 disabled={loading}
-                className="py-2 px-3 disabled:opacity-70 bg-primary hover:bg-secondary font-semibold duration-200 text-white hover:text-black flex items-center justify-center gap-x-2 w-full mt-5"
+                className="py-2 px-3 disabled:opacity-70 bg-primary hover:bg-secondary font-semibold duration-200 text-white hover:text-black flex items-center justify-center gap-x-2 w-full mt-5 rounded-lg"
               >
                 {loading && <LoaderIcon />} Submit
               </button>
@@ -129,7 +129,7 @@ function ListeningFrenzy() {
                   setTryAgain(!tryAgain);
                   setGameOver(false);
                 }}
-                className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5"
+                className="py-2 px-3 bg-secondary hover:bg-secondary font-semibold duration-200 text-black flex items-center justify-center gap-x-2 w-full mt-5 rounded-lg"
               >
                 Play again
               </button>

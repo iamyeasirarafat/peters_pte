@@ -5,11 +5,7 @@ export async function middleware(NextRequest) {
   const token = NextRequest.cookies.get("access_token")?.value;
   const refreshToken = NextRequest.cookies.get("refresh_token")?.value;
   //checking token in auth page
-  if (
-    NextRequest.nextUrl.pathname.startsWith("/auth") &&
-    refreshToken &&
-    token
-  ) {
+  if (NextRequest.nextUrl.pathname.startsWith("/auth") && token) {
     const role = await checkRole(token);
     let url;
     switch (role) {
@@ -30,7 +26,7 @@ export async function middleware(NextRequest) {
   const [valid, error] = await withSession({
     token,
   });
-  if (!valid || error) {
+  if (!valid && error) {
     const [token, error] = await withSession({
       refreshToken,
     });
@@ -42,33 +38,8 @@ export async function middleware(NextRequest) {
         path: "/",
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
       });
-      const role = await checkRole(token);
-      switch (role) {
-        case "super_admin":
-        case "admin":
-          if (NextRequest.nextUrl.pathname.startsWith("/admin")) {
-            return response;
-          } else {
-            const url = new URL(`/no-permission`, NextRequest.url);
-            return NextResponse.redirect(url);
-          }
-        case "organization":
-          if (NextRequest.nextUrl.pathname.startsWith("/organization")) {
-            return response;
-          } else {
-            const url = new URL(`/no-permission`, NextRequest.url);
-            return NextResponse.redirect(url);
-          }
-        case "student":
-          if (NextRequest.nextUrl.pathname.startsWith("/app")) {
-            return response;
-          } else {
-            const url = new URL(`/no-permission`, NextRequest.url);
-            return NextResponse.redirect(url);
-          }
-      }
-    }
-    if (!token || error) {
+      return response;
+    } else {
       const response = NextResponse.next();
       response.cookies.delete("access_token");
       response.cookies.delete("refresh_token");
@@ -107,6 +78,9 @@ export async function middleware(NextRequest) {
           const url = new URL(`/no-permission`, NextRequest.url);
           return NextResponse.redirect(url);
         }
+      default:
+        const url = new URL(`/no-permission`, NextRequest.url);
+        return NextResponse.redirect(url);
     }
   }
 }
