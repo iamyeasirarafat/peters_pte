@@ -29,7 +29,7 @@ function SpellingBee() {
       }
     };
     isCorrect && getQuestion();
-  }, [tryAgain]);
+  }, [tryAgain, aid, isCorrect]);
   // set question answers id
   useEffect(() => {
     setAid(question?.aid ? question.aid : "");
