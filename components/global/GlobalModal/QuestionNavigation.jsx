@@ -17,7 +17,7 @@ const QuestionNavigation = ({ questionType, setQuestionType }) => {
         ) : (
           <RiCheckboxBlankCircleLine className="text-sm text-black" />
         )}
-        <p>All Question</p>
+        <p className="text-sm md:text-lg">All Question</p>
       </div>
       {/* Practiced */}
       <div

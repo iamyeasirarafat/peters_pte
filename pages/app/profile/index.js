@@ -4,8 +4,19 @@ import Image from "next/image";
 import { MdCheckCircle, MdShoppingCartCheckout } from "react-icons/md";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { StudentProfileInfo } from "../../organization/student-details";
 
 function Index() {
+  const [fetch, setFetch] = useState(false);
+  const [studentDetails, setStudentDetails] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios("/student/" + 32);
+      setStudentDetails(res?.data);
+    };
+    // fetchData();
+  }, [fetch]);
+
   return (
     <DashboardLayout>
       <div className="mt-5">
@@ -14,6 +25,12 @@ function Index() {
           User Profile
           <span className="text-[#949494] inline-block">Plan & Package</span>
         </h2>
+        {/* Student Profile info */}
+
+        <div className="pt-5">
+          <StudentProfileInfo data={studentDetails} setFetch={setFetch} />
+        </div>
+        {/* Student Pack */}
         <StudentPack />
       </div>
     </DashboardLayout>

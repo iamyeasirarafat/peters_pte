@@ -37,13 +37,13 @@ const QuestionBlock = ({ data, toggleModal, finalPath }) => {
   return (
     <div
       onClick={addParam}
-      className="flex items-center cursor-pointer justify-between border border-primary rounded-[13px] p-3"
+      className="flex flex-col md:flex-row gap-y-3 md:items-center cursor-pointer justify-between border border-primary rounded-[13px] p-3"
     >
-      <h2 className="text-xl font-medium">
+      <h2 className="text-md md:text-xl font-medium ">
         {data?.title} | #{data?.id}
       </h2>
-      <div className="flex items-center gap-x-10">
-        <div className="space-x-2">
+      <div className="flex justify-between gap-3 md:gap-x-10">
+        <div className="flex flex-wrap md:flex-row gap-2">
           {data?.prediction && (
             <ButtonFill
               text="Prediction"
@@ -68,7 +68,7 @@ const QuestionBlock = ({ data, toggleModal, finalPath }) => {
             />
           )}
         </div>
-        <div className="space-x-5">
+        <div className="flex gap-3">
           <button
             onClick={(e) => {
               e.stopPropagation();

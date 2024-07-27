@@ -14,7 +14,16 @@ const DynamicReactMic = dynamic(
   }
 );
 
-const RecordBlock = ({ beginTimer = 35, beginText = true, setReFetch, api, data, stopTimer = 35, startRecord, startCountdown = true }) => {
+const RecordBlock = ({
+  beginTimer = 35,
+  beginText = true,
+  setReFetch,
+  api,
+  data,
+  stopTimer = 35,
+  startRecord,
+  startCountdown = true,
+}) => {
   // countdown function
   let targetDate = new Date().getTime() + beginTimer * 1000;
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -80,7 +89,7 @@ const RecordBlock = ({ beginTimer = 35, beginText = true, setReFetch, api, data,
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      handleStartRecording()
+      handleStartRecording();
     }
   }, [startRecord]);
 
@@ -223,6 +232,3 @@ const RecordBlock = ({ beginTimer = 35, beginText = true, setReFetch, api, data,
 };
 
 export default RecordBlock;
-
-
-

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPageName } from "../../../utils/getPageName";
 import QuestionBlock from "./QuestionBlock";
 import QuestionNavigation from "./QuestionNavigation";
+import { CiSearch } from "react-icons/ci";
 
 const GlobalModal = () => {
   //redux state management functions
@@ -110,11 +111,11 @@ const GlobalModal = () => {
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="pointer-events-auto w-screen bg-secondary pt-12 px-7 pb-7 overflow-hidden mt-32 border border-primary rounded-tl-[68px] max-w-6xl">
+                <Dialog.Panel className="pointer-events-auto w-screen bg-secondary pt-4 md:pt-12 px-3 md:px-7 pb-7 overflow-hidden mt-32 border border-primary rounded-tl-[20px] md:rounded-tl-[40px] max-w-6xl">
                   <div className="w-full">
-                    <div className="border flex justify-between border-primary rounded-xl px-7 py-3">
+                    <div className="border sm:flex justify-between border-primary rounded-xl px-3 md:px-7 py-3 gap-y-4">
                       <div className="flex gap-2 items-center">
-                        <h2 className="font-cabin text-4xl text-gray">
+                        <h2 className="font-cabin text-2xl sm:text-4xl text-gray">
                           {state?.data?.title}
                         </h2>
 
@@ -131,16 +132,10 @@ const GlobalModal = () => {
                             );
                           }}
                           type="text"
-                          className="w-full focus:ring-0 placeholder:text-lg rounded-3xl border-none pl-8 placeholder:text-gray placeholder:font-light "
+                          className="w-full text-sm md:text-base focus:ring-0 placeholder:text-xs md:placeholder:text-lg rounded-3xl border-none pl-3 md:pl-8 placeholder:text-gray placeholder:font-light "
                           placeholder="Search By Question Title / Number"
                         />
-                        <Image
-                          src="/icons/searchIcon.svg"
-                          alt="icon"
-                          width={20}
-                          height={20}
-                          className="absolute right-4 top-1/2 -translate-y-1/2"
-                        />
+                        <CiSearch className="absolute right-4 top-1/2 -translate-y-1/2" />
                       </div>
                     </div>
                     {/* Question type */}
@@ -149,7 +144,7 @@ const GlobalModal = () => {
                       setQuestionType={setQuestionType}
                     />
                     {/* Questions block  */}
-                    <div className="relative border border-primary rounded-[13px] bg-white p-5 mt-11">
+                    <div className="relative border border-primary rounded-[13px] bg-white p-2 md:p-5 mt-11">
                       {/* tab button */}
                       <div className="flex items-center gap-x-2 absolute bottom-full right-5">
                         <button
