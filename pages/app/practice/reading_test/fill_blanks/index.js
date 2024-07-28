@@ -92,7 +92,6 @@ export default Page;
 
 const FillBlanksBlock = ({
   typingTime,
-
   setReFetch,
   api,
   sentence,
@@ -136,6 +135,11 @@ const FillBlanksBlock = ({
     setMinutes(initialMinutes);
     setSeconds(0);
   }, [id, initialMinutes]);
+  const initialSeconds = initialMinutes * 60;
+  const remainingSeconds = minutes * 60 + seconds;
+  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
+    2
+  );
 
   //!Updating answer state
   const updateAnswer = (index, value) => {
@@ -152,11 +156,8 @@ const FillBlanksBlock = ({
       setAnswers((prev) => [...prev, { index, value }]);
     }
   };
-  const initialSeconds = initialMinutes * 60;
-  const remainingSeconds = minutes * 60 + seconds;
-  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
-    2
-  );
+
+  console.log("timeTakenInMinutes", timeTakenInMinutes);
   //*submit function
   const handelSubmit = async () => {
     try {

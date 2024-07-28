@@ -4,7 +4,7 @@ import { Fragment } from "react";
 export default function ReusableModal({ open, setOpen, children }) {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={setOpen}>
+      <Dialog as="div" className="relative z-50 w-full" onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -18,7 +18,7 @@ export default function ReusableModal({ open, setOpen, children }) {
         </Transition.Child>
 
         <div className="fixed inset-0 z-50 overflow-y-auto content-scrollbar no-scrollbar">
-          <div className="flex min-h-full justify-center sm:p-4 text-center items-center p-0">
+          <div className="flex min-h-full justify-center sm:p-4 text-center items-center p-0 w-full mx-auto">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -27,6 +27,7 @@ export default function ReusableModal({ open, setOpen, children }) {
               leave="ease-in duration-200"
               leaveFrom="opacity-100 translate-y-0 scale-100"
               leaveTo="opacity-0 translate-y-4 translate-y-0 scale-95"
+              className="w-[95%] md:w-[90%] xl:w-[60%]"
             >
               <Dialog.Panel>{children}</Dialog.Panel>
             </Transition.Child>
