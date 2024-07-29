@@ -14,13 +14,13 @@ const Footer = () => {
               height={300}
               width={300}
             />
-            <div className="flex justify-between items-center gap-2">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-2">
               <button className="bg-[url('/images/appStore.png')] bg-contain h-[67px] w-[225px] cursor-pointer" />
               <button className="bg-[url('/images/googlePlay.png')] bg-contain h-[67px] w-[225px] cursor-pointer" />
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-4 justify-between items-center text-white text-[18px]">
-            <ul className="flex gap-4 items-center ">
+            <ul className="flex flex-col md:flex-row gap-4 items-center ">
               <li>
                 <a
                   target="_blank"

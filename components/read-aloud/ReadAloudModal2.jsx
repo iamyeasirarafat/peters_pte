@@ -10,6 +10,7 @@ import AudioVisualizer from "../AudioVisualizer";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
 import WordHighlight from "../global/WordHighlight";
+import ModalHeader from "../global/ModalHeader";
 
 const ReadAloudModal2 = ({ open, setOpen, result }) => {
   const [selectedTab, setSelectedTab] = useState("pr");
@@ -30,39 +31,15 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
   const downloadAudio = AudioDownloader();
   return (
     <ReusableModal open={open} setOpen={setOpen}>
-      <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
+      <div className="bg-white border border-primary rounded-[15px] w-full overflow-hidden">
         {/* modal header */}
-        <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
-          <p className="text-white text-2xl">#{id}</p>
-          <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
-          <div className="flex items-center gap-x-4">
-            <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
-              <p className="text-white text-lg px-2 py-1 rounded-[30px] bg-blue">
-                Target Score
-              </p>
-              <p className="text-gray text-[28px] font-medium">80</p>
-            </div>
-            {result?.audio && (
-              <MdOutlineFileDownload
-                onClick={() => {
-                  downloadAudio(result?.audio)
-                    .then()
-                    .catch((error) => toast.error("Failed to download audio"));
-                }}
-                className="text-4xl text-white cursor-pointer"
-              />
-            )}
-            {/* close modal */}
-            <button
-              onClick={() => setOpen(false)}
-              className="w-9 h-9 rounded-full bg-white flex items-center outline-none justify-center"
-            >
-              <GrClose className="text-gray text-xl" />
-            </button>
-          </div>
-        </div>
+        <ModalHeader
+          audio={result?.audio}
+          id={id}
+          setOpen={() => setOpen(false)}
+        />
         {/* Modal content */}
-        <div className="px-8 pt-4 pb-2">
+        <div className="px-3 lg:px-8 pt-4 pb-2">
           {/* audio */}
           <div className="border border-primary rounded-xl flex items-center justify-between p-2">
             <div className="w-full">
@@ -77,10 +54,10 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
             </div>
           </div> */}
           {/* score */}
-          <div className="grid grid-cols-12 gap-x-6 mt-6">
+          <div className="grid grid-cols-12 gap-x-6 gap-y-3 mt-6">
             {/* Speaking Score */}
 
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-12 lg:col-span-3 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Speaking Score</p>
               </div>
@@ -105,7 +82,7 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
 
             {/* wrighting Score */}
 
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-12 lg:col-span-3 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">listening Score</p>
               </div>
@@ -130,7 +107,7 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
 
             {/* Enabling Skill  */}
             <div
-              className={`col-span-6 w-full border border-primary rounded-[13px]`}
+              className={`col-span-12 lg:col-span-6 w-full border border-primary rounded-[13px]`}
             >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Enabling Skill</p>
@@ -176,7 +153,9 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
           <div className="grid gap-4 mt-4 grid-cols-2">
             {/* Skill Analysis */}
 
-            <div className={` w-full border border-primary rounded-[13px]`}>
+            <div
+              className={`col-span-2 lg:col-span-1 w-full border border-primary rounded-[13px]`}
+            >
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Skill Analysis</p>
               </div>
@@ -236,7 +215,7 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
             </div>
 
             {/* AI Speech to Text */}
-            <div className="h-full">
+            <div className="col-span-2 lg:col-span-1 h-full">
               <div className="w-full border border-primary rounded-[13px]">
                 <div className="rounded-t-[13px] gap-4 flex place-items-center py-1 px-2">
                   <button
