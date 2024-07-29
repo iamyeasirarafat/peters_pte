@@ -9,7 +9,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { RiCloseCircleLine, RiMenu2Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import SideNav, { navItems } from "./SideNav";
+import { navItems } from "./SideNav";
 
 const TopNav = ({ dashboard }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -20,9 +20,8 @@ const TopNav = ({ dashboard }) => {
   };
   return (
     <div
-      className={`${
-        topNav ? "" : "-mt-16"
-      } transition-all shadow-[0px_-5px_25px_2px_rgba(0,0,0,0.25)] bg-white duration-300 ease-linear z-50 relative`}
+      className={`${topNav ? "" : "-mt-16"
+        } transition-all shadow-[0px_-5px_25px_2px_rgba(0,0,0,0.25)] bg-white duration-300 ease-linear z-50 relative`}
     >
       <div className=" h-16 w-full p-1.5 container mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
         <button
@@ -87,10 +86,10 @@ const MenuItem = () => {
                 const itemColor = item.includes("Speaking")
                   ? "#FF8D29"
                   : item.includes("Writing")
-                  ? "#2D46B9"
-                  : item.includes("Reading")
-                  ? "#3EC70B"
-                  : "#00B4D8";
+                    ? "#2D46B9"
+                    : item.includes("Reading")
+                      ? "#3EC70B"
+                      : "#00B4D8";
                 return (
                   <div key={index} className="w-full">
                     <h3
@@ -263,9 +262,8 @@ const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
   return (
     <div
-      className={`w-[250px] h-screen bg-secondary absolute top-0  ${
-        mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-      } z-50 pt-12 transition-transform duration-500 ease-in-out`}
+      className={`w-[250px] h-screen bg-secondary absolute top-0  ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } z-50 pt-12 transition-transform duration-500 ease-in-out`}
     >
       <RiCloseCircleLine
         onClick={() => {
@@ -339,7 +337,7 @@ function PracticeTest() {
   return (
     <div className="mt-3 space-y-1.5 pl-4">
       {Object.keys(menuData).map((item, index) => (
-        <div>
+        <div key={index}>
           <div
             onClick={() =>
               setIsCollapsOpen(isCollapsOpen === null ? item : null)
