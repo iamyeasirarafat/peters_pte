@@ -9,7 +9,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { RiCloseCircleLine, RiMenu2Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { navItems } from "./SideNav";
+import SideNav, { navItems } from "./SideNav";
 
 const TopNav = ({ dashboard }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -20,8 +20,9 @@ const TopNav = ({ dashboard }) => {
   };
   return (
     <div
-      className={`${topNav ? "" : "-mt-16"
-        } transition-all shadow-[0px_-5px_25px_2px_rgba(0,0,0,0.25)] bg-white duration-300 ease-linear z-50 relative`}
+      className={`${
+        topNav ? "" : "-mt-16"
+      } transition-all shadow-[0px_-5px_25px_2px_rgba(0,0,0,0.25)] bg-white duration-300 ease-linear z-50 relative`}
     >
       <div className=" h-16 w-full p-1.5 container mx-auto flex items-center justify-between px-6 md:px-10 4xl:px-0">
         <button
@@ -52,10 +53,14 @@ const TopNav = ({ dashboard }) => {
 
 export default TopNav;
 
+//-------- Logo---------//
+
 const Logo = () => {
   return (
     <div className="relative w-36 h-full">
-      <Image src="/pte_logo.png" fill alt="logo" />
+      <Link href={"/app"}>
+        <Image src="/pte_logo.png" fill alt="logo" />
+      </Link>
     </div>
   );
 };
@@ -71,7 +76,8 @@ const MenuItem = () => {
       </li>
       <li className="group flex items-center gap-x-2 cursor-pointer">
         Practice Test <IoIosArrowDown className="text-sm text-gray" />
-        {/* mega menu */}
+        {/*
+        -------------- mega menu ---------------*/}
         <div
           className={`absolute z-50 top-11 left-0 w-full overflow-hidden group-hover:shadow-md transition-all duration-500 group-hover:h-[430px] h-0 cursor-default`}
         >
@@ -81,10 +87,10 @@ const MenuItem = () => {
                 const itemColor = item.includes("Speaking")
                   ? "#FF8D29"
                   : item.includes("Writing")
-                    ? "#2D46B9"
-                    : item.includes("Reading")
-                      ? "#3EC70B"
-                      : "#00B4D8";
+                  ? "#2D46B9"
+                  : item.includes("Reading")
+                  ? "#3EC70B"
+                  : "#00B4D8";
                 return (
                   <div key={index} className="w-full">
                     <h3
@@ -233,9 +239,12 @@ const UserDropdown = () => {
                 alt="icon"
               />
             </button>
-            <button className="text-gray hover:scale-105 duration-200 hover:text-stone-600 text-lg font-medium flex items-center px-3 py-1 gap-x-2">
+            <Link
+              href="/app/profile"
+              className="text-gray hover:scale-105 duration-200 hover:text-stone-600 text-lg font-medium flex items-center px-3 py-1 gap-x-2"
+            >
               Profile Center <FiUser className="text-xl" />
-            </button>
+            </Link>
             <button
               onClick={() => Logout()}
               className="text-gray hover:scale-105 duration-200 hover:text-stone-600 text-lg font-medium flex items-center px-3 py-1 gap-x-2"
@@ -250,28 +259,62 @@ const UserDropdown = () => {
 };
 
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
+  const [practiceMenu, setPracticeMenu] = useState(false);
+
   return (
     <div
-      className={`w-[250px] h-full bg-secondary absolute top-0  ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } z-50 pt-14 transition-transform duration-500 ease-in-out`}
+      className={`w-[250px] h-screen bg-secondary absolute top-0  ${
+        mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+      } z-50 pt-12 transition-transform duration-500 ease-in-out`}
     >
       <RiCloseCircleLine
-        onClick={() => setMobileMenuOpen(false)}
-        className="text-primary text-3xl absolute top-2 right-2"
+        onClick={() => {
+          setMobileMenuOpen(false);
+          setPracticeMenu(false);
+        }}
+        className="text-red duration-200 cursor-pointer text-3xl absolute top-2 right-2"
       />
-      <ul className="text-white flex flex-col gap-4 text-xl font-semibold font-avantt px-6">
-        <li className="text-gray py-2 px-3 bg-primary rounded-md">
-          <Link href="/">Home</Link>
-        </li>
-        <li className="text-gray py-2 px-3 bg-primary rounded-md">
-          <Link href="/about">Mock Test</Link>
-        </li>
-        <li className="text-gray py-2 px-3 bg-primary rounded-md">
-          <Link href="/prediction">Prediction</Link>
-        </li>
-        <li className="text-gray py-2 px-3 bg-primary rounded-md">
-          <Link href="/contact">Mobile App</Link>
-        </li>
+      <ul className="text-white flex flex-col gap-3 text-xl font-semibold font-avantt px-4">
+        <Link
+          href="/app"
+          className="text-white py-2 px-3 bg-primary rounded-md"
+        >
+          Home
+        </Link>
+        <div className="">
+          <div
+            onClick={() => setPracticeMenu(!practiceMenu)}
+            className="bg-primary text-white py-2 px-3 rounded-md flex items-center justify-between"
+          >
+            <div>
+              <h1>Practice Test</h1>
+            </div>
+            <IoIosArrowDown
+              className={
+                practiceMenu ? "rotate-180 duration-200" : "duration-200"
+              }
+            />
+          </div>
+          {practiceMenu && <PracticeTest />}
+        </div>
+        <Link
+          className="text-white py-2 px-3 bg-primary rounded-md"
+          href="/app/practice/mock_test"
+        >
+          Mock Test
+        </Link>
+        <Link
+          className="text-white py-2 px-3 bg-primary rounded-md"
+          href="/app/prediction"
+        >
+          Prediction
+        </Link>
+        <Link
+          className="text-white py-2 px-3 bg-primary rounded-md"
+          href="/contact"
+        >
+          Mobile App
+        </Link>
         <li>
           <button className="w-full bg-gold flex text-lg text-white font-avantt font-semibold items-center py-2 px-3 rounded-md gap-x-1">
             <span>Become Premium</span>
@@ -286,5 +329,54 @@ const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen }) => {
         </li>
       </ul>
     </div>
+  );
+};
+
+function PracticeTest() {
+  const [isCollapsOpen, setIsCollapsOpen] = useState(null);
+  const menuData = navItems;
+
+  return (
+    <div className="mt-3 space-y-1.5 pl-4">
+      {Object.keys(menuData).map((item, index) => (
+        <div>
+          <div
+            onClick={() =>
+              setIsCollapsOpen(isCollapsOpen === null ? item : null)
+            }
+            className="flex items-center justify-between  bg-primary rounded-md px-2"
+          >
+            <h2 className="text-white py-1 px-3" key={index}>
+              {item}
+            </h2>
+            <IoIosArrowDown
+              className={
+                isCollapsOpen === item
+                  ? "rotate-180 duration-200"
+                  : "duration-200 text-white"
+              }
+            />
+          </div>
+          {isCollapsOpen === item && (
+            <div className="pl-3 mt-2">
+              {menuData[item]?.map((test, index) => (
+                <Menu test={test} key={index} />
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const Menu = ({ test }) => {
+  return (
+    <Link
+      href={test?.path}
+      className="text-lg text-secondary font-thin block bg-primary px-3 mt-1 rounded "
+    >
+      {test?.name}
+    </Link>
   );
 };
