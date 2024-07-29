@@ -37,7 +37,7 @@ const DashboardLayout = ({ children, dashboard }) => {
         overflow-y-auto  bg-white content-scrollbar no-scrollbar flex flex-col justify-between`}
         >
           <Suspense fallback={<SearchBarFallback />}>
-            <div className="container mx-auto px-6 pb-3 md:px-10 4xl:px-0">
+            <div className="container mx-auto p-2 md:px-10 4xl:px-0">
               {children}
             </div>
           </Suspense>
