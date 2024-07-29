@@ -9,8 +9,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { LoaderIcon } from "react-hot-toast";
-import { GrClose } from "react-icons/gr";
 import GlobalPagination from "../../../../../components/global/GlobalPagination";
+import ModalHeader from "../../../../../components/global/ModalHeader";
 import DashboardLayout from "../../../layout";
 
 function Page() {
@@ -246,36 +246,19 @@ const SentenceBlock = ({ data, from, setAnswerData, setQuestionData }) => {
 };
 
 const ReorderModal = ({ apiData, data, open, setOpen }) => {
+  const router = useRouter();
+  const id = router.query.que_no;
   return (
     <ReusableModal open={open} setOpen={setOpen}>
-      <div className="bg-white border border-primary rounded-[15px] w-[1100px] overflow-hidden">
+      <div className="bg-white border border-primary rounded-[15px] w-full overflow-hidden">
         {/* modal header */}
-        <div className="w-full bg-primary rounded-t-[15px] flex items-center justify-between px-3 py-2">
-          <p className="text-white text-2xl">#{data?.id || 0}</p>
-          <p className="text-white text-2xl ml-40">AI DETAILED SCORE</p>
-          <div className="flex items-center gap-x-4">
-            <div className="py-[5px] pl-[10px] pr-5 bg-white rounded-[30px] flex items-center gap-x-4">
-              <p className="text-white text-lg px-2 py-1 rounded-[30px] bg-blue">
-                Target Score
-              </p>
-              <p className="text-gray text-[28px] font-medium">80</p>
-            </div>
-            {/* <MdOutlineFileDownload className="text-4xl text-white cursor-pointer" /> */}
-            {/* close modal */}
-            <button
-              onClick={() => setOpen(false)}
-              className="w-9 h-9 rounded-full bg-white flex items-center outline-none justify-center"
-            >
-              <GrClose className="text-gray text-xl" />
-            </button>
-          </div>
-        </div>
+        <ModalHeader id={id} setOpen={() => setOpen(false)} />
         {/* Modal content */}
         <div className="p-5">
           {/* score */}
-          <div className="grid grid-cols-6 gap-6">
+          <div className="grid grid-cols-6 gap-x-6 gap-y-3">
             {/* Total Score */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px]">
+            <div className="col-span-12 lg:col-span-3 w-full border border-primary rounded-[13px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Reading Score</p>
               </div>
@@ -301,44 +284,46 @@ const ReorderModal = ({ apiData, data, open, setOpen }) => {
               </div>
             </div>
             {/* Time Taken */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-12 lg:col-span-3 w-full border border-primary rounded-[13px] relative h-[150px] lg:h-auto">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Time Taken</p>
               </div>
               {/* score point*/}
-              <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full">
+              <div className="flex items-center justify-center p-4 absolute top-0 left-0 w-full h-full mt-2 lg:mt-0">
                 <p className="text-[60px] text-gray">
                   {data?.time_taken || "0.00"}
                 </p>
               </div>
             </div>
             {/* Correct answer */}
-            <div className="col-span-3 w-full h-34 border border-primary rounded-[13px] relative">
+            <div className="col-span-12 lg:col-span-3 w-full border border-primary rounded-[13px] relative h-[250px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Correct answer</p>
               </div>
               {/* score point*/}
-              <div className="flex mt-4 text-xl justify-center h-full">
-                {apiData?.options?.map((item, index) => {
-                  return (
-                    <span
-                      key={index}
-                      className="h-14 w-14 mr-4 flex items-center justify-center  rounded bg-green-500 text-white font-semibold"
-                    >
-                      {item.index}
-                    </span>
-                  );
-                })}
+              <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full mt-2 lg:mt-0">
+                <div className="flex flex-wrap gap-2 mt-6 text-xl text-center">
+                  {apiData?.options?.map((item, index) => {
+                    return (
+                      <span
+                        key={index}
+                        className="h-14 w-14 mr-4 flex items-center justify-center  rounded bg-green-500 text-white font-semibold"
+                      >
+                        {item.index}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
             </div>
             {/* Your Answer */}
-            <div className="col-span-3 w-full border border-primary rounded-[13px] relative">
+            <div className="col-span-12 lg:col-span-3 w-full border border-primary rounded-[13px] relative h-[250px]">
               <div className="bg-secondary rounded-t-[13px] place-items-center py-1 px-2">
                 <p className="text-gray text-xl">Your Answer</p>
               </div>
               {/* score point*/}
-              <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full">
-                <p className="flex gap-2 mt-6 text-xl text-center">
+              <div className="flex items-center justify-center gap-x-1.5 p-4 absolute top-0 left-0 w-full h-full mt-2 lg:mt-0">
+                <div className="flex flex-wrap gap-2 mt-6 text-xl text-center">
                   {data?.scores?.score_details.map((item, index) => {
                     return (
                       <div key={index} className="">
@@ -368,7 +353,7 @@ const ReorderModal = ({ apiData, data, open, setOpen }) => {
                       </div>
                     );
                   })}
-                </p>
+                </div>
               </div>
             </div>
           </div>
