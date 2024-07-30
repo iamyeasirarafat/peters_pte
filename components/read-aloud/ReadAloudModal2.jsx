@@ -2,10 +2,6 @@ import wordCount from "@/utils/wordCount";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import toast from "react-hot-toast";
-import { GrClose } from "react-icons/gr";
-import { MdOutlineFileDownload } from "react-icons/md";
-import AudioDownloader from "../../utils/audioDownloader";
 import AudioVisualizer from "../AudioVisualizer";
 import LineProgressBar from "../global/LineProgressBar";
 import ReusableModal from "../global/ReusableModal";
@@ -28,7 +24,6 @@ const ReadAloudModal2 = ({ open, setOpen, result }) => {
     result?.scores?.pronountiation_accuracy * 100 || 0;
   const fluent = Math.round(result?.scores?.fluent[0]) || 0;
   // Download Function
-  const downloadAudio = AudioDownloader();
   return (
     <ReusableModal open={open} setOpen={setOpen}>
       <div className="bg-white border border-primary rounded-[15px] w-full overflow-hidden">
