@@ -1,27 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import BestRecordCard from "../Cards/BestRecordCard";
 import WhiteBGButton from "../Buttons/WhiteBGButton";
+import axios from "axios";
 
 export default function PTEAccurateMock() {
-  const data = [
-    {
-      title: "speaking test",
-      value: 85,
-    },
-    {
-      title: "listening test",
-      value: 45,
-    },
-    {
-      title: "writing test",
-      value: null,
-    },
-    {
-      title: "reading test",
-      value: 68,
-    },
-  ];
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axios("/best_record").then(({ data }) => {
+      const structuredData = [];
+      Object.keys(data).forEach((item) => {
+        const dd = {
+          value: data[item] > 0 ? data[item] : null,
+          title: `${item} test`,
+        };
+        structuredData.push(dd);
+      });
+      setData(structuredData);
+    });
+  }, []);
 
   return (
     <div className="flex mb-20 flex-col md:flex-row justify-between bg-[url('/images/ptemocktest.png')] w-full bg-clip-content md:bg-cover  rounded-[15px] my-[25px] text-white">
@@ -41,14 +38,10 @@ export default function PTEAccurateMock() {
         <div>
           <h2 className="text-[21px] ml-10">Your Best Record Till Now</h2>
           <div className="ml-10 flex gap-2 mt-2">
-            <div className="flex flex-col gap-2">
-              {/* record card */}
-              <BestRecordCard key={data[0].title} data={data[0]} />
-              <BestRecordCard key={data[1].title} data={data[1]} />
-            </div>
-            <div className="flex flex-col gap-2">
-              <BestRecordCard key={data[2].title} data={data[2]} />
-              <BestRecordCard key={data[3].title} data={data[3]} />
+            {/* record card */}
+            <div className="grid grid-cols-2 gap-2">
+              {data &&
+                data.map((item, i) => <BestRecordCard key={i} data={item} />)}
             </div>
           </div>
         </div>
