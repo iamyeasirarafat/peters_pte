@@ -86,8 +86,8 @@ export const StudentProfileInfo = ({ data, setFetch, user }) => {
     }
   };
   return (
-    <div className="space-y-3">
-      <div className="space-y-2">
+    <div className="space-y-5">
+      <div className="space-y-4">
         <label
           htmlFor="profile_image"
           className="group cursor-pointer relative w-21 h-21 inline-block"
@@ -164,7 +164,7 @@ export const StudentProfileInfo = ({ data, setFetch, user }) => {
       <div className="flex items-center gap-x-2">
         <button
           onClick={() => setOpenUpdateInformation({ state: true, data: data })}
-          className="flex items-center gap-x-3 bg-primary py-2.5 px-8 justify-center text-xs font-bold"
+          className="flex items-center gap-x-3 bg-primary py-4 px-28 justify-center text-lg rounded font-extrabold"
         >
           <BsFillPlusCircleFill /> Update Info
         </button>
