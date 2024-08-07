@@ -102,7 +102,7 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
     if (sentence) {
       setAnswers(sentence.map((_, index) => ({ index, value: "" })));
     }
-  }, [sentence]);
+  }, [sentence, id]);
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -166,10 +166,6 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
-
-  useEffect(() => {
-    setAnswers(sentence.map((_, index) => ({ index, value: "" })));
-  }, [id]);
 
   return (
     <>
