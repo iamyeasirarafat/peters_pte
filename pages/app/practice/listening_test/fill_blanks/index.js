@@ -97,7 +97,7 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(0);
   const [timerExpired, setTimerExpired] = useState(false);
-
+  const [submitted, setSubmitted] = useState(false);
   useEffect(() => {
     if (sentence) {
       setAnswers(sentence.map((_, index) => ({ index, value: "" })));
@@ -158,12 +158,19 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
       });
       toast.success(res.data.message || "Submitted Successfully");
       setReFetch((prev) => !prev);
+      setSubmitted(true);
+      setAnswers(sentence.map((_, index) => ({ index, value: "" })));
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+
+  useEffect(() => {
+    setAnswers(sentence.map((_, index) => ({ index, value: "" })));
+  }, [id]);
+
   return (
     <>
       <div className="p-5 border border-primary rounded-[15px] relative">
@@ -175,6 +182,7 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
                   {word}
                   {index !== sentence.length - 1 && (
                     <FillBlankInput
+                      value={answers[index]?.value || ""}
                       onChange={(e) => updateAnswer(index, e.target.value)}
                     />
                   )}
@@ -187,11 +195,11 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={handelSubmit}
-            disabled={isLoading}
+            disabled={isLoading || submitted}
             className="py-2 px-6 disabled:opacity-50 flex items-center gap-x-2 rounded-[22px] bg-primary text-white font-semibold text-lg"
           >
             {isLoading && <LoaderIcon />}
-            Submit
+            {!isLoading && submitted ? "Submitted" : "Submit"}
           </button>
           <button
             onClick={() => {
@@ -207,12 +215,13 @@ const FillBlanksBlock = ({ typingTime, result, setReFetch, api, sentence }) => {
     </>
   );
 };
-const FillBlankInput = ({ onChange }) => {
+const FillBlankInput = ({ value, onChange }) => {
   return (
     <div className="px-2 inline-block">
       <input
-        onBlur={onChange}
-        // onChange={onChange}
+        // onBlur={onChange}
+        value={value}
+        onChange={onChange}
         className="w-[150px] text-gray text-lg text-center border border-x-0 border-t-0 border-b-gray outline-none focus:ring-transparent focus:border-gray p-0 m-0"
         type="text"
       />
