@@ -120,7 +120,7 @@ const AudioPlayer = ({ listening, data, apiAudio, autoPlayAfter = 5 }) => {
     <div className="h-[150px] mb-4 w-full">
       <div className="flex flex-col  w-full gap-y-2">
         <div className="">
-          {userInteracted && countdown !== 0 && (
+          {!alreadyPlayed && userInteracted && countdown !== 0 && (
             <p className="text-sm text-gray-500">Beginning in {countdown}</p>
           )}
         </div>
