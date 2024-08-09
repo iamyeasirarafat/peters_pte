@@ -14,9 +14,7 @@ import Multiple_choice_single from "../../../../../../components/UserMockTest/Mu
 import Re_Order from "../../../../../../components/UserMockTest/Re_Order";
 import Read_aloud from "../../../../../../components/UserMockTest/Read_aloud";
 import Read_write_blanks from "../../../../../../components/UserMockTest/Read_write_blanks";
-import Record_Missing_words from "../../../../../../components/UserMockTest/Record_Missing_words";
 import Repeat_sentence from "../../../../../../components/UserMockTest/Repeat_sentence";
-import Retell_lecture from "../../../../../../components/UserMockTest/Retell_lecture";
 import Summarize_written from "../../../../../../components/UserMockTest/Summarize_written";
 import Fill_blanks from "../../../../../../components/UserMockTest/fill_blanks";
 import MockTestLayout from "../../../../../../components/UserMockTest/layout";
@@ -231,7 +229,6 @@ const MockLayouts = ({
   currentQuestion,
   questionList,
 }) => {
-  console.log("questionList", questionList);
   return (
     <MockTestLayout
       handleNext={handleNext}
@@ -249,8 +246,9 @@ const MockLayouts = ({
         />
       )}
 
-      {questionList?.question?.[currentQuestion]?.type ===
-        "repeat_sentence" && (
+      {(questionList?.question?.[currentQuestion]?.type === "repeat_sentence" ||
+        questionList?.question?.[currentQuestion]?.type ===
+          "retell_sentence") && (
         <Repeat_sentence
           question={questionList?.question?.[currentQuestion]}
           aid={questionList?.aid}
@@ -258,14 +256,20 @@ const MockLayouts = ({
       )}
 
       {questionList?.question?.[currentQuestion]?.type === "describe_image" && (
-        <Describe_image />
+        <Describe_image
+          data={questionList?.question?.[currentQuestion]}
+          aid={questionList?.aid}
+        />
       )}
       {/* if current question is 4 then show retell lecture component */}
-      {questionList?.question?.[currentQuestion]?.type ===
-        "retell_sentence" && <Retell_lecture />}
+      {/* {questionList?.question?.[currentQuestion]?.type ===
+        "retell_sentence" && <Retell_lecture />} */}
       {/* if current question is 5 then show answer short question component */}
       {questionList?.question?.[currentQuestion]?.type === "short_question" && (
-        <Answer_short_question />
+        <Answer_short_question
+          data={questionList?.question?.[currentQuestion]}
+          aid={questionList?.aid}
+        />
       )}
       {/* if current question is 6 then show summarize written component */}
       {(questionList?.question?.[currentQuestion]?.type === "summarize" ||
@@ -304,8 +308,8 @@ const MockLayouts = ({
         <Missing_words />
       )}
       {/* if current question is 12 then show record missing words component */}
-      {questionList?.question?.[currentQuestion]?.type ===
-        "highlight_incorrect_word" && <Record_Missing_words />}
+      {/* {questionList?.question?.[currentQuestion]?.type ===
+        "highlight_incorrect_word" && <Record_Missing_words />} */}
       {/* if current question is 13 then show multiple choice single component */}
       {questionList?.question?.[currentQuestion]?.type ===
         "multi_choice_reading_single_answer" && <Multiple_choice_single />}

@@ -5,7 +5,6 @@ import RecordBlock from './RecordBlock';
 const Repeat_sentence = ({ question, aid }) => {
     const router = useRouter();
     const { mock_type, testId } = router?.query;
-    console.log("question", question);
     const answerApi = `/mocktest/${mock_type?.split("_")?.[0]}/${testId}/answer/${aid}`;
     return (
         <div>

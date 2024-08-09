@@ -11,6 +11,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { LoaderIcon } from "react-hot-toast";
 import GlobalPagination from "../../../../../components/global/GlobalPagination";
 import ModalHeader from "../../../../../components/global/ModalHeader";
+import convertToTimeFormat from "../../../../../utils/convertTime";
 import DashboardLayout from "../../../layout";
 
 function Page() {
@@ -91,8 +92,8 @@ function Page() {
   }, [id, initialMinutes]);
   const initialSeconds = initialMinutes * 60;
   const remainingSeconds = minutes * 60 + seconds;
-  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
-    2
+  const timeTakenInMinutes = convertToTimeFormat(
+    initialSeconds - remainingSeconds
   );
 
   const handelSubmit = async () => {

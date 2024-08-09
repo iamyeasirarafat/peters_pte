@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { LoaderIcon, Toaster } from "react-hot-toast";
 import GlobalPagination from "../../../../../components/global/GlobalPagination";
+import convertToTimeFormat from "../../../../../utils/convertTime";
 import DashboardLayout from "../../../layout";
 
 const Page = () => {
@@ -155,8 +156,8 @@ export const FillBlanksBlock = ({
   };
   const initialSeconds = initialMinutes * 60;
   const remainingSeconds = minutes * 60 + seconds;
-  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
-    2
+  const timeTakenInMinutes = convertToTimeFormat(
+    initialSeconds - remainingSeconds
   );
   //*submit function
   const handelSubmit = async () => {

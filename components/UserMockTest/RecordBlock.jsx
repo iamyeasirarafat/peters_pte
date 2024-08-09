@@ -1,6 +1,5 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsFillMicFill } from "react-icons/bs";
@@ -80,26 +79,24 @@ const RecordBlock = ({ setReFetch, api, data }) => {
 
     return () => clearInterval(timerId); // Cleanup the timer on component unmount
   }, [isRecording]);
-  console.log(audioData)
   //progressbar width
   const progressBarWidth = (recordingTime / 40000) * 100;
   // handle submit function
-  const router = useRouter();
-  const id = router.query.que_no;
   const HandleSubmit = async () => {
     setIsLoading(true);
     try {
       const formData = new FormData();
       formData.append("audio", audioData, "recorded.wav"); // Append the audioData as is
-      // formData.append("read_aloud", id);
+      formData.append("type", data?.type);
+      formData.append("id", data?.id);
       const config = {
         headers: {
           "content-type": "multipart/form-data", // Use lowercase for header keys
         },
       };
 
-      const { data } = await axios.post(api, formData, config);
-      data && setReFetch((prev) => !prev);
+      const { data: result } = await axios.post(api, formData, config);
+      result && setReFetch((prev) => !prev);
       setIsLoading(false);
       setAudioData(null);
     } catch (error) {

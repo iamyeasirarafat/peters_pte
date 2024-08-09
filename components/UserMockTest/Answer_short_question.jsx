@@ -1,11 +1,15 @@
-import React from 'react'
-import RecordBlock from './RecordBlock'
+import { useRouter } from 'next/router';
+import React from 'react';
+import RecordBlock from './RecordBlock';
 
-const Answer_short_question = () => {
+const Answer_short_question = ({ data, aid }) => {
+    const router = useRouter();
+    const { mock_type, testId } = router?.query;
+    const answerApi = `/mocktest/${mock_type?.split("_")?.[0]}/${testId}/answer/${aid}`;
     return (
         <div>
             <p className='py-2 font-medium'>You will hear a question. Please give a simple and short answer
-            . Often just one or a few words is enough.
+                . Often just one or a few words is enough.
             </p>
 
             {/* audio player  */}
@@ -18,8 +22,8 @@ const Answer_short_question = () => {
             </div>
 
             <RecordBlock
-            // data={data} 
-            // api={answerApi} 
+                data={data}
+                api={answerApi}
             // setReFetch={setReFetch} 
             />
 

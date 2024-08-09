@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { LoaderIcon, toast } from "react-hot-toast";
+import convertToTimeFormat from "../../utils/convertTime";
 import GlobalPagination from "./GlobalPagination";
 
 const TypingBlock = ({
@@ -37,9 +38,8 @@ const TypingBlock = ({
   }, [minutes, seconds]);
   const initialSeconds = initialMinutes * 60;
   const remainingSeconds = minutes * 60 + seconds;
-  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
-    2
-  );
+  const timeTakenInMinutes = convertToTimeFormat((initialSeconds - remainingSeconds))
+
   //handle submit functionalities
   const [textAnswer, setTextAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
+import convertToTimeFormat from "../../utils/convertTime";
 import GlobalPagination from "./GlobalPagination";
 
 function MultipleChoiceAnswer({
@@ -46,9 +47,7 @@ function MultipleChoiceAnswer({
   }, [id, initialMinutes]);
   const initialSeconds = initialMinutes * 60;
   const remainingSeconds = minutes * 60 + seconds;
-  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
-    2
-  );
+  const timeTakenInMinutes = convertToTimeFormat((initialSeconds - remainingSeconds))
   //submit data
   const handelSubmit = async () => {
     try {

@@ -12,8 +12,9 @@ import toast, { LoaderIcon, Toaster } from "react-hot-toast";
 import { FaCheck } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import GlobalPagination from "../../../../../components/global/GlobalPagination";
-import DashboardLayout from "../../../layout";
 import ModalHeader from "../../../../../components/global/ModalHeader";
+import convertToTimeFormat from "../../../../../utils/convertTime";
+import DashboardLayout from "../../../layout";
 const Page = () => {
   const [aiResult, setAiResult] = useState(null);
   const [reFetch, setReFetch] = useState(false);
@@ -235,8 +236,8 @@ const SentenceBlock = ({ typingTime, setReFetch, api, data }) => {
 
   const initialSeconds = initialMinutes * 60;
   const remainingSeconds = minutes * 60 + seconds;
-  const timeTakenInMinutes = ((initialSeconds - remainingSeconds) / 60).toFixed(
-    2
+  const timeTakenInMinutes = convertToTimeFormat(
+    initialSeconds - remainingSeconds
   );
   //*submit function
   const handelSubmit = async () => {
